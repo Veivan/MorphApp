@@ -35,6 +35,7 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.memoOut = new System.Windows.Forms.TextBox();
+            this.btMakeSynAn = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -44,7 +45,7 @@
             this.btGetMorph.Name = "btGetMorph";
             this.btGetMorph.Size = new System.Drawing.Size(75, 23);
             this.btGetMorph.TabIndex = 0;
-            this.btGetMorph.Text = "Morph";
+            this.btGetMorph.Text = "MorphAn";
             this.btGetMorph.UseVisualStyleBackColor = true;
             this.btGetMorph.Click += new System.EventHandler(this.btGetMorph_Click);
             // 
@@ -97,11 +98,22 @@
             this.memoOut.Size = new System.Drawing.Size(363, 123);
             this.memoOut.TabIndex = 4;
             // 
+            // btMakeSynAn
+            // 
+            this.btMakeSynAn.Location = new System.Drawing.Point(93, 316);
+            this.btMakeSynAn.Name = "btMakeSynAn";
+            this.btMakeSynAn.Size = new System.Drawing.Size(75, 23);
+            this.btMakeSynAn.TabIndex = 5;
+            this.btMakeSynAn.Text = "SynAn";
+            this.btMakeSynAn.UseVisualStyleBackColor = true;
+            this.btMakeSynAn.Click += new System.EventHandler(this.btMakeSynAn_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(387, 367);
+            this.Controls.Add(this.btMakeSynAn);
             this.Controls.Add(this.memoOut);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.memoInp);
@@ -127,6 +139,7 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
         private System.Windows.Forms.TextBox memoOut;
+        private System.Windows.Forms.Button btMakeSynAn;
     }
 }
 

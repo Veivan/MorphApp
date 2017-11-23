@@ -30,5 +30,10 @@ namespace MorphApp
             memoOut.Text = gren.GetMorphInfo(memoInp.Text);
         }
 
+        private void btMakeSynAn_Click(object sender, EventArgs e)
+        {
+            memoOut.Text = gren.GetSynInfo(memoInp.Text);
+        }
+
     }
 }
