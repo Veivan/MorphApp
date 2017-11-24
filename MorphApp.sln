@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MorphApp", "MorphApp\MorphApp.csproj", "{1CCB2909-8F08-4484-BB87-1C216097D85E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LexiconFX", "..\..\RussianGrammaticalDictionary64\demo\ai\solarix\Grammar_Engine\LexiconFX\LexiconFX.csproj", "{AEC798F0-8CDD-4B21-BCF5-56E04F0F7C3D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LexiconFX", "D:\Work\Framework\RussianGrammaticalDictionary64\demo\ai\solarix\Grammar_Engine\LexiconFX\LexiconFX.csproj", "{AEC798F0-8CDD-4B21-BCF5-56E04F0F7C3D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

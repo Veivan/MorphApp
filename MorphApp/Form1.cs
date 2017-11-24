@@ -12,7 +12,7 @@ namespace MorphApp
     public partial class Form1 : Form
     {
         GrenHelper gren = new GrenHelper();
-        string dict = @"C:\Work\FrameWork\RussianGrammaticalDictionary64\bin-windows64\dictionary.xml";
+		string dict = @"D:\Work\Framework\RussianGrammaticalDictionary64\bin-windows64\dictionary.xml";
 
         public Form1()
         {
