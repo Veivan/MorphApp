@@ -8,6 +8,13 @@ using ZeroMQ;
 
 namespace MorphMQserver
 {
+	public enum Pars
+	{
+		UNDEF = -1,
+		MORPH_an = 0,
+		SYNT_an = 1
+	}
+
 	class Program
 	{
 		static void Main(string[] args)
@@ -34,14 +41,17 @@ namespace MorphMQserver
 						Console.WriteLine("Received {0}", req);
 						string resp = "";
 
+						var command = Pars.UNDEF;
+						var strip_req = strip_request(req, out command);
+
 						// Do some work
 						if (req.StartsWith("morph"))
 						{
-							resp = gren.GetMorphInfo(req);
+							resp = gren.GetMorphInfo(strip_req);
 						}
 						else
 						{
-							resp = gren.GetSynInfo(req);
+							resp = gren.GetSynInfo(strip_req);
 						}
 						//Thread.Sleep(1);
 
@@ -50,7 +60,20 @@ namespace MorphMQserver
 					}
 				}
 			}
-
 		}
+
+		static string strip_request(string requestText, out Pars command)
+		{
+			if (requestText.StartsWith("morph"))
+				command = Pars.MORPH_an;
+			else
+				command = Pars.SYNT_an;
+			var req = requestText.Split(' ');
+			var stripped = "";
+			for (int i = 1; i < req.Length; i++)
+				stripped += req[i] + " ";
+			return stripped.TrimEnd();
+		}
+
 	}
 }
