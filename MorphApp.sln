@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MorphMQserver", "MorphMQser
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestFlatBuf", "TestFlatBuf\TestFlatBuf.csproj", "{A9C5CD00-4114-48E0-B7D5-1DD75CAE5DE4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Schemas", "Schemas\Schemas.csproj", "{BF7809E6-3E9D-49FC-888D-6D0C7187CC5B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,16 @@ Global
 		{A9C5CD00-4114-48E0-B7D5-1DD75CAE5DE4}.Release|Mixed Platforms.Build.0 = Release|x86
 		{A9C5CD00-4114-48E0-B7D5-1DD75CAE5DE4}.Release|x86.ActiveCfg = Release|x86
 		{A9C5CD00-4114-48E0-B7D5-1DD75CAE5DE4}.Release|x86.Build.0 = Release|x86
+		{BF7809E6-3E9D-49FC-888D-6D0C7187CC5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF7809E6-3E9D-49FC-888D-6D0C7187CC5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF7809E6-3E9D-49FC-888D-6D0C7187CC5B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BF7809E6-3E9D-49FC-888D-6D0C7187CC5B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BF7809E6-3E9D-49FC-888D-6D0C7187CC5B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BF7809E6-3E9D-49FC-888D-6D0C7187CC5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF7809E6-3E9D-49FC-888D-6D0C7187CC5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF7809E6-3E9D-49FC-888D-6D0C7187CC5B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{BF7809E6-3E9D-49FC-888D-6D0C7187CC5B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{BF7809E6-3E9D-49FC-888D-6D0C7187CC5B}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

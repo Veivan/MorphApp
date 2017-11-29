@@ -1,0 +1,20 @@
+// IDL file for TMorph protocol.
+namespace TMorph.Schema;
+enum MessType:byte { mRequest = 0, mReplay = 1 }
+enum ServType:byte { svMorph = 0, svSUBD = 1 }
+// Token - токенизация предложения; Synt - синт анализ предложения; Morph - морф анализ слова
+enum ComType:long { Undef = 0, 
+			Token = 1, Synt = 2, Morph = 3, // команды svMorph
+	 IInsert = 11}   // команды svSUBD
+
+table Message {
+  messType:MessType;
+  serverType:ServType;
+  comtype:ComType = Undef; // Enum.
+  params:[Param];   // Vector of tables.
+}
+table Param {
+  name:string;
+  value:string;
+}
+root_type Message;

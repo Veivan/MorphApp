@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading;
 
 using ZeroMQ;
+using FlatBuffers;
+using TMorph.Schema;
 
 namespace HWServer
 {
@@ -37,7 +39,10 @@ namespace HWServer
 					using (ZFrame request = responder.ReceiveFrame())
 					{
 						Console.WriteLine("Received {0}", request.ReadString());
+						request.Position = 0;
+						var buf = request.Read();
 
+						PrintReq(buf);
 						// Do some work
 						Thread.Sleep(1);
 
@@ -47,5 +52,36 @@ namespace HWServer
 				}
 			}
 		}
+
+		static void PrintReq(byte[] req)
+		{
+			var buf = new ByteBuffer(req);
+			var message = Message.GetRootAsMessage(buf);
+			Console.WriteLine(" ServerType : {0}", message.ServerType.ToString());
+			Console.WriteLine(" Comtype : {0}", message.Comtype.ToString());
+
+	
+		}
+
+		static FlatBufferBuilder SetReq()
+		{
+			var builder = new FlatBufferBuilder(1);
+			var param1Name = builder.CreateString("phrase");
+			var param1Val = builder.CreateString("мама мыла раму");
+			var parms = new Offset<Param>[1];
+			parms[0] = Param.CreateParam(builder, param1Name, param1Val);
+			var paracol = Message.CreateParamsVector(builder, parms);
+
+			Message.StartMessage(builder);
+			Message.AddMessType(builder, MessType.mRequest);
+			Message.AddServerType(builder, ServType.svMorph);
+			Message.AddComtype(builder, ComType.Token);
+			Message.AddParams(builder, paracol);
+			var req = Message.EndMessage(builder);
+			builder.Finish(req.Value);
+
+			return builder;
+		}
+	
 	}
 }
