@@ -43,16 +43,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ComType.cs" />
-    <Compile Include="Message.cs" />
-    <Compile Include="MessType.cs" />
-    <Compile Include="Param.cs" />
+    <Compile Include="TMorph\Schema\ComType.cs" />
+    <Compile Include="TMorph\Schema\Message.cs" />
+    <Compile Include="TMorph\Schema\MessType.cs" />
+    <Compile Include="TMorph\Schema\Param.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServType.cs" />
+    <Compile Include="TMorph\Schema\ServType.cs" />
+    <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="message.fbs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

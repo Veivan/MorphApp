@@ -7,6 +7,7 @@ using ZeroMQ;
 using FlatBuffers;
 using TMorph.Schema;
 using MyGame.Sample;
+using TMorph.Common;
 
 namespace HWClient
 {
@@ -21,8 +22,9 @@ namespace HWClient
 			Console.WriteLine(" ServerType : {0}", message.ServerType.ToString());
 			Console.WriteLine(" Comtype : {0}", message.Comtype.ToString());
 
-			byte[] foo = new byte[buf.Length - buf.Position];
-			System.Buffer.BlockCopy(buf.Data, buf.Position, foo, 0, buf.Length - buf.Position);
+			/*byte[] foo = new byte[buf.Length - buf.Position];
+			System.Buffer.BlockCopy(buf.Data, buf.Position, foo, 0, buf.Length - buf.Position);*/
+            var foo = Utils.FormatBuff(buf);
 
 			var buf2 = new ByteBuffer(foo);
 			//var buf2 = new ByteBuffer(builder.DataBuffer.Data);
@@ -74,10 +76,14 @@ namespace HWClient
 				requester.Send(new ZFrame(foo));
 
 				// Receive
-				/*using (ZFrame reply = requester.ReceiveFrame())
+				using (ZFrame reply = requester.ReceiveFrame())
 				{
-					Console.WriteLine(" Received: {0} {1}!", requestText, reply.ReadString());
-				}*/
+					//Console.WriteLine(" Received: {0} {1}!", requestText, reply.ReadString());
+                    reply.Position = 0;
+                    var bufrep = reply.Read();
+
+                    PrintRep(bufrep);
+                }
 
 			}
 
@@ -87,22 +93,37 @@ namespace HWClient
 		static FlatBufferBuilder SetReq()
 		{
 			var builder = new FlatBufferBuilder(1);
-			/*var param1Name = builder.CreateString("phrase");
+			var param1Name = builder.CreateString("phrase");
 			var param1Val = builder.CreateString("мама мыла раму");
 			var parms = new Offset<Param>[1];
 			parms[0] = Param.CreateParam(builder, param1Name, param1Val);
-			var paracol = Message.CreateParamsVector(builder, parms); */
+			var paracol = Message.CreateParamsVector(builder, parms); 
 
 			Message.StartMessage(builder);
 			Message.AddMessType(builder, MessType.mRequest);
 			Message.AddServerType(builder, ServType.svSUBD);
 			Message.AddComtype(builder, ComType.Synt);
-			//Message.AddParams(builder, paracol);
+			Message.AddParams(builder, paracol);
 			var req = Message.EndMessage(builder);
 			builder.Finish(req.Value);
 
 			return builder;
 		}
+
+        static void PrintRep(byte[] req)
+        {
+            var buf = new ByteBuffer(req);
+            var message = Message.GetRootAsMessage(buf);
+            Console.WriteLine(" ServerType : {0}", message.ServerType.ToString());
+            Console.WriteLine(" Comtype : {0}", message.Comtype.ToString());
+
+            for (int i = 0; i < message.ParamsLength; i++)
+            {
+                Param? par = message.Params(i);
+                if (par == null) continue;
+                Console.WriteLine(" Param : {0} = {1}", par.Value.Name, par.Value.Value);
+            }
+        }
 
 		static FlatBufferBuilder MakeMonster()
 		{

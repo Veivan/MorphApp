@@ -7,6 +7,7 @@ using System.Threading;
 using ZeroMQ;
 using FlatBuffers;
 using TMorph.Schema;
+using TMorph.Common;
 
 namespace HWServer
 {
@@ -47,7 +48,10 @@ namespace HWServer
 						Thread.Sleep(1);
 
 						// Send
-						responder.Send(new ZFrame(name));
+                        var builder = SetRep();
+                        var foo = Utils.FormatBuff(builder.DataBuffer);
+
+                        responder.Send(new ZFrame(foo));
 					}
 				}
 			}
@@ -60,20 +64,25 @@ namespace HWServer
 			Console.WriteLine(" ServerType : {0}", message.ServerType.ToString());
 			Console.WriteLine(" Comtype : {0}", message.Comtype.ToString());
 
-	
+            for(int i = 0; i < message.ParamsLength; i++)
+            {
+                Param? par = message.Params(i);
+                if (par == null) continue;
+                Console.WriteLine(" Param : {0} = {1}", par.Value.Name, par.Value.Value);          
+            }           
 		}
 
-		static FlatBufferBuilder SetReq()
+		static FlatBufferBuilder SetRep()
 		{
 			var builder = new FlatBufferBuilder(1);
-			var param1Name = builder.CreateString("phrase");
-			var param1Val = builder.CreateString("мама мыла раму");
+			var param1Name = builder.CreateString("result");
+			var param1Val = builder.CreateString("3 tokens");
 			var parms = new Offset<Param>[1];
 			parms[0] = Param.CreateParam(builder, param1Name, param1Val);
 			var paracol = Message.CreateParamsVector(builder, parms);
 
 			Message.StartMessage(builder);
-			Message.AddMessType(builder, MessType.mRequest);
+			Message.AddMessType(builder, MessType.mReplay);
 			Message.AddServerType(builder, ServType.svMorph);
 			Message.AddComtype(builder, ComType.Token);
 			Message.AddParams(builder, paracol);

@@ -1,0 +1,1 @@
+flatc --csharp -n message.fbs
