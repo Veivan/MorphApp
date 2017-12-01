@@ -63,7 +63,7 @@ namespace MorphMQserver
 
                         // Send
                         var builder = SetRep(resp);
-                        var foo = Utils.FormatBuff(builder.DataBuffer);
+						var foo = builder.SizedByteArray();
 
                         responder.Send(new ZFrame(foo));
                     }

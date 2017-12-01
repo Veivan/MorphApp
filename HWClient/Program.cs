@@ -15,23 +15,28 @@ namespace HWClient
 	{
 		static void Main(string[] args)
 		{
-
 			var builder = SetReq();
 			var buf = builder.DataBuffer;
 			var message = Message.GetRootAsMessage(buf);
 			Console.WriteLine(" ServerType : {0}", message.ServerType.ToString());
 			Console.WriteLine(" Comtype : {0}", message.Comtype.ToString());
 
-			/*byte[] foo = new byte[buf.Length - buf.Position];
-			System.Buffer.BlockCopy(buf.Data, buf.Position, foo, 0, buf.Length - buf.Position);*/
-            var foo = Utils.FormatBuff(buf);
+			/*
+			 * Выяснил, что нельзя использовать напрямую builder.DataBuffer.Data,
+			 * потому что там размер не равен реальному размеру буфера.
+			 * Реальный буфер вычисляется по значению DataBuffer.Position и Offset.
+			 * Поэтому правильно работало сложное вычисление:
+			 * System.Buffer.BlockCopy(buf.Data, buf.Position, foo, 0, buf.Length - buf.Position);
+			 * Чтобы получить копию для десериализации или пересылки по сети, надо юзать builder.SizedByteArray()
+			 */
 
+			var foo = builder.SizedByteArray();
 			var buf2 = new ByteBuffer(foo);
-			//var buf2 = new ByteBuffer(builder.DataBuffer.Data);
 			var message2 = Message.GetRootAsMessage(buf2);
 
 			Console.WriteLine(" ServerType : {0}", message2.ServerType.ToString());
 			Console.WriteLine(" Comtype : {0}", message2.Comtype.ToString());
+			Console.WriteLine("--------------------------------");
 
 /*
 			var builder3 = MakeMonster();
@@ -95,15 +100,15 @@ namespace HWClient
 			var builder = new FlatBufferBuilder(1);
 			var param1Name = builder.CreateString("phrase");
 			var param1Val = builder.CreateString("мама мыла раму");
-			var parms = new Offset<Param>[1];
+			/*var parms = new Offset<Param>[1];
 			parms[0] = Param.CreateParam(builder, param1Name, param1Val);
-			var paracol = Message.CreateParamsVector(builder, parms); 
+			var paracol = Message.CreateParamsVector(builder, parms); */
 
 			Message.StartMessage(builder);
 			Message.AddMessType(builder, MessType.mRequest);
 			Message.AddServerType(builder, ServType.svSUBD);
 			Message.AddComtype(builder, ComType.Synt);
-			Message.AddParams(builder, paracol);
+			//Message.AddParams(builder, paracol);
 			var req = Message.EndMessage(builder);
 			builder.Finish(req.Value);
 

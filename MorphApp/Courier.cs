@@ -30,7 +30,7 @@ namespace MorphApp
                 {
                     var builder = SetReq(requestText);
                     var buf = builder.DataBuffer;
-                    var foo = Utils.FormatBuff(buf);
+					var foo = builder.SizedByteArray();
                     
                     // Send
                     requester.Send(new ZFrame(foo));
