@@ -13,3 +13,5 @@
 /MorphMQserver/*.user
 /TestSQLite/bin
 /TestSQLite/obj
+/dbMQserver/bin
+/dbMQserver/obj
