@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 using TMorph.Schema;
 using TMorph.Common;
@@ -13,10 +10,20 @@ namespace MorphMQserver
     class MorphServer
     {
         ComType command = ComType.Undef;
+		GrenHelper gren = new GrenHelper();
+
+		public MorphServer()
+		{
+		}
 
         public void Run()
         {
-            // Create
+			//string dict = @"D:\Work\Framework\RussianGrammaticalDictionary64\bin-windows64\dictionary.xml";
+			string dict = @"D:\Work\Framework\GrammarEngine\src\bin-windows64\dictionary.xml";
+			gren.Init(dict);
+			Console.WriteLine(" Dictionary vers : {0} ", gren.GetDictVersion());
+			
+			// Create
             // using (var context = new ZContext())
             using (var responder = new ZSocket(ZSocketType.REP))
             {
@@ -42,13 +49,13 @@ namespace MorphMQserver
                         {
                             case ComType.Morph:
                                 Console.WriteLine("ComType.Morph");
-                                resp = req + " " + "ComType.Morph";
-                                //resp = gren.GetMorphInfo(strip_req);
+                                //resp = req + " " + "ComType.Morph";
+								resp = gren.GetMorphInfo(req);
                                 break;
                             case ComType.Synt:
                                 Console.WriteLine("ComType.Synt");
-                                //resp = gren.GetSynInfo(strip_req);
-                                resp = req + " " + "ComType.Synt";
+								resp = gren.GetSynInfo(req);
+                                //resp = req + " " + "ComType.Synt";
                                 break;
                             default:
                                 break;
@@ -88,8 +95,9 @@ namespace MorphMQserver
             var message = Message.GetRootAsMessage(buf);
             Param? par = message.Params(0);
             if (par.HasValue)
-                result = String.Format(" Param : {0} = {1}", par.Value.Name, par.Value.Value);
-            return result;
+				//result = String.Format(" Param : {0} = {1}", par.Value.Name, par.Value.Value);
+				result = par.Value.Value;
+			return result;
         }
 
         private FlatBufferBuilder SetRep(string resultValue)
