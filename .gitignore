@@ -11,3 +11,5 @@
 /Schemas/bin
 /Schemas/obj
 /MorphMQserver/*.user
+/TestSQLite/bin
+/TestSQLite/obj
