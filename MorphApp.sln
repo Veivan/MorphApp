@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Schemas", "Schemas\Schemas.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSQLite", "TestSQLite\TestSQLite.csproj", "{E4437B9E-B444-4549-BCE6-F0D6BCD5E920}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dbMQserver", "dbMQserver\dbMQserver.csproj", "{A2E884DE-0511-4982-BFE5-930BBC658AB7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -127,6 +129,18 @@ Global
 		{E4437B9E-B444-4549-BCE6-F0D6BCD5E920}.Release|x64.ActiveCfg = Release|x86
 		{E4437B9E-B444-4549-BCE6-F0D6BCD5E920}.Release|x86.ActiveCfg = Release|x86
 		{E4437B9E-B444-4549-BCE6-F0D6BCD5E920}.Release|x86.Build.0 = Release|x86
+		{A2E884DE-0511-4982-BFE5-930BBC658AB7}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{A2E884DE-0511-4982-BFE5-930BBC658AB7}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{A2E884DE-0511-4982-BFE5-930BBC658AB7}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{A2E884DE-0511-4982-BFE5-930BBC658AB7}.Debug|x64.ActiveCfg = Debug|x86
+		{A2E884DE-0511-4982-BFE5-930BBC658AB7}.Debug|x86.ActiveCfg = Debug|x86
+		{A2E884DE-0511-4982-BFE5-930BBC658AB7}.Debug|x86.Build.0 = Debug|x86
+		{A2E884DE-0511-4982-BFE5-930BBC658AB7}.Release|Any CPU.ActiveCfg = Release|x86
+		{A2E884DE-0511-4982-BFE5-930BBC658AB7}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{A2E884DE-0511-4982-BFE5-930BBC658AB7}.Release|Mixed Platforms.Build.0 = Release|x86
+		{A2E884DE-0511-4982-BFE5-930BBC658AB7}.Release|x64.ActiveCfg = Release|x86
+		{A2E884DE-0511-4982-BFE5-930BBC658AB7}.Release|x86.ActiveCfg = Release|x86
+		{A2E884DE-0511-4982-BFE5-930BBC658AB7}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
