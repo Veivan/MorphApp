@@ -38,5 +38,11 @@ namespace MorphApp
             memoOut.Text = courier.sendit(memoInp.Text);
 		}
 
+		private void btDBGetWord_Click(object sender, EventArgs e)
+		{
+			courier.command = TMorph.Schema.ComType.GetWord;
+			memoOut.Text = courier.sendit(memoInp.Text);
+		}
+
 	}
 }

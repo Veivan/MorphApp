@@ -5,7 +5,7 @@ enum ServType:byte { svMorph = 0, svSUBD = 1 }
 // Token - токенизация предложения; Synt - синт анализ предложения; Morph - морф анализ слова
 enum ComType:long { Undef = 0, 
 			Token = 1, Synt = 2, Morph = 3, // команды svMorph
-	 IInsert = 11}   // команды svSUBD
+	SaveLex = 11, GetWord = 12}   // команды svSUBD
 
 table Message {
   messType:MessType;

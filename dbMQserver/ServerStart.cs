@@ -9,6 +9,7 @@ namespace dbMQserver
 	{
 		static void Main(string[] args)
 		{
+			/* Тестирование dbConnector
 			SQLiteConnector dbConnector = SQLiteConnector.Instance;
 			long w1 = dbConnector.SaveLex("qq");
 			long w2 = dbConnector.SaveLex("ww");
@@ -17,6 +18,11 @@ namespace dbMQserver
 			Console.WriteLine(x.ToString());
 			dbConnector.selectAll();
 			Console.ReadKey();
+			*/
+
+			mqServer mqServer = new mqServer();
+			mqServer.Run();
+
 		}
 	}
 }

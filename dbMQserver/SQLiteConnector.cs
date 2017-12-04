@@ -150,16 +150,16 @@ namespace dbMQserver
 		{
 			try
 			{
-				m_sqlCmd.CommandText = "SELECT с_id, ph_id, w_id FROM mPhraseContent";
-				//m_sqlCmd.CommandText = "SELECT lx_id, lex FROM mLexems";
+				//m_sqlCmd.CommandText = "SELECT с_id, ph_id, w_id FROM mPhraseContent";
+				m_sqlCmd.CommandText = "SELECT lx_id, lex FROM mLexems";
 
 				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
 				string line = String.Empty;
 				while (r.Read())
 				{
-					line = r["с_id"].ToString() + ", " + r["ph_id"].ToString() + ", " + r["w_id"].ToString();
+					//line = r["с_id"].ToString() + ", " + r["ph_id"].ToString() + ", " + r["w_id"].ToString();
+					line = r["lx_id"].ToString() + ", " + r["lex"];
 					Console.WriteLine(line);
-					//line = r["lx_id"].ToString() + ", " + r["lex"];
 				}
 				r.Close();
 
