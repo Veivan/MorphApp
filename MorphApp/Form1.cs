@@ -47,5 +47,12 @@ namespace MorphApp
 			memoOut.Text = courier.sendit(memoInp.Text);
 		}
 
+        private void btSaveLex_Click(object sender, EventArgs e)
+        {
+            courier.servType = TMorph.Schema.ServType.svSUBD;
+            courier.command = TMorph.Schema.ComType.SaveLex;
+            memoOut.Text = courier.sendit(memoInp.Text);
+        }
+
 	}
 }

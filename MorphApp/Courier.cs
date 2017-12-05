@@ -49,8 +49,8 @@ namespace MorphApp
                     }
 
                     // Process messages from both sockets
-                    //if (requesterMorph.PollIn(poll, out msg, out error, TimeSpan.FromMilliseconds(64)))
-                    if (requesterMorph.PollIn(poll, out msg, out error))
+                    if (requesterMorph.PollIn(poll, out msg, out error, TimeSpan.FromMilliseconds(1000)))
+                    //if (requesterMorph.PollIn(poll, out msg, out error))
                     {
                         // Process task
                         ZFrame reply = msg[0];

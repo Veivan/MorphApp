@@ -60,7 +60,7 @@ namespace dbMQserver
 				try
 				{
 					m_sqlCmd.CommandText = "INSERT INTO mLexems(lx_id, lex) VALUES(NULL, @lex)";
-					m_sqlCmd.Parameters.Add(new SQLiteParameter("@lex", word));
+                    m_sqlCmd.Parameters.Add(new SQLiteParameter("@lex", word.ToLower()));
 					m_sqlCmd.ExecuteNonQuery();
 
 					m_sqlCmd.CommandText = "SELECT last_insert_rowid()";
@@ -80,8 +80,9 @@ namespace dbMQserver
 			long result = -1;
 			try
 			{
-				m_sqlCmd.CommandText = "SELECT lx_id FROM mLexems WHERE upper(lex) = @lex";
-				m_sqlCmd.Parameters.Add(new SQLiteParameter("@lex", rword.ToUpper()));
+                //sqlite некорректно работает с upper, lower и like в utf8. Поэтому в БД надо всё хранить в lower
+                m_sqlCmd.CommandText = "SELECT lx_id FROM mLexems WHERE lex = @lex";
+                m_sqlCmd.Parameters.Add(new SQLiteParameter("@lex", rword.ToLower()));
 				// Читаем только первую запись
 				var resp = m_sqlCmd.ExecuteScalar();
 				if (resp != null)
