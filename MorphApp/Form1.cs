@@ -27,6 +27,7 @@ namespace MorphApp
 		private void btGetMorph_Click(object sender, EventArgs e)
 		{
 			//            memoOut.Text = gren.GetMorphInfo(memoInp.Text);
+            courier.servType = TMorph.Schema.ServType.svMorph;
             courier.command = TMorph.Schema.ComType.Morph;
             memoOut.Text = courier.sendit(memoInp.Text);
 		}
@@ -34,13 +35,15 @@ namespace MorphApp
 		private void btMakeSynAn_Click(object sender, EventArgs e)
 		{
 			//            memoOut.Text = gren.GetSynInfo(memoInp.Text);
+            courier.servType = TMorph.Schema.ServType.svMorph;
             courier.command = TMorph.Schema.ComType.Synt;
             memoOut.Text = courier.sendit(memoInp.Text);
 		}
 
 		private void btDBGetWord_Click(object sender, EventArgs e)
 		{
-			courier.command = TMorph.Schema.ComType.GetWord;
+            courier.servType = TMorph.Schema.ServType.svSUBD;
+            courier.command = TMorph.Schema.ComType.GetWord;
 			memoOut.Text = courier.sendit(memoInp.Text);
 		}
 

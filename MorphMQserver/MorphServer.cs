@@ -28,7 +28,7 @@ namespace MorphMQserver
             using (var responder = new ZSocket(ZSocketType.REP))
             {
                 // Bind
-                responder.Connect("tcp://127.0.0.1:5560");
+                responder.Bind("tcp://*:5559");
 
                 while (true)
                 {

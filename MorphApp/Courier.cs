@@ -13,14 +13,22 @@ namespace MorphApp
     class Courier
     {
         public ComType command;
+        public ServType servType;
 
         public string sendit(string requestText)
         {
             string replay = "";
-            using (var requester = new ZSocket(ZSocketType.REQ))
+            ZError error;
+            ZMessage msg = null;
+
+            using (var requesterMorph = new ZSocket(ZSocketType.REQ))
+            using (var requesterDB = new ZSocket(ZSocketType.REQ))
             {
                 // Connect
-                requester.Connect("tcp://127.0.0.1:5559");
+                requesterMorph.Connect("tcp://127.0.0.1:5559");
+                requesterDB.Connect("tcp://127.0.0.1:5560");
+
+                var poll = ZPollItem.CreateReceiver();
 
                 if (requestText != "")
                 {
@@ -29,17 +37,60 @@ namespace MorphApp
 					var foo = builder.SizedByteArray();
                     
                     // Send
-                    requester.Send(new ZFrame(foo));
-                    //requester.Send(new ZFrame(command + " " + requestText));
-                    // Receive
-                    using (ZFrame reply = requester.ReceiveFrame())
+
+                    switch (this.servType)
+                    {
+                        case ServType.svMorph:
+                            requesterMorph.Send(new ZFrame(foo));
+                            break;
+                        case ServType.svSUBD:
+                            requesterDB.Send(new ZFrame(foo));
+                            break;
+                    }
+
+                    // Process messages from both sockets
+                    //if (requesterMorph.PollIn(poll, out msg, out error, TimeSpan.FromMilliseconds(64)))
+                    if (requesterMorph.PollIn(poll, out msg, out error))
+                    {
+                        // Process task
+                        ZFrame reply = msg[0];
+                        reply.Position = 0;
+                        var bufrep = reply.Read();
+                        replay = GetRep(bufrep);
+                    }
+                    else
+                    {
+                        if (error == ZError.ETERM)
+                            return replay;    // Interrupted
+                        if (error != ZError.EAGAIN)
+                            throw new ZException(error);
+                    }
+
+                    if (requesterDB.PollIn(poll, out msg, out error, TimeSpan.FromMilliseconds(64)))
+                    {
+                        // Process task
+                        ZFrame reply = msg[0];
+                        reply.Position = 0;
+                        var bufrep = reply.Read();
+                        replay = GetRep(bufrep);
+                    }
+                    else
+                    {
+                        if (error == ZError.ETERM)
+                            return replay;    // Interrupted
+                        if (error != ZError.EAGAIN)
+                            throw new ZException(error);
+                    } 
+
+                    /*/ Receive
+                    using (ZFrame reply = requesterMorph.ReceiveFrame())
                     {
                         reply.Position = 0;
                         var bufrep = reply.Read();
-                        //replay = reply.ReadString();
                         //PrintRep(bufrep);
                         replay = GetRep(bufrep);
-                    }
+                    }*/
+                    
                 }
             }
 
@@ -57,7 +108,7 @@ namespace MorphApp
 
             Message.StartMessage(builder);
             Message.AddMessType(builder, MessType.mRequest);
-            Message.AddServerType(builder, ServType.svSUBD);
+            Message.AddServerType(builder, this.servType);
             Message.AddComtype(builder, this.command);
             Message.AddParams(builder, paracol);
             var req = Message.EndMessage(builder);
