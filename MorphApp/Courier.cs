@@ -14,10 +14,6 @@ namespace MorphApp
     {
         public ComType command;
 
-        //GrenHelper gren = new GrenHelper();
-        //string dict = @"D:\Work\Framework\RussianGrammaticalDictionary64\bin-windows64\dictionary.xml";
-        string dict = @"C:\Work\Framework\GrammarEngine\src\bin-windows64\dictionary.xml";
-
         public string sendit(string requestText)
         {
             string replay = "";

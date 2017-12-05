@@ -19,7 +19,7 @@ namespace MorphMQserver
         public void Run()
         {
 			//string dict = @"D:\Work\Framework\RussianGrammaticalDictionary64\bin-windows64\dictionary.xml";
-			string dict = @"D:\Work\Framework\GrammarEngine\src\bin-windows64\dictionary.xml";
+			string dict = @"C:\Work\Framework\GrammarEngine\src\bin-windows64\dictionary.xml";
 			gren.Init(dict);
 			Console.WriteLine(" Dictionary vers : {0} ", gren.GetDictVersion());
 			
