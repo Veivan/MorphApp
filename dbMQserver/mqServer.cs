@@ -25,7 +25,7 @@ namespace dbMQserver
             using (var responder = new ZSocket(ZSocketType.REP))
             {
                 // Bind
-                responder.Bind("tcp://*:5555");
+                responder.Connect("tcp://127.0.0.1:5560");
 
                 while (true)
                 {

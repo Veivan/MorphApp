@@ -20,7 +20,7 @@ namespace MorphApp
             using (var requester = new ZSocket(ZSocketType.REQ))
             {
                 // Connect
-                requester.Connect("tcp://127.0.0.1:5555");
+                requester.Connect("tcp://127.0.0.1:5559");
 
                 if (requestText != "")
                 {

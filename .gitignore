@@ -15,4 +15,6 @@
 /TestSQLite/obj
 /dbMQserver/bin
 /dbMQserver/obj
-/MorphApp.suo
+/sgBroker/bin
+/sgBroker/obj
+MorphApp.suo
