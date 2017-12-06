@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define DEBUG_GREN
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -11,8 +13,9 @@ namespace MorphApp
 {
 	public partial class Form1 : Form
 	{
-        Courier courier = new Courier();
-        
+		Courier courier = new Courier();
+		GrenHelperTest gren = new GrenHelperTest();
+
 		public Form1()
 		{
 			InitializeComponent();
@@ -20,39 +23,48 @@ namespace MorphApp
 
 		private void Form1_Load(object sender, EventArgs e)
 		{
-			//            gren.Init(dict);
-			//            toolStripStatusLabel2.Text = gren.GetDictVersion();
+#if (DEBUG_GREN)
+			gren.Init();
+			toolStripStatusLabel2.Text = gren.GetDictVersion();
+			memoInp.Text = "Мама мыла раму";
+#endif
 		}
 
 		private void btGetMorph_Click(object sender, EventArgs e)
 		{
-			//            memoOut.Text = gren.GetMorphInfo(memoInp.Text);
+#if (DEBUG_GREN)
+			memoOut.Text = gren.GetMorphInfo(memoInp.Text);
+#else 
             courier.servType = TMorph.Schema.ServType.svMorph;
             courier.command = TMorph.Schema.ComType.Morph;
             memoOut.Text = courier.sendit(memoInp.Text);
+#endif
 		}
 
 		private void btMakeSynAn_Click(object sender, EventArgs e)
 		{
-			//            memoOut.Text = gren.GetSynInfo(memoInp.Text);
-            courier.servType = TMorph.Schema.ServType.svMorph;
-            courier.command = TMorph.Schema.ComType.Synt;
-            memoOut.Text = courier.sendit(memoInp.Text);
+#if (DEBUG_GREN)
+			memoOut.Text = gren.GetSynInfo(memoInp.Text);
+#else 
+			courier.servType = TMorph.Schema.ServType.svMorph;
+			courier.command = TMorph.Schema.ComType.Synt;
+			memoOut.Text = courier.sendit(memoInp.Text);
+#endif
 		}
 
 		private void btDBGetWord_Click(object sender, EventArgs e)
 		{
-            courier.servType = TMorph.Schema.ServType.svSUBD;
-            courier.command = TMorph.Schema.ComType.GetWord;
+			courier.servType = TMorph.Schema.ServType.svSUBD;
+			courier.command = TMorph.Schema.ComType.GetWord;
 			memoOut.Text = courier.sendit(memoInp.Text);
 		}
 
-        private void btSaveLex_Click(object sender, EventArgs e)
-        {
-            courier.servType = TMorph.Schema.ServType.svSUBD;
-            courier.command = TMorph.Schema.ComType.SaveLex;
-            memoOut.Text = courier.sendit(memoInp.Text);
-        }
+		private void btSaveLex_Click(object sender, EventArgs e)
+		{
+			courier.servType = TMorph.Schema.ServType.svSUBD;
+			courier.command = TMorph.Schema.ComType.SaveLex;
+			memoOut.Text = courier.sendit(memoInp.Text);
+		}
 
 	}
 }
