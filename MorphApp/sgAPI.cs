@@ -3,8 +3,235 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using SolarixGrammarEngineNET;
+
 namespace Gren
 {
+	public enum GrenPart
+	{
+		NUM_WORD_CLASS = 2,              // class num_word
+		NOUN_ru = 6,                     // class СУЩЕСТВИТЕЛЬНОЕ
+		PRONOUN2_ru = 7,                 // class МЕСТОИМ_СУЩ
+		PRONOUN_ru = 8,                  // class МЕСТОИМЕНИЕ
+		ADJ_ru = 9,                      // class ПРИЛАГАТЕЛЬНОЕ
+		NUMBER_CLASS_ru = 10,            // class ЧИСЛИТЕЛЬНОЕ
+		INFINITIVE_ru = 11,              // class ИНФИНИТИВ
+		VERB_ru = 12,                    // class ГЛАГОЛ
+		GERUND_2_ru = 13,                // class ДЕЕПРИЧАСТИЕ
+		PREPOS_ru = 14,                  // class ПРЕДЛОГ
+		IMPERSONAL_VERB_ru = 15,         // class БЕЗЛИЧ_ГЛАГОЛ
+		PARTICLE_ru = 18,                // class ЧАСТИЦА
+		CONJ_ru = 19,                    // class СОЮЗ
+		ADVERB_ru = 20,                  // class НАРЕЧИЕ
+		PUNCTUATION_class = 21,          // class ПУНКТУАТОР
+		POSTPOS_ru = 26,                 // class ПОСЛЕЛОГ
+		POSESS_PARTICLE = 27,            // class ПРИТЯЖ_ЧАСТИЦА
+		MEASURE_UNIT = 28,               // class ЕДИНИЦА_ИЗМЕРЕНИЯ
+		COMPOUND_ADJ_PREFIX = 29,        // class ПРЕФИКС_СОСТАВ_ПРИЛ
+		COMPOUND_NOUN_PREFIX = 30,       // class ПРЕФИКС_СОСТАВ_СУЩ
+		VERB_en = 31,                    // class ENG_VERB
+		BEVERB_en = 32,                  // class ENG_BEVERB
+		AUXVERB_en = 33,                 // class ENG_AUXVERB
+		NOUN_en = 34,                    // class ENG_NOUN
+		PRONOUN_en = 35,                 // class ENG_PRONOUN
+		ARTICLE_en = 36,                 // class ENG_ARTICLE
+		PREP_en = 37,                    // class ENG_PREP
+		POSTPOS_en = 38,                 // class ENG_POSTPOS
+		CONJ_en = 39,                    // class ENG_CONJ
+		ADV_en = 40,                     // class ENG_ADVERB
+		ADJ_en = 41,                     // class ENG_ADJECTIVE
+		PARTICLE_en = 42,                // class ENG_PARTICLE
+		NUMERAL_en = 43,                 // class ENG_NUMERAL
+		INTERJECTION_en = 44,            // class ENG_INTERJECTION
+		POSSESSION_PARTICLE_en = 45,     // class ENG_POSSESSION
+		COMPOUND_PRENOUN_en = 46,        // class ENG_COMPOUND_PRENOUN
+		COMPOUND_PREADJ_en = 47,         // class ENG_COMPOUND_PREADJ
+		COMPOUND_PREVERB_en = 48,        // class ENG_COMPOUND_PREVERB
+		COMPOUND_PREADV_en = 49,         // class ENG_COMPOUND_PREADV
+		NUMERAL_fr = 50,                 // class FR_NUMERAL
+		ARTICLE_fr = 51,                 // class FR_ARTICLE
+		PREP_fr = 52,                    // class FR_PREP
+		ADV_fr = 53,                     // class FR_ADVERB
+		CONJ_fr = 54,                    // class FR_CONJ
+		NOUN_fr = 55,                    // class FR_NOUN
+		ADJ_fr = 56,                     // class FR_ADJ
+		PRONOUN_fr = 57,                 // class FR_PRONOUN
+		VERB_fr = 58,                    // class FR_VERB
+		PARTICLE_fr = 59,                // class FR_PARTICLE
+		PRONOUN2_fr = 60,                // class FR_PRONOUN2
+		NOUN_es = 61,                    // class ES_NOUN
+		ROOT_es = 62,                    // class ES_ROOT
+		JAP_NOUN = 63,                   // class JAP_NOUN
+		JAP_NUMBER = 64,                 // class JAP_NUMBER
+		JAP_ADJECTIVE = 65,              // class JAP_ADJECTIVE
+		JAP_ADVERB = 66,                 // class JAP_ADVERB
+		JAP_CONJ = 67,                   // class JAP_CONJ
+		JAP_VERB = 68,                   // class JAP_VERB
+		JAP_PRONOUN = 69,                // class JAP_PRONOUN
+		JAP_VERB_POSTFIX2 = 72,          // class JAP_VERB_POSTFIX2
+		JAP_PARTICLE = 74,               // class JAP_PARTICLE
+		UNKNOWN_ENTRIES_CLASS = 85      // class UnknownEntries
+	}
+
+	//public const int CharCasing = 4;                  // enum CharCasing
+	public enum enCharCasing
+	{
+		// Coordiname CharCasing states:
+		DECAPITALIZED_CASED = 0,         // CharCasing : Lower
+		FIRST_CAPITALIZED_CASED = 1,     // CharCasing : FirstCapitalized
+		ALL_CAPITALIZED_CASED = 2,       // CharCasing : Upper
+		EACH_LEXEM_CAPITALIZED_CASED = 3 // CharCasing : EachLexemCapitalized
+	}
+
+	//public const int PERSON_ru = 27;                  // enum ЛИЦО
+	public enum enPERSON_ru
+	{
+		// Coordiname ЛИЦО states:
+		PERSON_1_ru = 0,                 // ЛИЦО : 1
+		PERSON_2_ru = 1,                 // ЛИЦО : 2
+		PERSON_3_ru = 2                  // ЛИЦО : 3
+	}
+
+	//public const int NUMBER_ru = 28;                  // enum ЧИСЛО
+	public enum enNUMBER_ru
+	{
+		// Coordiname ЧИСЛО states:
+		SINGULAR_NUMBER_ru = 0,          // ЧИСЛО : ЕД
+		PLURAL_NUMBER_ru = 1             // ЧИСЛО : МН
+	}
+
+	//public const int GENDER_ru = 29;                  // enum РОД
+	public enum enGENDER_ru
+	{
+		// Coordiname РОД states:
+		MASCULINE_GENDER_ru = 0,         // РОД : МУЖ
+		FEMININE_GENDER_ru = 1,          // РОД : ЖЕН
+		NEUTRAL_GENDER_ru = 2            // РОД : СР
+	}
+
+	//public const int TRANSITIVENESS_ru = 30;          // enum ПЕРЕХОДНОСТЬ
+	public enum enTRANSITIVENESS_ru
+	{
+		// Coordiname ПЕРЕХОДНОСТЬ states:
+		NONTRANSITIVE_VERB_ru = 0,      // ПЕРЕХОДНОСТЬ : НЕПЕРЕХОДНЫЙ
+		TRANSITIVE_VERB_ru = 1         // ПЕРЕХОДНОСТЬ : ПЕРЕХОДНЫЙ
+	}
+
+	//public const int PARTICIPLE_ru = 31;              // enum ПРИЧАСТИЕ
+
+	//public const int PASSIVE_PARTICIPLE_ru = 32;      // enum СТРАД
+
+	//public const int ASPECT_ru = 33;                  // enum ВИД
+	public enum enASPECT_ru
+	{
+		// Coordiname ВИД states:
+		PERFECT_ru = 0,                  // ВИД : СОВЕРШ
+		IMPERFECT_ru = 1                 // ВИД : НЕСОВЕРШ
+	}
+
+	//public const int VERB_FORM_ru = 35;               // enum НАКЛОНЕНИЕ
+	public enum enVERB_FORM_ru
+	{
+		// Coordiname НАКЛОНЕНИЕ states:
+		VB_INF_ru = 0,                   // НАКЛОНЕНИЕ : ИЗЪЯВ
+		VB_ORDER_ru = 1                  // НАКЛОНЕНИЕ : ПОБУД
+	}
+
+	//public const int TENSE_ru = 36;                   // enum ВРЕМЯ
+	public enum enTENSE_ru
+	{
+		// Coordiname ВРЕМЯ states:
+		PAST_ru = 0,                     // ВРЕМЯ : ПРОШЕДШЕЕ
+		PRESENT_ru = 1,                  // ВРЕМЯ : НАСТОЯЩЕЕ
+		FUTURE_ru = 2                    // ВРЕМЯ : БУДУЩЕЕ
+	}
+
+	//public const int SHORTNESS_ru = 37;               // enum КРАТКИЙ
+
+	//public const int CASE_ru = 39;                    // enum ПАДЕЖ
+	public enum enCASE_ru
+	{
+		// Coordiname ПАДЕЖ states:
+		NOMINATIVE_CASE_ru = 0,          // ПАДЕЖ : ИМ
+		VOCATIVE_CASE_ru = 1,            // ЗВАТ
+		GENITIVE_CASE_ru = 2,            // ПАДЕЖ : РОД
+		PARTITIVE_CASE_ru = 3,           // ПАРТ
+		INSTRUMENTAL_CASE_ru = 5,        // ПАДЕЖ : ТВОР
+		ACCUSATIVE_CASE_ru = 6,          // ПАДЕЖ : ВИН
+		DATIVE_CASE_ru = 7,              // ПАДЕЖ : ДАТ
+		PREPOSITIVE_CASE_ru = 8,         // ПАДЕЖ : ПРЕДЛ
+		LOCATIVE_CASE_ru = 10           // МЕСТ
+	}
+
+	//public const int FORM_ru = 40;                    // enum ОДУШ
+	public enum enFORM_ru
+	{
+		// Coordiname ОДУШ states:
+		ANIMATIVE_FORM_ru = 0,           // ОДУШ : ОДУШ
+		INANIMATIVE_FORM_ru = 1          // ОДУШ : НЕОДУШ
+	}
+
+	/*		 public const int COUNTABILITY_ru = 41;            // enum ПЕРЕЧИСЛИМОСТЬ
+			// Coordiname ПЕРЕЧИСЛИМОСТЬ states:
+			 public const int COUNTABLE_ru = 0;                // ПЕРЕЧИСЛИМОСТЬ : ДА
+			 public const int UNCOUNTABLE_ru = 1;              // ПЕРЕЧИСЛИМОСТЬ : НЕТ
+
+			 public const int COMPAR_FORM_ru = 42;             // enum СТЕПЕНЬ
+			// Coordiname СТЕПЕНЬ states:
+			 public const int ATTRIBUTIVE_FORM_ru = 0;         // СТЕПЕНЬ : АТРИБ
+			 public const int COMPARATIVE_FORM_ru = 1;         // СТЕПЕНЬ : СРАВН
+			 public const int SUPERLATIVE_FORM_ru = 2;         // СТЕПЕНЬ : ПРЕВОСХ
+			 public const int LIGHT_COMPAR_FORM_RU = 3;        // СТЕПЕНЬ : КОМПАРАТИВ2
+			 public const int ABBREV_FORM_ru = 4;              // СТЕПЕНЬ : СОКРАЩ
+
+			 public const int CASE_GERUND_ru = 43;             // enum ПадежВал
+			// Coordiname ПадежВал states:
+
+			 public const int MODAL_ru = 44;                   // enum МОДАЛЬНЫЙ
+
+			 public const int VERBMODE_TENSE = 45;             // enum СГД_Время
+			// Coordiname СГД_Время states:
+
+			 public const int VERBMODE_DIRECTION = 46;         // enum СГД_Направление
+			// Coordiname СГД_Направление states:
+
+			 public const int NUMERAL_CATEGORY = 47;           // enum КАТЕГОРИЯ_ЧИСЛ
+			// Coordiname КАТЕГОРИЯ_ЧИСЛ states:
+			 public const int CARDINAL = 0;                    // КАТЕГОРИЯ_ЧИСЛ : КОЛИЧ
+			 public const int COLLECTION = 1;                  // КАТЕГОРИЯ_ЧИСЛ : СОБИР
+
+			 public const int ADV_SEMANTICS = 48;              // enum ОБСТ_ВАЛ
+			// Coordiname ОБСТ_ВАЛ states:
+			 public const int S_LOCATION = 0;                  // ОБСТ_ВАЛ : МЕСТО
+			 public const int S_DIRECTION = 1;                 // ОБСТ_ВАЛ : НАПРАВЛЕНИЕ
+			 public const int S_DIRECTION_FROM = 2;            // ОБСТ_ВАЛ : НАПРАВЛЕНИЕ_ОТКУДА
+			 public const int S_FINAL_POINT = 3;               // ОБСТ_ВАЛ : КОНЕЧНАЯ_ТОЧКА
+			 public const int S_DISTANCE = 4;                  // ОБСТ_ВАЛ : РАССТОЯНИЕ
+			 public const int S_VELOCITY = 5;                  // ОБСТ_ВАЛ : СКОРОСТЬ
+			 public const int S_MOMENT = 6;                    // ОБСТ_ВАЛ : МОМЕНТ_ВРЕМЕНИ
+			 public const int S_DURATION = 7;                  // ОБСТ_ВАЛ : ДЛИТЕЛЬНОСТЬ
+			 public const int S_TIME_DIVISIBILITY = 8;         // ОБСТ_ВАЛ : КРАТНОСТЬ
+			 public const int S_ANALOG = 9;                    // ОБСТ_ВАЛ : СОПОСТАВЛЕНИЕ
+			 public const int S_FACTOR = 10;                   // ОБСТ_ВАЛ : МНОЖИТЕЛЬ
+
+			 public const int ADJ_TYPE = 49;                   // enum ТИП_ПРИЛ
+			// Coordiname ТИП_ПРИЛ states:
+			 public const int ADJ_POSSESSIVE = 0;              // ТИП_ПРИЛ : ПРИТЯЖ
+			 public const int ADJ_ORDINAL = 1;                 // ТИП_ПРИЛ : ПОРЯДК
+
+			 public const int PRONOUN_TYPE_ru = 51;            // enum ТИП_МЕСТОИМЕНИЯ
+			// Coordiname ТИП_МЕСТОИМЕНИЯ states:
+
+			 public const int VERB_TYPE_ru = 52;               // enum ТИП_ГЛАГОЛА
+			// Coordiname ТИП_ГЛАГОЛА states:
+			 public const int COPULA_VERB_ru = 2;              // ТИП_ГЛАГОЛА : СВЯЗОЧН
+
+			 public const int PARTICLE_TYPE = 53;              // enum ТИП_ЧАСТИЦЫ
+			// Coordiname ТИП_ЧАСТИЦЫ states:
+			 public const int PREFIX_PARTICLE = 0;             // ТИП_ЧАСТИЦЫ : ПРЕФИКС
+			 public const int POSTFIX_PARTICLE = 1;            // ТИП_ЧАСТИЦЫ : ПОСТФИКС
+ 
+			 */
 	public enum GrenLink
 	{
 		OBJECT_link = 0,
@@ -115,7 +342,7 @@ namespace Gren
 		UNKNOWN_SLOT_link = 113,
 		SECOND_VERB_link = 114
 	}
-	
+
 	class sgAPI
 	{
 		public static GrenLink GetLinkType(int cnst)
@@ -125,7 +352,7 @@ namespace Gren
 				throw new InvalidOperationException("Enum out of range.");
 			}
 
-			return (GrenLink)cnst;			
+			return (GrenLink)cnst;
 		}
 
 		public static string GetLinkTypeStr(int cnst)
@@ -139,5 +366,160 @@ namespace Gren
 			return result;
 		}
 
+
+		public static Type GetTypeClassByID(GrenPart part)
+		{
+
+			Type result;
+			switch (part)
+			{
+				case GrenPart.NUM_WORD_CLASS:
+					result = typeof(ADJ);
+					break;
+				case GrenPart.NOUN_ru:
+					result = typeof(NOUN_ru);
+					break;
+				default:
+					result = null;
+					break;
+			}
+			/*
+					 = 2,              // class num_word
+					 = 6,                     // class СУЩЕСТВИТЕЛЬНОЕ
+					PRONOUN2_ru = 7,                 // class МЕСТОИМ_СУЩ
+					PRONOUN_ru = 8,                  // class МЕСТОИМЕНИЕ
+					ADJ_ru = 9,                      // class ПРИЛАГАТЕЛЬНОЕ
+					NUMBER_CLASS_ru = 10,            // class ЧИСЛИТЕЛЬНОЕ
+					INFINITIVE_ru = 11,              // class ИНФИНИТИВ
+					VERB_ru = 12,                    // class ГЛАГОЛ
+					GERUND_2_ru = 13,                // class ДЕЕПРИЧАСТИЕ
+					PREPOS_ru = 14,                  // class ПРЕДЛОГ
+					IMPERSONAL_VERB_ru = 15,         // class БЕЗЛИЧ_ГЛАГОЛ
+					PARTICLE_ru = 18,                // class ЧАСТИЦА
+					CONJ_ru = 19,                    // class СОЮЗ
+					ADVERB_ru = 20,                  // class НАРЕЧИЕ
+					PUNCTUATION_class = 21,          // class ПУНКТУАТОР
+					POSTPOS_ru = 26,                 // class ПОСЛЕЛОГ
+					POSESS_PARTICLE = 27,            // class ПРИТЯЖ_ЧАСТИЦА
+					MEASURE_UNIT = 28,               // class ЕДИНИЦА_ИЗМЕРЕНИЯ
+					COMPOUND_ADJ_PREFIX = 29,        // class ПРЕФИКС_СОСТАВ_ПРИЛ
+					COMPOUND_NOUN_PREFIX = 30,       // class ПРЕФИКС_СОСТАВ_СУЩ
+
+								*/
+
+			return result;
+		}
+
 	}
+
+	/// <summary>
+	/// Базовый класс для хранения ID характеристик слова в виде словаря.
+	/// </summary>
+	class HasDict
+	{
+		protected Dictionary<int, int> pairs = new Dictionary<int, int>();
+
+		public void AddPair(int Key, int Value)
+		{
+			if (!pairs.ContainsKey(Key))
+				pairs.Add(Key, Value);
+		}
+
+		public Dictionary<int, int> GetPairs()
+		{
+			return pairs;
+		}
+
+		virtual public Dictionary<string, string> GetPairsNames()
+		{
+			return null;
+		}
+	}
+
+	/// <summary>
+	/// Базовый класс для прилагательных, причастий, числительных.
+	/// </summary>
+	class ADJ : HasDict
+	{
+		private int[] dimentions = { 
+								   GrammarEngineAPI.GENDER_ru, 
+								   GrammarEngineAPI.NUMBER_ru, 
+								   GrammarEngineAPI.CASE_ru, 
+								   GrammarEngineAPI.FORM_ru };
+
+		public override Dictionary<string, string> GetPairsNames()
+		{
+			Dictionary<string, string> pnames = new Dictionary<string, string>();
+			foreach (var dim in dimentions)
+			{
+				if (this.pairs.ContainsKey(dim))
+				{
+					var Key = "";
+					var Value = "";
+					switch (dim)
+					{
+						case GrammarEngineAPI.GENDER_ru:
+							Key = (GrammarEngineAPI.GENDER_ru).ToString();
+							Value = ((enGENDER_ru)this.pairs[dim]).ToString();
+							break;
+						case GrammarEngineAPI.NUMBER_ru:
+							Key = GrammarEngineAPI.NUMBER_ru.ToString();
+							Value = ((enNUMBER_ru)this.pairs[dim]).ToString();
+							break;
+						case GrammarEngineAPI.CASE_ru:
+							Key = GrammarEngineAPI.CASE_ru.ToString();
+							Value = ((enCASE_ru)this.pairs[dim]).ToString();
+							break;
+						case GrammarEngineAPI.FORM_ru:
+							Key = GrammarEngineAPI.FORM_ru.ToString();
+							Value = ((enFORM_ru)this.pairs[dim]).ToString();
+							break;
+					}
+					pnames.Add(Key, Value);
+				}
+			}
+			// Используется ссылка на метод, определенный в базовом классе Font
+			return pnames;
+		}
+
+		public int[] GetDimensions()
+		{
+			return dimentions;
+		}
+	}
+
+	/// <summary>
+	/// СУЩЕСТВИТЕЛЬНОЕ 
+	/// </summary>
+	class NOUN_ru : HasDict
+	{
+		private int[] dimentions = { 
+				// МОДАЛЬНЫЙ   // модальность - для слов, могущий принимать участие в сочетаниях типа "желание учиться" или "возможность получить"
+				GrammarEngineAPI.MODAL_ru, 
+				// CharCasing  // Слова, начинающиеся с заглавной буквы или целиком в верхнем регистре
+				GrammarEngineAPI.CharCasing,
+
+				GrammarEngineAPI.COUNTABILITY_ru, //ПЕРЕЧИСЛИМОСТЬ
+				GrammarEngineAPI.FORM_ru, //ОДУШ
+				GrammarEngineAPI.GENDER_ru, //РОД
+
+				GrammarEngineAPI.NUMBER_ru, // ЧИСЛО
+				GrammarEngineAPI.CASE_ru //ПАДЕЖ
+			};
+
+		private enCharCasing CharCasing;
+	}
+
+	/// <summary>
+	/// МЕСТОИМ_СУЩ 
+	/// </summary>
+	class PRONOUN2_ru : HasDict
+	{
+		private int[] dimentions = { 
+				GrammarEngineAPI.GENDER_ru, // РОД
+				GrammarEngineAPI.CASE_ru //ПАДЕЖ
+			};
+
+	}
+
 }

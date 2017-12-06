@@ -17,4 +17,6 @@
 /dbMQserver/obj
 /sgBroker/bin
 /sgBroker/obj
+/SimpleTest/bin
+/SimpleTest/obj
 MorphApp.suo

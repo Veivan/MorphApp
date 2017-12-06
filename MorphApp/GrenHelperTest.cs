@@ -45,7 +45,24 @@ namespace MorphApp
 			if (!IsReady)
 				return result;
 
-			var sb = new StringBuilder();
+			var noun = new Gren.ADJ();
+			foreach (var dim in noun.GetDimensions())
+			{
+				noun.AddPair(dim, 1);
+			}
+
+			result = "";
+			var pairs = noun.GetPairs();
+			ICollection<int> keys = pairs.Keys;
+			foreach (int j in keys)
+				result += String.Format("ID -> {0}  Name -> {1} \r\n", j, pairs[j]);
+
+			var pairsn = noun.GetPairsNames();
+			var keysn = pairsn.Keys;
+			foreach (var j in keysn)
+				result += String.Format("ID -> {0}  Name -> {1} \r\n", j, pairsn[j]);
+
+			/*var sb = new StringBuilder();
 
 			// http://www.solarix.ru/api/ru/sol_Tokenize.shtml
 			IntPtr hTokens = GrammarEngine.sol_TokenizeW(hEngine, phrase, GrammarEngineAPI.RUSSIAN_LANGUAGE);
@@ -53,7 +70,7 @@ namespace MorphApp
 			int ntok = GrammarEngine.sol_CountStrings(hTokens);
 			sb.Append("Токенов : " + ntok + "\r\n");
 
-			result = sb.ToString();
+			result = sb.ToString();*/
 			return result;
 		}
 
@@ -118,13 +135,42 @@ namespace MorphApp
 			if (Position > -1)
 			{
 				sb.Append("\t Position: " + Position.ToString());
-
-				// http://www.solarix.ru/api/ru/sol_GetNodeVersionCount.shtml
-				int VersionCount = GrammarEngine.sol_GetNodeVersionCount(hEngine, hNode);
-				sb.Append("\t Число версий: " + VersionCount.ToString());
-
 				// http://www.solarix.ru/api/ru/sol_GetNodeIEntry.shtml
 				int ient = GrammarEngine.sol_GetNodeIEntry(hEngine, hNode);
+				string NameFX = GrammarEngine.sol_GetEntryNameFX(hEngine, ient);
+				sb.Append("\t");
+				sb.Append(NameFX);
+
+
+				// Определение части речи
+				// http://www.solarix.ru/api/ru/sol_GetClassName.shtml
+				int iclass = GrammarEngine.sol_GetEntryClass(hEngine, ient);
+				StringBuilder buffer = new StringBuilder(SolarixGrammarEngineNET.GrammarEngine.sol_MaxLexemLen(hEngine));
+				//SolarixGrammarEngineNET.GrammarEngine.sol_GetClassName(hEngine, SolarixGrammarEngineNET.GrammarEngineAPI.VERB_ru, buffer);
+				SolarixGrammarEngineNET.GrammarEngine.sol_GetClassName(hEngine, iclass, buffer);
+				sb.Append("\t");
+				sb.Append(buffer.ToString());
+
+
+				// http://www.solarix.ru/api/ru/sol_GetNodePairsCount.shtml
+				int PairsCount = GrammarEngine.sol_GetNodePairsCount(hNode);
+				for (int i = 0; i < PairsCount; i++)
+				{
+					// http://www.solarix.ru/api/ru/sol_GetNodePairCoord.shtml
+					int Coord = GrammarEngine.sol_GetNodePairCoord(hNode, i);
+					// http://www.solarix.ru/api/ru/sol_GetNodePairState.shtml
+					int State = GrammarEngine.sol_GetNodePairState(hNode, i);
+					sb.Append("\t");
+					sb.Append(Coord.ToString());
+					sb.Append("\t");
+					sb.Append(State.ToString());
+			
+				}
+
+				/*/ http://www.solarix.ru/api/ru/sol_GetNodeVersionCount.shtml
+				int VersionCount = GrammarEngine.sol_GetNodeVersionCount(hEngine, hNode);
+				sb.Append("\t Число версий: " + VersionCount.ToString()); */
+
 
 				if (hParentNode != IntPtr.Zero)
 				{
