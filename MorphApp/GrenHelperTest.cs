@@ -48,7 +48,7 @@ namespace MorphApp
             if (!IsReady)
                 return result;
 
-            var noun = new Gren.ADJ();
+            /*var noun = new Gren.ADJ_ru();
             foreach (var dim in noun.dimentions)
             {
                 noun.AddPair(dim, 1);
@@ -57,23 +57,86 @@ namespace MorphApp
             result = "";
             var pairs = noun.GetPairs();
             ICollection<int> keys = pairs.Keys;
-            foreach (int j in keys)
-                result += String.Format("ID -> {0}  Name -> {1} \r\n", j, pairs[j]);
+            //foreach (int j in keys)
+            //    result += String.Format("ID -> {0}  Name -> {1} \r\n", j, pairs[j]);
 
             var pairsn = noun.GetPairsNames(noun.dimentions);
             var keysn = pairsn.Keys;
             foreach (var j in keysn)
                 result += String.Format("ID -> {0}  Name -> {1} \r\n", j, pairsn[j]);
-
-            /*var sb = new StringBuilder();
+*/
+            var sb = new StringBuilder();
 
             // http://www.solarix.ru/api/ru/sol_Tokenize.shtml
-            IntPtr hTokens = GrammarEngine.sol_TokenizeW(hEngine, phrase, GrammarEngineAPI.RUSSIAN_LANGUAGE);
-            // http://www.solarix.ru/api/ru/sol_CountStrings.shtml
-            int ntok = GrammarEngine.sol_CountStrings(hTokens);
-            sb.Append("Токенов : " + ntok + "\r\n");
+            //IntPtr hTokens = GrammarEngine.sol_TokenizeW(hEngine, phrase, GrammarEngineAPI.RUSSIAN_LANGUAGE);
+            string[] tokens = GrammarEngine.sol_TokenizeFX(hEngine, phrase, GrammarEngineAPI.RUSSIAN_LANGUAGE);
 
-            result = sb.ToString();*/
+            // http://www.solarix.ru/api/ru/sol_CountStrings.shtml
+            //int ntok = GrammarEngine.sol_CountStrings(hTokens);
+            int ntok = tokens.Length;
+
+            sb.Append("Токенов : " + ntok + "\r\n");
+            sb.Append(new String('-', 32) + "\r\n");
+
+            foreach (var token in tokens)
+            {
+                // http://www.solarix.ru/api/ru/sol_ProjectWord.shtml
+                IntPtr hProjs = GrammarEngine.sol_ProjectWord(hEngine, token, 0);
+
+                int nprojs = GrammarEngine.sol_CountProjections(hProjs);
+
+                for (int i = 0; i < nprojs; ++i)
+                {
+                    int id_entry = GrammarEngine.sol_GetIEntry(hProjs, i);
+                    int id_partofspeech = GrammarEngine.sol_GetEntryClass(hEngine, id_entry);
+
+                    var EntryName = GrammarEngine.sol_GetEntryNameFX(hEngine, id_entry);
+
+                    StringBuilder PartOfSpeechName = new StringBuilder(GrammarEngine.sol_MaxLexemLen(hEngine));
+                    GrammarEngine.sol_GetClassName(hEngine, id_partofspeech, PartOfSpeechName);
+
+                    sb.Append(EntryName + "\r\n");
+                    sb.Append(PartOfSpeechName + "\r\n");
+ 
+                    // Определение типа класса по ID части речи
+                    var xType = Gren.sgAPI.GetTypeClassByID((Gren.GrenPart)id_partofspeech);
+                    if (xType != null)
+                    {
+                        // Создание класса части речи
+                        var xPart = Activator.CreateInstance(xType) as Gren.HasDict;
+                        foreach (var CoordID in xPart.dimentions)
+                        {
+                            int state = GrammarEngine.sol_GetProjCoordState(hEngine, hProjs, i, CoordID);
+                            xPart.AddPair(CoordID, state);
+                        }
+
+                        //CharCasing
+                        int CharCasingID = GrammarEngine.sol_FindEnum(hEngine, "CharCasing");
+
+                        var pairs = xPart.GetPairs();
+                        ICollection<int> keys = pairs.Keys;
+                        StringBuilder propname = new StringBuilder(GrammarEngine.sol_MaxLexemLen(hEngine));
+                        StringBuilder propvalname = new StringBuilder(GrammarEngine.sol_MaxLexemLen(hEngine));
+                        foreach (int j in keys)
+                        {
+                            GrammarEngine.sol_GetCoordName(hEngine, j, propname);
+                            GrammarEngine.sol_GetCoordStateName(hEngine, j, pairs[j], propvalname);
+                            sb.Append(String.Format("ID -> {0}  Name -> {1} \r\n", propname, propvalname));
+                        }
+
+                        /*var pairsn = xPart.GetPairsNames(xPart.dimentions);
+                        var keysn = pairsn.Keys;
+                        foreach (var j in keysn)
+                        {
+                            sb.Append(String.Format("ID -> {0}  Name -> {1} \r\n", j, pairsn[j]));
+                        }*/
+                    }
+                    sb.Append(new String('-', 32) + "\r\n\r\n");
+                }
+                GrammarEngine.sol_DeleteProjections(hProjs);
+            }
+
+            result = sb.ToString();
             return result;
         }
 

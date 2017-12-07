@@ -70,7 +70,28 @@ namespace Gren
 		JAP_PRONOUN = 69,                // class JAP_PRONOUN
 		JAP_VERB_POSTFIX2 = 72,          // class JAP_VERB_POSTFIX2
 		JAP_PARTICLE = 74,               // class JAP_PARTICLE */
-        UNKNOWN_ENTRIES_CLASS = 85      // class UnknownEntries
+        UNKNOWN_ENTRIES_CLASS = 85       // class UnknownEntries
+    }
+
+    public enum GrenProperty
+    {
+        CharCasing = 4,                  // enum CharCasing
+        PERSON_ru = 27,                  // enum ЛИЦО
+        NUMBER_ru = 28,                  // enum ЧИСЛО
+        GENDER_ru = 29,                  // enum РОД
+        TRANSITIVENESS_ru = 30,          // enum ПЕРЕХОДНОСТЬ
+        PARTICIPLE_ru = 31,              // enum ПРИЧАСТИЕ
+        PASSIVE_PARTICIPLE_ru = 32,      // enum СТРАД
+        ASPECT_ru = 33,                  // enum ВИД
+        VERB_FORM_ru = 35,               // enum НАКЛОНЕНИЕ
+        TENSE_ru = 36,                   // enum ВРЕМЯ
+        SHORTNESS_ru = 37,               // enum КРАТКИЙ
+        CASE_ru = 39,                    // enum ПАДЕЖ
+        FORM_ru = 40,                    // enum ОДУШ
+        COUNTABILITY_ru = 41,            // enum ПЕРЕЧИСЛИМОСТЬ
+        COMPAR_FORM_ru = 42,             // enum СТЕПЕНЬ
+        CASE_GERUND_ru = 43,             // enum ПадежВал
+        MODAL_ru = 44                    // enum МОДАЛЬНЫЙ
     }
 
     //public const int CharCasing = 4;                  // enum CharCasing
@@ -190,11 +211,7 @@ namespace Gren
         ABBREV_FORM_ru = 4               // СТЕПЕНЬ : СОКРАЩ
     }
 
-    /*             public const int CASE_GERUND_ru = 43;             // enum ПадежВал
-               // Coordiname ПадежВал states:
-
-                public const int MODAL_ru = 44;                   // enum МОДАЛЬНЫЙ
-
+    /*             
                 public const int VERBMODE_TENSE = 45;             // enum СГД_Время
                // Coordiname СГД_Время states:
 
@@ -379,39 +396,47 @@ namespace Gren
             Type result;
             switch (part)
             {
-                case GrenPart.NUM_WORD_CLASS:  // class num_word
-                    result = typeof(ADJ);
+                case GrenPart.NUM_WORD_CLASS:  // class num_word ???
+                    result = typeof(NOUN_ru);
                     break;
                 case GrenPart.NOUN_ru:
                     result = typeof(NOUN_ru); // class СУЩЕСТВИТЕЛЬНОЕ
                     break;
+                case GrenPart.PRONOUN2_ru:
+                    result = typeof(PRONOUN2_ru); // class МЕСТОИМ_СУЩ
+                    break;
+                case GrenPart.PRONOUN_ru:
+                    result = typeof(PRONOUN_ru); // class МЕСТОИМЕНИЕ
+                    break;
+
+                case GrenPart.VERB_ru:
+                    result = typeof(VERB_ru); // class ГЛАГОЛ
+                    break;
+                /*
+                         ADJ_ru = 9,                      // class ПРИЛАГАТЕЛЬНОЕ
+                         NUMBER_CLASS_ru = 10,            // class ЧИСЛИТЕЛЬНОЕ
+                         INFINITIVE_ru = 11,              // class ИНФИНИТИВ
+                          = 12,                    // class ГЛАГОЛ
+                         GERUND_2_ru = 13,                // class ДЕЕПРИЧАСТИЕ
+                         PREPOS_ru = 14,                  // class ПРЕДЛОГ
+                         IMPERSONAL_VERB_ru = 15,         // class БЕЗЛИЧ_ГЛАГОЛ
+                         PARTICLE_ru = 18,                // class ЧАСТИЦА
+                         CONJ_ru = 19,                    // class СОЮЗ
+                         ADVERB_ru = 20,                  // class НАРЕЧИЕ
+                         PUNCTUATION_class = 21,          // class ПУНКТУАТОР
+                         POSTPOS_ru = 26,                 // class ПОСЛЕЛОГ
+                         POSESS_PARTICLE = 27,            // class ПРИТЯЖ_ЧАСТИЦА
+                         MEASURE_UNIT = 28,               // class ЕДИНИЦА_ИЗМЕРЕНИЯ
+                         COMPOUND_ADJ_PREFIX = 29,        // class ПРЕФИКС_СОСТАВ_ПРИЛ
+                         COMPOUND_NOUN_PREFIX = 30,       // class ПРЕФИКС_СОСТАВ_СУЩ
+
+                                     */
                 default:
                     result = null;
                     break;
             }
-            /*
-                    PRONOUN2_ru = 7,                 // class МЕСТОИМ_СУЩ
-                    PRONOUN_ru = 8,                  // class МЕСТОИМЕНИЕ
-                    ADJ_ru = 9,                      // class ПРИЛАГАТЕЛЬНОЕ
-                    NUMBER_CLASS_ru = 10,            // class ЧИСЛИТЕЛЬНОЕ
-                    INFINITIVE_ru = 11,              // class ИНФИНИТИВ
-                    VERB_ru = 12,                    // class ГЛАГОЛ
-                    GERUND_2_ru = 13,                // class ДЕЕПРИЧАСТИЕ
-                    PREPOS_ru = 14,                  // class ПРЕДЛОГ
-                    IMPERSONAL_VERB_ru = 15,         // class БЕЗЛИЧ_ГЛАГОЛ
-                    PARTICLE_ru = 18,                // class ЧАСТИЦА
-                    CONJ_ru = 19,                    // class СОЮЗ
-                    ADVERB_ru = 20,                  // class НАРЕЧИЕ
-                    PUNCTUATION_class = 21,          // class ПУНКТУАТОР
-                    POSTPOS_ru = 26,                 // class ПОСЛЕЛОГ
-                    POSESS_PARTICLE = 27,            // class ПРИТЯЖ_ЧАСТИЦА
-                    MEASURE_UNIT = 28,               // class ЕДИНИЦА_ИЗМЕРЕНИЯ
-                    COMPOUND_ADJ_PREFIX = 29,        // class ПРЕФИКС_СОСТАВ_ПРИЛ
-                    COMPOUND_NOUN_PREFIX = 30,       // class ПРЕФИКС_СОСТАВ_СУЩ
 
-                                */
-
-            return result;
+             return result;
         }
 
     }
@@ -465,69 +490,53 @@ namespace Gren
             {
                 if (this.pairs.ContainsKey(dim))
                 {
-                    var Key = "";
+                    var Key = ((GrenProperty)dim).ToString();
                     var Value = "";
                     switch (dim)
                     {
-                        case GrammarEngineAPI.GENDER_ru:
-                            Key = (GrammarEngineAPI.GENDER_ru).ToString();
-                            Value = ((enGENDER_ru)this.pairs[dim]).ToString();
-                            break;
-                        case GrammarEngineAPI.NUMBER_ru:
-                            Key = GrammarEngineAPI.NUMBER_ru.ToString();
-                            Value = ((enNUMBER_ru)this.pairs[dim]).ToString();
-                            break;
-                        case GrammarEngineAPI.CASE_ru:
-                            Key = GrammarEngineAPI.CASE_ru.ToString();
-                            Value = ((enCASE_ru)this.pairs[dim]).ToString();
-                            break;
-                        case GrammarEngineAPI.FORM_ru:
-                            Key = GrammarEngineAPI.FORM_ru.ToString();
-                            Value = ((enFORM_ru)this.pairs[dim]).ToString();
-                            break;
                         case GrammarEngineAPI.CharCasing:
-                            Key = GrammarEngineAPI.CharCasing.ToString();
                             Value = ((enCharCasing)this.pairs[dim]).ToString();
                             break;
                         case GrammarEngineAPI.PERSON_ru:
-                            Key = GrammarEngineAPI.PERSON_ru.ToString();
                             Value = ((enPERSON_ru)this.pairs[dim]).ToString();
                             break;
-                        case GrammarEngineAPI.MODAL_ru:
-                            Key = GrammarEngineAPI.MODAL_ru.ToString();
-                            Value = "";
+                        case GrammarEngineAPI.NUMBER_ru:
+                            Value = ((enNUMBER_ru)this.pairs[dim]).ToString();
                             break;
-                        case GrammarEngineAPI.PASSIVE_PARTICIPLE_ru:
-                            Key = GrammarEngineAPI.PASSIVE_PARTICIPLE_ru.ToString();
-                            Value = "";
+                        case GrammarEngineAPI.GENDER_ru:
+                            Value = ((enGENDER_ru)this.pairs[dim]).ToString();
                             break;
                         case GrammarEngineAPI.TRANSITIVENESS_ru:
-                            Key = GrammarEngineAPI.TRANSITIVENESS_ru.ToString();
                             Value = ((enTRANSITIVENESS_ru)this.pairs[dim]).ToString();
                             break;
-                        case GrammarEngineAPI.CASE_GERUND_ru:
-                            Key = GrammarEngineAPI.CASE_GERUND_ru.ToString();
-                            Value = "";
+                        case GrammarEngineAPI.PARTICIPLE_ru:
+                        case GrammarEngineAPI.PASSIVE_PARTICIPLE_ru:
                             break;
                         case GrammarEngineAPI.ASPECT_ru:
-                            Key = GrammarEngineAPI.ASPECT_ru.ToString();
                             Value = ((enASPECT_ru)this.pairs[dim]).ToString();
                             break;
+                        case GrammarEngineAPI.VERB_FORM_ru:
+                            Value = ((enVERB_FORM_ru)this.pairs[dim]).ToString();
+                            break;
                         case GrammarEngineAPI.TENSE_ru:
-                            Key = GrammarEngineAPI.TENSE_ru.ToString();
                             Value = ((enTENSE_ru)this.pairs[dim]).ToString();
                             break;
-                        case GrammarEngineAPI.COMPAR_FORM_ru:
-                            Key = GrammarEngineAPI.COMPAR_FORM_ru.ToString();
-                            Value = ((enCOMPAR_FORM_ru)this.pairs[dim]).ToString();
+                        case GrammarEngineAPI.SHORTNESS_ru:
+                            break;
+                        case GrammarEngineAPI.CASE_ru:
+                            Value = ((enCASE_ru)this.pairs[dim]).ToString();
+                            break;
+                        case GrammarEngineAPI.FORM_ru:
+                            Value = ((enFORM_ru)this.pairs[dim]).ToString();
                             break;
                         case GrammarEngineAPI.COUNTABILITY_ru:
-                            Key = GrammarEngineAPI.COUNTABILITY_ru.ToString();
                             Value = ((enCOUNTABILITY_ru)this.pairs[dim]).ToString();
                             break;
-                        case GrammarEngineAPI.SHORTNESS_ru:
-                            Key = GrammarEngineAPI.SHORTNESS_ru.ToString();
-                            Value = "";
+                        case GrammarEngineAPI.COMPAR_FORM_ru:
+                            Value = ((enCOMPAR_FORM_ru)this.pairs[dim]).ToString();
+                            break;
+                        case GrammarEngineAPI.CASE_GERUND_ru:
+                        case GrammarEngineAPI.MODAL_ru:
                             break;
                     }
                     pnames.Add(Key, Value);
@@ -544,10 +553,10 @@ namespace Gren
     class NOUN_ru : HasDict
     {
         private int[] dims = { 
-				// МОДАЛЬНЫЙ   // модальность - для слов, могущий принимать участие в сочетаниях типа "желание учиться" или "возможность получить"
+				/*/ МОДАЛЬНЫЙ   // модальность - для слов, могущий принимать участие в сочетаниях типа "желание учиться" или "возможность получить"
 				GrammarEngineAPI.MODAL_ru, 
 				// CharCasing  // Слова, начинающиеся с заглавной буквы или целиком в верхнем регистре
-				GrammarEngineAPI.CharCasing,
+				GrammarEngineAPI.CharCasing, */
 
 				GrammarEngineAPI.COUNTABILITY_ru,   //ПЕРЕЧИСЛИМОСТЬ
 				GrammarEngineAPI.FORM_ru,           //ОДУШ
@@ -627,17 +636,144 @@ namespace Gren
 				GrammarEngineAPI.CASE_GERUND_ru,        //падежная валентность
                 GrammarEngineAPI.ASPECT_ru,             //ВИД
 				GrammarEngineAPI.MODAL_ru,              //МОДАЛЬНЫЙ
-				GrammarEngineAPI.TENSE_ru,              //ВРЕМЯ
-				
+				GrammarEngineAPI.TENSE_ru,              //ВРЕМЯ			
                 GrammarEngineAPI.COMPAR_FORM_ru,        //СТЕПЕНЬ
 				GrammarEngineAPI.SHORTNESS_ru           //КРАТКИЙ
             };
+        public ADJ_ru()
+        {
+            this.SetDims(dims);
+        }
     }
 
     /// <summary>
     /// ЧИСЛИТЕЛЬНОЕ 
     /// </summary>
     class NUMBER_CLASS_ru : ADJ
+    {
+    }
+
+    /// <summary>
+    /// ИНФИНИТИВ 
+    /// </summary>
+    class INFINITIVE_ru : HasDict
+    {
+        private int[] dims = { 
+                GrammarEngineAPI.ASPECT_ru,             //ВИД
+				GrammarEngineAPI.TRANSITIVENESS_ru,     //ПЕРЕХОДНОСТЬ
+				GrammarEngineAPI.CASE_GERUND_ru,        //падежная валентность
+				GrammarEngineAPI.MODAL_ru               //МОДАЛЬНЫЙ
+            };
+        public INFINITIVE_ru()
+        {
+            this.SetDims(dims);
+        }
+    }
+
+    /// <summary>
+    /// ГЛАГОЛ, ПРЕДИКАТ 
+    /// </summary>
+    class VERB_ru : HasDict
+    {
+        private int[] dims = { 
+				GrammarEngineAPI.TRANSITIVENESS_ru,     //ПЕРЕХОДНОСТЬ
+				GrammarEngineAPI.CASE_GERUND_ru,        //падежная валентность
+                GrammarEngineAPI.ASPECT_ru,             //ВИД              
+				GrammarEngineAPI.MODAL_ru,              //МОДАЛЬНЫЙ
+				GrammarEngineAPI.TENSE_ru,              //ВРЕМЯ			
+				GrammarEngineAPI.PERSON_ru,             //ЛИЦО
+				GrammarEngineAPI.GENDER_ru,             //РОД
+				GrammarEngineAPI.NUMBER_ru,             //ЧИСЛО
+                GrammarEngineAPI.VERB_FORM_ru           //НАКЛОНЕНИЕ
+                // ??? ЗАЛОГ
+            };
+        public VERB_ru()
+        {
+            this.SetDims(dims);
+        }
+    }
+
+    /// <summary>
+    /// ДЕЕПРИЧАСТИЕ 
+    /// </summary>
+    class GERUND_2_ru : HasDict
+    {
+        private int[] dims = { 
+                GrammarEngineAPI.ASPECT_ru,             //ВИД        
+				GrammarEngineAPI.TRANSITIVENESS_ru,     //ПЕРЕХОДНОСТЬ
+ 				GrammarEngineAPI.CASE_GERUND_ru,        //падежная валентность
+  				GrammarEngineAPI.MODAL_ru               //МОДАЛЬНЫЙ
+            };
+        public GERUND_2_ru()
+        {
+            this.SetDims(dims);
+        }
+    }
+
+    /// <summary>
+    /// ПРЕДЛОГ 
+    /// </summary>
+    class PREPOS_ru : HasDict
+    {
+        private int[] dims = { 
+				GrammarEngineAPI.CASE_ru    //ПАДЕЖ
+            };
+        public PREPOS_ru()
+        {
+            this.SetDims(dims);
+        }
+    }
+
+    /// <summary>
+    /// БЕЗЛИЧ_ГЛАГОЛ 
+    /// </summary>
+    class IMPERSONAL_VERB_ru : HasDict
+    {
+        private int[] dims = { 
+                GrammarEngineAPI.ASPECT_ru,             //ВИД        
+				GrammarEngineAPI.TRANSITIVENESS_ru,     //ПЕРЕХОДНОСТЬ
+ 				GrammarEngineAPI.CASE_GERUND_ru,        //падежная валентность
+				GrammarEngineAPI.TENSE_ru,              //ВРЕМЯ			
+  				GrammarEngineAPI.MODAL_ru               //МОДАЛЬНЫЙ
+            };
+        public IMPERSONAL_VERB_ru()
+        {
+            this.SetDims(dims);
+        }
+    }
+
+    /// <summary>
+    /// ЧАСТИЦА 
+    /// </summary>
+    class PARTICLE_ru : HasDict
+    {
+    }
+
+    /// <summary>
+    /// СОЮЗ 
+    /// </summary>
+    class CONJ_ru : HasDict
+    {
+    }
+
+    /// <summary>
+    /// НАРЕЧИЕ 
+    /// </summary>
+    class ADVERB_ru : HasDict
+    {
+        private int[] dims = { 
+                GrammarEngineAPI.COMPAR_FORM_ru        //СТЕПЕНЬ
+            };
+        public ADVERB_ru()
+        {
+            this.SetDims(dims);
+        }
+    }
+
+    /// <summary>
+    /// ПУНКТУАТОР 
+    /// </summary>
+    class PUNCTUATION_class : HasDict
     {
     }
 
