@@ -49,7 +49,7 @@ namespace MorphApp
                 return result;
 
             var noun = new Gren.ADJ();
-            foreach (var dim in noun.GetDimensions())
+            foreach (var dim in noun.dimentions)
             {
                 noun.AddPair(dim, 1);
             }
@@ -60,7 +60,7 @@ namespace MorphApp
             foreach (int j in keys)
                 result += String.Format("ID -> {0}  Name -> {1} \r\n", j, pairs[j]);
 
-            var pairsn = noun.GetPairsNames();
+            var pairsn = noun.GetPairsNames(noun.dimentions);
             var keysn = pairsn.Keys;
             foreach (var j in keysn)
                 result += String.Format("ID -> {0}  Name -> {1} \r\n", j, pairsn[j]);
