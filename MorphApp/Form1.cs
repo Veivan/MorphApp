@@ -26,7 +26,7 @@ namespace MorphApp
 #if (DEBUG_GREN)
 			gren.Init();
 			toolStripStatusLabel2.Text = gren.GetDictVersion();
-			memoInp.Text = "Мама мыла раму";
+            memoInp.Text = "Мама мыла раму. Пила злобно лежит на дубовом столе.";
 #endif
 		}
 
@@ -65,6 +65,18 @@ namespace MorphApp
 			courier.command = TMorph.Schema.ComType.SaveLex;
 			memoOut.Text = courier.sendit(memoInp.Text);
 		}
+
+        private void btTokenize_Click(object sender, EventArgs e)
+        {
+#if (DEBUG_GREN)
+            memoOut.Text = gren.TokenizeIt(memoInp.Text);
+/*#else 
+			courier.servType = TMorph.Schema.ServType.svMorph;
+			courier.command = TMorph.Schema.ComType.Synt;
+			memoOut.Text = courier.sendit(memoInp.Text); */
+#endif
+
+        }
 
 	}
 }

@@ -38,6 +38,7 @@
             this.btMakeSynAn = new System.Windows.Forms.Button();
             this.btDBGetWord = new System.Windows.Forms.Button();
             this.btSaveLex = new System.Windows.Forms.Button();
+            this.btTokenize = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -53,7 +54,7 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(12, 290);
+            this.textBox1.Location = new System.Drawing.Point(255, 290);
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
             this.textBox1.Size = new System.Drawing.Size(100, 20);
@@ -130,11 +131,22 @@
             this.btSaveLex.UseVisualStyleBackColor = true;
             this.btSaveLex.Click += new System.EventHandler(this.btSaveLex_Click);
             // 
+            // btTokenize
+            // 
+            this.btTokenize.Location = new System.Drawing.Point(12, 290);
+            this.btTokenize.Name = "btTokenize";
+            this.btTokenize.Size = new System.Drawing.Size(75, 20);
+            this.btTokenize.TabIndex = 8;
+            this.btTokenize.Text = "Tokenize";
+            this.btTokenize.UseVisualStyleBackColor = true;
+            this.btTokenize.Click += new System.EventHandler(this.btTokenize_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(387, 367);
+            this.Controls.Add(this.btTokenize);
             this.Controls.Add(this.btSaveLex);
             this.Controls.Add(this.btDBGetWord);
             this.Controls.Add(this.btMakeSynAn);
@@ -166,6 +178,7 @@
         private System.Windows.Forms.Button btMakeSynAn;
 		private System.Windows.Forms.Button btDBGetWord;
         private System.Windows.Forms.Button btSaveLex;
+        private System.Windows.Forms.Button btTokenize;
     }
 }
 

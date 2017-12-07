@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MorphApp", "MorphApp\MorphApp.csproj", "{1CCB2909-8F08-4484-BB87-1C216097D85E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LexiconFX", "D:\Work\Framework\RussianGrammaticalDictionary64\demo\ai\solarix\Grammar_Engine\LexiconFX\LexiconFX.csproj", "{AEC798F0-8CDD-4B21-BCF5-56E04F0F7C3D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LexiconFX", "..\RussianGrammaticalDictionary64\demo\ai\solarix\Grammar_Engine\LexiconFX\LexiconFX.csproj", "{AEC798F0-8CDD-4B21-BCF5-56E04F0F7C3D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HWClient", "HWClient\HWClient.csproj", "{02D630BA-B8D2-48E3-95FB-D93A2D9292EE}"
 EndProject
@@ -40,10 +40,13 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{1CCB2909-8F08-4484-BB87-1C216097D85E}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{1CCB2909-8F08-4484-BB87-1C216097D85E}.Debug|Any CPU.Build.0 = Debug|x64
 		{1CCB2909-8F08-4484-BB87-1C216097D85E}.Debug|Mixed Platforms.ActiveCfg = Debug|x64
+		{1CCB2909-8F08-4484-BB87-1C216097D85E}.Debug|Mixed Platforms.Build.0 = Debug|x64
 		{1CCB2909-8F08-4484-BB87-1C216097D85E}.Debug|x64.ActiveCfg = Debug|x64
 		{1CCB2909-8F08-4484-BB87-1C216097D85E}.Debug|x64.Build.0 = Debug|x64
 		{1CCB2909-8F08-4484-BB87-1C216097D85E}.Debug|x86.ActiveCfg = Debug|x64
+		{1CCB2909-8F08-4484-BB87-1C216097D85E}.Debug|x86.Build.0 = Debug|x64
 		{1CCB2909-8F08-4484-BB87-1C216097D85E}.Release|Any CPU.ActiveCfg = Release|x86
 		{1CCB2909-8F08-4484-BB87-1C216097D85E}.Release|Mixed Platforms.ActiveCfg = Release|x86
 		{1CCB2909-8F08-4484-BB87-1C216097D85E}.Release|Mixed Platforms.Build.0 = Release|x86
@@ -154,9 +157,11 @@ Global
 		{CE2EC111-01CE-4860-9243-798E7AAD083C}.Release|x86.ActiveCfg = Release|x86
 		{CE2EC111-01CE-4860-9243-798E7AAD083C}.Release|x86.Build.0 = Release|x86
 		{3FEBD270-AE10-4C76-B621-C75D45298312}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{3FEBD270-AE10-4C76-B621-C75D45298312}.Debug|Any CPU.Build.0 = Debug|x86
 		{3FEBD270-AE10-4C76-B621-C75D45298312}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{3FEBD270-AE10-4C76-B621-C75D45298312}.Debug|Mixed Platforms.Build.0 = Debug|x86
 		{3FEBD270-AE10-4C76-B621-C75D45298312}.Debug|x64.ActiveCfg = Debug|x86
+		{3FEBD270-AE10-4C76-B621-C75D45298312}.Debug|x64.Build.0 = Debug|x86
 		{3FEBD270-AE10-4C76-B621-C75D45298312}.Debug|x86.ActiveCfg = Debug|x86
 		{3FEBD270-AE10-4C76-B621-C75D45298312}.Debug|x86.Build.0 = Debug|x86
 		{3FEBD270-AE10-4C76-B621-C75D45298312}.Release|Any CPU.ActiveCfg = Release|x86
