@@ -43,7 +43,7 @@ namespace MorphApp
 			return result;
 		}
 
-		public string GetMorphInfo(string phrase)
+		public string MakeNRestoreSentence(string phrase)
 		{
 			string result = "Ошибка загрузки словаря.";
 			if (!IsReady)
@@ -141,6 +141,13 @@ namespace MorphApp
 										);
 							break;
 					}
+					/*							var forms_list = GrammarEngine.sol_GenerateWordformsFX(
+																		hEngine,
+																		id_entry,
+																		new ArrayList(pairs.Keys),
+																		new ArrayList(pairs.Values)
+																		); 
+*/
 					word = tok_buf.ToString();
 				}
 				sb.Append(word);
@@ -150,60 +157,41 @@ namespace MorphApp
 			return sb.ToString();
 		}
 
-		public string GetMorphInfo2(string phrase)
+		public string GetMorphInfo(string phrase)
 		{
 			string result = "Ошибка загрузки словаря.";
 			if (!IsReady)
 				return result;
 
-			/*var noun = new Gren.ADJ_ru();
-			foreach (var dim in noun.dimentions)
-			{
-				noun.AddPair(dim, 1);
-			}
-
-			result = "";
-			var pairs = noun.GetPairs();
-			ICollection<int> keys = pairs.Keys;
-			//foreach (int j in keys)
-			//    result += String.Format("ID -> {0}  Name -> {1} \r\n", j, pairs[j]);
-
-			var pairsn = noun.GetPairsNames(noun.dimentions);
-			var keysn = pairsn.Keys;
-			foreach (var j in keysn)
-				result += String.Format("ID -> {0}  Name -> {1} \r\n", j, pairsn[j]);
-*/
 			var sb = new StringBuilder();
 
 			// http://www.solarix.ru/api/ru/sol_Tokenize.shtml
-			//IntPtr hTokens = GrammarEngine.sol_TokenizeW(hEngine, phrase, GrammarEngineAPI.RUSSIAN_LANGUAGE);
 			string[] tokens = GrammarEngine.sol_TokenizeFX(hEngine, phrase, GrammarEngineAPI.RUSSIAN_LANGUAGE);
 
 			// http://www.solarix.ru/api/ru/sol_CountStrings.shtml
-			//int ntok = GrammarEngine.sol_CountStrings(hTokens);
 			int ntok = tokens.Length;
 
 			sb.Append("Токенов : " + ntok + "\r\n");
 			sb.Append(new String('-', 32) + "\r\n");
 
+			WordMap wmap = null;
 			foreach (var token in tokens)
 			{
 				// http://www.solarix.ru/api/ru/sol_ProjectWord.shtml
 				IntPtr hProjs = GrammarEngine.sol_ProjectWord(hEngine, token, 0);
-
 				int nprojs = GrammarEngine.sol_CountProjections(hProjs);
-
 				for (int i = 0; i < nprojs; ++i)
 				{
 					int id_entry = GrammarEngine.sol_GetIEntry(hProjs, i);
 					int id_partofspeech = GrammarEngine.sol_GetEntryClass(hEngine, id_entry);
 
-					var EntryName = GrammarEngine.sol_GetEntryNameFX(hEngine, id_entry);
+					wmap = new WordMap(id_entry, id_partofspeech);
+					wmap.EntryName = GrammarEngine.sol_GetEntryNameFX(hEngine, id_entry);
 
 					StringBuilder PartOfSpeechName = new StringBuilder(GrammarEngine.sol_MaxLexemLen(hEngine));
 					GrammarEngine.sol_GetClassName(hEngine, id_partofspeech, PartOfSpeechName);
 
-					sb.Append(EntryName + "\r\n");
+					sb.Append(wmap.EntryName + "\r\n");
 					sb.Append(PartOfSpeechName + "\r\n");
 
 					// Определение типа класса по ID части речи
@@ -212,68 +200,14 @@ namespace MorphApp
 					{
 						// Создание класса части речи
 						var xPart = Activator.CreateInstance(xType) as Gren.HasDict;
+						wmap.xPart = xPart;
 						foreach (var CoordID in xPart.dimensions)
 						{
 							int state = GrammarEngine.sol_GetProjCoordState(hEngine, hProjs, i, CoordID);
-							xPart.AddPair(CoordID, state);
+							wmap.AddPair(CoordID, state);
 						}
 
-						//CharCasing ???
-						int CharCasingID = GrammarEngine.sol_FindEnum(hEngine, "CharCasing");
-
-						var pairs = xPart.GetPairs();
-
-						int rc_res = -1;
-						if (xPart.CanMorph)
-						{
-							var tok_buf = new StringBuilder(GrammarEngine.sol_MaxLexemLen(hEngine));
-							switch (xPart.MorphAs)
-							{
-								case Gren.GrenPart.NOUN_ru:
-									rc_res = GrammarEngine.sol_GetNounForm(
-																		hEngine,
-																		id_entry,
-																		GrammarEngineAPI.PLURAL_NUMBER_ru,
-																		GrammarEngineAPI.NOMINATIVE_CASE_ru,
-																		tok_buf
-																	   );
-									break;
-								case Gren.GrenPart.VERB_ru:
-									rc_res = GrammarEngine.sol_GetVerbForm(
-												hEngine,
-												id_entry,
-												GrammarEngineAPI.PLURAL_NUMBER_ru,
-												GrammarEngineAPI.MASCULINE_GENDER_ru,
-												GrammarEngineAPI.PRESENT_ru,
-												GrammarEngineAPI.PERSON_3_ru,
-												tok_buf
-											   );
-									break;
-								case Gren.GrenPart.ADJ_ru:
-									int rc_subj = GrammarEngine.sol_GetAdjectiveForm(
-																				hEngine,
-																				id_entry,
-																				GrammarEngineAPI.SINGULAR_NUMBER_ru,
-																				GrammarEngineAPI.FEMININE_GENDER_ru,
-																				GrammarEngineAPI.ACCUSATIVE_CASE_ru,
-																				GrammarEngineAPI.FORM_ru,
-																				-1,
-																				GrammarEngineAPI.ABBREV_FORM_ru,
-																				tok_buf
-																			   );
-									break;
-							}
-
-							/*var forms_list = GrammarEngine.sol_GenerateWordformsFX(
-																		hEngine,
-																		id_entry,
-																		new ArrayList(pairs.Keys),
-																		new ArrayList(pairs.Values)
-																		); */
-
-							sb.Append(String.Format("Новая форма : {0}\r\n", tok_buf.ToString()));
-						}
-
+						var pairs = wmap.GetPairs();
 						ICollection<int> keys = pairs.Keys;
 						StringBuilder propname = new StringBuilder(GrammarEngine.sol_MaxLexemLen(hEngine));
 						StringBuilder propvalname = new StringBuilder(GrammarEngine.sol_MaxLexemLen(hEngine));
@@ -283,13 +217,6 @@ namespace MorphApp
 							GrammarEngine.sol_GetCoordStateName(hEngine, j, pairs[j], propvalname);
 							sb.Append(String.Format("ID -> {0}  Name -> {1} \r\n", propname, propvalname));
 						}
-
-						/*var pairsn = xPart.GetPairsNames(xPart.dimentions);
-						var keysn = pairsn.Keys;
-						foreach (var j in keysn)
-						{
-							sb.Append(String.Format("ID -> {0}  Name -> {1} \r\n", j, pairsn[j]));
-						}*/
 					}
 					sb.Append(new String('-', 32) + "\r\n\r\n");
 				}

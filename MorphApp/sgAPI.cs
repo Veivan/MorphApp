@@ -466,8 +466,7 @@ namespace Gren
 	{
 		/// <summary>
 		/// Свойство, отражающее, в каком виде часть речи может быть преобразована :
-		/// как Существительное, глагол или прилагательное 
-		/// или число, пол, время, лицо).
+		/// как Существительное, глагол или прилагательное. 
 		/// </summary>
 		protected GrenPart _MorphAs = GrenPart.UNKNOWN_ENTRIES_CLASS; 
 		public GrenPart MorphAs
@@ -484,8 +483,7 @@ namespace Gren
 
 		/// <summary>
 		/// Свойство, отражающее, может ли часть речи быть преобразована
-		/// (изменён число, падеж 
-		/// или число, пол, время, лицо).
+		/// (изменён число, падеж или число, пол, время, лицо).
 		/// </summary>
 		public bool CanMorph
 		{
@@ -509,91 +507,6 @@ namespace Gren
 		{
 			_dimensions.AddRange(dims);
 		}
-
-		protected Dictionary<int, int> pairs = new Dictionary<int, int>();
-
-		/// <summary>
-		/// Добавление ID характеристик слова в словарь.
-		/// </summary>
-		public void AddPair(int Key, int Value)
-		{
-			if (!pairs.ContainsKey(Key))
-				pairs.Add(Key, Value);
-		}
-
-		/// <summary>
-		/// Получение словаря ID характеристик.
-		/// </summary>
-		public Dictionary<int, int> GetPairs()
-		{
-			return pairs;
-		}
-
-		/// <summary>
-		/// Получение словаря характеристик в виде символов.
-		/// </summary>
-		public Dictionary<string, string> GetPairsNames(int[] dimentions)
-		{
-			Dictionary<string, string> pnames = new Dictionary<string, string>();
-			foreach (var dim in dimentions)
-			{
-				if (this.pairs.ContainsKey(dim))
-				{
-					var Key = ((GrenProperty)dim).ToString();
-					var Value = "";
-					switch (dim)
-					{
-						case GrammarEngineAPI.CharCasing:
-							Value = ((enCharCasing)this.pairs[dim]).ToString();
-							break;
-						case GrammarEngineAPI.PERSON_ru:
-							Value = ((enPERSON_ru)this.pairs[dim]).ToString();
-							break;
-						case GrammarEngineAPI.NUMBER_ru:
-							Value = ((enNUMBER_ru)this.pairs[dim]).ToString();
-							break;
-						case GrammarEngineAPI.GENDER_ru:
-							Value = ((enGENDER_ru)this.pairs[dim]).ToString();
-							break;
-						case GrammarEngineAPI.TRANSITIVENESS_ru:
-							Value = ((enTRANSITIVENESS_ru)this.pairs[dim]).ToString();
-							break;
-						case GrammarEngineAPI.PARTICIPLE_ru:
-						case GrammarEngineAPI.PASSIVE_PARTICIPLE_ru:
-							break;
-						case GrammarEngineAPI.ASPECT_ru:
-							Value = ((enASPECT_ru)this.pairs[dim]).ToString();
-							break;
-						case GrammarEngineAPI.VERB_FORM_ru:
-							Value = ((enVERB_FORM_ru)this.pairs[dim]).ToString();
-							break;
-						case GrammarEngineAPI.TENSE_ru:
-							Value = ((enTENSE_ru)this.pairs[dim]).ToString();
-							break;
-						case GrammarEngineAPI.SHORTNESS_ru:
-							break;
-						case GrammarEngineAPI.CASE_ru:
-							Value = ((enCASE_ru)this.pairs[dim]).ToString();
-							break;
-						case GrammarEngineAPI.FORM_ru:
-							Value = ((enFORM_ru)this.pairs[dim]).ToString();
-							break;
-						case GrammarEngineAPI.COUNTABILITY_ru:
-							Value = ((enCOUNTABILITY_ru)this.pairs[dim]).ToString();
-							break;
-						case GrammarEngineAPI.COMPAR_FORM_ru:
-							Value = ((enCOMPAR_FORM_ru)this.pairs[dim]).ToString();
-							break;
-						case GrammarEngineAPI.CASE_GERUND_ru:
-						case GrammarEngineAPI.MODAL_ru:
-							break;
-					}
-					pnames.Add(Key, Value);
-				}
-			}
-			return pnames;
-		}
-
 	}
 
 	/// <summary>
