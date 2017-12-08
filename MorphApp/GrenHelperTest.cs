@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-//using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
@@ -11,7 +10,7 @@ namespace MorphApp
 
     class GrenHelperTest
     {
-        const string dict = @"c:\Work\Framework\GrammarEngine\src\bin-windows64\dictionary.xml";
+		const string dict = @"d:\Work\Framework\GrammarEngine\src\bin-windows64\dictionary.xml";
 
         private bool IsReady = false;
         private IntPtr hEngine = IntPtr.Zero;
@@ -25,9 +24,10 @@ namespace MorphApp
             hEngine = GrammarEngine.sol_CreateGrammarEngineW(dict);
             if (hEngine == IntPtr.Zero)
             {
-                throw new Exception("Could not load the dictionary");
+                MessageBox.Show("Could not load the dictionary");
             }
-            IsReady = true;
+			else
+	            IsReady = true;
         }
 
         public string GetDictVersion()
@@ -112,6 +112,24 @@ namespace MorphApp
 
                         //CharCasing
                         int CharCasingID = GrammarEngine.sol_FindEnum(hEngine, "CharCasing");
+
+
+						if (xType == typeof(Gren.NOUN_ru))
+						//if (xType == typeof(Gren.ADJ_ru))
+							{
+							var tok_buf = new StringBuilder(GrammarEngine.sol_MaxLexemLen(hEngine));
+							// склонение существительного
+							// http://www.solarix.ru/api/ru/sol_GetNounForm.shtml
+							int rc_subj = GrammarEngine.sol_GetNounForm (
+																		hEngine,
+																		id_entry,
+																		GrammarEngineAPI.PLURAL_NUMBER_ru,
+																		GrammarEngineAPI.NOMINATIVE_CASE_ru,
+																		tok_buf
+																	   );
+							//Subj = tok_buf.ToString(); // получили лексическое представление новой формы подлежащего.
+							sb.Append(String.Format("Новая форма : {0}\r\n", tok_buf.ToString()));
+						}
 
                         var pairs = xPart.GetPairs();
                         ICollection<int> keys = pairs.Keys;

@@ -408,23 +408,41 @@ namespace Gren
                 case GrenPart.PRONOUN_ru:
                     result = typeof(PRONOUN_ru); // class МЕСТОИМЕНИЕ
                     break;
-
-                case GrenPart.VERB_ru:
-                    result = typeof(VERB_ru); // class ГЛАГОЛ
-                    break;
-                /*
-                         ADJ_ru = 9,                      // class ПРИЛАГАТЕЛЬНОЕ
-                         NUMBER_CLASS_ru = 10,            // class ЧИСЛИТЕЛЬНОЕ
-                         INFINITIVE_ru = 11,              // class ИНФИНИТИВ
-                          = 12,                    // class ГЛАГОЛ
-                         GERUND_2_ru = 13,                // class ДЕЕПРИЧАСТИЕ
-                         PREPOS_ru = 14,                  // class ПРЕДЛОГ
-                         IMPERSONAL_VERB_ru = 15,         // class БЕЗЛИЧ_ГЛАГОЛ
-                         PARTICLE_ru = 18,                // class ЧАСТИЦА
-                         CONJ_ru = 19,                    // class СОЮЗ
-                         ADVERB_ru = 20,                  // class НАРЕЧИЕ
-                         PUNCTUATION_class = 21,          // class ПУНКТУАТОР
-                         POSTPOS_ru = 26,                 // class ПОСЛЕЛОГ
+				case GrenPart.ADJ_ru:
+					result = typeof(ADJ_ru); // class ПРИЛАГАТЕЛЬНОЕ
+					break;
+				case GrenPart.NUMBER_CLASS_ru:
+					result = typeof(NUMBER_CLASS_ru); // class ЧИСЛИТЕЛЬНОЕ
+					break;
+				case GrenPart.INFINITIVE_ru:
+					result = typeof(INFINITIVE_ru); // class ИНФИНИТИВ
+					break;
+				case GrenPart.VERB_ru:
+					result = typeof(VERB_ru); // class ГЛАГОЛ
+					break;
+				case GrenPart.GERUND_2_ru:
+					result = typeof(GERUND_2_ru); // class ДЕЕПРИЧАСТИЕ
+					break;
+				case GrenPart.PREPOS_ru:
+					result = typeof(PREPOS_ru); // class ПРЕДЛОГ
+					break;
+				case GrenPart.IMPERSONAL_VERB_ru:
+					result = typeof(IMPERSONAL_VERB_ru); // class БЕЗЛИЧ_ГЛАГОЛ
+					break;
+				case GrenPart.PARTICLE_ru:
+					result = typeof(PARTICLE_ru); // class ЧАСТИЦА
+					break;
+				case GrenPart.CONJ_ru:
+					result = typeof(CONJ_ru); // class СОЮЗ
+					break;
+				case GrenPart.ADVERB_ru:
+					result = typeof(ADVERB_ru); // class НАРЕЧИЕ
+					break;
+				case GrenPart.PUNCTUATION_class:
+					result = typeof(PUNCTUATION_class); // class ПУНКТУАТОР
+					break;
+					/*
+                          POSTPOS_ru = 26,                 // class ПОСЛЕЛОГ
                          POSESS_PARTICLE = 27,            // class ПРИТЯЖ_ЧАСТИЦА
                          MEASURE_UNIT = 28,               // class ЕДИНИЦА_ИЗМЕРЕНИЯ
                          COMPOUND_ADJ_PREFIX = 29,        // class ПРЕФИКС_СОСТАВ_ПРИЛ
@@ -555,8 +573,8 @@ namespace Gren
         private int[] dims = { 
 				/*/ МОДАЛЬНЫЙ   // модальность - для слов, могущий принимать участие в сочетаниях типа "желание учиться" или "возможность получить"
 				GrammarEngineAPI.MODAL_ru, 
-				// CharCasing  // Слова, начинающиеся с заглавной буквы или целиком в верхнем регистре
-				GrammarEngineAPI.CharCasing, */
+				// CharCasing  // Слова, начинающиеся с заглавной буквы или целиком в верхнем регистре */
+				GrammarEngineAPI.CharCasing, 
 
 				GrammarEngineAPI.COUNTABILITY_ru,   //ПЕРЕЧИСЛИМОСТЬ
 				GrammarEngineAPI.FORM_ru,           //ОДУШ
