@@ -26,7 +26,7 @@ namespace MorphApp
 #if (DEBUG_GREN)
 			gren.Init();
 			toolStripStatusLabel2.Text = gren.GetDictVersion();
-            memoInp.Text = "Мама мыла раму.";
+            memoInp.Text = "Мама мыла красную раму.";
             //memoInp.Text = "Мама мыла раму. Пила злобно лежит на дубовом столе.";
 #endif
 		}

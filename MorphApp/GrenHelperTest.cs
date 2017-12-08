@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
@@ -110,28 +111,62 @@ namespace MorphApp
                             xPart.AddPair(CoordID, state);
                         }
 
-                        //CharCasing
+                        //CharCasing ???
                         int CharCasingID = GrammarEngine.sol_FindEnum(hEngine, "CharCasing");
 
+						var pairs = xPart.GetPairs();
 
-						if (xType == typeof(Gren.NOUN_ru))
-						//if (xType == typeof(Gren.ADJ_ru))
-							{
+						int rc_res = -1;
+						if (xPart.CanMorph)
+						{
 							var tok_buf = new StringBuilder(GrammarEngine.sol_MaxLexemLen(hEngine));
-							// склонение существительного
-							// http://www.solarix.ru/api/ru/sol_GetNounForm.shtml
-							int rc_subj = GrammarEngine.sol_GetNounForm (
+							switch (xPart.MorphAs)
+							{ 
+								case Gren.GrenPart.NOUN_ru :
+									rc_res = GrammarEngine.sol_GetNounForm(
 																		hEngine,
 																		id_entry,
 																		GrammarEngineAPI.PLURAL_NUMBER_ru,
 																		GrammarEngineAPI.NOMINATIVE_CASE_ru,
 																		tok_buf
 																	   );
-							//Subj = tok_buf.ToString(); // получили лексическое представление новой формы подлежащего.
+									break;
+								case Gren.GrenPart.VERB_ru:
+									rc_res = GrammarEngine.sol_GetVerbForm(
+                                                hEngine,
+												id_entry,
+                                                GrammarEngineAPI.PLURAL_NUMBER_ru,
+												GrammarEngineAPI.MASCULINE_GENDER_ru,
+												GrammarEngineAPI.PRESENT_ru,
+                                                GrammarEngineAPI.PERSON_3_ru,
+                                                tok_buf
+                                               );    
+	break;
+								case Gren.GrenPart.ADJ_ru:
+							int rc_subj = GrammarEngine.sol_GetAdjectiveForm(
+																		hEngine,
+																		id_entry,
+																		GrammarEngineAPI.SINGULAR_NUMBER_ru,
+																		GrammarEngineAPI.FEMININE_GENDER_ru,
+																		GrammarEngineAPI.ACCUSATIVE_CASE_ru,
+																		GrammarEngineAPI.FORM_ru,
+																		-1,
+																		GrammarEngineAPI.ABBREV_FORM_ru,
+																		tok_buf
+																	   );
+									break;
+							}
+
+							/*var forms_list = GrammarEngine.sol_GenerateWordformsFX(
+																		hEngine,
+																		id_entry,
+																		new ArrayList(pairs.Keys),
+																		new ArrayList(pairs.Values)
+																		); */
+
 							sb.Append(String.Format("Новая форма : {0}\r\n", tok_buf.ToString()));
 						}
 
-                        var pairs = xPart.GetPairs();
                         ICollection<int> keys = pairs.Keys;
                         StringBuilder propname = new StringBuilder(GrammarEngine.sol_MaxLexemLen(hEngine));
                         StringBuilder propvalname = new StringBuilder(GrammarEngine.sol_MaxLexemLen(hEngine));
