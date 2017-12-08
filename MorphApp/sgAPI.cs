@@ -495,19 +495,19 @@ namespace Gren
 			}
 		}
 
-		private List<int> _dimentions = new List<int>();
+		private List<int> _dimensions = new List<int>();
 
-		public int[] dimentions
+		public int[] dimensions
 		{
 			get
 			{
-				return _dimentions.ToArray();
+				return _dimensions.ToArray();
 			}
 		}
 
 		protected void SetDims(int[] dims)
 		{
-			_dimentions.AddRange(dims);
+			_dimensions.AddRange(dims);
 		}
 
 		protected Dictionary<int, int> pairs = new Dictionary<int, int>();
