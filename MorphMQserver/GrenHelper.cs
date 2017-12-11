@@ -79,12 +79,26 @@ namespace MorphMQserver
 						// Создание класса части речи
 						var xPart = Activator.CreateInstance(xType) as Gren.HasDict;
 						wmap.xPart = xPart;
+						//Перебор пар характеристик, относящихся к данной части речи
 						foreach (var CoordID in xPart.dimensions)
 						{
 							int state = GrammarEngine.sol_GetProjCoordState(hEngine, hProjs, i, CoordID);
 							wmap.AddPair(CoordID, state);
 						}
 					}
+
+					/* 
+					 * //Перебор всех пар характеристик
+					// http://www.solarix.ru/api/ru/sol_GetNodePairsCount.shtml
+					int PairsCount = GrammarEngine.sol_GetNodePairsCount(hNode);
+					for (int i = 0; i < PairsCount; i++)
+					{
+						// http://www.solarix.ru/api/ru/sol_GetNodePairCoord.shtml
+						int Coord = GrammarEngine.sol_GetNodePairCoord(hNode, i);
+						// http://www.solarix.ru/api/ru/sol_GetNodePairState.shtml
+						int State = GrammarEngine.sol_GetNodePairState(hNode, i);
+					}*/
+
 					sent.AddWord(iorder++, wmap);
 				}
 			}
@@ -356,26 +370,91 @@ namespace MorphMQserver
 					imin_graf = i;
 				}
 			}
-
-			// Распечатаем этот граф
-			StringBuilder sb = new StringBuilder();
-			result = "";
 			//Console.Write("Наиболее достоверный вариант разбора:\n");
 			Int32 rCount = GrammarEngine.sol_CountRoots(hPack, imin_graf);
-			for (int j = 0; j < rCount; j++)
+			var sent = new SentenceMap();
+			int Level = 0;
+			// Сохранение графа в памяти
+			for (int j = 1; j < rCount - 1; j++)
+			{
+				// http://www.solarix.ru/api/ru/sol_GetRoot.shtml
+				IntPtr hNode = GrammarEngine.sol_GetRoot(hPack, imin_graf, j);
+				SaveNodeReq(hNode, sent, Level, IntPtr.Zero, j);
+			}
+
+			StringBuilder sb = new StringBuilder();
+			sb.Append(RestoreSentenceOnePass(sent));
+			sb.Append("\r\n");
+
+			sb.Append(PrintGraf(sent));
+
+			/*/ Распечатаем этот граф
+			StringBuilder sb = new StringBuilder();
+			result = "";
+			for (int j = 1; j < rCount-1; j++)
 			{
 				// http://www.solarix.ru/api/ru/sol_GetRoot.shtml
 				IntPtr hNode = GrammarEngine.sol_GetRoot(hPack, imin_graf, j);
 				PrintNode(hNode, sb, IntPtr.Zero, j);
 				sb.Append(" ");
-				//Console.Write(" ");
-			}
+			} */
+
 			result = sb.ToString();
 			return result;
 		}
 
-		// мама мыла раму
-		//   string sent = "Пила злобно лежит на дубовом столе.";
+		private void SaveNodeReq(IntPtr hNode, SentenceMap sent, int Level, IntPtr hParentNode, int LeafIndex)
+		{
+			WordMap wmap = null;
+			int Position = GrammarEngine.sol_GetNodePosition(hNode);
+			if (Position > -1)
+			{
+				int id_entry = GrammarEngine.sol_GetNodeIEntry(hEngine, hNode);
+				int id_partofspeech = GrammarEngine.sol_GetEntryClass(hEngine, id_entry);
+				wmap = new WordMap(id_entry, id_partofspeech);
+				wmap.EntryName = GrammarEngine.sol_GetEntryNameFX(hEngine, id_entry);
+				// Определение типа класса по ID части речи
+				var xType = Gren.sgAPI.GetTypeClassByID((Gren.GrenPart)id_partofspeech);
+				if (xType != null)
+				{
+					// Создание класса части речи
+					var xPart = Activator.CreateInstance(xType) as Gren.HasDict;
+					wmap.xPart = xPart;
+					//Перебор пар характеристик, относящихся к данной части речи
+					foreach (var CoordID in xPart.dimensions)
+					{
+						int state = GrammarEngine.sol_GetNodeCoordState(hNode, CoordID);
+						wmap.AddPair(CoordID, state);
+					}
+
+					int linktype = -1;
+					if (hParentNode != IntPtr.Zero)
+					{
+						linktype = GrammarEngine.sol_GetLeafLinkType(hParentNode, LeafIndex);
+					}
+					sent.AddWord(Position, wmap, Level, LeafIndex, linktype);
+				}
+				Int32 n_leaf = GrammarEngine.sol_CountLeafs(hNode);				
+				for (int ileaf = 0; ileaf < n_leaf; ileaf++)
+				{
+					IntPtr hLeaf = GrammarEngine.sol_GetLeaf(hNode, ileaf);
+					SaveNodeReq(hLeaf, sent, Level + 1, hNode, ileaf);
+				}
+			}
+		}
+
+		private string PrintGraf(SentenceMap sent)
+		{
+			StringBuilder sb = new StringBuilder();
+
+			var ordlist = sent.GetTreeList();
+			foreach (tNode x in ordlist)
+			{
+				sb.Append(new String('\t', x.Level) + " " + sent.GetWordByOrder(x.index).EntryName + "\r\n");
+			}
+
+			return sb.ToString();
+		}
 
 		private string PrintNode(IntPtr hNode, StringBuilder sbit, IntPtr hParentNode, int LeafIndex)
 		{
@@ -408,7 +487,7 @@ namespace MorphMQserver
 				sb.Append(buffer.ToString());
 
 
-				// http://www.solarix.ru/api/ru/sol_GetNodePairsCount.shtml
+				/*/ http://www.solarix.ru/api/ru/sol_GetNodePairsCount.shtml
 				int PairsCount = GrammarEngine.sol_GetNodePairsCount(hNode);
 				for (int i = 0; i < PairsCount; i++)
 				{
@@ -420,8 +499,7 @@ namespace MorphMQserver
 					sb.Append(Coord.ToString());
 					sb.Append("\t");
 					sb.Append(State.ToString());
-
-				}
+				} */
 
 				/*/ http://www.solarix.ru/api/ru/sol_GetNodeVersionCount.shtml
 				int VersionCount = GrammarEngine.sol_GetNodeVersionCount(hEngine, hNode);
