@@ -89,11 +89,61 @@ namespace MorphApp
 				}
 			}
 
-			sb.Append(RestoreSentence(sent));
+			sb.Append(RestoreSentenceOnePass(sent));
 			result = sb.ToString();
 			return result;
 		}
 
+		/// <summary>
+		/// Восстановление предложения из грамматических характеристик каждого слова
+		/// с использованием обобщённой функции sol_GenerateWordformsFX.
+		/// </summary>
+		private string RestoreSentenceOnePass(SentenceMap sentence)
+		{
+			var sb = new StringBuilder();
+			for (int i = 0; i < sentence.Capasity; i++)
+			{
+				var wmap = sentence.GetWordByOrder(i);
+				var coords = new ArrayList();
+				var states = new ArrayList();
+
+				var props = new Gren.GrenProperty[] { Gren.GrenProperty.NUMBER_ru, Gren.GrenProperty.CASE_ru ,
+					Gren.GrenProperty.GENDER_ru, Gren.GrenProperty.TENSE_ru, Gren.GrenProperty.PERSON_ru,
+					Gren.GrenProperty.FORM_ru, Gren.GrenProperty.SHORTNESS_ru, Gren.GrenProperty.COMPAR_FORM_ru
+				};
+
+				foreach (var prop in props)
+				{
+					var val = wmap.GetPropertyValue(prop);
+					if (val > -1)
+					{
+						coords.Add((int)prop);
+						states.Add((int)val);
+					}
+				}
+
+				string word = "";
+				ArrayList fx = GrammarEngine.sol_GenerateWordformsFX(hEngine, wmap.ID_Entry, coords, states);
+				if (fx != null && fx.Count > 0)
+				{
+					word = (fx[0] as String).ToLower();
+					if (i == 0)
+					{
+						word = char.ToUpper(word[0]) + word.Substring(1);
+					}
+					if (i != sentence.Capasity-1)
+						sb.Append(" ");
+					sb.Append(word);
+				}
+			}
+
+			return sb.ToString();
+		}
+
+		/// <summary>
+		/// Восстановление предложения из грамматических характеристик каждого слова
+		/// с использованием функций частей речи.
+		/// </summary>
 		private string RestoreSentence(SentenceMap sentence)
 		{
 			var sb = new StringBuilder();
@@ -141,13 +191,6 @@ namespace MorphApp
 										);
 							break;
 					}
-					/*							var forms_list = GrammarEngine.sol_GenerateWordformsFX(
-																		hEngine,
-																		id_entry,
-																		new ArrayList(pairs.Keys),
-																		new ArrayList(pairs.Values)
-																		); 
-*/
 					word = tok_buf.ToString();
 				}
 				sb.Append(word);
@@ -157,6 +200,9 @@ namespace MorphApp
 			return sb.ToString();
 		}
 
+		/// <summary>
+		/// Получение грамматических характеристик каждого слова в предложении.
+		/// </summary>
 		public string GetMorphInfo(string phrase)
 		{
 			string result = "Ошибка загрузки словаря.";

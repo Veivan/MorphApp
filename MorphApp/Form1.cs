@@ -79,5 +79,16 @@ namespace MorphApp
 
         }
 
+		private void btRestore_Click(object sender, EventArgs e)
+		{
+#if (DEBUG_GREN)
+			memoOut.Text = gren.MakeNRestoreSentence(memoInp.Text);
+			/*#else 
+						courier.servType = TMorph.Schema.ServType.svMorph;
+						courier.command = TMorph.Schema.ComType.Synt;
+						memoOut.Text = courier.sendit(memoInp.Text); */
+#endif
+		}
+
 	}
 }
