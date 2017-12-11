@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace MorphApp
+namespace MorphMQserver
 {
 	/// <summary>
 	/// Класс хранит информацию о предложении.

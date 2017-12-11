@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MorphApp
+namespace MorphMQserver
 {
 	/// <summary>
 	/// Класс хранит грамматическое представление одного слова.
