@@ -464,35 +464,6 @@ namespace Gren
 	/// </summary>
 	class HasDict
 	{
-		/// <summary>
-		/// Свойство, отражающее, в каком виде часть речи может быть преобразована :
-		/// как Существительное, глагол или прилагательное. 
-		/// </summary>
-		protected GrenPart _MorphAs = GrenPart.UNKNOWN_ENTRIES_CLASS; 
-		public GrenPart MorphAs
-		{
-			get
-			{
-				return _MorphAs;
-			}
-			protected set
-			{
-				_MorphAs = value;
-			}
-		}
-
-		/// <summary>
-		/// Свойство, отражающее, может ли часть речи быть преобразована
-		/// (изменён число, падеж или число, пол, время, лицо).
-		/// </summary>
-		public bool CanMorph
-		{
-			get
-			{
-				return MorphAs != GrenPart.UNKNOWN_ENTRIES_CLASS;
-			}
-		}
-
 		private List<int> _dimensions = new List<int>();
 
 		public int[] dimensions
@@ -530,7 +501,6 @@ namespace Gren
 
 		public NOUN_ru()
 		{
-			this.MorphAs = GrenPart.NOUN_ru;
 			this.SetDims(dims);
 		}
 	}
@@ -565,7 +535,6 @@ namespace Gren
 
 		public PRONOUN_ru()
 		{
-			this.MorphAs = GrenPart.NOUN_ru;
 			this.SetDims(dims);
 		}
 	}
@@ -584,7 +553,6 @@ namespace Gren
 
 		public ADJ()
 		{
-			this.MorphAs = GrenPart.ADJ_ru;
 			this.SetDims(dims);
 		}
 	}
@@ -654,7 +622,6 @@ namespace Gren
             };
 		public VERB_ru()
 		{
-			this.MorphAs = GrenPart.VERB_ru;
 			this.SetDims(dims);
 		}
 	}
@@ -672,7 +639,6 @@ namespace Gren
             };
 		public GERUND_2_ru()
 		{
-			this.MorphAs = GrenPart.VERB_ru;
 			this.SetDims(dims);
 		}
 	}
@@ -714,10 +680,6 @@ namespace Gren
 	/// </summary>
 	class PARTICLE_ru : HasDict
 	{
-		public PARTICLE_ru()
-		{
-			this.MorphAs = GrenPart.VERB_ru;
-		}
 	}
 
 	/// <summary>

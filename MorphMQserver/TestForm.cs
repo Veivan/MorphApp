@@ -36,35 +36,14 @@ namespace MorphMQserver
 			memoOut.Text = gren.GetSynInfo(memoInp.Text);
 		}
 
-		private void btDBGetWord_Click(object sender, EventArgs e)
-		{
-		}
-
-		private void btSaveLex_Click(object sender, EventArgs e)
-		{
-		}
-
         private void btTokenize_Click(object sender, EventArgs e)
         {
-#if (DEBUG_GREN)
             memoOut.Text = gren.TokenizeIt(memoInp.Text);
-/*#else 
-			courier.servType = TMorph.Schema.ServType.svMorph;
-			courier.command = TMorph.Schema.ComType.Synt;
-			memoOut.Text = courier.sendit(memoInp.Text); */
-#endif
-
         }
 
 		private void btRestore_Click(object sender, EventArgs e)
 		{
-#if (DEBUG_GREN)
 			memoOut.Text = gren.MakeNRestoreSentence(memoInp.Text);
-			/*#else 
-						courier.servType = TMorph.Schema.ServType.svMorph;
-						courier.command = TMorph.Schema.ComType.Synt;
-						memoOut.Text = courier.sendit(memoInp.Text); */
-#endif
 		}
 
 	}

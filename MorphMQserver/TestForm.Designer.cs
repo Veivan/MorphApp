@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
 			this.btGetMorph = new System.Windows.Forms.Button();
-			this.textBox1 = new System.Windows.Forms.TextBox();
 			this.memoInp = new System.Windows.Forms.TextBox();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -43,21 +42,13 @@
 			// 
 			// btGetMorph
 			// 
-			this.btGetMorph.Location = new System.Drawing.Point(12, 316);
+			this.btGetMorph.Location = new System.Drawing.Point(174, 290);
 			this.btGetMorph.Name = "btGetMorph";
 			this.btGetMorph.Size = new System.Drawing.Size(75, 23);
 			this.btGetMorph.TabIndex = 0;
 			this.btGetMorph.Text = "MorphAn";
 			this.btGetMorph.UseVisualStyleBackColor = true;
 			this.btGetMorph.Click += new System.EventHandler(this.btGetMorph_Click);
-			// 
-			// textBox1
-			// 
-			this.textBox1.Location = new System.Drawing.Point(255, 290);
-			this.textBox1.Name = "textBox1";
-			this.textBox1.ReadOnly = true;
-			this.textBox1.Size = new System.Drawing.Size(100, 20);
-			this.textBox1.TabIndex = 1;
 			// 
 			// memoInp
 			// 
@@ -102,7 +93,7 @@
 			// 
 			// btMakeSynAn
 			// 
-			this.btMakeSynAn.Location = new System.Drawing.Point(93, 316);
+			this.btMakeSynAn.Location = new System.Drawing.Point(255, 290);
 			this.btMakeSynAn.Name = "btMakeSynAn";
 			this.btMakeSynAn.Size = new System.Drawing.Size(75, 23);
 			this.btMakeSynAn.TabIndex = 5;
@@ -141,7 +132,6 @@
 			this.Controls.Add(this.memoOut);
 			this.Controls.Add(this.statusStrip1);
 			this.Controls.Add(this.memoInp);
-			this.Controls.Add(this.textBox1);
 			this.Controls.Add(this.btGetMorph);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.Name = "TestForm";
@@ -156,8 +146,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Button btGetMorph;
-        private System.Windows.Forms.TextBox textBox1;
+		private System.Windows.Forms.Button btGetMorph;
         private System.Windows.Forms.TextBox memoInp;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;

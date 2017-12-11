@@ -100,17 +100,19 @@ namespace MorphMQserver
 		/// </summary>
 		private string RestoreSentenceOnePass(SentenceMap sentence)
 		{
-			var sb = new StringBuilder();
-			for (int i = 0; i < sentence.Capasity; i++)
-			{
-				var wmap = sentence.GetWordByOrder(i);
-				var coords = new ArrayList();
-				var states = new ArrayList();
-
-				var props = new Gren.GrenProperty[] { Gren.GrenProperty.NUMBER_ru, Gren.GrenProperty.CASE_ru ,
+			// Перечень характеристик, нужных для восстановления слова по словоформе
+			var props = new Gren.GrenProperty[] { Gren.GrenProperty.NUMBER_ru, Gren.GrenProperty.CASE_ru ,
 					Gren.GrenProperty.GENDER_ru, Gren.GrenProperty.TENSE_ru, Gren.GrenProperty.PERSON_ru,
 					Gren.GrenProperty.FORM_ru, Gren.GrenProperty.SHORTNESS_ru, Gren.GrenProperty.COMPAR_FORM_ru
 				};
+			var sb = new StringBuilder();
+			var coords = new ArrayList();
+			var states = new ArrayList();
+			for (int i = 0; i < sentence.Capasity; i++)
+			{
+				var wmap = sentence.GetWordByOrder(i);
+				coords.Clear();
+				states.Clear();
 
 				foreach (var prop in props)
 				{
@@ -127,11 +129,15 @@ namespace MorphMQserver
 				if (fx != null && fx.Count > 0)
 				{
 					word = (fx[0] as String).ToLower();
+				}
+
+				if (word != "")
+				{
 					if (i == 0)
 					{
 						word = char.ToUpper(word[0]) + word.Substring(1);
 					}
-					if (i != sentence.Capasity-1)
+					if (i != sentence.Capasity - 1)
 						sb.Append(" ");
 					sb.Append(word);
 				}
@@ -141,9 +147,10 @@ namespace MorphMQserver
 		}
 
 		/// <summary>
-		/// Восстановление предложения из грамматических характеристик каждого слова
+		/// Пример: Восстановление предложения из грамматических характеристик каждого слова
 		/// с использованием функций частей речи.
 		/// </summary>
+		/*
 		private string RestoreSentence(SentenceMap sentence)
 		{
 			var sb = new StringBuilder();
@@ -198,7 +205,7 @@ namespace MorphMQserver
 			}
 
 			return sb.ToString();
-		}
+		} */
 
 		/// <summary>
 		/// Получение грамматических характеристик каждого слова в предложении.
