@@ -151,7 +151,7 @@ namespace MorphMQserver
 					{
 						word = char.ToUpper(word[0]) + word.Substring(1);
 					}
-					if (i != sentence.Capasity - 1)
+					if (i > 0 && i < sentence.Capasity-1)
 						sb.Append(" ");
 					sb.Append(word);
 				}
@@ -432,7 +432,7 @@ namespace MorphMQserver
 					{
 						linktype = GrammarEngine.sol_GetLeafLinkType(hParentNode, LeafIndex);
 					}
-					sent.AddWord(Position, wmap, Level, LeafIndex, linktype);
+					sent.AddWord(Position, wmap, Level, linktype);
 				}
 				Int32 n_leaf = GrammarEngine.sol_CountLeafs(hNode);				
 				for (int ileaf = 0; ileaf < n_leaf; ileaf++)
@@ -450,7 +450,9 @@ namespace MorphMQserver
 			var ordlist = sent.GetTreeList();
 			foreach (tNode x in ordlist)
 			{
-				sb.Append(new String('\t', x.Level) + " " + sent.GetWordByOrder(x.index).EntryName + "\r\n");
+				sb.Append(new String('\t', x.Level) + 
+					String.Format("{0} Level {1} link {2} \r\n",
+						sent.GetWordByOrder(x.index).EntryName, x.Level, Gren.sgAPI.GetLinkTypeStr(x.linktype)));
 			}
 
 			return sb.ToString();

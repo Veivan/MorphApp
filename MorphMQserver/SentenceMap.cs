@@ -7,10 +7,10 @@ namespace MorphMQserver
 {
 	struct tNode
 	{
-		public int Level;
-		public int orderlvl;
-		public int index;
-		public int linktype;
+		public int ID; // Порядок добавления в дерево, для сортировки в виде плоского списка
+		public int Level; // Уровень вложенности, для отображения
+		public int index; // порядковый номер в предложении
+		public int linktype; // тип взаимосвязи с родителем
 	}
 	
 	/// <summary>
@@ -30,16 +30,20 @@ namespace MorphMQserver
 			}
 		}
 
-		public void AddWord(int order, WordMap word, int Level = -1, int orderlvl = -1, int linktype = -1)
+		public void AddWord(int order, WordMap word, int Level = -1, int linktype = -1)
 		{
 			if (words.ContainsKey(order) || word == null)
 				return;
 			words.Add(order, word);
-			if (Level > -1 && orderlvl > -1)
+			//if (Level > -1 && orderlvl > -1)
+			var maxID = 0;
+			if (treeList.Count > 0)
+				maxID = treeList.OrderByDescending(x => x.Level).First().Level + 1;
+			//if (lastNode == null) maxID = 0; else maxID++;
 			{
 				var node = new tNode();
+				node.ID = maxID;
 				node.Level = Level;
-				node.orderlvl = orderlvl;
 				node.index = order;
 				node.linktype = linktype;
 				treeList.Add(node);
@@ -56,7 +60,9 @@ namespace MorphMQserver
 
 		public List<tNode> GetTreeList()
 		{
-			var newlist = treeList.OrderBy(x => x.Level).ThenBy(x => x.orderlvl).ToList();
+			var newlist = treeList.OrderBy(x => x.ID)
+				//.ThenBy(x => x.orderlvl)
+				.ToList();
 			return newlist;
 		}
 
