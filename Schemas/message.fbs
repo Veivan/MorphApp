@@ -8,13 +8,44 @@ enum ComType:long { Undef = 0,
 	SaveLex = 11, GetWord = 12}   // команды svSUBD
 
 table Message {
-  messType:MessType;
-  serverType:ServType;
-  comtype:ComType = Undef; // Enum.
-  params:[Param];   // Vector of tables.
+	messType:MessType;
+	serverType:ServType;
+	comtype:ComType = Undef;	// Enum.
+	params:[Param];				// Vector of tables.
+	sentences:[Sentence];		// Vector of tables.
 }
+
 table Param {
-  name:string;
-  value:string;
+	name:string;
+	value:string;
 }
+
+table Sentence {
+	order:short;		// Порядок предложения в абзаце
+	nodes:[Node];		// Vector of tables.
+	words:[Lexema];		// Vector of tables.
+	phrase:string;		// Текст предложения
+}
+
+table Node
+{
+	ID : short;			// Порядок добавления в дерево, для сортировки в виде плоского списка
+	Level : short;		// Уровень вложенности, для отображения
+	index : short;		// порядковый номер в предложении
+	linktype : short;	// тип взаимосвязи с родителем
+}
+
+table Lexema {
+	order:short; // Порядок слова в предложении
+	EntryName:string;
+	id_entry:int;
+	id_partofspeech:short;
+	grammems:[Grammema];   // Vector of tables.
+}
+
+table Grammema {
+  key:short;
+  value:short;
+}
+
 root_type Message;
