@@ -19,4 +19,7 @@
 /sgBroker/obj
 /SimpleTest/bin
 /SimpleTest/obj
-MorphApp.suo
+/dbMQserverTests/bin
+/dbMQserverTests/obj
+/MorphApp.suo
+/TestResults
