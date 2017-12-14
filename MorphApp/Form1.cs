@@ -48,10 +48,10 @@ namespace MorphApp
             courier.servType = TMorph.Schema.ServType.svMorph;
             courier.command = TMorph.Schema.ComType.Synt;
             courier.sendit(memoInp.Text);
-            var sents = courier.GetSeparatedSentsList();
+            var sent = courier.GetSentenceStruct();
             var sb = new StringBuilder();
-            foreach (var sent in sents)
-                sb.Append(sent + "\r\n");
+
+            sb.Append(sent + "\r\n");
             memoOut.Text = sb.ToString();
         }
 

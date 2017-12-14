@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using TMorph.Schema;
 using TMorph.Common;
+using Schemas;
 using ZeroMQ;
 using FlatBuffers;
 
@@ -12,7 +13,10 @@ namespace MorphMQserver
     {
         ComType command = ComType.Undef;
 		GrenHelper gren = new GrenHelper();
+        
+        // Возвращаемый значения GrenHelper
         List<string> separated;
+        SentenceMap sentence;
 
 		public MorphServer()
 		{
@@ -47,19 +51,18 @@ namespace MorphMQserver
                         // Do some work
                         switch (command)
                         {
-                            case ComType.Morph:
-                                Console.WriteLine("ComType.Morph");
-                                //resp = req + " " + "ComType.Morph";
-								resp = gren.GetMorphInfo(req);
-                                break;
-                            case ComType.Synt:
-                                Console.WriteLine("ComType.Synt");
-                                resp = gren.GetSynInfo(req);
-                                //resp = req + " " + "ComType.Synt";
-                                break;
                             case ComType.Separ:
                                 Console.WriteLine("ComType.Separ");
                                 separated = gren.SeparateIt(req);
+                                break;
+                            case ComType.Synt:
+                                Console.WriteLine("ComType.Synt");
+                                sentence = gren.GetSynInfoMap(req);
+                                break;
+                            case ComType.Morph:
+                                Console.WriteLine("ComType.Morph");
+                                //resp = req + " " + "ComType.Morph";
+                                resp = gren.GetMorphInfo(req);
                                 break;
                             default:
                                 break;
@@ -92,6 +95,9 @@ namespace MorphMQserver
             }
         }
 
+        /// <summary>
+        /// Чтение реквеста.
+        /// </summary>
         private string GetReq(byte[] req)
         {
             var result = "";
@@ -104,6 +110,9 @@ namespace MorphMQserver
 			return result;
         }
 
+        /// <summary>
+        /// Формирование реплая.
+        /// </summary>
         private FlatBufferBuilder SetRep(ComType command)
         {
             var builder = new FlatBufferBuilder(1);
@@ -111,18 +120,49 @@ namespace MorphMQserver
 
             switch (command)
             {
-                case ComType.Morph:
-                    break;
                 case ComType.Synt:
-                    break;
-                case ComType.Separ:
-                    var sents = new Offset<Sentence>[separated.Count];
-                    for (short i = 0; i < separated.Count; i++)
                     {
-                        var sentVal = builder.CreateString(separated[i]);
-                        sents[i] = Sentence.CreateSentence(builder, i, default(VectorOffset), default(VectorOffset), sentVal);
+                        #region Синтаксический анализ - выполняется для одного предложения
+                        var sents = new Offset<Sentence>[1];
+
+                        // Чтение слов
+                        var words = new Offset<Lexema>[sentence.Capasity];
+                        for (short i = 0; i < sentence.Capasity; i++)
+                        {
+                            var word = sentence.GetWordByOrder(i);
+                            var EntryName = builder.CreateString(word.EntryName);
+
+                            // Чтение граммем
+                            var pairs = word.GetPairs();
+                            var grammems = new Offset<Grammema>[pairs.Count];
+                            short j = 0;
+                            foreach (var pair in pairs)
+                            { 
+                                grammems[j] = Grammema.CreateGrammema(builder, (short)pair.Key, (short)pair.Value);                                
+                            }
+                            var gramsCol = Lexema.CreateGrammemsVector(builder, grammems);
+                            words[i] = Lexema.CreateLexema(builder, i, EntryName, word.ID_Entry, (short)word.ID_PartOfSpeech, gramsCol);
+                        }
+                        var wordsCol = Sentence.CreateWordsVector(builder, words);
+
+                        var sentVal = builder.CreateString("");
+                        sents[0] = Sentence.CreateSentence(builder, 0, default(VectorOffset), wordsCol, sentVal);
+                        sentscol = Message.CreateSentencesVector(builder, sents);
+                        break;
+                        #endregion
                     }
-                    sentscol = Message.CreateSentencesVector(builder, sents); 
+                case ComType.Separ:
+                    {
+                        var sents = new Offset<Sentence>[separated.Count];
+                        for (short i = 0; i < separated.Count; i++)
+                        {
+                            var sentVal = builder.CreateString(separated[i]);
+                            sents[i] = Sentence.CreateSentence(builder, i, default(VectorOffset), default(VectorOffset), sentVal);
+                        }
+                        sentscol = Message.CreateSentencesVector(builder, sents);
+                        break;
+                    }
+                case ComType.Morph:
                     break;
                 default:
                     break;
@@ -135,14 +175,15 @@ namespace MorphMQserver
 
             switch (command)
             {
-                case ComType.Morph:
-                    break;
                 case ComType.Synt:
+                    Message.AddSentences(builder, sentscol);
                     break;
                 case ComType.Separ:
                     Message.AddSentences(builder, sentscol);
                     break;
                 default:
+                    break;
+                case ComType.Morph:
                     break;
             }
 

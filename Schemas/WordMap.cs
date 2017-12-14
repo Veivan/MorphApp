@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using TMorph.Schema;
 
 namespace Schemas
 {
@@ -10,6 +11,7 @@ namespace Schemas
 	{
 		public HasDict xPart = null;
 		public string EntryName = "";
+	    public short order; // Порядок слова в предложении
 
 		/// <summary>
 		/// ID словарной статьи.
@@ -68,5 +70,52 @@ namespace Schemas
 				return -1;
 		}
 
-	}
+        /// <summary>
+        /// Получение из сообщения списка структур WordMap, сортированных в порядке слов в предложении.
+        /// </summary>
+        public static SortedList<short, WordMap> GetWordsFromMessage(Message message)
+        {
+            if (message.SentencesLength == 0)
+                return null;
+            SortedList<short, WordMap> outlist = null;
+            var sent = message.Sentences(0);
+            if (sent.HasValue)
+            {
+                outlist = new SortedList<short, WordMap>();
+                var sentval = sent.Value;
+                // Чтение слов
+                for (int i = 0; i < sentval.WordsLength; i++)
+                {
+                    var word = BuildFromLexema(sentval.Words(i));
+                    outlist.Add(word.order, word);
+                }
+            }
+            return outlist;
+        }
+        
+        /// <summary>
+        /// Получение структуры WordMap из структуры Lexema.
+        /// </summary>
+        private static WordMap BuildFromLexema(Lexema? lexema)
+        {
+            WordMap word = null;
+            if (lexema.HasValue)
+            {
+                var lexval = lexema.Value;
+                word = new WordMap(lexval.IdEntry, lexval.IdPartofspeech);
+                word.EntryName = lexval.EntryName;
+                // Чтение граммем
+                for (int i = 0; i < lexval.GrammemsLength; i++)
+                {
+                    var grammema = lexval.Grammems(i);
+                    if (grammema.HasValue)
+                    {
+                        word.AddPair(grammema.Value.Key, grammema.Value.Value);
+                    }
+                }
+            }
+            return word;
+        }
+        
+    }
 }

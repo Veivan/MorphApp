@@ -7,6 +7,7 @@ using ZeroMQ;
 using FlatBuffers;
 using TMorph.Schema;
 using TMorph.Common;
+using Schemas;
 
 namespace MorphApp
 {
@@ -70,10 +71,7 @@ namespace MorphApp
             {
                 var sent = message.Sentences(i);
                 if (sent.HasValue)
-                {
-                    var ss = sent.Value;
-                    outlist.Add(ss.Phrase);
-                }
+                    outlist.Add(sent.Value.Phrase);
             }
             return outlist;
         }
@@ -81,25 +79,15 @@ namespace MorphApp
         /// <summary>
         /// Получение структуры предложения из сообщения.
         /// </summary>
-        public List<string> GetSentenceStructList()
+        public SentenceMap GetSentenceStruct()
         {
-            // TODO реализовать
-            if (replay == null) return null;
-            var outlist = new List<string>();
+            if (replay == null) 
+                return null;
             replay.Position = 0;
             var bufrep = replay.Read();
             var buf = new ByteBuffer(bufrep);
             var message = Message.GetRootAsMessage(buf);
-            for (int i = 0; i < message.SentencesLength; i++)
-            {
-                var sent = message.Sentences(i);
-                if (sent.HasValue)
-                {
-                    var ss = sent.Value;
-                    outlist.Add(ss.Phrase);
-                }
-            }
-            return outlist;
+            return SentenceMap.BuildFromMessage(message);
         }
 
         private ZFrame SendMess(ZFrame frame)
@@ -191,32 +179,5 @@ namespace MorphApp
 
 			return builder;
 		}
-/*
-		private void PrintRep(byte[] req)
-		{
-			var buf = new ByteBuffer(req);
-			var message = Message.GetRootAsMessage(buf);
-			Console.WriteLine(" ServerType : {0}", message.ServerType.ToString());
-			Console.WriteLine(" Comtype : {0}", message.Comtype.ToString());
-
-			for (int i = 0; i < message.ParamsLength; i++)
-			{
-				Param? par = message.Params(i);
-				if (par == null) continue;
-				Console.WriteLine(" Param : {0} = {1}", par.Value.Name, par.Value.Value);
-			}
-		}
-
-		private string GetRep(byte[] req)
-		{
-			var result = "";
-			var buf = new ByteBuffer(req);
-			var message = Message.GetRootAsMessage(buf);
-			Param? par = message.Params(0);
-			if (par.HasValue)
-				result = String.Format(" Param : {0} = {1}", par.Value.Name, par.Value.Value);
-			return result;
-		}
-*/
 	}
 }

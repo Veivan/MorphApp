@@ -227,9 +227,10 @@ namespace MorphMQserver
         /// </summary>
         public List<string> SeparateIt(string text)
         {
-            var outlist = new List<string>();
             if (!IsReady)
                 return null; //"Ошибка загрузки словаря.";
+
+            var outlist = new List<string>();
 
             // эту строку будет делить на предложения с помощью сегментатора
             // http://www.solarix.ru/api/ru/sol_CreateSentenceBrokerMem.shtml
@@ -373,43 +374,55 @@ namespace MorphMQserver
 			return sb.ToString();
 		}
 
-		public string GetSynInfo(string phrase)
+        /// <summary>
+        /// Выполнение синтаксического анализа предложения.
+        /// Получение структуры SentenceMap из предложении.
+        /// </summary>
+        public SentenceMap GetSynInfoMap(string phrase)
+        {
+            if (!IsReady)
+                return null; //"Ошибка загрузки словаря."
+
+            // 60000 - это ограничение на время разбора в мсек.
+            // 20 - это beam size в ходе перебора вариантов.
+            IntPtr hPack = GrammarEngine.sol_SyntaxAnalysis(hEngine, phrase, 0, 0, (60000 | (20 << 22)), GrammarEngineAPI.RUSSIAN_LANGUAGE);
+
+            // Выберем граф с минимальным количеством корневых узлов
+            // http://www.solarix.ru/api/ru/sol_CountGrafs.shtml
+            int ngrafs = GrammarEngine.sol_CountGrafs(hPack);
+
+            int imin_graf = -1, minv = 2000000;
+            for (int i = 0; i < ngrafs; i++)
+            {
+                // http://www.solarix.ru/api/ru/sol_CountRoots.shtml
+                int nroots = GrammarEngine.sol_CountRoots(hPack, i);
+                if (nroots < minv)
+                {
+                    minv = nroots;
+                    imin_graf = i;
+                }
+            }
+
+            Int32 rCount = GrammarEngine.sol_CountRoots(hPack, imin_graf);
+            var sent = new SentenceMap();
+            int Level = 0;
+            // Сохранение графа в памяти
+            for (int j = 1; j < rCount - 1; j++)
+            {
+                // http://www.solarix.ru/api/ru/sol_GetRoot.shtml
+                IntPtr hNode = GrammarEngine.sol_GetRoot(hPack, imin_graf, j);
+                SaveNodeReq(hNode, sent, Level, IntPtr.Zero, j);
+            }
+            return sent;
+        }
+        
+        public string GetSynInfo(string phrase)
 		{
 			string result = "Ошибка загрузки словаря.";
 			if (!IsReady)
 				return result;
 
-			// 60000 - это ограничение на время разбора в мсек.
-			// 20 - это beam size в ходе перебора вариантов.
-			IntPtr hPack = GrammarEngine.sol_SyntaxAnalysis(hEngine, phrase, 0, 0, (60000 | (20 << 22)), GrammarEngineAPI.RUSSIAN_LANGUAGE);
-
-			// Выберем граф с минимальным количеством корневых узлов
-			// http://www.solarix.ru/api/ru/sol_CountGrafs.shtml
-			int ngrafs = GrammarEngine.sol_CountGrafs(hPack);
-			//MessageBox.Show("Всего графов : " + ngrafs.ToString());
-			Console.Write("Наиболее достоверный вариант разбора:\n");
-			int imin_graf = -1, minv = 2000000;
-			for (int i = 0; i < ngrafs; i++)
-			{
-				// http://www.solarix.ru/api/ru/sol_CountRoots.shtml
-				int nroots = GrammarEngine.sol_CountRoots(hPack, i);
-				if (nroots < minv)
-				{
-					minv = nroots;
-					imin_graf = i;
-				}
-			}
-			//Console.Write("Наиболее достоверный вариант разбора:\n");
-			Int32 rCount = GrammarEngine.sol_CountRoots(hPack, imin_graf);
-			var sent = new SentenceMap();
-			int Level = 0;
-			// Сохранение графа в памяти
-			for (int j = 1; j < rCount - 1; j++)
-			{
-				// http://www.solarix.ru/api/ru/sol_GetRoot.shtml
-				IntPtr hNode = GrammarEngine.sol_GetRoot(hPack, imin_graf, j);
-				SaveNodeReq(hNode, sent, Level, IntPtr.Zero, j);
-			}
+            SentenceMap sent = GetSynInfoMap(phrase);
 
 			StringBuilder sb = new StringBuilder();
 			sb.Append(RestoreSentenceOnePass(sent));
