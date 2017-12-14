@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using TMorph.Schema;
 using TMorph.Common;
@@ -11,6 +12,7 @@ namespace MorphMQserver
     {
         ComType command = ComType.Undef;
 		GrenHelper gren = new GrenHelper();
+        List<string> separated;
 
 		public MorphServer()
 		{
@@ -52,15 +54,19 @@ namespace MorphMQserver
                                 break;
                             case ComType.Synt:
                                 Console.WriteLine("ComType.Synt");
-								resp = gren.GetSynInfo(req);
+                                resp = gren.GetSynInfo(req);
                                 //resp = req + " " + "ComType.Synt";
+                                break;
+                            case ComType.Separ:
+                                Console.WriteLine("ComType.Separ");
+                                separated = gren.SeparateIt(req);
                                 break;
                             default:
                                 break;
                         }
 
                         // Send
-                        var builder = SetRep(resp);
+                        var builder = SetRep(command);
 						var foo = builder.SizedByteArray();
 
                         responder.Send(new ZFrame(foo));
@@ -98,20 +104,48 @@ namespace MorphMQserver
 			return result;
         }
 
-        private FlatBufferBuilder SetRep(string resultValue)
+        private FlatBufferBuilder SetRep(ComType command)
         {
             var builder = new FlatBufferBuilder(1);
-            var param1Name = builder.CreateString("result");
-            var param1Val = builder.CreateString(resultValue);
-            var parms = new Offset<Param>[1];
-            parms[0] = Param.CreateParam(builder, param1Name, param1Val);
-            var paracol = Message.CreateParamsVector(builder, parms);
+            VectorOffset sentscol = default(VectorOffset);
+
+            switch (command)
+            {
+                case ComType.Morph:
+                    break;
+                case ComType.Synt:
+                    break;
+                case ComType.Separ:
+                    var sents = new Offset<Sentence>[separated.Count];
+                    for (short i = 0; i < separated.Count; i++)
+                    {
+                        var sentVal = builder.CreateString(separated[i]);
+                        sents[i] = Sentence.CreateSentence(builder, i, default(VectorOffset), default(VectorOffset), sentVal);
+                    }
+                    sentscol = Message.CreateSentencesVector(builder, sents); 
+                    break;
+                default:
+                    break;
+            }
 
             Message.StartMessage(builder);
             Message.AddMessType(builder, MessType.mReplay);
             Message.AddServerType(builder, ServType.svMorph);
-            Message.AddComtype(builder, ComType.Token);
-            Message.AddParams(builder, paracol);
+            Message.AddComtype(builder, command);
+
+            switch (command)
+            {
+                case ComType.Morph:
+                    break;
+                case ComType.Synt:
+                    break;
+                case ComType.Separ:
+                    Message.AddSentences(builder, sentscol);
+                    break;
+                default:
+                    break;
+            }
+
             var req = Message.EndMessage(builder);
             builder.Finish(req.Value);
 

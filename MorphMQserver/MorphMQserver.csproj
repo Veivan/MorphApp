@@ -69,7 +69,7 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>MorphMQserver.RunTestForm</StartupObject>
+    <StartupObject>MorphMQserver.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="FlatBuffers">

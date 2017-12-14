@@ -11,6 +11,7 @@ public enum ComType : long
  Token = 1,
  Synt = 2,
  Morph = 3,
+ Separ = 4,
  SaveLex = 11,
  GetWord = 12,
 };

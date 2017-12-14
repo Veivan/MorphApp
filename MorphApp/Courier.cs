@@ -28,12 +28,12 @@ namespace MorphApp
 			var builder = SetReq(requestText);
 			var buf = builder.SizedByteArray();
 			ZFrame replay = SendMess(new ZFrame(buf));
-			
-			/*string replay = "";
-			replay = GetRep(bufrep);*/
 		}
 
-		public List<SimpleParam> GetParamsList()
+        /// <summary>
+        /// Получение списка параметров из сообщения.
+        /// </summary>
+        public List<SimpleParam> GetParamsList()
 		{
 			if (replay == null) return null;
 			var paramlist = new List<SimpleParam>();
@@ -54,8 +54,55 @@ namespace MorphApp
 			}
 			return paramlist;
 		}
-		
-		private ZFrame SendMess(ZFrame frame)
+
+        /// <summary>
+        /// Получение списка текстов предложений из сообщения.
+        /// </summary>
+        public List<string> GetSeparatedSentsList()
+        {
+            if (replay == null) return null;
+            var outlist = new List<string>();
+            replay.Position = 0;
+            var bufrep = replay.Read();
+            var buf = new ByteBuffer(bufrep);
+            var message = Message.GetRootAsMessage(buf);
+            for (int i = 0; i < message.SentencesLength; i++)
+            {
+                var sent = message.Sentences(i);
+                if (sent.HasValue)
+                {
+                    var ss = sent.Value;
+                    outlist.Add(ss.Phrase);
+                }
+            }
+            return outlist;
+        }
+
+        /// <summary>
+        /// Получение списка структур предложений из сообщения.
+        /// </summary>
+        public List<string> GetStructSentenciesList()
+        {
+            // TODO реализовать
+            if (replay == null) return null;
+            var outlist = new List<string>();
+            replay.Position = 0;
+            var bufrep = replay.Read();
+            var buf = new ByteBuffer(bufrep);
+            var message = Message.GetRootAsMessage(buf);
+            for (int i = 0; i < message.SentencesLength; i++)
+            {
+                var sent = message.Sentences(i);
+                if (sent.HasValue)
+                {
+                    var ss = sent.Value;
+                    outlist.Add(ss.Phrase);
+                }
+            }
+            return outlist;
+        }
+
+        private ZFrame SendMess(ZFrame frame)
 		{
 			replay = null;
 			ZError error;
@@ -144,7 +191,7 @@ namespace MorphApp
 
 			return builder;
 		}
-
+/*
 		private void PrintRep(byte[] req)
 		{
 			var buf = new ByteBuffer(req);
@@ -170,6 +217,6 @@ namespace MorphApp
 				result = String.Format(" Param : {0} = {1}", par.Value.Name, par.Value.Value);
 			return result;
 		}
-
+*/
 	}
 }

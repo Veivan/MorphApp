@@ -221,7 +221,35 @@ namespace MorphMQserver
 			return sb.ToString();
 		} */
 
-		/// <summary>
+        /// <summary>
+        /// Разбивка текста на предложении.
+        /// </summary>
+        public List<string> SeparateIt(string text)
+        {
+            var outlist = new List<string>();
+            if (!IsReady)
+                return null; //"Ошибка загрузки словаря.";
+
+            // эту строку будет делить на предложения с помощью сегментатора
+            // http://www.solarix.ru/api/ru/sol_CreateSentenceBrokerMem.shtml
+            IntPtr hSegmenter = GrammarEngine.sol_CreateSentenceBrokerMemW(hEngine, text, GrammarEngineAPI.RUSSIAN_LANGUAGE);
+
+            while (GrammarEngine.sol_FetchSentence(hSegmenter) >= 0)
+            {
+                // извлекаем очередное предложение...
+                string sentence = GrammarEngine.sol_GetFetchedSentenceFX(hSegmenter);
+                if (sentence.Length > 0)
+                    outlist.Add(sentence);
+            }
+
+            // закончили извлекать предложения из текста - удаляем объект сегментатора
+            // http://www.solarix.ru/api/ru/sol_DeleteSentenceBroker.shtml
+            GrammarEngine.sol_DeleteSentenceBroker(hSegmenter);
+
+            return outlist;
+        }
+        
+        /// <summary>
 		/// Получение грамматических характеристик каждого слова в предложении.
 		/// </summary>
 		public string GetMorphInfo(string phrase)

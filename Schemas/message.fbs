@@ -4,7 +4,7 @@ enum MessType:byte { mRequest = 0, mReplay = 1 }
 enum ServType:byte { svMorph = 0, svSUBD = 1 }
 // Token - токенизация предложения; Synt - синт анализ предложения; Morph - морф анализ слова
 enum ComType:long { Undef = 0, 
-			Token = 1, Synt = 2, Morph = 3, // команды svMorph
+			Token = 1, Synt = 2, Morph = 3, Separ = 4, // команды svMorph
 	SaveLex = 11, GetWord = 12}   // команды svSUBD
 
 table Message {
