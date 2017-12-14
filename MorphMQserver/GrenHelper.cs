@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Forms;
 
 using SolarixGrammarEngineNET;
+using Schemas;
 
 namespace MorphMQserver
 {
@@ -77,7 +78,7 @@ namespace MorphMQserver
 					if (xType != null)
 					{
 						// Создание класса части речи
-						var xPart = Activator.CreateInstance(xType) as Gren.HasDict;
+						var xPart = Activator.CreateInstance(xType) as HasDict;
 						wmap.xPart = xPart;
 						//Перебор пар характеристик, относящихся к данной части речи
 						foreach (var CoordID in xPart.dimensions)
@@ -115,9 +116,9 @@ namespace MorphMQserver
 		private string RestoreSentenceOnePass(SentenceMap sentence)
 		{
 			// Перечень характеристик, нужных для восстановления слова по словоформе
-			var props = new Gren.GrenProperty[] { Gren.GrenProperty.NUMBER_ru, Gren.GrenProperty.CASE_ru ,
-					Gren.GrenProperty.GENDER_ru, Gren.GrenProperty.TENSE_ru, Gren.GrenProperty.PERSON_ru,
-					Gren.GrenProperty.FORM_ru, Gren.GrenProperty.SHORTNESS_ru, Gren.GrenProperty.COMPAR_FORM_ru
+			var props = new GrenProperty[] { GrenProperty.NUMBER_ru, GrenProperty.CASE_ru ,
+					GrenProperty.GENDER_ru, GrenProperty.TENSE_ru, GrenProperty.PERSON_ru,
+					GrenProperty.FORM_ru, GrenProperty.SHORTNESS_ru, GrenProperty.COMPAR_FORM_ru
 				};
 			var sb = new StringBuilder();
 			var coords = new ArrayList();
@@ -294,7 +295,7 @@ namespace MorphMQserver
 					if (xType != null)
 					{
 						// Создание класса части речи
-						var xPart = Activator.CreateInstance(xType) as Gren.HasDict;
+						var xPart = Activator.CreateInstance(xType) as HasDict;
 						wmap.xPart = xPart;
 						foreach (var CoordID in xPart.dimensions)
 						{
@@ -446,7 +447,7 @@ namespace MorphMQserver
 				if (xType != null)
 				{
 					// Создание класса части речи
-					var xPart = Activator.CreateInstance(xType) as Gren.HasDict;
+					var xPart = Activator.CreateInstance(xType) as HasDict;
 					wmap.xPart = xPart;
 					//Перебор пар характеристик, относящихся к данной части речи
 					foreach (var CoordID in xPart.dimensions)

@@ -108,9 +108,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RunTestForm.cs" />
-    <Compile Include="SentenceMap.cs" />
     <Compile Include="sgAPI.cs" />
-    <Compile Include="WordMap.cs" />
     <Compile Include="_sg_api.cs" />
   </ItemGroup>
   <ItemGroup>

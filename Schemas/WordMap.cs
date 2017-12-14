@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MorphMQserver
+namespace Schemas
 {
 	/// <summary>
 	/// Класс хранит грамматическое представление одного слова.
 	/// </summary>
-	class WordMap
+	public class WordMap
 	{
-		public Gren.HasDict xPart = null;
+		public HasDict xPart = null;
 		public string EntryName = "";
 
 		/// <summary>
@@ -60,7 +60,7 @@ namespace MorphMQserver
 			return pairs;
 		}
 
-		public int GetPropertyValue(Gren.GrenProperty property)
+		public int GetPropertyValue(GrenProperty property)
 		{
 			if (pairs.ContainsKey((int)property))
 				return pairs[(int)property];

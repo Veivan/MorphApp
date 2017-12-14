@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MorphMQserver
+namespace Schemas
 {
-	struct tNode
+	public struct tNode
 	{
 		public int ID; // Порядок добавления в дерево, для сортировки в виде плоского списка
 		public int Level; // Уровень вложенности, для отображения
@@ -16,7 +16,7 @@ namespace MorphMQserver
 	/// <summary>
 	/// Класс хранит информацию о предложении.
 	/// </summary>
-	class SentenceMap
+	public class SentenceMap
 	{
 		private SortedList<int, WordMap> words = new SortedList<int, WordMap>();
 

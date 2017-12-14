@@ -79,9 +79,9 @@ namespace MorphApp
         }
 
         /// <summary>
-        /// Получение списка структур предложений из сообщения.
+        /// Получение структуры предложения из сообщения.
         /// </summary>
-        public List<string> GetStructSentenciesList()
+        public List<string> GetSentenceStructList()
         {
             // TODO реализовать
             if (replay == null) return null;

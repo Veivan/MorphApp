@@ -25,18 +25,40 @@ namespace MorphApp
 		{
         }
 
-		private void btGetMorph_Click(object sender, EventArgs e)
+        private void btTokenize_Click(object sender, EventArgs e)
+        {
+            courier.servType = TMorph.Schema.ServType.svMorph;
+            courier.command = TMorph.Schema.ComType.Separ;
+            courier.sendit(memoInp.Text);
+            var sents = courier.GetSeparatedSentsList();
+            var sb = new StringBuilder();
+            foreach (var sent in sents)
+                sb.Append(sent + "\r\n");
+            memoOut.Text = sb.ToString();
+
+            /* var slist = new ArrayList();
+             slist.Add(memoInp.Text);
+             slist.Add("Предл один.");
+             para.AddParagraph(slist); */
+
+        }
+
+        private void btMakeSynAn_Click(object sender, EventArgs e)
+        {
+            courier.servType = TMorph.Schema.ServType.svMorph;
+            courier.command = TMorph.Schema.ComType.Synt;
+            courier.sendit(memoInp.Text);
+            var sents = courier.GetSeparatedSentsList();
+            var sb = new StringBuilder();
+            foreach (var sent in sents)
+                sb.Append(sent + "\r\n");
+            memoOut.Text = sb.ToString();
+        }
+
+        private void btGetMorph_Click(object sender, EventArgs e)
 		{
 			courier.servType = TMorph.Schema.ServType.svMorph;
 			courier.command = TMorph.Schema.ComType.Morph;
-            courier.sendit(memoInp.Text);
-            memoOut.Text = "";
-		}
-
-		private void btMakeSynAn_Click(object sender, EventArgs e)
-		{
-			courier.servType = TMorph.Schema.ServType.svMorph;
-			courier.command = TMorph.Schema.ComType.Synt;
             courier.sendit(memoInp.Text);
             memoOut.Text = "";
 		}
@@ -61,23 +83,6 @@ namespace MorphApp
 
         }
 
-		private void btTokenize_Click(object sender, EventArgs e)
-		{
-			courier.servType = TMorph.Schema.ServType.svMorph;
-			courier.command = TMorph.Schema.ComType.Separ;
-            courier.sendit(memoInp.Text);
-            var sents = courier.GetSeparatedSentsList();
-            var sb = new StringBuilder();
-            foreach (var sent in sents)
-                sb.Append(sent + "\r\n");
-            memoOut.Text = sb.ToString();
-
-           /* var slist = new ArrayList();
-            slist.Add(memoInp.Text);
-            slist.Add("Предл один.");
-            para.AddParagraph(slist); */
- 
-		}
 
 		private void btRestore_Click(object sender, EventArgs e)
 		{
