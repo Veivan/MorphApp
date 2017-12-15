@@ -84,10 +84,10 @@ namespace Schemas
                 outlist = new SortedList<short, WordMap>();
                 var sentval = sent.Value;
                 // Чтение слов
-                for (int i = 0; i < sentval.WordsLength; i++)
+                for (short i = 0; i < sentval.WordsLength; i++)
                 {
                     var word = BuildFromLexema(sentval.Words(i));
-                    outlist.Add(word.order, word);
+					outlist.Add(word.order, word);
                 }
             }
             return outlist;
@@ -104,6 +104,7 @@ namespace Schemas
                 var lexval = lexema.Value;
                 word = new WordMap(lexval.IdEntry, lexval.IdPartofspeech);
                 word.EntryName = lexval.EntryName;
+				word.order = lexval.Order;
                 // Чтение граммем
                 for (int i = 0; i < lexval.GrammemsLength; i++)
                 {

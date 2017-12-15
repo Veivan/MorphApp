@@ -138,7 +138,8 @@ namespace MorphMQserver
                             short j = 0;
                             foreach (var pair in pairs)
                             { 
-                                grammems[j] = Grammema.CreateGrammema(builder, (short)pair.Key, (short)pair.Value);                                
+                                grammems[j] = Grammema.CreateGrammema(builder, (short)pair.Key, (short)pair.Value);
+								j++;
                             }
                             var gramsCol = Lexema.CreateGrammemsVector(builder, grammems);
                             words[i] = Lexema.CreateLexema(builder, i, EntryName, word.ID_Entry, (short)word.ID_PartOfSpeech, gramsCol);

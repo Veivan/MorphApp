@@ -23,6 +23,7 @@ namespace MorphApp
 
 		private void Form1_Load(object sender, EventArgs e)
 		{
+			memoInp.Text = "Мама мыла";
         }
 
         private void btTokenize_Click(object sender, EventArgs e)
@@ -49,9 +50,24 @@ namespace MorphApp
             courier.command = TMorph.Schema.ComType.Synt;
             courier.sendit(memoInp.Text);
             var sent = courier.GetSentenceStruct();
-            var sb = new StringBuilder();
+			if (sent == null) return;
 
-            sb.Append(sent + "\r\n");
+            var sb = new StringBuilder();
+			for (int i = 0; i < sent.Capasity; i++)
+			{
+				var word = sent.GetWordByOrder(i);
+				sb.Append(word.EntryName + "\r\n");
+			}
+
+			var ordlist = sent.GetTreeList();
+			foreach (var x in ordlist)
+			{
+				sb.Append(new String('\t', x.Level) +
+					String.Format("{0} Level {1} link {2} \r\n",
+						sent.GetWordByOrder(x.index).EntryName, x.Level, x.linktype));
+			}
+
+
             memoOut.Text = sb.ToString();
         }
 

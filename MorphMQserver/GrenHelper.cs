@@ -12,7 +12,7 @@ namespace MorphMQserver
 
 	class GrenHelper
 	{
-		const string dict = @"c:\Work\Framework\GrammarEngine\src\bin-windows64\dictionary.xml";
+		const string dict = @"d:\Work\Framework\GrammarEngine\src\bin-windows64\dictionary.xml";
 
 		private bool IsReady = false;
 		private IntPtr hEngine = IntPtr.Zero;
