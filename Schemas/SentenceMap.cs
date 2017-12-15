@@ -78,7 +78,10 @@ namespace Schemas
                 var wlist = WordMap.GetWordsFromMessage(message);
                 foreach (var w in wlist)
                     resSent.words.Add(w.Key, w.Value);
-            }
+				var nlist = GetNodesFromMessage(message);
+				foreach (var node in nlist)
+					resSent.treeList.Add(node.Value);
+			}
             return resSent;
         }
 

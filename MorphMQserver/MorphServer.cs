@@ -145,9 +145,20 @@ namespace MorphMQserver
                             words[i] = Lexema.CreateLexema(builder, i, EntryName, word.ID_Entry, (short)word.ID_PartOfSpeech, gramsCol);
                         }
                         var wordsCol = Sentence.CreateWordsVector(builder, words);
+						
+						// Чтение узлов
+						var treelist = sentence.GetTreeList();
+						var nodes = new Offset<Node>[treelist.Count];
+
+						for (short i = 0; i < treelist.Count; i++)
+						{
+							nodes[i] = Node.CreateNode(builder, treelist[i].ID, (short)treelist[i].Level,
+								(short)treelist[i].index, (short)treelist[i].linktype);
+						}
+						var nodesCol = Sentence.CreateNodesVector(builder, nodes);
 
                         var sentVal = builder.CreateString("");
-                        sents[0] = Sentence.CreateSentence(builder, 0, default(VectorOffset), wordsCol, sentVal);
+						sents[0] = Sentence.CreateSentence(builder, 0, nodesCol, wordsCol, sentVal);
                         sentscol = Message.CreateSentencesVector(builder, sents);
                         break;
                         #endregion

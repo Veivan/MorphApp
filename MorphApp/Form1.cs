@@ -67,7 +67,6 @@ namespace MorphApp
 						sent.GetWordByOrder(x.index).EntryName, x.Level, x.linktype));
 			}
 
-
             memoOut.Text = sb.ToString();
         }
 
