@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 
 using System.Collections;
+using Schemas;
 
 namespace MorphApp
 {
@@ -15,6 +16,8 @@ namespace MorphApp
 	{
 		Courier courier = new Courier();
         Paragraph para = new Paragraph();
+
+		SentenceMap sent;
 
 		public Form1()
 		{
@@ -30,7 +33,7 @@ namespace MorphApp
         {
             courier.servType = TMorph.Schema.ServType.svMorph;
             courier.command = TMorph.Schema.ComType.Separ;
-            courier.sendit(memoInp.Text);
+            courier.SendText(memoInp.Text);
             var sents = courier.GetSeparatedSentsList();
             var sb = new StringBuilder();
             foreach (var sent in sents)
@@ -48,8 +51,8 @@ namespace MorphApp
         {
             courier.servType = TMorph.Schema.ServType.svMorph;
             courier.command = TMorph.Schema.ComType.Synt;
-            courier.sendit(memoInp.Text);
-            var sent = courier.GetSentenceStruct();
+            courier.SendText(memoInp.Text);
+            sent = courier.GetSentenceStruct();
 			if (sent == null) return;
 
             var sb = new StringBuilder();
@@ -70,11 +73,38 @@ namespace MorphApp
             memoOut.Text = sb.ToString();
         }
 
-        private void btGetMorph_Click(object sender, EventArgs e)
+		private void btRestore_Click(object sender, EventArgs e)
+		{			
+			//sent = 
+			courier.servType = TMorph.Schema.ServType.svMorph;
+			courier.command = TMorph.Schema.ComType.Synt;
+			courier.SendText(memoInp.Text);
+			var sentstr = courier.GetSentenceStruct();
+			if (sentstr == null) return;
+
+			courier.servType = TMorph.Schema.ServType.svMorph;
+			courier.command = TMorph.Schema.ComType.Repar;
+			courier.SendStruct(sentstr);
+			var sents = courier.GetSeparatedSentsList();
+			var sb = new StringBuilder();
+			foreach (var sent in sents)
+				sb.Append(sent + "\r\n");
+			memoOut.Text = sb.ToString();
+
+			/*var plist = para.GetParagraph();
+			var sb = new StringBuilder();
+			foreach (var sent in plist)
+			{
+				sb.Append(sent.sentence);
+			}
+			memoOut.Text = sb.ToString(); */
+		}
+		
+		private void btGetMorph_Click(object sender, EventArgs e)
 		{
 			courier.servType = TMorph.Schema.ServType.svMorph;
 			courier.command = TMorph.Schema.ComType.Morph;
-            courier.sendit(memoInp.Text);
+            courier.SendText(memoInp.Text);
             memoOut.Text = "";
 		}
 
@@ -82,7 +112,7 @@ namespace MorphApp
 		{
 			courier.servType = TMorph.Schema.ServType.svSUBD;
 			courier.command = TMorph.Schema.ComType.GetWord;
-            courier.sendit(memoInp.Text);
+            courier.SendText(memoInp.Text);
             memoOut.Text = "";
 		}
 
@@ -97,23 +127,6 @@ namespace MorphApp
             plist[0] = ms;
 
         }
-
-
-		private void btRestore_Click(object sender, EventArgs e)
-		{
-            var plist = para.GetParagraph();
-            var sb = new StringBuilder();
-            foreach (var sent in plist)
-            {
-                sb.Append(sent.sentence);
-            }
-            memoOut.Text = sb.ToString();
-
-                
-			/*courier.servType = TMorph.Schema.ServType.svMorph;
-			courier.command = TMorph.Schema.ComType.Synt;
-			memoOut.Text = courier.sendit(memoInp.Text);*/
-		}
 
 	}
 }

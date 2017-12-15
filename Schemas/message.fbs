@@ -2,10 +2,15 @@
 namespace TMorph.Schema;
 enum MessType:byte { mRequest = 0, mReplay = 1 }
 enum ServType:byte { svMorph = 0, svSUBD = 1 }
-// Token - токенизация предложения; Synt - синт анализ предложения; Morph - морф анализ слова
+// Token - токенизация предложения; Synt - синт анализ предложения; 
+// Morph - морф анализ слова; Separ - разделение текста на предложения
+// Repar - восстановление предложения из синт структуры
 enum ComType:long { Undef = 0, 
-			Token = 1, Synt = 2, Morph = 3, Separ = 4, // команды svMorph
-	SaveLex = 11, GetWord = 12}   // команды svSUBD
+			// команды svMorph
+			Token = 1, Synt = 2, Morph = 3, Separ = 4, Repar = 5,
+			// команды svSUBD
+			SaveLex = 11, GetWord = 12
+			}   
 
 table Message {
 	messType:MessType;

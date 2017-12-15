@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMorph.Schema;
+using FlatBuffers;
 
 namespace Schemas
 {
@@ -125,6 +126,51 @@ namespace Schemas
             return node;
         }
 
+		/// <summary>
+		/// Формирование объекта синт.структуры предложения для записи в сообщение.
+		/// </summary>
+		public static VectorOffset BuildSentOffsetFromMessage(FlatBufferBuilder builder, SentenceMap sentence)
+		{
+			VectorOffset sentscol = default(VectorOffset);
+			var sents = new Offset<Sentence>[1];
 
+			// Чтение слов
+			var words = new Offset<Lexema>[sentence.Capasity];
+			for (short i = 0; i < sentence.Capasity; i++)
+			{
+				var word = sentence.GetWordByOrder(i);
+				var EntryName = builder.CreateString(word.EntryName);
+
+				// Чтение граммем
+				var pairs = word.GetPairs();
+				var grammems = new Offset<Grammema>[pairs.Count];
+				short j = 0;
+				foreach (var pair in pairs)
+				{
+					grammems[j] = Grammema.CreateGrammema(builder, (short)pair.Key, (short)pair.Value);
+					j++;
+				}
+				var gramsCol = Lexema.CreateGrammemsVector(builder, grammems);
+				words[i] = Lexema.CreateLexema(builder, i, EntryName, word.ID_Entry, (short)word.ID_PartOfSpeech, gramsCol);
+			}
+			var wordsCol = Sentence.CreateWordsVector(builder, words);
+
+			// Чтение узлов
+			var treelist = sentence.GetTreeList();
+			var nodes = new Offset<Node>[treelist.Count];
+
+			for (short i = 0; i < treelist.Count; i++)
+			{
+				nodes[i] = Node.CreateNode(builder, treelist[i].ID, (short)treelist[i].Level,
+					(short)treelist[i].index, (short)treelist[i].linktype);
+			}
+			var nodesCol = Sentence.CreateNodesVector(builder, nodes);
+
+			var sentVal = builder.CreateString("");
+			sents[0] = Sentence.CreateSentence(builder, 0, nodesCol, wordsCol, sentVal);
+			sentscol = Message.CreateSentencesVector(builder, sents);
+
+			return sentscol;
+		}
     }
 }

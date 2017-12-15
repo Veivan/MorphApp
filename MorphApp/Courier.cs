@@ -11,30 +11,40 @@ using Schemas;
 
 namespace MorphApp
 {
-    public struct SimpleParam
-    {
-        public string Name;
-        public string Value;
-    }
+	public struct SimpleParam
+	{
+		public string Name;
+		public string Value;
+	}
 
 	class Courier
 	{
 		public ComType command;
 		public ServType servType;
 
+		private SentenceMap sentstr;
+
 		private ZFrame replay = null;
 
-		public void sendit(string requestText)
+		public void SendText(string requestText)
 		{
 			var builder = SetReq(requestText);
 			var buf = builder.SizedByteArray();
 			ZFrame replay = SendMess(new ZFrame(buf));
 		}
 
-        /// <summary>
-        /// Получение списка параметров из сообщения.
-        /// </summary>
-        public List<SimpleParam> GetParamsList()
+		public void SendStruct(SentenceMap sentstr)
+		{
+			this.sentstr = sentstr;
+			var builder = SetReq("");
+			var buf = builder.SizedByteArray();
+			ZFrame replay = SendMess(new ZFrame(buf));
+		}
+
+		/// <summary>
+		/// Получение списка параметров из сообщения.
+		/// </summary>
+		public List<SimpleParam> GetParamsList()
 		{
 			if (replay == null) return null;
 			var paramlist = new List<SimpleParam>();
@@ -45,52 +55,52 @@ namespace MorphApp
 			for (int i = 0; i < message.ParamsLength; i++)
 			{
 				var par = message.Params(i);
-				if (par.HasValue) 
+				if (par.HasValue)
 				{
 					var spar = new SimpleParam();
 					spar.Name = par.Value.Name;
 					spar.Value = par.Value.Value;
 					paramlist.Add(spar);
-				}		
+				}
 			}
 			return paramlist;
 		}
 
-        /// <summary>
-        /// Получение списка текстов предложений из сообщения.
-        /// </summary>
-        public List<string> GetSeparatedSentsList()
-        {
-            if (replay == null) return null;
-            var outlist = new List<string>();
-            replay.Position = 0;
-            var bufrep = replay.Read();
-            var buf = new ByteBuffer(bufrep);
-            var message = Message.GetRootAsMessage(buf);
-            for (int i = 0; i < message.SentencesLength; i++)
-            {
-                var sent = message.Sentences(i);
-                if (sent.HasValue)
-                    outlist.Add(sent.Value.Phrase);
-            }
-            return outlist;
-        }
+		/// <summary>
+		/// Получение списка текстов предложений из сообщения.
+		/// </summary>
+		public List<string> GetSeparatedSentsList()
+		{
+			if (replay == null) return null;
+			var outlist = new List<string>();
+			replay.Position = 0;
+			var bufrep = replay.Read();
+			var buf = new ByteBuffer(bufrep);
+			var message = Message.GetRootAsMessage(buf);
+			for (int i = 0; i < message.SentencesLength; i++)
+			{
+				var sent = message.Sentences(i);
+				if (sent.HasValue)
+					outlist.Add(sent.Value.Phrase);
+			}
+			return outlist;
+		}
 
-        /// <summary>
-        /// Получение структуры предложения из сообщения.
-        /// </summary>
-        public SentenceMap GetSentenceStruct()
-        {
-            if (replay == null) 
-                return null;
-            replay.Position = 0;
-            var bufrep = replay.Read();
-            var buf = new ByteBuffer(bufrep);
-            var message = Message.GetRootAsMessage(buf);
-            return SentenceMap.BuildFromMessage(message);
-        }
+		/// <summary>
+		/// Получение структуры предложения из сообщения.
+		/// </summary>
+		public SentenceMap GetSentenceStruct()
+		{
+			if (replay == null)
+				return null;
+			replay.Position = 0;
+			var bufrep = replay.Read();
+			var buf = new ByteBuffer(bufrep);
+			var message = Message.GetRootAsMessage(buf);
+			return SentenceMap.BuildFromMessage(message);
+		}
 
-        private ZFrame SendMess(ZFrame frame)
+		private ZFrame SendMess(ZFrame frame)
 		{
 			replay = null;
 			ZError error;
@@ -163,17 +173,36 @@ namespace MorphApp
 		private FlatBufferBuilder SetReq(string requestText)
 		{
 			var builder = new FlatBufferBuilder(1);
-			var param1Name = builder.CreateString("phrase");
-			var param1Val = builder.CreateString(requestText);
-			var parms = new Offset<Param>[1];
-			parms[0] = Param.CreateParam(builder, param1Name, param1Val);
-			var paracol = Message.CreateParamsVector(builder, parms);
+			VectorOffset paracol = default(VectorOffset);
+			VectorOffset sentscol = default(VectorOffset);
+
+			switch (command)
+			{
+				case ComType.Separ:
+				case ComType.Synt:
+					{
+
+						var param1Name = builder.CreateString("phrase");
+						var param1Val = builder.CreateString(requestText);
+						var parms = new Offset<Param>[1];
+						parms[0] = Param.CreateParam(builder, param1Name, param1Val);
+						paracol = Message.CreateParamsVector(builder, parms);
+						break;
+					}
+				case ComType.Repar:
+					{
+						// Синтаксический анализ - выполняется для одного предложения
+						sentscol = SentenceMap.BuildSentOffsetFromMessage(builder, this.sentstr);
+						break;
+					}
+			}
 
 			Message.StartMessage(builder);
 			Message.AddMessType(builder, MessType.mRequest);
 			Message.AddServerType(builder, this.servType);
 			Message.AddComtype(builder, this.command);
 			Message.AddParams(builder, paracol);
+			Message.AddSentences(builder, sentscol);
 			var req = Message.EndMessage(builder);
 			builder.Finish(req.Value);
 

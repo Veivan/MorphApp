@@ -1,26 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using TMorph.Schema;
-using TMorph.Common;
-using Schemas;
 using ZeroMQ;
-using FlatBuffers;
+using MorphMQserver.Commands;
 
 namespace MorphMQserver
 {
     class MorphServer
     {
-        ComType command = ComType.Undef;
 		GrenHelper gren = new GrenHelper();
-        
-        // Возвращаемый значения GrenHelper
-        List<string> separated;
-        SentenceMap sentence;
-
-		public MorphServer()
-		{
-		}
+		CommandBuilder combuilder = new CommandBuilder();
 
         public void Run()
         {
@@ -41,170 +30,17 @@ namespace MorphMQserver
                     {
                         request.Position = 0;
                         var buf = request.Read();
-
-                        PrintReq(buf);
-                        var req = GetReq(buf);
-                        //var req = request.ReadString();
-                        Console.WriteLine("Received {0}", req);
-                        var resp = "";
-
-                        // Do some work
-                        switch (command)
-                        {
-                            case ComType.Separ:
-                                Console.WriteLine("ComType.Separ");
-                                separated = gren.SeparateIt(req);
-                                break;
-                            case ComType.Synt:
-                                Console.WriteLine("ComType.Synt");
-                                sentence = gren.GetSynInfoMap(req);
-                                break;
-                            case ComType.Morph:
-                                Console.WriteLine("ComType.Morph");
-                                //resp = req + " " + "ComType.Morph";
-                                resp = gren.GetMorphInfo(req);
-                                break;
-                            default:
-                                break;
-                        }
-
-                        // Send
-                        var builder = SetRep(command);
-						var foo = builder.SizedByteArray();
-
+						var order = combuilder.GetCommand(buf);
+						Console.WriteLine("Received {0}", combuilder.CommandType);
+						// Do some work
+						order.Execute(gren);
+						// Send
+						var foo = order.GetResultBytes();
                         responder.Send(new ZFrame(foo));
                     }
                 }
             }
         }
-
-        private void PrintReq(byte[] req)
-        {
-            var buf = new ByteBuffer(req);
-            var message = Message.GetRootAsMessage(buf);
-            Console.WriteLine(" ServerType : {0}", message.ServerType.ToString());
-            Console.WriteLine(" Comtype : {0}", message.Comtype.ToString());
-
-            this.command = message.Comtype;
-
-            for (int i = 0; i < message.ParamsLength; i++)
-            {
-                Param? par = message.Params(i);
-                if (par == null) continue;
-                Console.WriteLine(" Param : {0} = {1}", par.Value.Name, par.Value.Value);
-            }
-        }
-
-        /// <summary>
-        /// Чтение реквеста.
-        /// </summary>
-        private string GetReq(byte[] req)
-        {
-            var result = "";
-            var buf = new ByteBuffer(req);
-            var message = Message.GetRootAsMessage(buf);
-            Param? par = message.Params(0);
-            if (par.HasValue)
-				//result = String.Format(" Param : {0} = {1}", par.Value.Name, par.Value.Value);
-				result = par.Value.Value;
-			return result;
-        }
-
-        /// <summary>
-        /// Формирование реплая.
-        /// </summary>
-        private FlatBufferBuilder SetRep(ComType command)
-        {
-            var builder = new FlatBufferBuilder(1);
-            VectorOffset sentscol = default(VectorOffset);
-
-            switch (command)
-            {
-                case ComType.Synt:
-                    {
-                        #region Синтаксический анализ - выполняется для одного предложения
-                        var sents = new Offset<Sentence>[1];
-
-                        // Чтение слов
-                        var words = new Offset<Lexema>[sentence.Capasity];
-                        for (short i = 0; i < sentence.Capasity; i++)
-                        {
-                            var word = sentence.GetWordByOrder(i);
-                            var EntryName = builder.CreateString(word.EntryName);
-
-                            // Чтение граммем
-                            var pairs = word.GetPairs();
-                            var grammems = new Offset<Grammema>[pairs.Count];
-                            short j = 0;
-                            foreach (var pair in pairs)
-                            { 
-                                grammems[j] = Grammema.CreateGrammema(builder, (short)pair.Key, (short)pair.Value);
-								j++;
-                            }
-                            var gramsCol = Lexema.CreateGrammemsVector(builder, grammems);
-                            words[i] = Lexema.CreateLexema(builder, i, EntryName, word.ID_Entry, (short)word.ID_PartOfSpeech, gramsCol);
-                        }
-                        var wordsCol = Sentence.CreateWordsVector(builder, words);
-						
-						// Чтение узлов
-						var treelist = sentence.GetTreeList();
-						var nodes = new Offset<Node>[treelist.Count];
-
-						for (short i = 0; i < treelist.Count; i++)
-						{
-							nodes[i] = Node.CreateNode(builder, treelist[i].ID, (short)treelist[i].Level,
-								(short)treelist[i].index, (short)treelist[i].linktype);
-						}
-						var nodesCol = Sentence.CreateNodesVector(builder, nodes);
-
-                        var sentVal = builder.CreateString("");
-						sents[0] = Sentence.CreateSentence(builder, 0, nodesCol, wordsCol, sentVal);
-                        sentscol = Message.CreateSentencesVector(builder, sents);
-                        break;
-                        #endregion
-                    }
-                case ComType.Separ:
-                    {
-                        var sents = new Offset<Sentence>[separated.Count];
-                        for (short i = 0; i < separated.Count; i++)
-                        {
-                            var sentVal = builder.CreateString(separated[i]);
-                            sents[i] = Sentence.CreateSentence(builder, i, default(VectorOffset), default(VectorOffset), sentVal);
-                        }
-                        sentscol = Message.CreateSentencesVector(builder, sents);
-                        break;
-                    }
-                case ComType.Morph:
-                    break;
-                default:
-                    break;
-            }
-
-            Message.StartMessage(builder);
-            Message.AddMessType(builder, MessType.mReplay);
-            Message.AddServerType(builder, ServType.svMorph);
-            Message.AddComtype(builder, command);
-
-            switch (command)
-            {
-                case ComType.Synt:
-                    Message.AddSentences(builder, sentscol);
-                    break;
-                case ComType.Separ:
-                    Message.AddSentences(builder, sentscol);
-                    break;
-                default:
-                    break;
-                case ComType.Morph:
-                    break;
-            }
-
-            var req = Message.EndMessage(builder);
-            builder.Finish(req.Value);
-
-            return builder;
-        }
-
 
     }
 }

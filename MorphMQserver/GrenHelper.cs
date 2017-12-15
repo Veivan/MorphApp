@@ -10,7 +10,7 @@ using Schemas;
 namespace MorphMQserver
 {
 
-	class GrenHelper
+	public class GrenHelper
 	{
 		const string dict = @"d:\Work\Framework\GrammarEngine\src\bin-windows64\dictionary.xml";
 
@@ -113,7 +113,7 @@ namespace MorphMQserver
 		/// Восстановление предложения из грамматических характеристик каждого слова
 		/// с использованием обобщённой функции sol_GenerateWordformsFX.
 		/// </summary>
-		private string RestoreSentenceOnePass(SentenceMap sentence)
+		public string RestoreSentenceOnePass(SentenceMap sentence)
 		{
 			// Перечень характеристик, нужных для восстановления слова по словоформе
 			var props = new GrenProperty[] { GrenProperty.NUMBER_ru, GrenProperty.CASE_ru ,
