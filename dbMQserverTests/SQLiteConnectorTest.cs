@@ -35,6 +35,20 @@ namespace dbMQserverTests
 
 			// assert
 			Assert.AreNotEqual(-1, res);
+
+		}
+		
+		[TestMethod]
+		public void ShowSelectAll()
+		{
+			// arrange
+			SQLiteConnector dbConnector = SQLiteConnector.Instance;
+
+			// act
+			dbConnector.selectAll();
+
+			// assert
+			Assert.AreEqual(0, 0);
 		}
 	}
 }

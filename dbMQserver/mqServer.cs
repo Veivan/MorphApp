@@ -1,20 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-using TMorph.Schema;
 using ZeroMQ;
-using FlatBuffers;
+using dbMQserver.Commands;
 
 namespace dbMQserver
 {
 	class mqServer
 	{
-		ComType command = ComType.Undef;
-		public mqServer()
-		{
-		}
+		CommandBuilder combuilder = new CommandBuilder();
 
         public void Run()
         {
@@ -35,13 +29,16 @@ namespace dbMQserver
                         request.Position = 0;
                         var buf = request.Read();
 
-                        PrintReq(buf);
-                        var req = GetReq(buf);
-                        //var req = request.ReadString();
-                        Console.WriteLine("Received {0}", req);
-                        var resp = "";
+						var order = combuilder.GetCommand(buf);
+						Console.WriteLine("Received {0}", combuilder.CommandType);
+						// Do some work
+						order.Execute(dbConnector);
+						// Send
+						var foo = order.GetResultBytes();
+						responder.Send(new ZFrame(foo));
+						
 
-                        // Do some work
+                        /*/ Do some work
                         switch (command)
                         {
                             case ComType.GetWord:
@@ -60,60 +57,43 @@ namespace dbMQserver
                         var builder = SetRep(resp);
 						var foo = builder.SizedByteArray();
 
-                        responder.Send(new ZFrame(foo));
+                        responder.Send(new ZFrame(foo)); */
                     }
                 }
             }
-        }	
-
-        private void PrintReq(byte[] req)
-        {
-            var buf = new ByteBuffer(req);
-            var message = Message.GetRootAsMessage(buf);
-            Console.WriteLine(" ServerType : {0}", message.ServerType.ToString());
-            Console.WriteLine(" Comtype : {0}", message.Comtype.ToString());
-
-            this.command = message.Comtype;
-
-            for (int i = 0; i < message.ParamsLength; i++)
-            {
-                Param? par = message.Params(i);
-                if (par == null) continue;
-                Console.WriteLine(" Param : {0} = {1}", par.Value.Name, par.Value.Value);
-            }
         }
 
-		private string GetReq(byte[] req)
-		{
-			var result = "";
-			var buf = new ByteBuffer(req);
-			var message = Message.GetRootAsMessage(buf);
-			Param? par = message.Params(0);
-			if (par.HasValue)
-				//result = String.Format(" Param : {0} = {1}", par.Value.Name, par.Value.Value);
-				result = par.Value.Value;
-			return result;
-		}
+		/*		private string GetReq(byte[] req)
+				{
+					var result = "";
+					var buf = new ByteBuffer(req);
+					var message = Message.GetRootAsMessage(buf);
+					Param? par = message.Params(0);
+					if (par.HasValue)
+						//result = String.Format(" Param : {0} = {1}", par.Value.Name, par.Value.Value);
+						result = par.Value.Value;
+					return result;
+				} 
 
-		private FlatBufferBuilder SetRep(string resultValue)
-		{
-			var builder = new FlatBufferBuilder(1);
-			var param1Name = builder.CreateString("result");
-			var param1Val = builder.CreateString(resultValue);
-			var parms = new Offset<Param>[1];
-			parms[0] = Param.CreateParam(builder, param1Name, param1Val);
-			var paracol = Message.CreateParamsVector(builder, parms);
+				private FlatBufferBuilder SetRep(string resultValue)
+				{
+					var builder = new FlatBufferBuilder(1);
+					var param1Name = builder.CreateString("result");
+					var param1Val = builder.CreateString(resultValue);
+					var parms = new Offset<Param>[1];
+					parms[0] = Param.CreateParam(builder, param1Name, param1Val);
+					var paracol = Message.CreateParamsVector(builder, parms);
 
-			Message.StartMessage(builder);
-			Message.AddMessType(builder, MessType.mReplay);
-			Message.AddServerType(builder, ServType.svMorph);
-			Message.AddComtype(builder, ComType.Token);
-			Message.AddParams(builder, paracol);
-			var req = Message.EndMessage(builder);
-			builder.Finish(req.Value);
+					Message.StartMessage(builder);
+					Message.AddMessType(builder, MessType.mReplay);
+					Message.AddServerType(builder, ServType.svMorph);
+					Message.AddComtype(builder, ComType.Token);
+					Message.AddParams(builder, paracol);
+					var req = Message.EndMessage(builder);
+					builder.Finish(req.Value);
 
-			return builder;
-		}
-
+					return builder;
+				}
+		*/
 	}
 }

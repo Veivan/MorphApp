@@ -119,7 +119,6 @@ namespace MorphApp
 				switch (this.servType)
 				{
 					case ServType.svMorph:
-						//requesterMorph.Send(new ZFrame(foo));
 						requesterMorph.Send(frame);
 						break;
 					case ServType.svSUBD:
@@ -182,10 +181,10 @@ namespace MorphApp
 				case ComType.Synt:
 					{
 
-						var param1Name = builder.CreateString("phrase");
-						var param1Val = builder.CreateString(requestText);
+						var paramName = builder.CreateString("phrase");
+						var paramVal = builder.CreateString(requestText);
 						var parms = new Offset<Param>[1];
-						parms[0] = Param.CreateParam(builder, param1Name, param1Val);
+						parms[0] = Param.CreateParam(builder, paramName, paramVal);
 						paracol = Message.CreateParamsVector(builder, parms);
 						break;
 					}
@@ -193,6 +192,16 @@ namespace MorphApp
 					{
 						// Синтаксический анализ - выполняется для одного предложения
 						sentscol = SentenceMap.BuildSentOffsetFromMessage(builder, this.sentstr);
+						break;
+					}
+				case ComType.GetWord:
+				case ComType.SaveLex:
+					{
+						var paramName = builder.CreateString("word");
+						var paramVal = builder.CreateString(requestText);
+						var parms = new Offset<Param>[1];
+						parms[0] = Param.CreateParam(builder, paramName, paramVal);
+						paracol = Message.CreateParamsVector(builder, parms);
 						break;
 					}
 			}
