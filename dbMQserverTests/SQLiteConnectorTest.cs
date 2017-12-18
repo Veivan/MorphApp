@@ -45,10 +45,39 @@ namespace dbMQserverTests
 			SQLiteConnector dbConnector = SQLiteConnector.Instance;
 
 			// act
-			dbConnector.selectAll();
+			dbConnector.selectAll("mSpParts");
 
 			// assert
 			Assert.AreEqual(0, 0);
 		}
+
+		[TestMethod]
+		public void TestInsertSpeechParts()
+		{
+			// arrange
+			SQLiteConnector dbConnector = SQLiteConnector.Instance;
+
+			// act
+			dbConnector.InsertSpeechParts();
+			dbConnector.selectAll("mSpParts");
+
+			// assert
+			Assert.AreEqual(0, 0);
+		}
+
+		[TestMethod]
+		public void TestInsertGrenProperties()
+		{
+			// arrange
+			SQLiteConnector dbConnector = SQLiteConnector.Instance;
+
+			// act
+			dbConnector.InsertGrenProperties();
+			dbConnector.selectAll("mSiGram");
+
+			// assert
+			Assert.AreEqual(0, 0);
+		}
+
 	}
 }
