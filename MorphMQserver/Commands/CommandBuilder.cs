@@ -48,7 +48,10 @@ namespace MorphMQserver.Commands
 					}
 				case ComType.Repar:
 					{
-						var sentence = SentenceMap.BuildFromMessage(message);
+						SentenceMap sentence = null;
+						var sentlist = SentenceMap.BuildFromMessage(message);
+						if (sentlist.Count > 0)
+							sentence = sentlist[0];
 						intCommand = new CommandRepar(sentence);
 						break;
 					}

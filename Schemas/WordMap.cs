@@ -11,12 +11,12 @@ namespace Schemas
 	{
 		public HasDict xPart = null;
 		public string EntryName = "";
-	    public short order; // Порядок слова в предложении
+		public short order; // Порядок слова в предложении
 
 		/// <summary>
 		/// ID словарной статьи.
 		/// </summary>
-		private int id_entry;		
+		private int id_entry;
 		public int ID_Entry
 		{
 			get
@@ -24,7 +24,7 @@ namespace Schemas
 				return id_entry;
 			}
 		}
-		
+
 		/// <summary>
 		/// ID части речи.
 		/// </summary>
@@ -70,53 +70,46 @@ namespace Schemas
 				return -1;
 		}
 
-        /// <summary>
-        /// Получение из сообщения списка структур WordMap, сортированных в порядке слов в предложении.
-        /// </summary>
-        public static SortedList<short, WordMap> GetWordsFromMessage(Message message)
-        {
-            if (message.SentencesLength == 0)
-                return null;
-            SortedList<short, WordMap> outlist = null;
-            var sent = message.Sentences(0);
-            if (sent.HasValue)
-            {
-                outlist = new SortedList<short, WordMap>();
-                var sentval = sent.Value;
-                // Чтение слов
-                for (short i = 0; i < sentval.WordsLength; i++)
-                {
-                    var word = BuildFromLexema(sentval.Words(i));
-					outlist.Add(word.order, word);
-                }
-            }
-            return outlist;
-        }
-        
-        /// <summary>
-        /// Получение структуры WordMap из структуры Lexema.
-        /// </summary>
-        private static WordMap BuildFromLexema(Lexema? lexema)
-        {
-            WordMap word = null;
-            if (lexema.HasValue)
-            {
-                var lexval = lexema.Value;
-                word = new WordMap(lexval.IdEntry, lexval.IdPartofspeech);
-                word.EntryName = lexval.EntryName;
+		/// <summary>
+		/// Получение из предложения (в сообщении) списка структур WordMap, сортированных в порядке слов в предложении.
+		/// </summary>
+		public static SortedList<short, WordMap> GetWordsFromMessSentence(Sentence sent)
+		{
+			SortedList<short, WordMap> outlist = null;
+			outlist = new SortedList<short, WordMap>();
+			// Чтение слов
+			for (short i = 0; i < sent.WordsLength; i++)
+			{
+				var word = BuildFromLexema(sent.Words(i));
+				outlist.Add(word.order, word);
+			}
+			return outlist;
+		}
+
+		/// <summary>
+		/// Получение структуры WordMap из структуры Lexema.
+		/// </summary>
+		private static WordMap BuildFromLexema(Lexema? lexema)
+		{
+			WordMap word = null;
+			if (lexema.HasValue)
+			{
+				var lexval = lexema.Value;
+				word = new WordMap(lexval.IdEntry, lexval.IdPartofspeech);
+				word.EntryName = lexval.EntryName;
 				word.order = lexval.Order;
-                // Чтение граммем
-                for (int i = 0; i < lexval.GrammemsLength; i++)
-                {
-                    var grammema = lexval.Grammems(i);
-                    if (grammema.HasValue)
-                    {
-                        word.AddPair(grammema.Value.Key, grammema.Value.Value);
-                    }
-                }
-            }
-            return word;
-        }
-        
-    }
+				// Чтение граммем
+				for (int i = 0; i < lexval.GrammemsLength; i++)
+				{
+					var grammema = lexval.Grammems(i);
+					if (grammema.HasValue)
+					{
+						word.AddPair(grammema.Value.Key, grammema.Value.Value);
+					}
+				}
+			}
+			return word;
+		}
+
+	}
 }

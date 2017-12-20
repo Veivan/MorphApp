@@ -108,7 +108,11 @@ namespace MorphApp
 			var bufrep = replay.Read();
 			var buf = new ByteBuffer(bufrep);
 			var message = Message.GetRootAsMessage(buf);
-			return SentenceMap.BuildFromMessage(message);
+			var sentlist = SentenceMap.BuildFromMessage(message);
+			if (sentlist.Count > 0)
+				return sentlist[0];
+			else
+				return null;
 		}
 
 		private ZFrame SendMess(ZFrame frame)

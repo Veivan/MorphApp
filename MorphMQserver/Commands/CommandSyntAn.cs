@@ -26,7 +26,9 @@ namespace MorphMQserver.Commands
 		{
 			var builder = new FlatBufferBuilder(1);
 			// Синтаксический анализ - выполняется для одного предложения
-			VectorOffset sentscol = SentenceMap.BuildSentOffsetFromSentStructList(builder, sentence);
+			var senttlist = new List<SentenceMap>();
+			senttlist.Add(this.sentence);
+			VectorOffset sentscol = SentenceMap.BuildSentOffsetFromSentStructList(builder, senttlist);
 			Message.StartMessage(builder);
 			Message.AddMessType(builder, MessType.mReplay);
 			Message.AddServerType(builder, ServType.svMorph);

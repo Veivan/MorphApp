@@ -115,6 +115,9 @@ namespace MorphMQserver
 		/// </summary>
 		public string RestoreSentenceOnePass(SentenceMap sentence)
 		{
+			if (sentence == null)
+				return "";
+
 			// Перечень характеристик, нужных для восстановления слова по словоформе
 			var props = new GrenProperty[] { GrenProperty.NUMBER_ru, GrenProperty.CASE_ru ,
 					GrenProperty.GENDER_ru, GrenProperty.TENSE_ru, GrenProperty.PERSON_ru,

@@ -72,6 +72,7 @@
     <Compile Include="Commands\CommandBuilder.cs" />
     <Compile Include="Commands\CommandGetWord.cs" />
     <Compile Include="Commands\CommandSaveLex.cs" />
+    <Compile Include="Commands\CommandSaveParagraph.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="IdbConnector.cs" />
     <Compile Include="mqServer.cs" />

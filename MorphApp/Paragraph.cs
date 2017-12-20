@@ -22,8 +22,11 @@ namespace MorphApp
 	/// </summary>
 	class Paragraph
 	{
-		private int _pID = -1;
-		public int pID { get { return _pID; } set { _pID = value; } }
+		private long _pgID = -1;
+		/// <summary>
+		/// Идентификатор абзаца в БД.
+		/// </summary>
+		public long ParagraphID { get { return _pgID; } set { _pgID = value; } }
 
 		/// <summary>
 		/// Список предназначен для хранения предложений абзаца.

@@ -27,6 +27,12 @@ namespace dbMQserver.Commands
 			command = message.Comtype;
 			switch (command)
 			{
+				case ComType.SavePara:
+					{
+						var senttlist = SentenceMap.BuildFromMessage(message);
+						intCommand = new CommandSaveParagraph(message.ParagraphID, senttlist);
+						break;
+					}
 				case ComType.GetWord:
 					{
 						Param? par = message.Params(0);
@@ -45,12 +51,6 @@ namespace dbMQserver.Commands
 						intCommand = new CommandSaveLex(strParam);
 						break;
 					}
-				/*case ComType.Repar:
-					{
-						var sentence = SentenceMap.BuildFromMessage(message);
-						intCommand = new CommandRepar(sentence);
-						break;
-					} */
 				default:
 					break;
 			}

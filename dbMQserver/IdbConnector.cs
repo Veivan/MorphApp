@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Schemas;
 
 namespace dbMQserver
 {
@@ -24,6 +23,15 @@ namespace dbMQserver
 		long GetWord(String rword);
 
 		/**
+		 * Сохранение абзаца в DB. Если pg_id == -1, то Insert, иначе - Update
+		 * 
+		 * @param pg_id
+		 * @param sentlist - упорядоченный список структур предложений
+		 * @return ID абзаца
+		 */
+		long SaveParagraph(long pg_id, List<SentenceMap> sentlist);
+
+		/**
 		 * Сохранение фразы в DB. Если ph_id == -1, то Insert, иначе - Update
 		 * 
 		 * @param ph_id
@@ -34,12 +42,13 @@ namespace dbMQserver
 		/**
 		 * Сохранение состава фразы в DB. 
 		 * 
-		 * @param ph_id ID фразы
-		 * @param w_id ID лексемы
+		 * @param ph_id  - ID фразы
+		 * @param lx_id  - ID лексемы
+		 * @param sorder - порядок слова в предложении
 		 * 
 		 * @return ID записи
 		 */
-		long SavePhraseContent(long ph_id, long w_id);
+		long SavePhraseWords(long ph_id, long lx_id, short sorder);
 
 	}
 }

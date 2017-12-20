@@ -7,124 +7,130 @@ using FlatBuffers;
 
 namespace Schemas
 {
-    public struct tNode
-    {
-        public short ID; // Порядок добавления в дерево, для сортировки в виде плоского списка
-        public int Level; // Уровень вложенности, для отображения
-        public int index; // порядковый номер в предложении
-        public int linktype; // тип взаимосвязи с родителем
-    }
+	public struct tNode
+	{
+		public short ID; // Порядок добавления в дерево, для сортировки в виде плоского списка
+		public int Level; // Уровень вложенности, для отображения
+		public int index; // порядковый номер в предложении
+		public int linktype; // тип взаимосвязи с родителем
+	}
 
-    /// <summary>
-    /// Класс хранит информацию о предложении.
-    /// </summary>
-    public class SentenceMap
-    {
-        private SortedList<int, WordMap> words = new SortedList<int, WordMap>();
+	/// <summary>
+	/// Класс хранит информацию о предложении.
+	/// </summary>
+	public class SentenceMap
+	{
+		private long _phID = -1;
+		/// <summary>
+		/// Идентификатор предложения в БД.
+		/// </summary>
+		public long SentenceID { get { return _phID; } set { _phID = value; } }
 
-        private List<tNode> treeList = new List<tNode>();
+		private SortedList<int, WordMap> words = new SortedList<int, WordMap>();
 
-        public int Capasity
-        {
-            get
-            {
-                return words.Count;
-            }
-        }
+		private List<tNode> treeList = new List<tNode>();
 
-        public void AddWord(int order, WordMap word, int Level = -1, int linktype = -1)
-        {
-            if (words.ContainsKey(order) || word == null)
-                return;
-            words.Add(order, word);
-            if (Level > -1 && linktype > -1)
-            {
-                short maxID = 0;
-                if (treeList.Count > 0)
-                    maxID = (short)(treeList.OrderByDescending(x => x.Level).First().ID + 1);
-                var node = new tNode();
-                node.ID = maxID;
-                node.Level = Level;
-                node.index = order;
-                node.linktype = linktype;
-                treeList.Add(node);
-            }
-        }
-
-        public WordMap GetWordByOrder(int order)
-        {
-            if (words.ContainsKey(order))
-                return words[order];
-            else
-                return null;
-        }
-
-        public List<tNode> GetTreeList()
-        {
-            var newlist = treeList.OrderBy(x => x.ID)
-                //.ThenBy(x => x.orderlvl)
-                .ToList();
-            return newlist;
-        }
-
-        public static SentenceMap BuildFromMessage(Message message)
-        {
-            if (message.SentencesLength == 0)
-                return null;
-            SentenceMap resSent = null;
-            var sent = message.Sentences(0);
-            if (sent.HasValue)
-            {
-                resSent = new SentenceMap();
-                var wlist = WordMap.GetWordsFromMessage(message);
-                foreach (var w in wlist)
-                    resSent.words.Add(w.Key, w.Value);
-				var nlist = GetNodesFromMessage(message);
-				foreach (var node in nlist)
-					resSent.treeList.Add(node.Value);
+		public int Capasity
+		{
+			get
+			{
+				return words.Count;
 			}
-            return resSent;
-        }
+		}
 
-        /// <summary>
-        /// Получение из сообщения списка структур tNode, сортированных в порядке слов в предложении.
-        /// </summary>
-        private static SortedList<short, tNode> GetNodesFromMessage(Message message)
-        {
-            if (message.SentencesLength == 0)
-                return null;
-            SortedList<short, tNode> outlist = null;
-            var sent = message.Sentences(0);
-            if (sent.HasValue)
-            {
-                outlist = new SortedList<short, tNode>();
-                var sentval = sent.Value;
-                // Чтение узлов
-                for (int i = 0; i < sentval.NodesLength; i++)
-                {
-                    if (sentval.Nodes(i).HasValue)
-                    {
-                        var node = BuildFromNode(sentval.Nodes(i));
-                        outlist.Add(node.ID, node);
-                    }
-                }
-            }
-            return outlist;
-        }
+		public void AddWord(int order, WordMap word, int Level = -1, int linktype = -1)
+		{
+			if (words.ContainsKey(order) || word == null)
+				return;
+			words.Add(order, word);
+			if (Level > -1 && linktype > -1)
+			{
+				short maxID = 0;
+				if (treeList.Count > 0)
+					maxID = (short)(treeList.OrderByDescending(x => x.Level).First().ID + 1);
+				var node = new tNode();
+				node.ID = maxID;
+				node.Level = Level;
+				node.index = order;
+				node.linktype = linktype;
+				treeList.Add(node);
+			}
+		}
 
-        /// <summary>
-        /// Получение структуры tNode из структуры Node.
-        /// </summary>
-        private static tNode BuildFromNode(Node? innode)
-        {
-            var innodeval = innode.Value;
-            var node = new tNode();
-            node.ID = innodeval.ID;
-            node.Level = innodeval.Level;
-            node.index = innodeval.Index;
-            node.linktype = innodeval.Linktype;
-            return node;
-        }
+		public WordMap GetWordByOrder(int order)
+		{
+			if (words.ContainsKey(order))
+				return words[order];
+			else
+				return null;
+		}
+
+		public List<tNode> GetTreeList()
+		{
+			var newlist = treeList.OrderBy(x => x.ID)
+				//.ThenBy(x => x.orderlvl)
+				.ToList();
+			return newlist;
+		}
+
+		public static List<SentenceMap> BuildFromMessage(Message message)
+		{
+			List<SentenceMap> sentlist = new List<SentenceMap>();
+			if (message.SentencesLength == 0)
+				return sentlist;
+			for (int i = 0; i < message.SentencesLength; i++)
+			{
+				SentenceMap resSent = null;
+				var sent = message.Sentences(i);
+				if (sent.HasValue)
+				{
+					var sentval = sent.Value;
+					resSent = new SentenceMap();
+					resSent._phID = sentval.SentenceID;
+					var wlist = WordMap.GetWordsFromMessSentence(sentval);
+					foreach (var w in wlist)
+						resSent.words.Add(w.Key, w.Value);
+					var nlist = GetNodesFromMessSentence(sentval);
+					foreach (var node in nlist)
+						resSent.treeList.Add(node.Value);
+					sentlist.Add(resSent);
+				}
+			}
+			return sentlist;
+		}
+
+		/// <summary>
+		/// Получение из сообщения списка структур tNode, сортированных в порядке слов в предложении.
+		/// </summary>
+		private static SortedList<short, tNode> GetNodesFromMessSentence(Sentence sent)
+		{
+			SortedList<short, tNode> outlist = null;
+			outlist = new SortedList<short, tNode>();
+			// Чтение узлов
+			for (int i = 0; i < sent.NodesLength; i++)
+			{
+				if (sent.Nodes(i).HasValue)
+				{
+					var node = BuildFromNode(sent.Nodes(i));
+					outlist.Add(node.ID, node);
+				}
+			}
+			return outlist;
+		}
+
+		/// <summary>
+		/// Получение структуры tNode из структуры Node.
+		/// </summary>
+		private static tNode BuildFromNode(Node? innode)
+		{
+			var innodeval = innode.Value;
+			var node = new tNode();
+			node.ID = innodeval.ID;
+			node.Level = innodeval.Level;
+			node.index = innodeval.Index;
+			node.linktype = innodeval.Linktype;
+			return node;
+		}
 
 		/// <summary>
 		/// Формирование объекта синт.структуры предложения для записи в сообщение.
@@ -133,15 +139,15 @@ namespace Schemas
 		{
 			VectorOffset sentscol = default(VectorOffset);
 			var sents = new Offset<Sentence>[sentlist.Count];
-			for (int i = 0; i < sentlist.Count; i++)
+			for (short i = 0; i < sentlist.Count; i++)
 			{
-				sents[i] = BuildSingleFlatSent(builder, sentlist[i]);
+				sents[i] = BuildSingleFlatSent(builder, sentlist[i], i);
 			}
 			sentscol = Message.CreateSentencesVector(builder, sents);
 			return sentscol;
 		}
 
-		private static Offset<Sentence> BuildSingleFlatSent(FlatBufferBuilder builder, SentenceMap sentence)
+		private static Offset<Sentence> BuildSingleFlatSent(FlatBufferBuilder builder, SentenceMap sentence, short order)
 		{
 			// Чтение слов
 			var words = new Offset<Lexema>[sentence.Capasity];
@@ -176,7 +182,7 @@ namespace Schemas
 			var nodesCol = Sentence.CreateNodesVector(builder, nodes);
 
 			var sentVal = builder.CreateString("");
-			return Sentence.CreateSentence(builder, 0, nodesCol, wordsCol, sentVal);
+			return Sentence.CreateSentence(builder, order, nodesCol, wordsCol, sentVal);
 		}
-    }
+	}
 }
