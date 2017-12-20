@@ -24,13 +24,16 @@ public struct Sentence : IFlatbufferObject
   public int WordsLength { get { int o = __p.__offset(8); return o != 0 ? __p.__vector_len(o) : 0; } }
   public string Phrase { get { int o = __p.__offset(10); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
   public ArraySegment<byte>? GetPhraseBytes() { return __p.__vector_as_arraysegment(10); }
+  public long SentenceID { get { int o = __p.__offset(12); return o != 0 ? __p.bb.GetLong(o + __p.bb_pos) : (long)0; } }
 
   public static Offset<Sentence> CreateSentence(FlatBufferBuilder builder,
       short order = 0,
       VectorOffset nodesOffset = default(VectorOffset),
       VectorOffset wordsOffset = default(VectorOffset),
-      StringOffset phraseOffset = default(StringOffset)) {
-    builder.StartObject(4);
+      StringOffset phraseOffset = default(StringOffset),
+      long SentenceID = 0) {
+    builder.StartObject(5);
+    Sentence.AddSentenceID(builder, SentenceID);
     Sentence.AddPhrase(builder, phraseOffset);
     Sentence.AddWords(builder, wordsOffset);
     Sentence.AddNodes(builder, nodesOffset);
@@ -38,7 +41,7 @@ public struct Sentence : IFlatbufferObject
     return Sentence.EndSentence(builder);
   }
 
-  public static void StartSentence(FlatBufferBuilder builder) { builder.StartObject(4); }
+  public static void StartSentence(FlatBufferBuilder builder) { builder.StartObject(5); }
   public static void AddOrder(FlatBufferBuilder builder, short order) { builder.AddShort(0, order, 0); }
   public static void AddNodes(FlatBufferBuilder builder, VectorOffset nodesOffset) { builder.AddOffset(1, nodesOffset.Value, 0); }
   public static VectorOffset CreateNodesVector(FlatBufferBuilder builder, Offset<Node>[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
@@ -47,6 +50,7 @@ public struct Sentence : IFlatbufferObject
   public static VectorOffset CreateWordsVector(FlatBufferBuilder builder, Offset<Lexema>[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
   public static void StartWordsVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
   public static void AddPhrase(FlatBufferBuilder builder, StringOffset phraseOffset) { builder.AddOffset(3, phraseOffset.Value, 0); }
+  public static void AddSentenceID(FlatBufferBuilder builder, long SentenceID) { builder.AddLong(4, SentenceID, 0); }
   public static Offset<Sentence> EndSentence(FlatBufferBuilder builder) {
     int o = builder.EndObject();
     return new Offset<Sentence>(o);

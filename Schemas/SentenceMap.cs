@@ -129,11 +129,20 @@ namespace Schemas
 		/// <summary>
 		/// Формирование объекта синт.структуры предложения для записи в сообщение.
 		/// </summary>
-		public static VectorOffset BuildSentOffsetFromMessage(FlatBufferBuilder builder, SentenceMap sentence)
+		public static VectorOffset BuildSentOffsetFromSentStructList(FlatBufferBuilder builder, List<SentenceMap> sentlist)
 		{
 			VectorOffset sentscol = default(VectorOffset);
-			var sents = new Offset<Sentence>[1];
+			var sents = new Offset<Sentence>[sentlist.Count];
+			for (int i = 0; i < sentlist.Count; i++)
+			{
+				sents[i] = BuildSingleFlatSent(builder, sentlist[i]);
+			}
+			sentscol = Message.CreateSentencesVector(builder, sents);
+			return sentscol;
+		}
 
+		private static Offset<Sentence> BuildSingleFlatSent(FlatBufferBuilder builder, SentenceMap sentence)
+		{
 			// Чтение слов
 			var words = new Offset<Lexema>[sentence.Capasity];
 			for (short i = 0; i < sentence.Capasity; i++)
@@ -167,10 +176,7 @@ namespace Schemas
 			var nodesCol = Sentence.CreateNodesVector(builder, nodes);
 
 			var sentVal = builder.CreateString("");
-			sents[0] = Sentence.CreateSentence(builder, 0, nodesCol, wordsCol, sentVal);
-			sentscol = Message.CreateSentencesVector(builder, sents);
-
-			return sentscol;
+			return Sentence.CreateSentence(builder, 0, nodesCol, wordsCol, sentVal);
 		}
     }
 }

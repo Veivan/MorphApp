@@ -22,6 +22,7 @@ namespace MorphApp
 		public ComType command;
 		public ServType servType;
 
+		private Paragraph parastr;
 		private SentenceMap sentstr;
 
 		private ZFrame replay = null;
@@ -36,9 +37,19 @@ namespace MorphApp
 		public void SendStruct(SentenceMap sentstr)
 		{
 			this.sentstr = sentstr;
-			var builder = SetReq("");
+			var builder = SetReq();
 			var buf = builder.SizedByteArray();
 			ZFrame replay = SendMess(new ZFrame(buf));
+			this.sentstr = null;
+		}
+
+		public void SendParagraph(Paragraph parastr)
+		{
+			this.parastr = parastr;
+			var builder = SetReq();
+			var buf = builder.SizedByteArray();
+			ZFrame replay = SendMess(new ZFrame(buf));
+			this.parastr = null;
 		}
 
 		/// <summary>
@@ -169,18 +180,19 @@ namespace MorphApp
 			return replay;
 		}
 
-		private FlatBufferBuilder SetReq(string requestText)
+		private FlatBufferBuilder SetReq(string requestText = "")
 		{
 			var builder = new FlatBufferBuilder(1);
 			VectorOffset paracol = default(VectorOffset);
 			VectorOffset sentscol = default(VectorOffset);
+			long ParagraphID = -1;
 
 			switch (command)
 			{
 				case ComType.Separ:
 				case ComType.Synt:
 					{
-
+						// Синтаксический анализ - выполняется для одного предложения
 						var paramName = builder.CreateString("phrase");
 						var paramVal = builder.CreateString(requestText);
 						var parms = new Offset<Param>[1];
@@ -190,8 +202,10 @@ namespace MorphApp
 					}
 				case ComType.Repar:
 					{
-						// Синтаксический анализ - выполняется для одного предложения
-						sentscol = SentenceMap.BuildSentOffsetFromMessage(builder, this.sentstr);
+						// Восстановление из структуры выполняется для одного предложения
+						var senttlist = new List<SentenceMap>();
+						senttlist.Add(this.sentstr);
+						sentscol = SentenceMap.BuildSentOffsetFromSentStructList(builder, senttlist);
 						break;
 					}
 				case ComType.GetWord:
@@ -204,6 +218,21 @@ namespace MorphApp
 						paracol = Message.CreateParamsVector(builder, parms);
 						break;
 					}
+				case ComType.SavePara:
+					{
+						var innersents = parastr.GetParagraph();
+						var senttlist = innersents
+							.OrderBy(y => y.order)
+							.Select(x => x.sentstruct).ToList();
+						sentscol = SentenceMap.BuildSentOffsetFromSentStructList(builder, senttlist);
+						ParagraphID = parastr.pID;
+						break;
+					}
+				case ComType.ReadPara:
+					{
+						ParagraphID = parastr.pID;
+						break;
+					}
 			}
 
 			Message.StartMessage(builder);
@@ -212,6 +241,7 @@ namespace MorphApp
 			Message.AddComtype(builder, this.command);
 			Message.AddParams(builder, paracol);
 			Message.AddSentences(builder, sentscol);
+			Message.AddParagraphID(builder, ParagraphID);
 			var req = Message.EndMessage(builder);
 			builder.Finish(req.Value);
 

@@ -21,13 +21,16 @@ public struct Node : IFlatbufferObject
   public short Level { get { int o = __p.__offset(6); return o != 0 ? __p.bb.GetShort(o + __p.bb_pos) : (short)0; } }
   public short Index { get { int o = __p.__offset(8); return o != 0 ? __p.bb.GetShort(o + __p.bb_pos) : (short)0; } }
   public short Linktype { get { int o = __p.__offset(10); return o != 0 ? __p.bb.GetShort(o + __p.bb_pos) : (short)0; } }
+  public long NodeID { get { int o = __p.__offset(12); return o != 0 ? __p.bb.GetLong(o + __p.bb_pos) : (long)0; } }
 
   public static Offset<Node> CreateNode(FlatBufferBuilder builder,
       short ID = 0,
       short Level = 0,
       short index = 0,
-      short linktype = 0) {
-    builder.StartObject(4);
+      short linktype = 0,
+      long NodeID = 0) {
+    builder.StartObject(5);
+    Node.AddNodeID(builder, NodeID);
     Node.AddLinktype(builder, linktype);
     Node.AddIndex(builder, index);
     Node.AddLevel(builder, Level);
@@ -35,11 +38,12 @@ public struct Node : IFlatbufferObject
     return Node.EndNode(builder);
   }
 
-  public static void StartNode(FlatBufferBuilder builder) { builder.StartObject(4); }
+  public static void StartNode(FlatBufferBuilder builder) { builder.StartObject(5); }
   public static void AddID(FlatBufferBuilder builder, short ID) { builder.AddShort(0, ID, 0); }
   public static void AddLevel(FlatBufferBuilder builder, short Level) { builder.AddShort(1, Level, 0); }
   public static void AddIndex(FlatBufferBuilder builder, short index) { builder.AddShort(2, index, 0); }
   public static void AddLinktype(FlatBufferBuilder builder, short linktype) { builder.AddShort(3, linktype, 0); }
+  public static void AddNodeID(FlatBufferBuilder builder, long NodeID) { builder.AddLong(4, NodeID, 0); }
   public static Offset<Node> EndNode(FlatBufferBuilder builder) {
     int o = builder.EndObject();
     return new Offset<Node>(o);

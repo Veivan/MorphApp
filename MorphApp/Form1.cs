@@ -29,6 +29,54 @@ namespace MorphApp
 			memoInp.Text = "Мама мыла";
 		}
 
+		/// <summary>
+		/// Формирование содержимого внутреннего объекта Paragraph.
+		/// </summary>
+		private void UpdateParagraph()
+		{
+			// Разделение текста на предложения
+			courier.servType = TMorph.Schema.ServType.svMorph;
+			courier.command = TMorph.Schema.ComType.Separ;
+			courier.SendText(memoInp.Text);
+			var sents = courier.GetSeparatedSentsList();
+			para.RefreshParagraph(new ArrayList(sents));
+
+			// Выполнение синтана для неактуальных предложений.
+			courier.servType = TMorph.Schema.ServType.svMorph;
+			courier.command = TMorph.Schema.ComType.Synt;
+			var sentlist = para.GetParagraph(SentTypes.enstNotActual);
+			foreach (var sent in sentlist)
+			{
+				courier.SendText(sent.sentence);
+				var sentstruct = courier.GetSentenceStruct();
+				para.UpdateSentStruct(sent.order, sentstruct);
+			}
+		}
+
+		/// <summary>
+		/// Сохранение внутреннего объекта Paragraph в БД.
+		/// </summary>
+		private void SaveParagraphBD()
+		{
+			courier.servType = TMorph.Schema.ServType.svSUBD;
+			courier.command = TMorph.Schema.ComType.SavePara;
+			courier.SendParagraph(this.para);
+			var paramlist = courier.GetParamsList();
+			//this.para.pID = 
+		}
+
+		/// <summary>
+		/// Формирование внутреннего объекта Paragraph из БД.
+		/// </summary>
+		private void ReadParagraphBD()
+		{
+			courier.servType = TMorph.Schema.ServType.svSUBD;
+			courier.command = TMorph.Schema.ComType.ReadPara;
+			courier.SendParagraph(this.para);
+			// Через параметры передать -1 в случае ошибки, либо ID параграфа
+			var paramlist = courier.GetParamsList();
+		}
+
 		private void btTokenize_Click(object sender, EventArgs e)
 		{
 			courier.servType = TMorph.Schema.ServType.svMorph;
@@ -39,12 +87,6 @@ namespace MorphApp
 			foreach (var sent in sents)
 				sb.Append(sent + "\r\n");
 			memoOut.Text = sb.ToString();
-
-			/* var slist = new ArrayList();
-			 slist.Add(memoInp.Text);
-			 slist.Add("Предл один.");
-			 para.AddParagraph(slist); */
-
 		}
 
 		private void btMakeSynAn_Click(object sender, EventArgs e)
@@ -89,14 +131,6 @@ namespace MorphApp
 			foreach (var sent in sents)
 				sb.Append(sent + "\r\n");
 			memoOut.Text = sb.ToString();
-
-			/*var plist = para.GetParagraph();
-			var sb = new StringBuilder();
-			foreach (var sent in plist)
-			{
-				sb.Append(sent.sentence);
-			}
-			memoOut.Text = sb.ToString(); */
 		}
 
 		private void btDBGetWord_Click(object sender, EventArgs e)
@@ -127,12 +161,6 @@ namespace MorphApp
 				foreach (var par in paramlist)
 					sb.Append(par.Name + "\t" + par.Value + "\r\n");
 			memoOut.Text = sb.ToString();
-			
-			/*var plist = para.GetParagraph();
-			SentProps ms = plist[0];
-			ms.sentence += "qq";
-			plist[0] = ms;
-			*/
 		}
 
 		private void btGetMorph_Click(object sender, EventArgs e)

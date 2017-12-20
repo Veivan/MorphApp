@@ -15,6 +15,8 @@ public enum ComType : long
  Repar = 5,
  SaveLex = 11,
  GetWord = 12,
+ SavePara = 13,
+ ReadPara = 14,
 };
 
 
