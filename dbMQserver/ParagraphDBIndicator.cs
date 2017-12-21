@@ -13,14 +13,21 @@ namespace dbMQserver
         internal OpersDB NeedOperate { get; private set; }
         internal bool CanOperate { get; private set; }
 
+        SQLiteConnector dbConnector = SQLiteConnector.Instance;
+
         internal void Fill(long ParagraphID)
         {
+            CanOperate = true; // TODO Сделать проверку на блокировку
+            NeedOperate = OpersDB.odNone;
             if (ParagraphID == -1)
                 NeedOperate = OpersDB.odInsert;
             else
             { 
                 // проверить существование записи
-                SQLiteConnector dbConnector = SQLiteConnector.Instance;
+                if (dbConnector.IsParagraphExists(ParagraphID))
+                    NeedOperate = OpersDB.odUpdate;
+                else
+                    NeedOperate = OpersDB.odInsert;
             }
         }
     }

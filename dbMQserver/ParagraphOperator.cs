@@ -22,10 +22,22 @@ namespace dbMQserver
 
         internal void Update()
         {
-            if (ParagraphID == -1)
+            if (!indicator.CanOperate)
+                return;
+            switch (indicator.NeedOperate)
             {
-                TruncateParaContent(sentlist.Count);
+                case OpersDB.odInsert:
+                    {
+                        ParagraphID = dbConnector.InsertParagraphDB();
+                        break;
+                    }
+                case OpersDB.odUpdate:
+                    {
+                        ParagraphID = dbConnector.InsertParagraphDB();
+                        break;
+                    }
             }
+            TruncateParaContent(sentlist.Count);
             ParagraphID = SaveParagraphDB(pg_id);
             foreach (var sent in sentlist)
             {
@@ -39,63 +51,6 @@ namespace dbMQserver
             }
         }
 
-        /// <summary>
-        /// Удаление записей из mPhrases, относящихся к абзацу pg_id и порядок в предложении у которых больше maxcnt.
-        /// </summary>
-        private void TruncateParaContent(int maxcnt)
-        {
-            try
-            {
-                m_sqlCmd.CommandText = "SELECT ph_id FROM mPhrases WHERE pg_id = @pg_id AND sorder > @maxcnt";
-                m_sqlCmd.Parameters.Clear();
-                m_sqlCmd.Parameters.Add(new SQLiteParameter("@pg_id", ParagraphID));
-                m_sqlCmd.Parameters.Add(new SQLiteParameter("@maxcnt", maxcnt - 1));
-
-                SQLiteDataReader r = m_sqlCmd.ExecuteReader();
-                string line = String.Empty;
-                while (r.Read())
-                {
-                    var ph_id = (long)r["ph_id"];
-                    TruncateWords(ph_id, maxcnt);
-                }
-                r.Close();
-            }
-            catch (SQLiteException ex)
-            {
-                Console.WriteLine("Error: " + ex.Message);
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-            }
-        }
-
-        private long SaveParagraphDB(long pg_id)
-        {
-            var IsParaExists = false;
-            if (pg_id != -1)
-            {
-                m_sqlCmd.CommandText = "SELECT COUNT(*) FROM mParagraphs WHERE pg_id = @pg_id";
-                m_sqlCmd.Parameters.Clear();
-                m_sqlCmd.Parameters.Add(new SQLiteParameter("@pg_id", pg_id));
-                // Читаем только первую запись
-                var resp = m_sqlCmd.ExecuteScalar();
-                if (resp != null && (long)resp > 0)
-                    IsParaExists = true;
-            }
-            if (pg_id == -1 || !IsParaExists)
-                try
-                {
-                    // Нужно только создать ID
-                    m_sqlCmd.CommandText = "INSERT INTO mParagraphs(pg_id) VALUES(NULL)";
-                    m_sqlCmd.ExecuteNonQuery();
-
-                    m_sqlCmd.CommandText = "SELECT last_insert_rowid()";
-                    pg_id = (long)m_sqlCmd.ExecuteScalar();
-                }
-                catch (SQLiteException ex)
-                {
-                    Console.WriteLine("Error: " + ex.Message);
-                }
-            return pg_id;
-        }
 
     }
 }

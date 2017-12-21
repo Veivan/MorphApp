@@ -76,6 +76,9 @@
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="IdbConnector.cs" />
     <Compile Include="mqServer.cs" />
+    <Compile Include="ParagraphDBIndicator.cs" />
+    <Compile Include="ParagraphOperator.cs" />
+    <Compile Include="SagaDBServer.cs" />
     <Compile Include="ServerStart.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SQLiteConnector.cs" />
