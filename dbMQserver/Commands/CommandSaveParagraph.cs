@@ -18,9 +18,10 @@ namespace dbMQserver.Commands
 			this.sentlist.AddRange(sentlist);
 		}
 
-		public void Execute(SQLiteConnector dbConnector)
+        public void Execute()
 		{
-			ParagraphID = dbConnector.SaveParagraph(ParagraphID, sentlist);
+            var dbServer = new SagaDBServer();
+            ParagraphID = dbServer.SaveParagraph(ParagraphID, sentlist);
 		}
 
 		public byte[] GetResultBytes()

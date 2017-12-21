@@ -7,7 +7,7 @@ namespace dbMQserver.Commands
 {
 	public interface ICommand
 	{
-		void Execute(SQLiteConnector dbConnector);
+        void Execute();
 		byte[] GetResultBytes();
 	}
 }

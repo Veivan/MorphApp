@@ -11,8 +11,6 @@ namespace dbMQserver
 
 		public void Run()
 		{
-			SQLiteConnector dbConnector = SQLiteConnector.Instance;
-
 			// Create
 			// using (var context = new ZContext())
 			using (var responder = new ZSocket(ZSocketType.REP))
@@ -31,7 +29,7 @@ namespace dbMQserver
 						var order = combuilder.GetCommand(buf);
 						Console.WriteLine("Received {0}", combuilder.CommandType);
 						// Do some work
-						order.Execute(dbConnector);
+						order.Execute();
 						// Send
 						var foo = order.GetResultBytes();
 						responder.Send(new ZFrame(foo));

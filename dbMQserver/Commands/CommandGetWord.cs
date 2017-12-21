@@ -16,9 +16,10 @@ namespace dbMQserver.Commands
 			this.param = param;
 		}
 
-		public void Execute(SQLiteConnector dbConnector)
+        public void Execute()
 		{
-			lexID = dbConnector.GetWord(param);
+            var dbServer = new SagaDBServer();
+            lexID = dbServer.GetWord(param);
 		}
 
 		public byte[] GetResultBytes()
