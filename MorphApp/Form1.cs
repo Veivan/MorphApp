@@ -48,8 +48,9 @@ namespace MorphApp
 			foreach (var sent in sentlist)
 			{
 				courier.SendText(sent.sentence);
-				var sentstruct = courier.GetSentenceStruct();
-				para.UpdateSentStruct(sent.order, sentstruct);
+				var sentlistRep = courier.GetSentenceStructList();
+				if (sentlistRep.Count > 0)
+					para.UpdateSentStruct(sent.order, sentlistRep[0]);
 			}
 		}
 
@@ -62,7 +63,14 @@ namespace MorphApp
 			courier.command = TMorph.Schema.ComType.SavePara;
 			courier.SendParagraph(this.para);
 			var paramlist = courier.GetParamsList();
-			//this.para.pID = 
+
+			foreach (var par in paramlist)
+				if (par.Name == "ParagraphID")
+				{
+					this.para.ParagraphID = Convert.ToInt32(par.Value, 10);
+					break;
+				}
+			memoOut.Text = this.para.ParagraphID.ToString();
 		}
 
 		/// <summary>
@@ -75,6 +83,10 @@ namespace MorphApp
 			courier.SendParagraph(this.para);
 			// Через параметры передать -1 в случае ошибки, либо ID параграфа
 			var paramlist = courier.GetParamsList();
+			var sentlist = courier.GetSentenceStructList();
+			para.RefreshParagraph(new ArrayList(sentlist));
+
+			//TODO прочитался параграф из БД - надо его ресторить и выдать на просмотр
 		}
 
 		private void btTokenize_Click(object sender, EventArgs e)
@@ -94,8 +106,11 @@ namespace MorphApp
 			courier.servType = TMorph.Schema.ServType.svMorph;
 			courier.command = TMorph.Schema.ComType.Synt;
 			courier.SendText(memoInp.Text);
-			sent = courier.GetSentenceStruct();
-			if (sent == null) return;
+			var sentlistRep = courier.GetSentenceStructList();
+			if (sentlistRep.Count > 0)
+				sent = sentlistRep[0];
+			else
+				return;
 
 			var sb = new StringBuilder();
 			for (int i = 0; i < sent.Capasity; i++)
@@ -120,12 +135,15 @@ namespace MorphApp
 			courier.servType = TMorph.Schema.ServType.svMorph;
 			courier.command = TMorph.Schema.ComType.Synt;
 			courier.SendText(memoInp.Text);
-			var sentstr = courier.GetSentenceStruct();
+			var sentstr = courier.GetSentenceStructList();
 			if (sentstr == null) return;
+			var sentlistRep = courier.GetSentenceStructList();
+			if (sentlistRep.Count == 0)
+				return;
 
 			courier.servType = TMorph.Schema.ServType.svMorph;
 			courier.command = TMorph.Schema.ComType.Repar;
-			courier.SendStruct(sentstr);
+			courier.SendStruct(sentlistRep[0]);
 			var sents = courier.GetSeparatedSentsList();
 			var sb = new StringBuilder();
 			foreach (var sent in sents)

@@ -6,6 +6,21 @@ namespace dbMQserver
 {
 	interface IdbOperator
 	{
+		/// <summary>
+		/// Сохранение абзаца в DB. Если pg_id == -1, то Insert, иначе - Update.
+		/// </summary>
+		/// <param name="pg_id">ID абзаца</param>
+		/// <param name="sentlist">упорядоченный список структур предложений</param>
+		/// <returns>ID абзаца</returns>
+		long SaveParagraph(long pg_id, List<SentenceMap> sentlist);
+
+		/// <summary>
+		/// Чтение абзаца из DB.
+		/// </summary>
+		/// <param name="pg_id">ID абзаца</param>
+		/// <returns>упорядоченный список структур предложений</returns>
+		List<SentenceMap> ReadParagraphDB(long pg_id);
+	
 		/**
 		 * Сохранение лексемы в DB. Функция проверяет, нет ли уже слова в словаре.
 		 * Если слово отсутствует, то происходит добавление.
@@ -22,14 +37,6 @@ namespace dbMQserver
 		 */
 		//long GetWord(String rword);
 
-		/**
-		 * Сохранение абзаца в DB. Если pg_id == -1, то Insert, иначе - Update
-		 * 
-		 * @param pg_id
-		 * @param sentlist - упорядоченный список структур предложений
-		 * @return ID абзаца
-		 */
-		long SaveParagraph(long pg_id, List<SentenceMap> sentlist);
 
 		/**
 		 * Сохранение фразы в DB. Если ph_id == -1, то Insert, иначе - Update

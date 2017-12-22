@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace dbMQserver
 {
@@ -9,9 +7,16 @@ namespace dbMQserver
     {
         public long SaveParagraph(long pg_id, List<Schemas.SentenceMap> sentlist)
         {
-            var paraOper = new ParagraphOperator(pg_id, sentlist);
+            var paraOper = new ParagraphOperator(pg_id, sentlist, pg_id == -1 ? OpersDB.odInsert : OpersDB.odUpdate);
             paraOper.Update();
-            return pg_id;
+			return paraOper.ParagraphID;
         }
-    }
+
+		public List<Schemas.SentenceMap> ReadParagraphDB(long pg_id)
+		{
+			var paraOper = new ParagraphOperator(pg_id, null, OpersDB.odSelect);
+			paraOper.Read();
+			return paraOper.GetSentList();
+		}
+	}
 }

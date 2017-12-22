@@ -9,7 +9,15 @@ using Schemas;
 
 namespace dbMQserver
 {
-	public enum OpersDB { odNone, odInsert, odUpdate, odDelete };
+	public enum OpersDB { odNone, odSelect, odInsert, odUpdate, odDelete };
+
+	public struct WordStruct
+	{
+		public int с_id;
+		public int lx_id;
+		public int sp_id;
+		public string lemma;
+	}
 
 	/// Singleton
 	public sealed class SQLiteConnector
@@ -245,9 +253,72 @@ namespace dbMQserver
 			}
 			return result;
 		}
-	
+
+		/// <summary>
+		/// Чтение записей из mPhrases, относящихся к абзацу pg_id.
+		/// </summary>
+		/// <param name="pg_id">ID параграфа</param>
+		/// <returns>Список ID предложений</returns>
+		public List<long> ReadPhraseDB(long pg_id)
+		{
+			var listID = new List<long>();
+			try
+			{
+				m_sqlCmd.CommandText = "SELECT ph_id FROM mPhrases WHERE pg_id = @pg_id ORDER BY sorder";
+				m_sqlCmd.Parameters.Clear();
+				m_sqlCmd.Parameters.Add(new SQLiteParameter("@pg_id", pg_id));
+
+				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
+				string line = String.Empty;
+				while (r.Read())
+				{
+					listID.Add((long)r["ph_id"]);
+				}
+				r.Close();
+			}
+			catch (SQLiteException ex)
+			{
+				Console.WriteLine("Error: " + ex.Message);
+				System.Diagnostics.Debug.WriteLine(ex.Message);
+			}
+			return listID;
+		}				
 		
-		
+		/// <summary>
+		/// Чтение записей из mPhraseContent, относящихся к предложению ph_id.
+		/// </summary>
+		/// <param name="ph_id">ID предложения</param>
+		/// <returns>Список данных о слове</returns>
+		public List<WordStruct> ReadPhraseContentDB(long ph_id)
+		{
+			var reslist = new List<WordStruct>();
+			try
+			{
+				m_sqlCmd.CommandText = "SELECT P.с_id, P.lx_id, B.sp_id FROM mPhraseContent P JOIN mLemms B ON B.lx_id = P.lx_id" +
+					"WHERE ph_id = @ph_id ORDER BY sorder";
+				m_sqlCmd.Parameters.Clear();
+				m_sqlCmd.Parameters.Add(new SQLiteParameter("@ph_id", ph_id));
+
+				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
+				string line = String.Empty;
+				while (r.Read())
+				{
+					var wstruct = new WordStruct();
+					wstruct.с_id = (int)r["с_id"];
+					wstruct.lx_id = (int)r["lx_id"];
+					wstruct.sp_id = (int)r["sp_id"];
+					reslist.Add(wstruct);
+				}
+				r.Close();
+			}
+			catch (SQLiteException ex)
+			{
+				Console.WriteLine("Error: " + ex.Message);
+				System.Diagnostics.Debug.WriteLine(ex.Message);
+			}
+			return reslist;
+		}
+
 		/*// <summary>
 		/// Удаление записей из mPhrases, относящихся к абзацу pg_id и порядок в предложении у которых больше maxcnt.
 		/// </summary>

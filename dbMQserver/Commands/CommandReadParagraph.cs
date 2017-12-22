@@ -6,22 +6,22 @@ using FlatBuffers;
 
 namespace dbMQserver.Commands
 {
-	class CommandSaveParagraph : ICommand
+	class CommandReadParagraph : ICommand
 	{
-		private ComType command = ComType.SavePara;
+		private ComType command = ComType.ReadPara;
 		private List<SentenceMap> sentlist = new List<SentenceMap>();
 		private long ParagraphID;
 
-		public CommandSaveParagraph(long ParagraphID, List<SentenceMap> sentlist)
+		public CommandReadParagraph(long ParagraphID)
 		{
 			this.ParagraphID = ParagraphID;
-			this.sentlist.AddRange(sentlist);
 		}
 
 		public void Execute()
 		{
 			var dbServer = new SagaDBServer();
-			ParagraphID = dbServer.SaveParagraph(ParagraphID, sentlist);
+			var sents = dbServer.ReadParagraphDB(ParagraphID);
+			this.sentlist.AddRange(sents);
 		}
 
 		public byte[] GetResultBytes()
@@ -32,12 +32,15 @@ namespace dbMQserver.Commands
 			var parms = new Offset<Param>[1];
 			parms[0] = Param.CreateParam(builder, paramName, paramVal);
 			var paracol = Message.CreateParamsVector(builder, parms);
+			VectorOffset sentscol = default(VectorOffset);
+			sentscol = SentenceMap.BuildSentOffsetFromSentStructList(builder, this.sentlist);
 
 			Message.StartMessage(builder);
 			Message.AddMessType(builder, MessType.mReplay);
 			Message.AddServerType(builder, ServType.svSUBD);
 			Message.AddComtype(builder, command);
 			Message.AddParams(builder, paracol);
+			Message.AddSentences(builder, sentscol);
 			Message.AddParagraphID(builder, ParagraphID);
 			var req = Message.EndMessage(builder);
 			builder.Finish(req.Value);

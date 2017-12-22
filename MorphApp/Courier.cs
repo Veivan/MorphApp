@@ -100,7 +100,7 @@ namespace MorphApp
 		/// <summary>
 		/// Получение структуры предложения из сообщения.
 		/// </summary>
-		public SentenceMap GetSentenceStruct()
+		public List<SentenceMap> GetSentenceStructList()
 		{
 			if (replay == null)
 				return null;
@@ -109,10 +109,7 @@ namespace MorphApp
 			var buf = new ByteBuffer(bufrep);
 			var message = Message.GetRootAsMessage(buf);
 			var sentlist = SentenceMap.BuildFromMessage(message);
-			if (sentlist.Count > 0)
-				return sentlist[0];
-			else
-				return null;
+			return sentlist;
 		}
 
 		private ZFrame SendMess(ZFrame frame)
@@ -229,12 +226,12 @@ namespace MorphApp
 							.OrderBy(y => y.order)
 							.Select(x => x.sentstruct).ToList();
 						sentscol = SentenceMap.BuildSentOffsetFromSentStructList(builder, senttlist);
-						ParagraphID = parastr.pID;
+						ParagraphID = parastr.ParagraphID;
 						break;
 					}
 				case ComType.ReadPara:
 					{
-						ParagraphID = parastr.pID;
+						ParagraphID = parastr.ParagraphID;
 						break;
 					}
 			}

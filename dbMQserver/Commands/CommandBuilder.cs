@@ -33,6 +33,12 @@ namespace dbMQserver.Commands
 						intCommand = new CommandSaveParagraph(message.ParagraphID, senttlist);
 						break;
 					}
+				case ComType.ReadPara:
+					{
+						var ParagraphID = message.ParagraphID;
+						intCommand = new CommandReadParagraph(message.ParagraphID);
+						break;
+					}
 				case ComType.GetWord:
 					{
 						Param? par = message.Params(0);
