@@ -18,7 +18,7 @@ namespace dbMQserverTests
 			SQLiteConnector dbConnector = SQLiteConnector.Instance;
 
 			// act
-			long res = dbConnector.SaveLex("qq");
+			long res = dbConnector.SaveLex("qq", 6);
 
 			// assert
 			Assert.AreNotEqual(0, res);
@@ -31,7 +31,7 @@ namespace dbMQserverTests
 			SQLiteConnector dbConnector = SQLiteConnector.Instance;
 
 			// act
-			long res = dbConnector.GetWord("qq");
+			long res = dbConnector.GetWord("qq", 6);
 
 			// assert
 			Assert.AreNotEqual(-1, res);
@@ -45,7 +45,7 @@ namespace dbMQserverTests
 			SQLiteConnector dbConnector = SQLiteConnector.Instance;
 
 			// act
-			dbConnector.selectAll("mSpParts");
+			dbConnector.selectAll("mSiGram");
 
 			// assert
 			Assert.AreEqual(0, 0);

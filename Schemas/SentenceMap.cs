@@ -26,10 +26,19 @@ namespace Schemas
 		/// </summary>
 		public long SentenceID { get { return _phID; } set { _phID = value; } }
 
+		/// <summary>
+		/// Хранилище структур слов предложения.
+		/// </summary>
 		private SortedList<int, WordMap> words = new SortedList<int, WordMap>();
 
+		/// <summary>
+		/// Хранилище синтаксических связей предложения.
+		/// </summary>
 		private List<tNode> treeList = new List<tNode>();
 
+		/// <summary>
+		/// Количество слов предложения.
+		/// </summary>
 		public int Capasity
 		{
 			get
@@ -65,6 +74,9 @@ namespace Schemas
 				return null;
 		}
 
+		/// <summary>
+		/// Получение списка синтаксических связей предложения.
+		/// </summary>
 		public List<tNode> GetTreeList()
 		{
 			var newlist = treeList.OrderBy(x => x.ID)

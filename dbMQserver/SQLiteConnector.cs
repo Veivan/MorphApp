@@ -9,10 +9,10 @@ using Schemas;
 
 namespace dbMQserver
 {
-    public enum OpersDB { odNone, odInsert, odUpdate, odDelete };
-    
-    /// Singleton
-	public sealed class SQLiteConnector : IdbConnector
+	public enum OpersDB { odNone, odInsert, odUpdate, odDelete };
+
+	/// Singleton
+	public sealed class SQLiteConnector
 	{
 		private static readonly Lazy<SQLiteConnector> instanceHolder =
 			new Lazy<SQLiteConnector>(() => new SQLiteConnector());
@@ -70,15 +70,24 @@ namespace dbMQserver
 			get { return instanceHolder.Value; }
 		}
 
-		public long SaveLex(string word)
+		/// <summary>
+		/// Сохранение леммы в БД.
+		/// sqlite некорректно работает с upper, lower и like в utf8. Поэтому в БД надо всё хранить в lower
+		/// </summary>
+		/// <param name="lemma">лемма</param>
+		/// <param name="sp_id">ID части речи</param>
+		/// <returns>ID леммы</returns>
+		public long SaveLex(string lemma, int sp_id)
 		{
-			long result = GetWord(word);
+			long result = GetWord(lemma, sp_id);
 			if (result == -1)
 			{
 				try
 				{
-					m_sqlCmd.CommandText = "INSERT INTO mLexems(lx_id, lex) VALUES(NULL, @lex)";
-					m_sqlCmd.Parameters.Add(new SQLiteParameter("@lex", word.ToLower()));
+					m_sqlCmd.CommandText = "INSERT INTO mLemms(lx_id, sp_id, lex) VALUES(NULL, @sp_id, @lex)";
+					m_sqlCmd.Parameters.Clear();
+					m_sqlCmd.Parameters.Add(new SQLiteParameter("@sp_id", sp_id));
+					m_sqlCmd.Parameters.Add(new SQLiteParameter("@lex", lemma.ToLower()));
 					m_sqlCmd.ExecuteNonQuery();
 
 					m_sqlCmd.CommandText = "SELECT last_insert_rowid()";
@@ -93,14 +102,21 @@ namespace dbMQserver
 			return result;
 		}
 
-		public long GetWord(string rword)
+		/// <summary>
+		/// Получение ID леммы из БД.
+		/// </summary>
+		/// <param name="lemma">лемма</param>
+		/// <param name="sp_id">ID части речи</param>
+		/// <returns>ID леммы</returns>
+		public long GetWord(string lemma, int sp_id)
 		{
 			long result = -1;
 			try
 			{
-				//sqlite некорректно работает с upper, lower и like в utf8. Поэтому в БД надо всё хранить в lower
-				m_sqlCmd.CommandText = "SELECT lx_id FROM mLexems WHERE lex = @lex";
-				m_sqlCmd.Parameters.Add(new SQLiteParameter("@lex", rword.ToLower()));
+				m_sqlCmd.CommandText = "SELECT lx_id FROM mLemms WHERE lex = @lex AND sp_id = @sp_id";
+				m_sqlCmd.Parameters.Clear();
+				m_sqlCmd.Parameters.Add(new SQLiteParameter("@sp_id", sp_id));
+				m_sqlCmd.Parameters.Add(new SQLiteParameter("@lex", lemma.ToLower()));
 				// Читаем только первую запись
 				var resp = m_sqlCmd.ExecuteScalar();
 				if (resp != null)
@@ -113,127 +129,87 @@ namespace dbMQserver
 			return result;
 		}
 
-        /// <summary>
-        /// Проверка, сеществует в БД абзац pg_id или нет.
-        /// </summary>
-        /// <param name="pg_id">ID параграфа</param>
-        /// <returns>boolean</returns>
-        public bool IsParagraphExists(long pg_id)
-        {
-            var IsParaExists = false;
-            if (pg_id != -1)
-            {
-                m_sqlCmd.CommandText = "SELECT COUNT(*) FROM mParagraphs WHERE pg_id = @pg_id";
-                m_sqlCmd.Parameters.Clear();
-                m_sqlCmd.Parameters.Add(new SQLiteParameter("@pg_id", pg_id));
-                // Читаем только первую запись
-                var resp = m_sqlCmd.ExecuteScalar();
-                if (resp != null && (long)resp > 0)
-                    IsParaExists = true;
-            }
-            return IsParaExists;
-        }
-
-        /// <summary>
-        /// Вставка в mParagraphs.
-        /// </summary>
-        /// <returns>ID параграфа</returns>
-        public long InsertParagraphDB()
-        {
-            long pg_id = -1;
-            try
-            {
-                // Нужно только создать ID
-                m_sqlCmd.CommandText = "INSERT INTO mParagraphs(pg_id) VALUES(NULL)";
-                m_sqlCmd.ExecuteNonQuery();
-
-                m_sqlCmd.CommandText = "SELECT last_insert_rowid()";
-                pg_id = (long)m_sqlCmd.ExecuteScalar();
-            }
-            catch (SQLiteException ex)
-            {
-                Console.WriteLine("Error: " + ex.Message);
-            }
-            return pg_id;
-        }
-
-        /// <summary>
-        /// Удаление записей из mPhrases, относящихся к абзацу pg_id и порядок в предложении у которых больше maxcnt.
-        /// </summary>
-        private void TruncateParaContent(int maxcnt)
-        {
-            try
-            {
-                m_sqlCmd.CommandText = "SELECT ph_id FROM mPhrases WHERE pg_id = @pg_id AND sorder > @maxcnt";
-                m_sqlCmd.Parameters.Clear();
-                m_sqlCmd.Parameters.Add(new SQLiteParameter("@pg_id", ParagraphID));
-                m_sqlCmd.Parameters.Add(new SQLiteParameter("@maxcnt", maxcnt - 1));
-
-                SQLiteDataReader r = m_sqlCmd.ExecuteReader();
-                string line = String.Empty;
-                while (r.Read())
-                {
-                    var ph_id = (long)r["ph_id"];
-                    TruncateWords(ph_id, maxcnt);
-                }
-                r.Close();
-            }
-            catch (SQLiteException ex)
-            {
-                Console.WriteLine("Error: " + ex.Message);
-                System.Diagnostics.Debug.WriteLine(ex.Message);
-            }
-        }
-        
-        private void DeleteWords(long ph_id)
+		/// <summary>
+		/// Проверка, существует в БД абзац pg_id или нет.
+		/// </summary>
+		/// <param name="pg_id">ID параграфа</param>
+		/// <returns>boolean</returns>
+		public bool IsParagraphExists(long pg_id)
 		{
-			m_sqlCmd.CommandText = "SELECT COUNT(*) FROM mParagraphs WHERE pg_id = @pg_id";
-			m_sqlCmd.Parameters.Clear();
-			m_sqlCmd.Parameters.Add(new SQLiteParameter("@pg_id", pg_id));
-		}
-		
-		private void TruncateWords(long ph_id, int maxcnt)
-		{
+			var IsParaExists = false;
+			if (pg_id != -1)
+			{
+				m_sqlCmd.CommandText = "SELECT COUNT(*) FROM mParagraphs WHERE pg_id = @pg_id";
+				m_sqlCmd.Parameters.Clear();
+				m_sqlCmd.Parameters.Add(new SQLiteParameter("@pg_id", pg_id));
+				// Читаем только первую запись
+				var resp = m_sqlCmd.ExecuteScalar();
+				if (resp != null && (long)resp > 0)
+					IsParaExists = true;
+			}
+			return IsParaExists;
 		}
 
-		public long SavePhrase(long ph_id)
+		/// <summary>
+		/// Вставка в mParagraphs.
+		/// </summary>
+		/// <returns>ID параграфа</returns>
+		public long InsertParagraphDB()
 		{
-			if (ph_id == -1)
-				try
-				{
-					// Нужно только создать ID
-					m_sqlCmd.CommandText = "INSERT INTO mPhrases(ph_id) VALUES(NULL)";
-					m_sqlCmd.ExecuteNonQuery();
+			long pg_id = -1;
+			try
+			{
+				// Нужно только создать ID
+				m_sqlCmd.CommandText = "INSERT INTO mParagraphs(pg_id) VALUES(NULL)";
+				m_sqlCmd.ExecuteNonQuery();
 
-					m_sqlCmd.CommandText = "SELECT last_insert_rowid()";
-					ph_id = (long)m_sqlCmd.ExecuteScalar();
-				}
-				catch (SQLiteException ex)
-				{
-					Console.WriteLine("Error: " + ex.Message);
-				}
-			else
-				// Пока тут нечего UPDATE
-				try
-				{
-					// pstmt.setInt(1, ph_id);
-				}
-				catch (SQLiteException ex)
-				{
-					Console.WriteLine("Error: " + ex.Message);
-				}
+				m_sqlCmd.CommandText = "SELECT last_insert_rowid()";
+				pg_id = (long)m_sqlCmd.ExecuteScalar();
+			}
+			catch (SQLiteException ex)
+			{
+				Console.WriteLine("Error: " + ex.Message);
+			}
+			return pg_id;
+		}
+
+		/// <summary>
+		/// Вставка в mPhrases.
+		/// </summary>
+		/// <returns>ID предложения</returns>
+		public long InsertPhraseDB(long pg_id, short sorder)
+		{
+			long ph_id = -1;
+			try
+			{
+				m_sqlCmd.CommandText =
+					String.Format("INSERT INTO mPhrases(ph_id, pg_id, sorder) VALUES(NULL, {0}, {1})", pg_id, sorder);
+				m_sqlCmd.ExecuteNonQuery();
+
+				m_sqlCmd.CommandText = "SELECT last_insert_rowid()";
+				ph_id = (long)m_sqlCmd.ExecuteScalar();
+			}
+			catch (SQLiteException ex)
+			{
+				Console.WriteLine("Error: " + ex.Message);
+			}
 			return ph_id;
 		}
 
-		public long SavePhraseWords(long ph_id, long lx_id, short sorder)
+		/// <summary>
+		/// Вставка в mPhraseContent.
+		/// </summary>
+		/// <returns>ID</returns>
+		public long InsertWordDB(long ph_id, long lx_id, short sorder)
 		{
 			long result = -1;
-			m_sqlCmd.CommandText = "INSERT INTO mPhraseContent(с_id, ph_id, lx_id, sorder) VALUES(NULL, @ph_id, @lx_id, @sorder)";
-			m_sqlCmd.Parameters.Add(new SQLiteParameter("@ph_id", -1));
-			m_sqlCmd.Parameters.Add(new SQLiteParameter("@lx_id", -1));
-			m_sqlCmd.Parameters.Add(new SQLiteParameter("@sorder", -1));
 			try
 			{
+				m_sqlCmd.CommandText = "INSERT INTO mPhraseContent(с_id, ph_id, lx_id, sorder) VALUES(NULL, @ph_id, @lx_id, @sorder)";
+				m_sqlCmd.Parameters.Clear();
+				m_sqlCmd.Parameters.Add(new SQLiteParameter("@ph_id", ph_id));
+				m_sqlCmd.Parameters.Add(new SQLiteParameter("@lx_id", lx_id));
+				m_sqlCmd.Parameters.Add(new SQLiteParameter("@sorder", sorder));
 				m_sqlCmd.ExecuteNonQuery();
 
 				m_sqlCmd.CommandText = "SELECT last_insert_rowid()";
@@ -245,6 +221,73 @@ namespace dbMQserver
 			}
 			return result;
 		}
+
+		/// <summary>
+		/// Вставка в mGrammems.
+		/// </summary>
+		/// <returns>ID</returns>
+		public long InsertGrammemDB(long с_id, int sg_id, int intval)
+		{
+			long result = -1;
+			try
+			{
+				m_sqlCmd.CommandText =
+					String.Format("INSERT INTO mGrammems(gr_id, с_id, sg_id, sorder) VALUES(NULL, {0}, {1}, {2})",
+					с_id, sg_id, intval);
+				m_sqlCmd.ExecuteNonQuery();
+
+				m_sqlCmd.CommandText = "SELECT last_insert_rowid()";
+				result = (long)m_sqlCmd.ExecuteScalar();
+			}
+			catch (SQLiteException ex)
+			{
+				Console.WriteLine("Error: " + ex.Message);
+			}
+			return result;
+		}
+	
+		
+		
+		/*// <summary>
+		/// Удаление записей из mPhrases, относящихся к абзацу pg_id и порядок в предложении у которых больше maxcnt.
+		/// </summary>
+		private void TruncateParaContent(int maxcnt)
+		{
+			try
+			{
+				m_sqlCmd.CommandText = "SELECT ph_id FROM mPhrases WHERE pg_id = @pg_id AND sorder > @maxcnt";
+				m_sqlCmd.Parameters.Clear();
+				m_sqlCmd.Parameters.Add(new SQLiteParameter("@pg_id", ParagraphID));
+				m_sqlCmd.Parameters.Add(new SQLiteParameter("@maxcnt", maxcnt - 1));
+
+				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
+				string line = String.Empty;
+				while (r.Read())
+				{
+					var ph_id = (long)r["ph_id"];
+					TruncateWords(ph_id, maxcnt);
+				}
+				r.Close();
+			}
+			catch (SQLiteException ex)
+			{
+				Console.WriteLine("Error: " + ex.Message);
+				System.Diagnostics.Debug.WriteLine(ex.Message);
+			}
+		} */
+
+		private void DeleteWords(long ph_id)
+		{
+			m_sqlCmd.CommandText = "SELECT COUNT(*) FROM mParagraphs WHERE pg_id = @pg_id";
+			m_sqlCmd.Parameters.Clear();
+			m_sqlCmd.Parameters.Add(new SQLiteParameter("@pg_id", ph_id));
+		}
+
+		private void TruncateWords(long ph_id, int maxcnt)
+		{
+		}
+
+
 
 		///
 		/// select all rows in the mPhrases table

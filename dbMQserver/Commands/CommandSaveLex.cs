@@ -19,7 +19,7 @@ namespace dbMQserver.Commands
         public void Execute()
         {
             var dbServer = new SagaDBServer();
-            lexID = dbServer.SaveLex(param);
+            //lexID = dbServer.SaveLex(param);
 		}
 
 		public byte[] GetResultBytes()

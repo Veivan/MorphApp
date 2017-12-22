@@ -10,12 +10,12 @@ namespace dbMQserver
     /// </summary>
     class ParagraphDBIndicator
     {
-        internal OpersDB NeedOperate { get; private set; }
-        internal bool CanOperate { get; private set; }
+        public OpersDB NeedOperate { get; private set; }
+        public bool CanOperate { get; private set; }
 
         SQLiteConnector dbConnector = SQLiteConnector.Instance;
 
-        internal void Fill(long ParagraphID)
+        public void Fill(long ParagraphID)
         {
             CanOperate = true; // TODO Сделать проверку на блокировку
             NeedOperate = OpersDB.odNone;

@@ -74,7 +74,7 @@
     <Compile Include="Commands\CommandSaveLex.cs" />
     <Compile Include="Commands\CommandSaveParagraph.cs" />
     <Compile Include="Commands\ICommand.cs" />
-    <Compile Include="IdbConnector.cs" />
+    <Compile Include="IdbOperator.cs" />
     <Compile Include="mqServer.cs" />
     <Compile Include="ParagraphDBIndicator.cs" />
     <Compile Include="ParagraphOperator.cs" />

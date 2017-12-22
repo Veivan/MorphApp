@@ -4,7 +4,7 @@ using Schemas;
 
 namespace dbMQserver
 {
-	interface IdbConnector
+	interface IdbOperator
 	{
 		/**
 		 * Сохранение лексемы в DB. Функция проверяет, нет ли уже слова в словаре.
@@ -12,7 +12,7 @@ namespace dbMQserver
 		 * 
 		 * @return ID лексемы
 		 */
-		long SaveLex(String word);
+		//long SaveLex(String word);
 
 		/**
 		 * Поиск слова в словаре. Затем надо искать его по словоформе в справчнике
@@ -20,7 +20,7 @@ namespace dbMQserver
 		 * 
 		 * @return ID лексемы
 		 */
-		long GetWord(String rword);
+		//long GetWord(String rword);
 
 		/**
 		 * Сохранение абзаца в DB. Если pg_id == -1, то Insert, иначе - Update
@@ -37,7 +37,7 @@ namespace dbMQserver
 		 * @param ph_id
 		 * @return ID фразы
 		 */
-		long SavePhrase(long ph_id);
+		//long SavePhrase(long ph_id);
 
 		/**
 		 * Сохранение состава фразы в DB. 
@@ -48,7 +48,7 @@ namespace dbMQserver
 		 * 
 		 * @return ID записи
 		 */
-		long SavePhraseWords(long ph_id, long lx_id, short sorder);
+		//long SavePhraseWords(long ph_id, long lx_id, short sorder);
 
 	}
 }
