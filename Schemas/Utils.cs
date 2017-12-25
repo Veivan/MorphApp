@@ -7,7 +7,7 @@ using FlatBuffers;
 
 namespace TMorph.Common
 {
-    public class Utils
+	public class Utils
     {
         /*// <summary>
         /// Функция получает "правильный" массив foo из builder.DataBuffer.Data.

@@ -45,7 +45,7 @@ namespace dbMQserverTests
 			SQLiteConnector dbConnector = SQLiteConnector.Instance;
 
 			// act
-			dbConnector.selectAll("mParagraphs");
+			dbConnector.selectAll("mSiLinks");
 
 			// assert
 			Assert.AreEqual(0, 0);
@@ -74,6 +74,20 @@ namespace dbMQserverTests
 			// act
 			dbConnector.InsertGrenProperties();
 			dbConnector.selectAll("mSiGram");
+
+			// assert
+			Assert.AreEqual(0, 0);
+		}
+
+		[TestMethod]
+		public void TestInsertGrenLinks()
+		{
+			// arrange
+			SQLiteConnector dbConnector = SQLiteConnector.Instance;
+
+			// act
+			dbConnector.InsertGrenLinks();
+			dbConnector.selectAll("mSiLinks");
 
 			// assert
 			Assert.AreEqual(0, 0);

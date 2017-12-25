@@ -74,7 +74,7 @@ namespace MorphMQserver
 					wmap.EntryName = GrammarEngine.sol_GetEntryNameFX(hEngine, id_entry);
 
 					// Определение типа класса по ID части речи
-					var xType = Gren.sgAPI.GetTypeClassByID((Gren.GrenPart)id_partofspeech);
+					var xType = Gren.sgAPI.GetTypeClassByID((GrenPart)id_partofspeech);
 					if (xType != null)
 					{
 						// Создание класса части речи
@@ -299,7 +299,7 @@ namespace MorphMQserver
 					sb.Append(PartOfSpeechName + "\r\n");
 
 					// Определение типа класса по ID части речи
-					var xType = Gren.sgAPI.GetTypeClassByID((Gren.GrenPart)id_partofspeech);
+					var xType = Gren.sgAPI.GetTypeClassByID((GrenPart)id_partofspeech);
 					if (xType != null)
 					{
 						// Создание класса части речи
@@ -463,7 +463,7 @@ namespace MorphMQserver
 				wmap = new WordMap(id_entry, id_partofspeech);
 				wmap.EntryName = GrammarEngine.sol_GetEntryNameFX(hEngine, id_entry);
 				// Определение типа класса по ID части речи
-				var xType = Gren.sgAPI.GetTypeClassByID((Gren.GrenPart)id_partofspeech);
+				var xType = Gren.sgAPI.GetTypeClassByID((GrenPart)id_partofspeech);
 				if (xType != null)
 				{
 					// Создание класса части речи

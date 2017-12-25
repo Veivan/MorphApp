@@ -60,6 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GrenEnums.cs" />
     <Compile Include="HasDict.cs" />
     <Compile Include="SentenceMap.cs" />
     <Compile Include="TMorph\Schema\ComType.cs" />
