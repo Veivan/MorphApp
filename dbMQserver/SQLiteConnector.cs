@@ -14,9 +14,8 @@ namespace dbMQserver
 	public struct WordStruct
 	{
 		public int с_id;
-		public int lx_id;
-		public int sp_id;
 		public string lemma;
+		public int sp_id;
 	}
 
 	/// Singleton
@@ -294,8 +293,8 @@ namespace dbMQserver
 			var reslist = new List<WordStruct>();
 			try
 			{
-				m_sqlCmd.CommandText = "SELECT P.с_id, P.lx_id, B.sp_id FROM mPhraseContent P JOIN mLemms B ON B.lx_id = P.lx_id" +
-					"WHERE ph_id = @ph_id ORDER BY sorder";
+				m_sqlCmd.CommandText = "SELECT P.с_id, B.lemma, B.sp_id FROM mPhraseContent P JOIN mLemms B ON B.lx_id = P.lx_id " +
+					"WHERE P.ph_id = @ph_id ORDER BY sorder";
 				m_sqlCmd.Parameters.Clear();
 				m_sqlCmd.Parameters.Add(new SQLiteParameter("@ph_id", ph_id));
 
@@ -304,9 +303,9 @@ namespace dbMQserver
 				while (r.Read())
 				{
 					var wstruct = new WordStruct();
-					wstruct.с_id = (int)r["с_id"];
-					wstruct.lx_id = (int)r["lx_id"];
-					wstruct.sp_id = (int)r["sp_id"];
+					wstruct.с_id = r.GetInt32(0); 
+					wstruct.lemma = r.GetString(1);
+					wstruct.sp_id = r.GetInt32(2);
 					reslist.Add(wstruct);
 				}
 				r.Close();
@@ -329,13 +328,13 @@ namespace dbMQserver
 			var reslist = new List<KeyValuePair<int, int>>();
 			try
 			{
-				m_sqlCmd.CommandText = String.Format("SELECT sg_id, intval FROM mPhraseContent WHERE с_id = {0}", с_id);
+				m_sqlCmd.CommandText = String.Format("SELECT sg_id, intval FROM mGrammems WHERE с_id = {0}", с_id);
 
 				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
 				string line = String.Empty;
 				while (r.Read())
 				{
-					var pair = new KeyValuePair<int, int>((int)r["sg_id"], (int)r["intval"]);
+					var pair = new KeyValuePair<int, int>(r.GetInt32(0), r.GetInt32(1));
 					reslist.Add(pair);
 				}
 				r.Close();

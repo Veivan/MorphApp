@@ -17,7 +17,8 @@ namespace dbMQserver
 		public ParagraphOperator(long ParagraphID, List<SentenceMap> sentlist, OpersDB operDB)
 		{
 			this.paragraphID = ParagraphID;
-			this.sentlist.AddRange(sentlist);
+			if (sentlist != null)
+				this.sentlist.AddRange(sentlist);
 			if (operDB != OpersDB.odSelect)
 				indicator.Fill(ParagraphID);
 		}
@@ -77,17 +78,19 @@ namespace dbMQserver
 				sent.SentenceID = phID;
 				// Чтение данных о словах
 				var wstructs = dbConnector.ReadPhraseContentDB(phID);
-				foreach (var wstr in wstructs)
+				for (int j = 0; j < wstructs.Count; j++)
 				{
+					var wstr = wstructs[j];
 					// В БД не хранится ID словарной статьи GREN. 
 					var word = new WordMap(-1, wstr.sp_id);
+					word.EntryName = wstr.lemma;
 					// Чтение граммем слова
 					var grammems = dbConnector.ReadGrammemsDB(wstr.с_id);
 					foreach (var pair in grammems)
 					{
 						word.AddPair(pair.Key, pair.Value);
 					}
-
+					sent.AddWord(j, word);
 				}
 				// Чтение списка синтаксических связей предложения
 

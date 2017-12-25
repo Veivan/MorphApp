@@ -93,6 +93,7 @@ namespace MorphApp
 		/// </summary>
 		private void ReadParagraphBD()
 		{
+			this.para.ParagraphID = 7;
 			courier.servType = TMorph.Schema.ServType.svSUBD;
 			courier.command = TMorph.Schema.ComType.ReadPara;
 			courier.SendParagraph(this.para);
@@ -111,7 +112,7 @@ namespace MorphApp
 				courier.SendStruct(sent);
 				var sents = courier.GetSeparatedSentsList();
 				foreach (var sentrep in sents)
-					sb.Append(sent + "\r\n");
+					sb.Append(sentrep + "\r\n");
 			}
 			memoOut.Text = sb.ToString();
 		}
