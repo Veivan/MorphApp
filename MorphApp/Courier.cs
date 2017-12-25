@@ -31,7 +31,7 @@ namespace MorphApp
 		{
 			var builder = SetReq(requestText);
 			var buf = builder.SizedByteArray();
-			ZFrame replay = SendMess(new ZFrame(buf));
+			replay = SendMess(new ZFrame(buf));
 		}
 
 		public void SendStruct(SentenceMap sentstr)
@@ -39,7 +39,7 @@ namespace MorphApp
 			this.sentstr = sentstr;
 			var builder = SetReq();
 			var buf = builder.SizedByteArray();
-			ZFrame replay = SendMess(new ZFrame(buf));
+			replay = SendMess(new ZFrame(buf));
 			this.sentstr = null;
 		}
 
@@ -48,7 +48,7 @@ namespace MorphApp
 			this.parastr = parastr;
 			var builder = SetReq();
 			var buf = builder.SizedByteArray();
-			ZFrame replay = SendMess(new ZFrame(buf));
+			replay = SendMess(new ZFrame(buf));
 			this.parastr = null;
 		}
 
@@ -153,7 +153,7 @@ namespace MorphApp
 						throw new ZException(error);
 				}
 
-				if (requesterDB.PollIn(poll, out msg, out error, TimeSpan.FromMilliseconds(64)))
+				if (requesterDB.PollIn(poll, out msg, out error, TimeSpan.FromMilliseconds(1000)))
 				{
 					// Process task
 					replay = msg[0];

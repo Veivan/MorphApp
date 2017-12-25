@@ -25,7 +25,6 @@ namespace dbMQserver
 					{
 						request.Position = 0;
 						var buf = request.Read();
-
 						var order = combuilder.GetCommand(buf);
 						Console.WriteLine("Received {0}", combuilder.CommandType);
 						// Do some work
