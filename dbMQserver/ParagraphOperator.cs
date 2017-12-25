@@ -79,8 +79,15 @@ namespace dbMQserver
 				var wstructs = dbConnector.ReadPhraseContentDB(phID);
 				foreach (var wstr in wstructs)
 				{
-					var word = new WordMap(wstr.lx_id, wstr.sp_id);
+					// В БД не хранится ID словарной статьи GREN. 
+					var word = new WordMap(-1, wstr.sp_id);
 					// Чтение граммем слова
+					var grammems = dbConnector.ReadGrammemsDB(wstr.с_id);
+					foreach (var pair in grammems)
+					{
+						word.AddPair(pair.Key, pair.Value);
+					}
+
 				}
 				// Чтение списка синтаксических связей предложения
 

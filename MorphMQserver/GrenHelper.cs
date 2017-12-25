@@ -141,9 +141,13 @@ namespace MorphMQserver
 						states.Add((int)val);
 					}
 				}
-
+			
+				// Проверка ID_Entry (В БД не хранится ID_Entry)
+				int entry_id = GrammarEngine.sol_FindEntry( hEngine, wmap.EntryName, wmap.ID_PartOfSpeech, GrammarEngineAPI.RUSSIAN_LANGUAGE );
+				//if( entry_id==-1 )
 				string word = "";
-				ArrayList fx = GrammarEngine.sol_GenerateWordformsFX(hEngine, wmap.ID_Entry, coords, states);
+				ArrayList fx = GrammarEngine.sol_GenerateWordformsFX(hEngine, entry_id, coords, states);
+				//ArrayList fx = GrammarEngine.sol_GenerateWordformsFX(hEngine, wmap.ID_Entry, coords, states);
 				if (fx != null && fx.Count > 0)
 				{
 					word = (fx[0] as String).ToLower();

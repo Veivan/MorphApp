@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
 			this.btGetMorph = new System.Windows.Forms.Button();
-			this.textBox1 = new System.Windows.Forms.TextBox();
 			this.memoInp = new System.Windows.Forms.TextBox();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -40,6 +39,8 @@
 			this.btSaveLex = new System.Windows.Forms.Button();
 			this.btTokenize = new System.Windows.Forms.Button();
 			this.btRestore = new System.Windows.Forms.Button();
+			this.btSavePara = new System.Windows.Forms.Button();
+			this.btReadPara = new System.Windows.Forms.Button();
 			this.statusStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -52,14 +53,6 @@
 			this.btGetMorph.Text = "MorphAn";
 			this.btGetMorph.UseVisualStyleBackColor = true;
 			this.btGetMorph.Click += new System.EventHandler(this.btGetMorph_Click);
-			// 
-			// textBox1
-			// 
-			this.textBox1.Location = new System.Drawing.Point(255, 290);
-			this.textBox1.Name = "textBox1";
-			this.textBox1.ReadOnly = true;
-			this.textBox1.Size = new System.Drawing.Size(100, 20);
-			this.textBox1.TabIndex = 1;
 			// 
 			// memoInp
 			// 
@@ -152,11 +145,33 @@
 			this.btRestore.UseVisualStyleBackColor = true;
 			this.btRestore.Click += new System.EventHandler(this.btRestore_Click);
 			// 
+			// btSavePara
+			// 
+			this.btSavePara.Location = new System.Drawing.Point(174, 290);
+			this.btSavePara.Name = "btSavePara";
+			this.btSavePara.Size = new System.Drawing.Size(75, 20);
+			this.btSavePara.TabIndex = 10;
+			this.btSavePara.Text = "Save para";
+			this.btSavePara.UseVisualStyleBackColor = true;
+			this.btSavePara.Click += new System.EventHandler(this.btSavePara_Click);
+			// 
+			// btReadPara
+			// 
+			this.btReadPara.Location = new System.Drawing.Point(255, 290);
+			this.btReadPara.Name = "btReadPara";
+			this.btReadPara.Size = new System.Drawing.Size(75, 20);
+			this.btReadPara.TabIndex = 11;
+			this.btReadPara.Text = "Read Para";
+			this.btReadPara.UseVisualStyleBackColor = true;
+			this.btReadPara.Click += new System.EventHandler(this.btReadPara_Click);
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(387, 367);
+			this.Controls.Add(this.btReadPara);
+			this.Controls.Add(this.btSavePara);
 			this.Controls.Add(this.btRestore);
 			this.Controls.Add(this.btTokenize);
 			this.Controls.Add(this.btSaveLex);
@@ -165,7 +180,6 @@
 			this.Controls.Add(this.memoOut);
 			this.Controls.Add(this.statusStrip1);
 			this.Controls.Add(this.memoInp);
-			this.Controls.Add(this.textBox1);
 			this.Controls.Add(this.btGetMorph);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.Name = "Form1";
@@ -180,8 +194,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Button btGetMorph;
-        private System.Windows.Forms.TextBox textBox1;
+		private System.Windows.Forms.Button btGetMorph;
         private System.Windows.Forms.TextBox memoInp;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
@@ -192,6 +205,8 @@
         private System.Windows.Forms.Button btSaveLex;
         private System.Windows.Forms.Button btTokenize;
 		private System.Windows.Forms.Button btRestore;
+		private System.Windows.Forms.Button btSavePara;
+		private System.Windows.Forms.Button btReadPara;
     }
 }
 

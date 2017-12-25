@@ -29,6 +29,17 @@ namespace MorphApp
 			memoInp.Text = "Мама мыла";
 		}
 
+		private void btSavePara_Click(object sender, EventArgs e)
+		{
+			//UpdateParagraph();
+			SaveParagraphBD();
+		}
+
+		private void btReadPara_Click(object sender, EventArgs e)
+		{
+			ReadParagraphBD();
+		}
+
 		/// <summary>
 		/// Формирование содержимого внутреннего объекта Paragraph.
 		/// </summary>
@@ -63,6 +74,10 @@ namespace MorphApp
 			courier.command = TMorph.Schema.ComType.SavePara;
 			courier.SendParagraph(this.para);
 			var paramlist = courier.GetParamsList();
+			if (paramlist == null)
+			{
+				return;
+			}
 
 			foreach (var par in paramlist)
 				if (par.Name == "ParagraphID")
@@ -87,6 +102,18 @@ namespace MorphApp
 			para.RefreshParagraph(new ArrayList(sentlist));
 
 			//TODO прочитался параграф из БД - надо его ресторить и выдать на просмотр
+
+			var sb = new StringBuilder();
+			courier.servType = TMorph.Schema.ServType.svMorph;
+			courier.command = TMorph.Schema.ComType.Repar;
+			foreach (var sent in sentlist)
+			{
+				courier.SendStruct(sent);
+				var sents = courier.GetSeparatedSentsList();
+				foreach (var sentrep in sents)
+					sb.Append(sent + "\r\n");
+			}
+			memoOut.Text = sb.ToString();
 		}
 
 		private void btTokenize_Click(object sender, EventArgs e)
@@ -111,6 +138,8 @@ namespace MorphApp
 				sent = sentlistRep[0];
 			else
 				return;
+
+			this.para.AddSentStruct(5, sent);
 
 			var sb = new StringBuilder();
 			for (int i = 0; i < sent.Capasity; i++)

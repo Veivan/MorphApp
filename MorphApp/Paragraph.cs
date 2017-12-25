@@ -8,7 +8,7 @@ using Schemas;
 namespace MorphApp
 {
 	enum SentTypes { enstAll, enstNotActual };
-	struct SentProps
+	class SentProps
 	{
 		public int order;
 		public string sentence;
@@ -85,16 +85,39 @@ namespace MorphApp
 		}
 
 		/// <summary>
-		/// Запичь в хранилище предложения новой структуры синтана этого предложения.
+		/// Запиcь в хранилище предложения новой структуры синтана этого предложения.
 		/// </summary>
 		public void UpdateSentStruct(int order, SentenceMap sentstruct)
 		{
+			var cnt = innerPara.Where(x => x.order == order).Count();
+			if (cnt > 0)
+			{
+				var sent = innerPara[order];
+				if (sent.sentstruct == null)
+					sent.sentstruct = new SentenceMap();
+				//sent.sentstruct = new SentenceMap(sentstruct);
+				sent.IsActual = true;
+			}
+			/*
 			var sent = innerPara.Where(x => x.order == order).FirstOrDefault();
 			if (!String.IsNullOrEmpty(sent.sentence))
 			{
 				sent.sentstruct = sentstruct;
 				sent.IsActual = true;
-			}
+			}*/
 		}
+
+		/// <summary>
+		/// Запиcь в хранилище предложения новой структуры синтана этого предложения.
+		/// </summary>
+		public void AddSentStruct(int order, SentenceMap sentstruct)
+		{
+			var sprop = new SentProps();
+			sprop.order = order;
+			sprop.sentstruct = new SentenceMap(sentstruct);
+			innerPara.Add(sprop);
+
+		}
+
 	}
 }

@@ -45,7 +45,7 @@ namespace dbMQserverTests
 			SQLiteConnector dbConnector = SQLiteConnector.Instance;
 
 			// act
-			dbConnector.selectAll("mSiGram");
+			dbConnector.selectAll("mParagraphs");
 
 			// assert
 			Assert.AreEqual(0, 0);

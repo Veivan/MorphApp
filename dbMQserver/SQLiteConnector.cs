@@ -92,10 +92,10 @@ namespace dbMQserver
 			{
 				try
 				{
-					m_sqlCmd.CommandText = "INSERT INTO mLemms(lx_id, sp_id, lex) VALUES(NULL, @sp_id, @lex)";
+					m_sqlCmd.CommandText = "INSERT INTO mLemms(lx_id, sp_id, lemma) VALUES(NULL, @sp_id, @lemma)";
 					m_sqlCmd.Parameters.Clear();
 					m_sqlCmd.Parameters.Add(new SQLiteParameter("@sp_id", sp_id));
-					m_sqlCmd.Parameters.Add(new SQLiteParameter("@lex", lemma.ToLower()));
+					m_sqlCmd.Parameters.Add(new SQLiteParameter("@lemma", lemma.ToLower()));
 					m_sqlCmd.ExecuteNonQuery();
 
 					m_sqlCmd.CommandText = "SELECT last_insert_rowid()";
@@ -121,10 +121,10 @@ namespace dbMQserver
 			long result = -1;
 			try
 			{
-				m_sqlCmd.CommandText = "SELECT lx_id FROM mLemms WHERE lex = @lex AND sp_id = @sp_id";
+				m_sqlCmd.CommandText = "SELECT lx_id FROM mLemms WHERE lemma = @lemma AND sp_id = @sp_id";
 				m_sqlCmd.Parameters.Clear();
 				m_sqlCmd.Parameters.Add(new SQLiteParameter("@sp_id", sp_id));
-				m_sqlCmd.Parameters.Add(new SQLiteParameter("@lex", lemma.ToLower()));
+				m_sqlCmd.Parameters.Add(new SQLiteParameter("@lemma", lemma.ToLower()));
 				// Читаем только первую запись
 				var resp = m_sqlCmd.ExecuteScalar();
 				if (resp != null)
@@ -240,7 +240,7 @@ namespace dbMQserver
 			try
 			{
 				m_sqlCmd.CommandText =
-					String.Format("INSERT INTO mGrammems(gr_id, с_id, sg_id, sorder) VALUES(NULL, {0}, {1}, {2})",
+					String.Format("INSERT INTO mGrammems(gr_id, с_id, sg_id, intval) VALUES(NULL, {0}, {1}, {2})",
 					с_id, sg_id, intval);
 				m_sqlCmd.ExecuteNonQuery();
 
@@ -319,6 +319,35 @@ namespace dbMQserver
 			return reslist;
 		}
 
+		/// <summary>
+		/// Чтение записей из mGrammems, относящихся к слову с_id.
+		/// </summary>
+		/// <param name="с_id">ID слова</param>
+		/// <returns>Список данных о слове</returns>
+		public List<KeyValuePair<int, int>> ReadGrammemsDB(long с_id)
+		{
+			var reslist = new List<KeyValuePair<int, int>>();
+			try
+			{
+				m_sqlCmd.CommandText = String.Format("SELECT sg_id, intval FROM mPhraseContent WHERE с_id = {0}", с_id);
+
+				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
+				string line = String.Empty;
+				while (r.Read())
+				{
+					var pair = new KeyValuePair<int, int>((int)r["sg_id"], (int)r["intval"]);
+					reslist.Add(pair);
+				}
+				r.Close();
+			}
+			catch (SQLiteException ex)
+			{
+				Console.WriteLine("Error: " + ex.Message);
+				System.Diagnostics.Debug.WriteLine(ex.Message);
+			}
+			return reslist;
+		}
+
 		/*// <summary>
 		/// Удаление записей из mPhrases, относящихся к абзацу pg_id и порядок в предложении у которых больше maxcnt.
 		/// </summary>
@@ -375,14 +404,22 @@ namespace dbMQserver
 					case "mSiGram":
 						m_sqlCmd.CommandText = "SELECT sg_id, property FROM mSiGram";
 						break;
+					case "mParagraphs":
+						m_sqlCmd.CommandText = "SELECT pg_id, created_at FROM mParagraphs";
+						break;
+					case "mPhrases":
+						m_sqlCmd.CommandText = "SELECT ph_id, pg_id, sorder, created_at FROM mPhrases";
+						break;
+					case "mPhraseContent":
+						m_sqlCmd.CommandText = "SELECT с_id, ph_id, lx_id, sorder FROM mPhraseContent";
+						break;
 				}
-				//m_sqlCmd.CommandText = "SELECT с_id, ph_id, w_id FROM mPhraseContent";
+				//m_sqlCmd.CommandText = "SELECT  ph_id, w_id FROM ";
 
 				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
 				string line = String.Empty;
 				while (r.Read())
 				{
-					//line = r["с_id"].ToString() + ", " + r["ph_id"].ToString() + ", " + r["w_id"].ToString();
 					switch (nTable)
 					{
 						case "mSpParts":
@@ -390,6 +427,15 @@ namespace dbMQserver
 							break;
 						case "mSiGram":
 							line = r["sg_id"].ToString() + ", " + r["property"];
+							break;
+						case "mParagraphs":
+							line = r["pg_id"].ToString() + ", " + r["created_at"].ToString();
+							break;
+						case "mPhrases":
+							line = r["ph_id"].ToString() + ", " + r["pg_id"].ToString() + ", " + r["sorder"].ToString();
+							break;
+						case "mPhraseContent":
+							line = r["с_id"].ToString() + ", " + r["ph_id"].ToString() + ", " + r["lx_id"].ToString();
 							break;
 					}
 					//Console.WriteLine(line);

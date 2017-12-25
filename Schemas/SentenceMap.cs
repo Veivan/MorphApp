@@ -37,6 +37,24 @@ namespace Schemas
 		private List<tNode> treeList = new List<tNode>();
 
 		/// <summary>
+		/// Конструктор по умолчанию
+		/// </summary>
+		public SentenceMap()
+		{ 
+		}
+
+		/// <summary>
+		/// Конструктор - копировщик.
+		/// </summary>
+		public SentenceMap(SentenceMap map)
+		{
+			this.SentenceID = map.SentenceID;
+			foreach (var w in map.words)
+				this.words.Add(w.Key, w.Value);
+			this.treeList.AddRange(map.treeList);
+		}
+
+		/// <summary>
 		/// Количество слов предложения.
 		/// </summary>
 		public int Capasity
