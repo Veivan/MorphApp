@@ -78,7 +78,7 @@ namespace dbMQserver
             if (cnt > 0)
             {
                 var node = nodes.Where(x => x.index == order).First();
-                dbConnector.InsertSyntNodesDB(c_id, node.Level, node.linktype);
+                dbConnector.InsertSyntNodesDB(c_id, node.linktype, node.Level);
             }
         }
 
@@ -94,9 +94,9 @@ namespace dbMQserver
 				sent.SentenceID = phID;
 				// Чтение данных о словах
 				var wstructs = dbConnector.ReadPhraseContentDB(phID);
-				for (int j = 0; j < wstructs.Count; j++)
+				for (int i = 0; i < wstructs.Count; i++)
 				{
-					var wstr = wstructs[j];
+					var wstr = wstructs[i];
 					// В БД не хранится ID словарной статьи GREN. 
 					var word = new WordMap(-1, wstr.sp_id);
 					word.EntryName = wstr.lemma;
@@ -106,10 +106,15 @@ namespace dbMQserver
 					{
 						word.AddPair(pair.Key, pair.Value);
 					}
-					sent.AddWord(j, word);
+					sent.AddWord(i, word);
 				}
 				// Чтение списка синтаксических связей предложения
-
+                var nodelist = dbConnector.ReadSyntNodesDB(phID);
+				for (short i = 0; i < nodelist.Count; i++)
+				{
+                    var node = nodelist[i];
+                    sent.AddNode(i, node.Level, node.linktype);
+                }
 				sentlist.Add(sent);
 			}
 		}

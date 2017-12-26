@@ -153,14 +153,13 @@ namespace dbMQserver
 			var IsParaExists = false;
 			if (pg_id != -1)
 			{
-				m_sqlCmd.CommandText = "SELECT COUNT(*) FROM mParagraphs WHERE pg_id = @pg_id";
-				m_sqlCmd.Parameters.Clear();
+                m_sqlCmd.CommandText = "SELECT * FROM mParagraphs WHERE pg_id = @pg_id";
+                m_sqlCmd.Parameters.Clear();
 				m_sqlCmd.Parameters.Add(new SQLiteParameter("@pg_id", pg_id));
-				// Читаем только первую запись
-				var resp = m_sqlCmd.ExecuteScalar();
-				if (resp != null && (long)resp > 0)
-					IsParaExists = true;
-			}
+                var executeScalar = m_sqlCmd.ExecuteScalar();
+                var resp = executeScalar == null ? 0 : 1;
+                IsParaExists = resp > 0;
+            }
 			return IsParaExists;
 		}
 

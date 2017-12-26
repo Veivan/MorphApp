@@ -113,6 +113,16 @@ namespace MorphApp
 				var sents = courier.GetSeparatedSentsList();
 				foreach (var sentrep in sents)
 					sb.Append(sentrep + "\r\n");
+
+                // Отображение синт связей
+                var ordlist = sent.GetTreeList();
+                foreach (var x in ordlist)
+                {
+                    sb.Append(new String('\t', x.Level) +
+                        String.Format("{0} Level {1} link {2} \r\n",
+                            sent.GetWordByOrder(x.index).EntryName, x.Level, x.linktype));
+                }
+
 			}
 			memoOut.Text = sb.ToString();
 		}
@@ -149,7 +159,8 @@ namespace MorphApp
 				sb.Append(word.EntryName + "\r\n");
 			}
 
-			var ordlist = sent.GetTreeList();
+            // Отображение синт связей
+            var ordlist = sent.GetTreeList();
 			foreach (var x in ordlist)
 			{
 				sb.Append(new String('\t', x.Level) +
