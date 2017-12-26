@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Schemas;
 using System.Data.SQLite;
 
@@ -36,7 +37,8 @@ namespace dbMQserver
 						{
 							var sent = sentlist[k];
 							var ph_id = dbConnector.InsertPhraseDB(paragraphID, k);
-							// Сохранение слов предложения в БД
+                            var nodes = sent.GetTreeList();
+                            // Сохранение слов предложения в БД
 							for (short i = 0; i < sent.Capasity; i++)
 							{
 								var word = sent.GetWordByOrder(i);
@@ -49,10 +51,9 @@ namespace dbMQserver
 								{
 									dbConnector.InsertGrammemDB(c_id, key, grammems[key]);
 								}
-							}
-							// Сохранение списка синтаксических связей предложения в БД
-							var nodes = sent.GetTreeList();
-
+                                // Сохранение списка синтаксических связей предложения в БД
+                                InsertNode(nodes, word.order, c_id);
+                            }
 						}
 						break;
 					}
@@ -65,6 +66,21 @@ namespace dbMQserver
 			//TruncateParaContent(sentlist.Count);
 
 		}
+
+        /// <summary>
+        /// Определение узла в синтаксическом дереве предложения по порядковому номеру слова в предложении.
+        /// Запись в mSyntNodes.
+        /// </summary>
+        /// <returns></returns>
+        private void InsertNode(List<tNode> nodes, int order, long c_id)
+        {
+            var cnt = nodes.Where(x => x.index == order).Count();
+            if (cnt > 0)
+            {
+                var node = nodes.Where(x => x.index == order).First();
+                dbConnector.InsertSyntNodesDB(c_id, node.Level, node.linktype);
+            }
+        }
 
 		public void Read()
 		{

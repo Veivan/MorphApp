@@ -69,7 +69,10 @@ namespace dbMQserver
 					+ "	gr_id integer PRIMARY KEY, с_id integer, sg_id integer, intval integer);";
 				m_sqlCmd.ExecuteNonQuery();
 
-			}
+                m_sqlCmd.CommandText = "CREATE TABLE IF NOT EXISTS mSyntNodes (\n"
+                    + "	sn_id integer PRIMARY KEY, с_id integer, ln_id integer, level integer);";
+                m_sqlCmd.ExecuteNonQuery();
+            }
 			catch (SQLiteException ex)
 			{
 				Console.WriteLine("Error: " + ex.Message);
@@ -252,12 +255,36 @@ namespace dbMQserver
 			}
 			catch (SQLiteException ex)
 			{
-				Console.WriteLine("Error: " + ex.Message);
+                Console.WriteLine("Error InsertGrammemDB: " + ex.Message);
 			}
 			return result;
 		}
 
-		/// <summary>
+        /// <summary>
+        /// Вставка в mSyntNodes.
+        /// </summary>
+        /// <returns>ID</returns>
+        public long InsertSyntNodesDB(long с_id, int ln_id, int level)
+        {
+            long result = -1;
+            try
+            {
+                m_sqlCmd.CommandText =
+                    String.Format("INSERT INTO mSyntNodes(sn_id, с_id, ln_id, level) VALUES(NULL, {0}, {1}, {2})",
+                    с_id, ln_id, level);
+                m_sqlCmd.ExecuteNonQuery();
+
+                m_sqlCmd.CommandText = "SELECT last_insert_rowid()";
+                result = (long)m_sqlCmd.ExecuteScalar();
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("Error InsertSyntNodesDB: " + ex.Message);
+            }
+            return result;
+        }
+
+        /// <summary>
 		/// Чтение записей из mPhrases, относящихся к абзацу pg_id.
 		/// </summary>
 		/// <param name="pg_id">ID параграфа</param>
@@ -351,7 +378,42 @@ namespace dbMQserver
 			return reslist;
 		}
 
-		/*// <summary>
+        /// <summary>
+        /// Чтение записей из mSyntNodes, относящихся к предложению ph_id.
+        /// </summary>
+        /// <param name="ph_id">ID предложения</param>
+        /// <returns>Список синт. связей предложения</returns>
+        public List<tNode> ReadSyntNodesDB(long ph_id)
+        {
+            var reslist = new List<tNode>();
+            try
+            {
+                m_sqlCmd.CommandText = String.Format("SELECT A.ln_id, A.level, B.sorder FROM mSyntNodes A " +
+                    "JOIN mPhraseContent B ON B.с_id = A.с_id WHERE B.ph_id = {0} ORDER BY A.sn_id", ph_id);
+                SQLiteDataReader r = m_sqlCmd.ExecuteReader();
+                string line = String.Empty;
+                short i = 0;
+                while (r.Read())
+                {
+                    var node = new tNode();
+                    node.ID = i;
+                    node.Level = r.GetInt32(1);
+                    node.index = r.GetInt32(2);
+                    node.linktype = r.GetInt32(0);
+                    reslist.Add(node);
+                    i++;
+                }
+                r.Close();
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+            return reslist;
+        }
+        
+        /*// <summary>
 		/// Удаление записей из mPhrases, относящихся к абзацу pg_id и порядок в предложении у которых больше maxcnt.
 		/// </summary>
 		private void TruncateParaContent(int maxcnt)
@@ -416,11 +478,16 @@ namespace dbMQserver
 					case "mPhrases":
 						m_sqlCmd.CommandText = "SELECT ph_id, pg_id, sorder, created_at FROM mPhrases";
 						break;
-					case "mPhraseContent":
-						m_sqlCmd.CommandText = "SELECT с_id, ph_id, lx_id, sorder FROM mPhraseContent";
-						break;
-				}
-				//m_sqlCmd.CommandText = "SELECT  ph_id, w_id FROM ";
+                    case "mPhraseContent":
+                        m_sqlCmd.CommandText = "SELECT с_id, ph_id, lx_id, sorder FROM mPhraseContent";
+                        break;
+                    case "mGrammems":
+                        m_sqlCmd.CommandText = "SELECT gr_id, с_id, sg_id, intval FROM mGrammems";
+                        break;
+                    case "mSyntNodes":
+                        m_sqlCmd.CommandText = "SELECT sn_id, с_id, ln_id, level FROM mSyntNodes";
+                        break;
+                }
 
 				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
 				string line = String.Empty;
@@ -446,7 +513,13 @@ namespace dbMQserver
 						case "mPhraseContent":
 							line = r["с_id"].ToString() + ", " + r["ph_id"].ToString() + ", " + r["lx_id"].ToString();
 							break;
-					}
+                        case "mGrammems":
+                            line = r["gr_id"].ToString() + ", " + r["с_id"].ToString() + ", " + r["sg_id"].ToString() + ", " + r["intval"].ToString();
+                            break;
+                        case "mSyntNodes":
+                            line = r["sn_id"].ToString() + ", " + r["с_id"].ToString() + ", " + r["ln_id"].ToString() + ", " + r["level"].ToString();
+                            break;
+                    }
 					//Console.WriteLine(line);
 					System.Diagnostics.Debug.WriteLine(line);
 				}
