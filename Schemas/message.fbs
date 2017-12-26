@@ -9,16 +9,19 @@ enum ComType:long { Undef = 0,
 			// команды svMorph
 			Token = 1, Synt = 2, Morph = 3, Separ = 4, Repar = 5,
 			// команды svSUBD
-			SaveLex = 11, GetWord = 12, SavePara = 13, ReadPara = 14
+			SaveLex = 11, GetWord = 12, SavePara = 13, ReadPara = 14,
+			//GetRecords = 15
+			GetParags = 15
 			}   
 
 table Message {
 	messType:MessType;
 	serverType:ServType;
 	comtype:ComType = Undef;	// Enum.
-	params:[Param];				// Vector of tables.
-	sentences:[Sentence];		// Vector of tables.
-	paragraphID : long;			// ID СУБД
+	params:[Param];		// Vector of tables.
+	sentences:[Sentence];	// Vector of tables.
+	paragraphs:[Paragraph];	// Vector of tables - массив записей из mParagraphs.
+	paragraphID : long;		// ID СУБД
 }
 
 table Param {
@@ -31,7 +34,7 @@ table Sentence {
 	nodes:[Node];		// Vector of tables.
 	words:[Lexema];		// Vector of tables.
 	phrase:string;		// Текст предложения
-	SentenceID : long;	// ID СУБД
+	SentenceID : long;		// ID СУБД
 }
 
 table Node
@@ -39,7 +42,7 @@ table Node
 	ID : short;			// Порядок добавления в дерево, для сортировки в виде плоского списка
 	Level : short;		// Уровень вложенности, для отображения
 	index : short;		// порядковый номер в предложении
-	linktype : short;	// тип взаимосвязи с родителем
+	linktype : short;		// тип взаимосвязи с родителем
 	NodeID : long;		// ID СУБД
 }
 
@@ -55,6 +58,11 @@ table Lexema {
 table Grammema {
   key:short;
   value:short;
+}
+
+table Paragraph {
+	pg_id :  long;		// ID СУБД
+	created_at : long;
 }
 
 root_type Message;

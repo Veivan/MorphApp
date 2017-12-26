@@ -17,6 +17,7 @@ public enum ComType : long
  GetWord = 12,
  SavePara = 13,
  ReadPara = 14,
+ GetParags = 15,
 };
 
 

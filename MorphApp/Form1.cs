@@ -27,7 +27,26 @@ namespace MorphApp
 		private void Form1_Load(object sender, EventArgs e)
 		{
 			memoInp.Text = "Мама мыла";
-		}
+            MyFontList fonts = new MyFontList();
+            for (int i = 0; i < FontFamily.Families.Length; i++)
+            {
+                if (FontFamily.Families[i].IsStyleAvailable(FontStyle.Regular))
+                    fonts.Add(new Font(FontFamily.Families[i], 11.0F, FontStyle.Regular));
+            }
+
+           MyNodesList nodes = new MyNodesList();
+            for (int i = 0; i < 3; i++)
+            {
+                nodes.Add(new mmNode(i.ToString(), i * 2));
+            }
+
+            binding1.DataSource = nodes;
+            listBox1.DataSource = binding1;
+            listBox1.DisplayMember = "name";
+
+            dataGridView1.DataSource = binding1;
+            dataGridView1.AutoGenerateColumns = true;
+        }
 
 		private void btSavePara_Click(object sender, EventArgs e)
 		{
@@ -230,5 +249,97 @@ namespace MorphApp
 			memoOut.Text = "";
 		}
 
+        private void btSelect_Click(object sender, EventArgs e)
+        {
+
+
+         /*   courier.servType = TMorph.Schema.ServType.svSUBD;
+            courier.command = TMorph.Schema.ComType.GetParags;
+            courier.SendText(""); */
+            
+            /*    DataTable dTable = new DataTable();
+     String sqlQuery;
+
+     if (m_dbConn.State != ConnectionState.Open)
+     {
+         MessageBox.Show("Open connection with database");
+         return;
+     }
+    
+     try
+     {
+         sqlQuery = "SELECT * FROM Catalog";
+         SQLiteDataAdapter adapter = new SQLiteDataAdapter(sqlQuery, m_dbConn);
+         adapter.Fill(dTable);
+
+         if (dTable.Rows.Count > 0)
+         {
+             dgvViewer.Rows.Clear();
+
+             for (int i = 0; i < dTable.Rows.Count; i++)
+                 dgvViewer.Rows.Add(dTable.Rows[i].ItemArray);
+         }
+         else
+             MessageBox.Show("Database is empty");
+     }
+     catch (SQLiteException ex)
+     {               
+         MessageBox.Show("Error: " + ex.Message);
+     }           */
+        }
+
+        public class mmNode
+        {
+            public string name { get; set; }
+            public int Level;
+            private string p;
+            private int p_2;
+
+            public mmNode(string p, int p_2)
+            {
+                this.name = p;
+                this.Level = p_2;
+            }
+        }
+        public class MyNodesList : BindingList<mmNode>
+        {
+            protected override bool SupportsSearchingCore
+            {
+                get { return true; }
+            }
+            protected override int FindCore(PropertyDescriptor prop, object key)
+            {
+                /*/ Ignore the prop value and search by family name.
+                for (int i = 0; i < Count; ++i)
+                {
+                    if (Items[i].FontFamily.Name.ToLower() == ((string)key).ToLower())
+                        return i;
+
+                } */
+                return -1;
+            }
+        }
+
+        public class MyFontList : BindingList<Font>
+        {
+
+            protected override bool SupportsSearchingCore
+            {
+                get { return true; }
+            }
+            protected override int FindCore(PropertyDescriptor prop, object key)
+            {
+                // Ignore the prop value and search by family name.
+                for (int i = 0; i < Count; ++i)
+                {
+                    if (Items[i].FontFamily.Name.ToLower() == ((string)key).ToLower())
+                        return i;
+
+                }
+                return -1;
+            }
+
+
+        }
 	}
 }

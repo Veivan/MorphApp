@@ -234,7 +234,11 @@ namespace MorphApp
 						ParagraphID = parastr.ParagraphID;
 						break;
 					}
-			}
+                case ComType.GetParags:
+                    {
+                        break;
+                    }
+            }
 
 			Message.StartMessage(builder);
 			Message.AddMessType(builder, MessType.mRequest);

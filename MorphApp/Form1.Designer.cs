@@ -28,167 +28,207 @@
         /// </summary>
         private void InitializeComponent()
         {
-			this.btGetMorph = new System.Windows.Forms.Button();
-			this.memoInp = new System.Windows.Forms.TextBox();
-			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-			this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
-			this.memoOut = new System.Windows.Forms.TextBox();
-			this.btMakeSynAn = new System.Windows.Forms.Button();
-			this.btDBGetWord = new System.Windows.Forms.Button();
-			this.btSaveLex = new System.Windows.Forms.Button();
-			this.btTokenize = new System.Windows.Forms.Button();
-			this.btRestore = new System.Windows.Forms.Button();
-			this.btSavePara = new System.Windows.Forms.Button();
-			this.btReadPara = new System.Windows.Forms.Button();
-			this.statusStrip1.SuspendLayout();
-			this.SuspendLayout();
-			// 
-			// btGetMorph
-			// 
-			this.btGetMorph.Location = new System.Drawing.Point(12, 316);
-			this.btGetMorph.Name = "btGetMorph";
-			this.btGetMorph.Size = new System.Drawing.Size(75, 23);
-			this.btGetMorph.TabIndex = 0;
-			this.btGetMorph.Text = "MorphAn";
-			this.btGetMorph.UseVisualStyleBackColor = true;
-			this.btGetMorph.Click += new System.EventHandler(this.btGetMorph_Click);
-			// 
-			// memoInp
-			// 
-			this.memoInp.Location = new System.Drawing.Point(12, 12);
-			this.memoInp.Multiline = true;
-			this.memoInp.Name = "memoInp";
-			this.memoInp.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.memoInp.Size = new System.Drawing.Size(363, 123);
-			this.memoInp.TabIndex = 2;
-			// 
-			// statusStrip1
-			// 
-			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.components = new System.ComponentModel.Container();
+            this.btGetMorph = new System.Windows.Forms.Button();
+            this.memoInp = new System.Windows.Forms.TextBox();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.memoOut = new System.Windows.Forms.TextBox();
+            this.btMakeSynAn = new System.Windows.Forms.Button();
+            this.btDBGetWord = new System.Windows.Forms.Button();
+            this.btSaveLex = new System.Windows.Forms.Button();
+            this.btTokenize = new System.Windows.Forms.Button();
+            this.btRestore = new System.Windows.Forms.Button();
+            this.btSavePara = new System.Windows.Forms.Button();
+            this.btReadPara = new System.Windows.Forms.Button();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.btSelect = new System.Windows.Forms.Button();
+            this.binding1 = new System.Windows.Forms.BindingSource(this.components);
+            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.statusStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.binding1)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // btGetMorph
+            // 
+            this.btGetMorph.Location = new System.Drawing.Point(12, 316);
+            this.btGetMorph.Name = "btGetMorph";
+            this.btGetMorph.Size = new System.Drawing.Size(75, 23);
+            this.btGetMorph.TabIndex = 0;
+            this.btGetMorph.Text = "MorphAn";
+            this.btGetMorph.UseVisualStyleBackColor = true;
+            this.btGetMorph.Click += new System.EventHandler(this.btGetMorph_Click);
+            // 
+            // memoInp
+            // 
+            this.memoInp.Location = new System.Drawing.Point(12, 12);
+            this.memoInp.Multiline = true;
+            this.memoInp.Name = "memoInp";
+            this.memoInp.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.memoInp.Size = new System.Drawing.Size(363, 123);
+            this.memoInp.TabIndex = 2;
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1,
             this.toolStripStatusLabel2});
-			this.statusStrip1.Location = new System.Drawing.Point(0, 345);
-			this.statusStrip1.Name = "statusStrip1";
-			this.statusStrip1.Size = new System.Drawing.Size(387, 22);
-			this.statusStrip1.TabIndex = 3;
-			this.statusStrip1.Text = "statusStrip1";
-			// 
-			// toolStripStatusLabel1
-			// 
-			this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-			this.toolStripStatusLabel1.Size = new System.Drawing.Size(97, 17);
-			this.toolStripStatusLabel1.Text = "Версия словаря:";
-			// 
-			// toolStripStatusLabel2
-			// 
-			this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-			this.toolStripStatusLabel2.Size = new System.Drawing.Size(0, 17);
-			// 
-			// memoOut
-			// 
-			this.memoOut.Location = new System.Drawing.Point(12, 161);
-			this.memoOut.Multiline = true;
-			this.memoOut.Name = "memoOut";
-			this.memoOut.ReadOnly = true;
-			this.memoOut.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.memoOut.Size = new System.Drawing.Size(363, 123);
-			this.memoOut.TabIndex = 4;
-			// 
-			// btMakeSynAn
-			// 
-			this.btMakeSynAn.Location = new System.Drawing.Point(93, 316);
-			this.btMakeSynAn.Name = "btMakeSynAn";
-			this.btMakeSynAn.Size = new System.Drawing.Size(75, 23);
-			this.btMakeSynAn.TabIndex = 5;
-			this.btMakeSynAn.Text = "SynAn";
-			this.btMakeSynAn.UseVisualStyleBackColor = true;
-			this.btMakeSynAn.Click += new System.EventHandler(this.btMakeSynAn_Click);
-			// 
-			// btDBGetWord
-			// 
-			this.btDBGetWord.Location = new System.Drawing.Point(174, 316);
-			this.btDBGetWord.Name = "btDBGetWord";
-			this.btDBGetWord.Size = new System.Drawing.Size(75, 23);
-			this.btDBGetWord.TabIndex = 6;
-			this.btDBGetWord.Text = "DBGetWord";
-			this.btDBGetWord.UseVisualStyleBackColor = true;
-			this.btDBGetWord.Click += new System.EventHandler(this.btDBGetWord_Click);
-			// 
-			// btSaveLex
-			// 
-			this.btSaveLex.Location = new System.Drawing.Point(255, 316);
-			this.btSaveLex.Name = "btSaveLex";
-			this.btSaveLex.Size = new System.Drawing.Size(78, 23);
-			this.btSaveLex.TabIndex = 7;
-			this.btSaveLex.Text = "SaveLex";
-			this.btSaveLex.UseVisualStyleBackColor = true;
-			this.btSaveLex.Click += new System.EventHandler(this.btSaveLex_Click);
-			// 
-			// btTokenize
-			// 
-			this.btTokenize.Location = new System.Drawing.Point(12, 290);
-			this.btTokenize.Name = "btTokenize";
-			this.btTokenize.Size = new System.Drawing.Size(75, 20);
-			this.btTokenize.TabIndex = 8;
-			this.btTokenize.Text = "Tokenize";
-			this.btTokenize.UseVisualStyleBackColor = true;
-			this.btTokenize.Click += new System.EventHandler(this.btTokenize_Click);
-			// 
-			// btRestore
-			// 
-			this.btRestore.Location = new System.Drawing.Point(93, 290);
-			this.btRestore.Name = "btRestore";
-			this.btRestore.Size = new System.Drawing.Size(75, 20);
-			this.btRestore.TabIndex = 9;
-			this.btRestore.Text = "Restore";
-			this.btRestore.UseVisualStyleBackColor = true;
-			this.btRestore.Click += new System.EventHandler(this.btRestore_Click);
-			// 
-			// btSavePara
-			// 
-			this.btSavePara.Location = new System.Drawing.Point(174, 290);
-			this.btSavePara.Name = "btSavePara";
-			this.btSavePara.Size = new System.Drawing.Size(75, 20);
-			this.btSavePara.TabIndex = 10;
-			this.btSavePara.Text = "Save para";
-			this.btSavePara.UseVisualStyleBackColor = true;
-			this.btSavePara.Click += new System.EventHandler(this.btSavePara_Click);
-			// 
-			// btReadPara
-			// 
-			this.btReadPara.Location = new System.Drawing.Point(255, 290);
-			this.btReadPara.Name = "btReadPara";
-			this.btReadPara.Size = new System.Drawing.Size(75, 20);
-			this.btReadPara.TabIndex = 11;
-			this.btReadPara.Text = "Read Para";
-			this.btReadPara.UseVisualStyleBackColor = true;
-			this.btReadPara.Click += new System.EventHandler(this.btReadPara_Click);
-			// 
-			// Form1
-			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(387, 367);
-			this.Controls.Add(this.btReadPara);
-			this.Controls.Add(this.btSavePara);
-			this.Controls.Add(this.btRestore);
-			this.Controls.Add(this.btTokenize);
-			this.Controls.Add(this.btSaveLex);
-			this.Controls.Add(this.btDBGetWord);
-			this.Controls.Add(this.btMakeSynAn);
-			this.Controls.Add(this.memoOut);
-			this.Controls.Add(this.statusStrip1);
-			this.Controls.Add(this.memoInp);
-			this.Controls.Add(this.btGetMorph);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-			this.Name = "Form1";
-			this.Text = "Form1";
-			this.Load += new System.EventHandler(this.Form1_Load);
-			this.statusStrip1.ResumeLayout(false);
-			this.statusStrip1.PerformLayout();
-			this.ResumeLayout(false);
-			this.PerformLayout();
+            this.statusStrip1.Location = new System.Drawing.Point(0, 713);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(371, 22);
+            this.statusStrip1.TabIndex = 3;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(97, 17);
+            this.toolStripStatusLabel1.Text = "Версия словаря:";
+            // 
+            // toolStripStatusLabel2
+            // 
+            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(0, 17);
+            // 
+            // memoOut
+            // 
+            this.memoOut.Location = new System.Drawing.Point(12, 161);
+            this.memoOut.Multiline = true;
+            this.memoOut.Name = "memoOut";
+            this.memoOut.ReadOnly = true;
+            this.memoOut.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.memoOut.Size = new System.Drawing.Size(363, 123);
+            this.memoOut.TabIndex = 4;
+            // 
+            // btMakeSynAn
+            // 
+            this.btMakeSynAn.Location = new System.Drawing.Point(93, 316);
+            this.btMakeSynAn.Name = "btMakeSynAn";
+            this.btMakeSynAn.Size = new System.Drawing.Size(75, 23);
+            this.btMakeSynAn.TabIndex = 5;
+            this.btMakeSynAn.Text = "SynAn";
+            this.btMakeSynAn.UseVisualStyleBackColor = true;
+            this.btMakeSynAn.Click += new System.EventHandler(this.btMakeSynAn_Click);
+            // 
+            // btDBGetWord
+            // 
+            this.btDBGetWord.Location = new System.Drawing.Point(174, 316);
+            this.btDBGetWord.Name = "btDBGetWord";
+            this.btDBGetWord.Size = new System.Drawing.Size(75, 23);
+            this.btDBGetWord.TabIndex = 6;
+            this.btDBGetWord.Text = "DBGetWord";
+            this.btDBGetWord.UseVisualStyleBackColor = true;
+            this.btDBGetWord.Click += new System.EventHandler(this.btDBGetWord_Click);
+            // 
+            // btSaveLex
+            // 
+            this.btSaveLex.Location = new System.Drawing.Point(255, 316);
+            this.btSaveLex.Name = "btSaveLex";
+            this.btSaveLex.Size = new System.Drawing.Size(78, 23);
+            this.btSaveLex.TabIndex = 7;
+            this.btSaveLex.Text = "SaveLex";
+            this.btSaveLex.UseVisualStyleBackColor = true;
+            this.btSaveLex.Click += new System.EventHandler(this.btSaveLex_Click);
+            // 
+            // btTokenize
+            // 
+            this.btTokenize.Location = new System.Drawing.Point(12, 290);
+            this.btTokenize.Name = "btTokenize";
+            this.btTokenize.Size = new System.Drawing.Size(75, 20);
+            this.btTokenize.TabIndex = 8;
+            this.btTokenize.Text = "Tokenize";
+            this.btTokenize.UseVisualStyleBackColor = true;
+            this.btTokenize.Click += new System.EventHandler(this.btTokenize_Click);
+            // 
+            // btRestore
+            // 
+            this.btRestore.Location = new System.Drawing.Point(93, 290);
+            this.btRestore.Name = "btRestore";
+            this.btRestore.Size = new System.Drawing.Size(75, 20);
+            this.btRestore.TabIndex = 9;
+            this.btRestore.Text = "Restore";
+            this.btRestore.UseVisualStyleBackColor = true;
+            this.btRestore.Click += new System.EventHandler(this.btRestore_Click);
+            // 
+            // btSavePara
+            // 
+            this.btSavePara.Location = new System.Drawing.Point(174, 290);
+            this.btSavePara.Name = "btSavePara";
+            this.btSavePara.Size = new System.Drawing.Size(75, 20);
+            this.btSavePara.TabIndex = 10;
+            this.btSavePara.Text = "Save para";
+            this.btSavePara.UseVisualStyleBackColor = true;
+            this.btSavePara.Click += new System.EventHandler(this.btSavePara_Click);
+            // 
+            // btReadPara
+            // 
+            this.btReadPara.Location = new System.Drawing.Point(255, 290);
+            this.btReadPara.Name = "btReadPara";
+            this.btReadPara.Size = new System.Drawing.Size(75, 20);
+            this.btReadPara.TabIndex = 11;
+            this.btReadPara.Text = "Read Para";
+            this.btReadPara.UseVisualStyleBackColor = true;
+            this.btReadPara.Click += new System.EventHandler(this.btReadPara_Click);
+            // 
+            // dataGridView1
+            // 
+            this.dataGridView1.AutoGenerateColumns = false;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.DataSource = this.binding1;
+            this.dataGridView1.Location = new System.Drawing.Point(12, 358);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.Size = new System.Drawing.Size(354, 275);
+            this.dataGridView1.TabIndex = 12;
+            // 
+            // btSelect
+            // 
+            this.btSelect.Location = new System.Drawing.Point(12, 639);
+            this.btSelect.Name = "btSelect";
+            this.btSelect.Size = new System.Drawing.Size(75, 23);
+            this.btSelect.TabIndex = 13;
+            this.btSelect.Text = "Select";
+            this.btSelect.UseVisualStyleBackColor = true;
+            this.btSelect.Click += new System.EventHandler(this.btSelect_Click);
+            // 
+            // listBox1
+            // 
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.Location = new System.Drawing.Point(213, 628);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(120, 95);
+            this.listBox1.TabIndex = 14;
+            // 
+            // Form1
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(371, 735);
+            this.Controls.Add(this.listBox1);
+            this.Controls.Add(this.btSelect);
+            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.btReadPara);
+            this.Controls.Add(this.btSavePara);
+            this.Controls.Add(this.btRestore);
+            this.Controls.Add(this.btTokenize);
+            this.Controls.Add(this.btSaveLex);
+            this.Controls.Add(this.btDBGetWord);
+            this.Controls.Add(this.btMakeSynAn);
+            this.Controls.Add(this.memoOut);
+            this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.memoInp);
+            this.Controls.Add(this.btGetMorph);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Name = "Form1";
+            this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form1_Load);
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.binding1)).EndInit();
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -207,6 +247,10 @@
 		private System.Windows.Forms.Button btRestore;
 		private System.Windows.Forms.Button btSavePara;
 		private System.Windows.Forms.Button btReadPara;
+        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.Button btSelect;
+        private System.Windows.Forms.BindingSource binding1;
+        private System.Windows.Forms.ListBox listBox1;
     }
 }
 

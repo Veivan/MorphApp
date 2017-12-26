@@ -24,7 +24,9 @@ public struct Message : IFlatbufferObject
   public int ParamsLength { get { int o = __p.__offset(10); return o != 0 ? __p.__vector_len(o) : 0; } }
   public Sentence? Sentences(int j) { int o = __p.__offset(12); return o != 0 ? (Sentence?)(new Sentence()).__assign(__p.__indirect(__p.__vector(o) + j * 4), __p.bb) : null; }
   public int SentencesLength { get { int o = __p.__offset(12); return o != 0 ? __p.__vector_len(o) : 0; } }
-  public long ParagraphID { get { int o = __p.__offset(14); return o != 0 ? __p.bb.GetLong(o + __p.bb_pos) : (long)0; } }
+  public Paragraph? Paragraphs(int j) { int o = __p.__offset(14); return o != 0 ? (Paragraph?)(new Paragraph()).__assign(__p.__indirect(__p.__vector(o) + j * 4), __p.bb) : null; }
+  public int ParagraphsLength { get { int o = __p.__offset(14); return o != 0 ? __p.__vector_len(o) : 0; } }
+  public long ParagraphID { get { int o = __p.__offset(16); return o != 0 ? __p.bb.GetLong(o + __p.bb_pos) : (long)0; } }
 
   public static Offset<Message> CreateMessage(FlatBufferBuilder builder,
       MessType messType = MessType.mRequest,
@@ -32,10 +34,12 @@ public struct Message : IFlatbufferObject
       ComType comtype = ComType.Undef,
       VectorOffset paramsOffset = default(VectorOffset),
       VectorOffset sentencesOffset = default(VectorOffset),
+      VectorOffset paragraphsOffset = default(VectorOffset),
       long paragraphID = 0) {
-    builder.StartObject(6);
+    builder.StartObject(7);
     Message.AddParagraphID(builder, paragraphID);
     Message.AddComtype(builder, comtype);
+    Message.AddParagraphs(builder, paragraphsOffset);
     Message.AddSentences(builder, sentencesOffset);
     Message.AddParams(builder, paramsOffset);
     Message.AddServerType(builder, serverType);
@@ -43,7 +47,7 @@ public struct Message : IFlatbufferObject
     return Message.EndMessage(builder);
   }
 
-  public static void StartMessage(FlatBufferBuilder builder) { builder.StartObject(6); }
+  public static void StartMessage(FlatBufferBuilder builder) { builder.StartObject(7); }
   public static void AddMessType(FlatBufferBuilder builder, MessType messType) { builder.AddSbyte(0, (sbyte)messType, 0); }
   public static void AddServerType(FlatBufferBuilder builder, ServType serverType) { builder.AddSbyte(1, (sbyte)serverType, 0); }
   public static void AddComtype(FlatBufferBuilder builder, ComType comtype) { builder.AddLong(2, (long)comtype, 0); }
@@ -53,7 +57,10 @@ public struct Message : IFlatbufferObject
   public static void AddSentences(FlatBufferBuilder builder, VectorOffset sentencesOffset) { builder.AddOffset(4, sentencesOffset.Value, 0); }
   public static VectorOffset CreateSentencesVector(FlatBufferBuilder builder, Offset<Sentence>[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
   public static void StartSentencesVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
-  public static void AddParagraphID(FlatBufferBuilder builder, long paragraphID) { builder.AddLong(5, paragraphID, 0); }
+  public static void AddParagraphs(FlatBufferBuilder builder, VectorOffset paragraphsOffset) { builder.AddOffset(5, paragraphsOffset.Value, 0); }
+  public static VectorOffset CreateParagraphsVector(FlatBufferBuilder builder, Offset<Paragraph>[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
+  public static void StartParagraphsVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
+  public static void AddParagraphID(FlatBufferBuilder builder, long paragraphID) { builder.AddLong(6, paragraphID, 0); }
   public static Offset<Message> EndMessage(FlatBufferBuilder builder) {
     int o = builder.EndObject();
     return new Offset<Message>(o);
