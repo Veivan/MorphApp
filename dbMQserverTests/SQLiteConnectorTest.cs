@@ -43,11 +43,21 @@ namespace dbMQserverTests
 		{
 			// arrange
 			SQLiteConnector dbConnector = SQLiteConnector.Instance;
-
 			// act
             dbConnector.selectAll("mSyntNodes");
-
 			// assert
+			Assert.AreEqual(0, 0);
+		}
+
+		[TestMethod]
+		public void TestEmptyDB()
+		{
+			// arrange
+			SQLiteConnector dbConnector = SQLiteConnector.Instance;
+			// act
+			dbConnector.EmptyDB();
+			// assert
+			dbConnector.selectAll("mParagraphs");
 			Assert.AreEqual(0, 0);
 		}
 

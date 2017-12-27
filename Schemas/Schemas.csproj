@@ -60,6 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DocumentMap.cs" />
     <Compile Include="GrenEnums.cs" />
     <Compile Include="HasDict.cs" />
     <Compile Include="SentenceMap.cs" />

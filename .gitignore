@@ -21,5 +21,7 @@
 /SimpleTest/obj
 /dbMQserverTests/bin
 /dbMQserverTests/obj
+/DirectDBA/bin
+/DirectDBA/obj
 /MorphApp.suo
 /TestResults
