@@ -60,10 +60,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DocumentMap.cs" />
+    <Compile Include="ObjectMaps\ContainerMap.cs" />
+    <Compile Include="ObjectMaps\DocumentMap.cs" />
     <Compile Include="GrenEnums.cs" />
     <Compile Include="HasDict.cs" />
-    <Compile Include="SentenceMap.cs" />
+    <Compile Include="ObjectMaps\SentenceMap.cs" />
     <Compile Include="TMorph\Schema\ComType.cs" />
     <Compile Include="TMorph\Schema\Grammema.cs" />
     <Compile Include="TMorph\Schema\Lexema.cs" />
@@ -76,7 +77,7 @@
     <Compile Include="TMorph\Schema\Sentence.cs" />
     <Compile Include="TMorph\Schema\ServType.cs" />
     <Compile Include="Utils.cs" />
-    <Compile Include="WordMap.cs" />
+    <Compile Include="ObjectMaps\WordMap.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="message.fbs" />

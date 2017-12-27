@@ -196,6 +196,29 @@ namespace dbMQserver
 		}
 
 		/// <summary>
+		/// Вставка в mDocuments.
+		/// </summary>
+		/// <returns>ID документа</returns>
+		public long InsertDocumentDB()
+		{
+			long doc_id = -1;
+			try
+			{
+				m_sqlCmd.CommandText = String.Format("INSERT INTO mDocuments(doc_id, ct_id, name) VALUES(NULL, {0}, '{1}')",
+					8, "doc1");
+				m_sqlCmd.ExecuteNonQuery();
+
+				m_sqlCmd.CommandText = "SELECT last_insert_rowid()";
+				doc_id = (long)m_sqlCmd.ExecuteScalar();
+			}
+			catch (SQLiteException ex)
+			{
+				Console.WriteLine("InsertDocumentDB Error: " + ex.Message);
+			}
+			return doc_id;
+		}
+
+		/// <summary>
 		/// Проверка, существует в БД абзац pg_id или нет.
 		/// </summary>
 		/// <param name="pg_id">ID параграфа</param>
@@ -523,6 +546,12 @@ namespace dbMQserver
 					case "mSiLinks":
 						m_sqlCmd.CommandText = "SELECT ln_id, linktype FROM mSiLinks";
 						break;
+					case "mContainers":
+						m_sqlCmd.CommandText = "SELECT ct_id, created_at, name FROM mContainers";
+						break;
+					case "mDocuments":
+						m_sqlCmd.CommandText = "SELECT doc_id, ct_id, created_at, name FROM mDocuments";
+						break;
 					case "mParagraphs":
 						m_sqlCmd.CommandText = "SELECT pg_id, created_at FROM mParagraphs";
 						break;
@@ -554,6 +583,12 @@ namespace dbMQserver
 							break;
 						case "mSiLinks":
 							line = r["ln_id"].ToString() + ", " + r["linktype"];
+							break;
+						case "mContainers":
+							line = r["ct_id"].ToString() + ", " + r["created_at"].ToString() + ", " + r["name"];
+							break;
+						case "mDocuments":
+							line = r["doc_id"].ToString() + ", " + r["ct_id"].ToString() + ", " + r["created_at"].ToString() + ", " + r["name"];
 							break;
 						case "mParagraphs":
 							line = r["pg_id"].ToString() + ", " + r["created_at"].ToString();

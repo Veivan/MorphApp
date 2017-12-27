@@ -22,12 +22,34 @@ namespace DirectDBA
 
 		private void Form1_Load(object sender, EventArgs e)
 		{
+			#region Создание колонок для Документов
+			dgvDocuments.Columns.Add(new DataGridViewTextBoxColumn
+			{
+				DataPropertyName = "DocumentID", 
+				HeaderText = "doc_id"
+			}); 
+			dgvDocuments.Columns.Add(new DataGridViewTextBoxColumn
+			{
+				DataPropertyName = "ContainerID",
+				HeaderText = "ct_id"
+			});
+			dgvDocuments.Columns.Add(new DataGridViewTextBoxColumn
+			{
+				DataPropertyName = "Created_at",
+				HeaderText = "Создан"
+			});
+			dgvDocuments.Columns.Add(new DataGridViewTextBoxColumn
+			{
+				DataPropertyName = "name",
+				HeaderText = "name"
+			});
+			#endregion
 		}
 
 		/// <summary>
 		/// Пример чтения данных напрямую из БД.
 		/// </summary>
-		private void ReadDocsDirect()
+		private void ReadDocsDirectExample()
 		{
 			DataTable dTable = dbConnector.dirCmd.GetDocumentsT();
 			if (dTable.Rows.Count > 0)
@@ -63,17 +85,18 @@ namespace DirectDBA
 			var docs = new BindingList<DocumentMap>();
 			foreach (var rec in dTable)
 			{
-				docs.Add(new DocumentMap(rec.DocumentID, rec.ContainerID, rec.Name, rec.Created));
+				docs.Add(new DocumentMap(rec.DocumentID, rec.ContainerID, rec.Name, rec.Created_at));
 			}
 
-			binding1.DataSource = docs;
+			bsDocuments.DataSource = docs;
+			/*binding1.DataSource = docs;
 			dgvViewer.DataSource = binding1;
-			dgvViewer.AutoGenerateColumns = true;
+			dgvViewer.AutoGenerateColumns = true; */
 		}
 
-        /// <summary>
-        /// Пример заполнения binding из коллекции объектов.
-        /// </summary>
+		/// <summary>
+		/// Пример заполнения binding из коллекции объектов.
+		/// </summary>
 		private void FillBindingFromCollection()
 		{
 			var nodes = new BindingList<mmNode>();
@@ -92,8 +115,8 @@ namespace DirectDBA
 
 		public class mmNode
 		{
-			public string name {get;set;}
-			public int Level {get;set;}
+			public string name { get; set; }
+			public int Level { get; set; }
 			public mmNode(string p, int p_2)
 			{
 				this.name = p;
@@ -103,7 +126,7 @@ namespace DirectDBA
 
 		private void btSelect_Click(object sender, EventArgs e)
 		{
-			//ReadDocsDirect();
+			//ReadDocsDirectExample();
 			ReadDocsFromList();
 
 			//FillBindingFromCollection();
@@ -112,41 +135,36 @@ namespace DirectDBA
 
 		private void btRefreshDocuments_Click(object sender, EventArgs e)
 		{
-			//ReadDocsDirect();
+			ReadDocsDirect();
+			//ReadDocsFromList();
 		}
 
-             
-            /*    DataTable dTable = new DataTable();
-     String sqlQuery;
+		/// <summary>
+		/// Чтения Документов напрямую из БД.
+		/// </summary>
+		private void ReadDocsDirect()
+		{
+			DataTable dTable = dbConnector.dirCmd.GetDocumentsT();
+			bsDocuments.DataSource = dTable;
+			//dgvDocuments.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader);
 
-     if (m_dbConn.State != ConnectionState.Open)
-     {
-         MessageBox.Show("Open connection with database");
-         return;
-     }
-    
-     try
-     {
-         sqlQuery = "SELECT * FROM Catalog";
-         SQLiteDataAdapter adapter = new SQLiteDataAdapter(sqlQuery, m_dbConn);
-         adapter.Fill(dTable);
+			/*if (dTable.Rows.Count > 0)
+			{
+				dgvDocuments.Rows.Clear();
+				//dgvDocuments.AutoGenerateColumns = true;
+				for (int i = 0; i < dTable.Rows.Count; i++)
+					dgvDocuments.Rows.Add(dTable.Rows[i].ItemArray);
+			}
+			else
+				MessageBox.Show("Database is empty"); */
+		}
 
-         if (dTable.Rows.Count > 0)
-         {
-             dgvViewer.Rows.Clear();
+		private void navCommit_Click(object sender, EventArgs e)
+		{
+			//dbConnector.dirCmd.UpdateDocumentsT((DataTable)bsDocuments.DataSource);
 
-             for (int i = 0; i < dTable.Rows.Count; i++)
-                 dgvViewer.Rows.Add(dTable.Rows[i].ItemArray);
-         }
-         else
-             MessageBox.Show("Database is empty");
-     }
-     catch (SQLiteException ex)
-     {               
-         MessageBox.Show("Error: " + ex.Message);
-     }           
+			dbConnector.dirCmd.UpdateDocuments(bsDocuments.DataSource);
+		}
 
-
-		 }*/
 	}
 }

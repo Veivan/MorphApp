@@ -54,6 +54,8 @@
 			this.bindingNavigatorMoveLastItem = new System.Windows.Forms.ToolStripButton();
 			this.bindingNavigatorSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.binding1 = new System.Windows.Forms.BindingSource(this.components);
+			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+			this.navCommit = new System.Windows.Forms.ToolStripButton();
 			this.tabControl1.SuspendLayout();
 			this.tabPage2.SuspendLayout();
 			this.panel2.SuspendLayout();
@@ -69,8 +71,8 @@
 			// 
 			// tabControl1
 			// 
-			this.tabControl1.Controls.Add(this.tabPage2);
 			this.tabControl1.Controls.Add(this.tabPage1);
+			this.tabControl1.Controls.Add(this.tabPage2);
 			this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabControl1.Location = new System.Drawing.Point(0, 0);
 			this.tabControl1.Name = "tabControl1";
@@ -187,7 +189,9 @@
             this.bindingNavigatorMoveLastItem,
             this.bindingNavigatorSeparator2,
             this.bindingNavigatorAddNewItem,
-            this.bindingNavigatorDeleteItem});
+            this.bindingNavigatorDeleteItem,
+            this.toolStripSeparator1,
+            this.navCommit});
 			this.navDocuments.Location = new System.Drawing.Point(0, 0);
 			this.navDocuments.MoveFirstItem = this.bindingNavigatorMoveFirstItem;
 			this.navDocuments.MoveLastItem = this.bindingNavigatorMoveLastItem;
@@ -284,6 +288,20 @@
 			this.bindingNavigatorSeparator2.Name = "bindingNavigatorSeparator2";
 			this.bindingNavigatorSeparator2.Size = new System.Drawing.Size(6, 25);
 			// 
+			// toolStripSeparator1
+			// 
+			this.toolStripSeparator1.Name = "toolStripSeparator1";
+			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+			// 
+			// navCommit
+			// 
+			this.navCommit.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.navCommit.Image = ((System.Drawing.Image)(resources.GetObject("navCommit.Image")));
+			this.navCommit.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.navCommit.Name = "navCommit";
+			this.navCommit.Size = new System.Drawing.Size(23, 22);
+			this.navCommit.Click += new System.EventHandler(this.navCommit_Click);
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -336,6 +354,8 @@
 		private System.Windows.Forms.BindingSource binding1;
 		private System.Windows.Forms.Panel panel2;
 		private System.Windows.Forms.Button btSelect;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+		private System.Windows.Forms.ToolStripButton navCommit;
 	}
 }
 

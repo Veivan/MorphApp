@@ -6,21 +6,16 @@ using System.Text;
 namespace Schemas
 {
 	/// <summary>
-	/// Класс хранит представление одного документа.
+	/// Класс хранит представление одного контейнера.
 	/// </summary>
-	public class DocumentMap
+	public class ContainerMap
 	{
-		private long _doc_id = -1;
 		private long _ct_id = -1;
 		private DateTime _created_at;
 		private string _name = "";
 
 		/// <summary>
-		/// Идентификатор документа в БД.
-		/// </summary>
-		public long DocumentID { get { return _doc_id; } set { _doc_id = value; } }
-		/// <summary>
-		/// Контейнер размещения — ссылка на mContainers.
+		/// Идентификатор контейнера в БД.
 		/// </summary>
 		public long ContainerID { get { return _ct_id; } set { _ct_id = value; } }
 		/// <summary>
@@ -35,14 +30,12 @@ namespace Schemas
 		/// <summary>
 		/// Конструктор
 		/// </summary>
-		public DocumentMap(long doc_id, long ct_id, string name, DateTime created_at)
+		public ContainerMap(long ct_id, string name, DateTime created_at)
         {
-			_doc_id = doc_id;
 			_ct_id = ct_id;
 			_name = name;
 			//if (created_at == null)	created_at = DateTime.Now;
 			_created_at = created_at;
 		}
-
 	}
 }

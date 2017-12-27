@@ -16,10 +16,8 @@ namespace dbMQserverTests
 		{
 			// arrange
 			SQLiteConnector dbConnector = SQLiteConnector.Instance;
-
 			// act
 			long res = dbConnector.SaveLex("qq", 6);
-
 			// assert
 			Assert.AreNotEqual(0, res);
 		}
@@ -29,13 +27,10 @@ namespace dbMQserverTests
 		{
 			// arrange
 			SQLiteConnector dbConnector = SQLiteConnector.Instance;
-
 			// act
 			long res = dbConnector.GetWord("qq", 6);
-
 			// assert
 			Assert.AreNotEqual(-1, res);
-
 		}
 		
 		[TestMethod]
@@ -44,7 +39,7 @@ namespace dbMQserverTests
 			// arrange
 			SQLiteConnector dbConnector = SQLiteConnector.Instance;
 			// act
-            dbConnector.selectAll("mSyntNodes");
+			dbConnector.selectAll("mDocuments");
 			// assert
 			Assert.AreEqual(0, 0);
 		}
@@ -66,11 +61,9 @@ namespace dbMQserverTests
 		{
 			// arrange
 			SQLiteConnector dbConnector = SQLiteConnector.Instance;
-
 			// act
 			dbConnector.InsertSpeechParts();
 			dbConnector.selectAll("mSpParts");
-
 			// assert
 			Assert.AreEqual(0, 0);
 		}
@@ -80,11 +73,9 @@ namespace dbMQserverTests
 		{
 			// arrange
 			SQLiteConnector dbConnector = SQLiteConnector.Instance;
-
 			// act
 			dbConnector.InsertGrenProperties();
 			dbConnector.selectAll("mSiGram");
-
 			// assert
 			Assert.AreEqual(0, 0);
 		}
@@ -94,11 +85,21 @@ namespace dbMQserverTests
 		{
 			// arrange
 			SQLiteConnector dbConnector = SQLiteConnector.Instance;
-
 			// act
 			dbConnector.InsertGrenLinks();
 			dbConnector.selectAll("mSiLinks");
+			// assert
+			Assert.AreEqual(0, 0);
+		}
 
+		[TestMethod]
+		public void TestInsertDocument()
+		{
+			// arrange
+			SQLiteConnector dbConnector = SQLiteConnector.Instance;
+			// act
+			dbConnector.InsertDocumentDB();
+			dbConnector.selectAll("mDocuments");
 			// assert
 			Assert.AreEqual(0, 0);
 		}
