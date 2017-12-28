@@ -13,10 +13,10 @@ namespace dbMQserver
 	/// Класс возвращает DataTable из БД
 	/// </summary>
 	public class DirectSQL
-	{
-		const string comSelDocuments = "SELECT doc_id, ct_id, created_at, name FROM mDocuments";
-		private SQLiteConnection m_dbConn;
+	{	
+        private SQLiteConnection m_dbConn;
 		private SQLiteCommand m_sqlCmd = new SQLiteCommand();
+        private TableSelector tableSelector = new TableSelector();
 
 		public DirectSQL(SQLiteConnection _m_dbConn)
 		{
@@ -24,13 +24,56 @@ namespace dbMQserver
 			m_sqlCmd.Connection = m_dbConn;
 		}
 
-		public DataTable GetDocumentsT()
+        /// <summary>
+        /// Чтения таблицы из БД.
+        /// </summary>
+        /// <param name="tblname">enum нужной таблицы</param>
+        /// <returns>DataTable</returns>
+        public DataTable GetDataTable(dbTables tblname)
+        {
+            var stmnt = tableSelector.GetSelectStatement(tblname);
+            if (String.IsNullOrEmpty(stmnt))
+                return null;
+            DataTable dTable = new DataTable();
+            try
+            {
+                SQLiteDataAdapter adapter = new SQLiteDataAdapter(stmnt, m_dbConn);
+                adapter.Fill(dTable);
+            }
+            catch (SQLiteException ex)
+            {
+                //MessageBox.Show("Error: " + ex.Message);
+            }
+            return dTable;
+        }
+
+        /// <summary>
+        /// Обновление таблицы в БД.
+        /// </summary>
+        /// <param name="dTable">набор данных</param>
+        /// <param name="tblname">enum нужной таблицы</param>
+        /// <returns></returns>
+        public void UpdateDataTable(DataTable dTable, dbTables tblname)
+        {
+            if (dTable == null) return;
+            var stmnt = tableSelector.GetSelectStatement(tblname);
+            if (String.IsNullOrEmpty(stmnt))
+                return;
+            m_sqlCmd.CommandText = stmnt;
+            var dataAdapter = new SQLiteDataAdapter(m_sqlCmd);
+            var commandBuilder = new SQLiteCommandBuilder(dataAdapter);
+            dataAdapter.Update(dTable);
+        }
+
+
+        #region Функции для Документов
+        public DataTable GetDocumentsT()
 		{
 			DataTable dTable = new DataTable();
 
 			try
 			{
-				SQLiteDataAdapter adapter = new SQLiteDataAdapter(comSelDocuments, m_dbConn);
+				SQLiteDataAdapter adapter = new SQLiteDataAdapter(""/*comSelDocuments*/, m_dbConn);
 				adapter.Fill(dTable);
 			}
 			catch (SQLiteException ex)
@@ -45,7 +88,7 @@ namespace dbMQserver
 			var reslist = new List<DocumentMap>();
 			try
 			{
-				m_sqlCmd.CommandText = comSelDocuments;
+                m_sqlCmd.CommandText = ""; //comSelDocuments;
 				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
 				while (r.Read())
 				{
@@ -67,7 +110,7 @@ namespace dbMQserver
 		public void UpdateDocumentsT(DataTable dTable)
 		{
 			if (dTable == null) return;
-			m_sqlCmd.CommandText = comSelDocuments;
+            m_sqlCmd.CommandText = "";// comSelDocuments;
 			var dataAdapter = new SQLiteDataAdapter(m_sqlCmd);
 			var commandBuilder = new SQLiteCommandBuilder(dataAdapter);
 			dataAdapter.Update(dTable);
@@ -76,7 +119,7 @@ namespace dbMQserver
 		public void UpdateDocuments(object dTable)
 		{
 			if (dTable == null) return;
-			m_sqlCmd.CommandText = comSelDocuments;
+            m_sqlCmd.CommandText = "";// comSelDocuments;
 			var dataAdapter = new SQLiteDataAdapter(m_sqlCmd);
 			var commandBuilder = new SQLiteCommandBuilder(dataAdapter);
 			if (dTable is DataTable)
@@ -112,5 +155,6 @@ namespace dbMQserver
 			table.AcceptChanges();
 			return table;
 		}
-	}
+        #endregion
+    }
 }

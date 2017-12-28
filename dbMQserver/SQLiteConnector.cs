@@ -195,7 +195,30 @@ namespace dbMQserver
 			return result;
 		}
 
-		/// <summary>
+        /// <summary>
+        /// Вставка в mContainers.
+        /// </summary>
+        /// <param name="name">Имя папки</param>
+        /// <returns>ID контейнера</returns>
+        public long InsertContainerDB(string name)
+        {
+            long ct_id = -1;
+            try
+            {
+                m_sqlCmd.CommandText = String.Format("INSERT INTO mContainers(ct_id, name) VALUES(NULL, '{0}')", name);
+                m_sqlCmd.ExecuteNonQuery();
+
+                m_sqlCmd.CommandText = "SELECT last_insert_rowid()";
+                ct_id = (long)m_sqlCmd.ExecuteScalar();
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("InsertContainerDB Error: " + ex.Message);
+            }
+            return ct_id;
+        }
+        
+        /// <summary>
 		/// Вставка в mDocuments.
 		/// </summary>
 		/// <returns>ID документа</returns>

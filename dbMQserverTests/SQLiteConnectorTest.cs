@@ -104,5 +104,17 @@ namespace dbMQserverTests
 			Assert.AreEqual(0, 0);
 		}
 
+		[TestMethod]
+        public void TestInsertContainerDB()
+		{
+			// arrange
+			SQLiteConnector dbConnector = SQLiteConnector.Instance;
+			// act
+            var id = dbConnector.InsertContainerDB("Хранилище");
+            dbConnector.selectAll("mContainers");
+			// assert
+            Assert.AreNotEqual(-1, id);
+		}
+        
 	}
 }

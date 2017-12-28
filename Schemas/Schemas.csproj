@@ -62,7 +62,7 @@
   <ItemGroup>
     <Compile Include="ObjectMaps\ContainerMap.cs" />
     <Compile Include="ObjectMaps\DocumentMap.cs" />
-    <Compile Include="GrenEnums.cs" />
+    <Compile Include="ConstEnums.cs" />
     <Compile Include="HasDict.cs" />
     <Compile Include="ObjectMaps\SentenceMap.cs" />
     <Compile Include="TMorph\Schema\ComType.cs" />

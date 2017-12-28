@@ -203,4 +203,9 @@ namespace Schemas
 		SECOND_VERB_link = 114
 	}
 
+    public enum dbTables
+    {
+        tblContainers,
+        tblDocuments
+    }
 }
