@@ -114,7 +114,7 @@ namespace dbMQserver
 					"CREATE TABLE IF NOT EXISTS mLemms (\n"
 						+ "	lx_id integer PRIMARY KEY, sp_id integer, lemma text NOT NULL);" +
 					" CREATE TABLE IF NOT EXISTS mContainers (\n"
-						+ "	ct_id integer PRIMARY KEY, created_at DATETIME DEFAULT CURRENT_TIMESTAMP, name text);" +
+						+ "	ct_id integer PRIMARY KEY, created_at DATETIME DEFAULT CURRENT_TIMESTAMP, name text, parent_id integer);" +
 					" CREATE TABLE IF NOT EXISTS mDocuments (doc_id integer PRIMARY KEY, \n"
 						+ "	ct_id integer, created_at DATETIME DEFAULT CURRENT_TIMESTAMP, name text);" +
 					" CREATE TABLE IF NOT EXISTS mParagraphs (pg_id integer PRIMARY KEY, \n"
@@ -200,12 +200,12 @@ namespace dbMQserver
         /// </summary>
         /// <param name="name">Имя папки</param>
         /// <returns>ID контейнера</returns>
-        public long InsertContainerDB(string name)
+		public long InsertContainerDB(string name, long parent_id = -1)
         {
             long ct_id = -1;
             try
             {
-                m_sqlCmd.CommandText = String.Format("INSERT INTO mContainers(ct_id, name) VALUES(NULL, '{0}')", name);
+				m_sqlCmd.CommandText = String.Format("INSERT INTO mContainers(ct_id, name, parent_id) VALUES(NULL, '{0}', {1})", name, parent_id);
                 m_sqlCmd.ExecuteNonQuery();
 
                 m_sqlCmd.CommandText = "SELECT last_insert_rowid()";
@@ -570,7 +570,7 @@ namespace dbMQserver
 						m_sqlCmd.CommandText = "SELECT ln_id, linktype FROM mSiLinks";
 						break;
 					case "mContainers":
-						m_sqlCmd.CommandText = "SELECT ct_id, created_at, name FROM mContainers";
+						m_sqlCmd.CommandText = "SELECT ct_id, created_at, name, parent_id FROM mContainers";
 						break;
 					case "mDocuments":
 						m_sqlCmd.CommandText = "SELECT doc_id, ct_id, created_at, name FROM mDocuments";
@@ -608,7 +608,7 @@ namespace dbMQserver
 							line = r["ln_id"].ToString() + ", " + r["linktype"];
 							break;
 						case "mContainers":
-							line = r["ct_id"].ToString() + ", " + r["created_at"].ToString() + ", " + r["name"];
+							line = r["ct_id"].ToString() + ", " + r["created_at"].ToString() + ", " + r["name"] + ", " + r["parent_id"].ToString();
 							break;
 						case "mDocuments":
 							line = r["doc_id"].ToString() + ", " + r["ct_id"].ToString() + ", " + r["created_at"].ToString() + ", " + r["name"];

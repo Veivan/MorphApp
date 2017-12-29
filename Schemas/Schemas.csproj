@@ -60,6 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Session.cs" />
     <Compile Include="ObjectMaps\ContainerMap.cs" />
     <Compile Include="ObjectMaps\DocumentMap.cs" />
     <Compile Include="ConstEnums.cs" />
