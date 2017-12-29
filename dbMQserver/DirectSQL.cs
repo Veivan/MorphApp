@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Text;
 
 using System.Data.SQLite;
 using Schemas;
@@ -13,10 +14,10 @@ namespace dbMQserver
 	/// Класс возвращает DataTable из БД
 	/// </summary>
 	public class DirectSQL
-	{	
-        private SQLiteConnection m_dbConn;
+	{
+		private SQLiteConnection m_dbConn;
 		private SQLiteCommand m_sqlCmd = new SQLiteCommand();
-        private TableSelector tableSelector = new TableSelector();
+		private TableSelector tableSelector = new TableSelector();
 
 		public DirectSQL(SQLiteConnection _m_dbConn)
 		{
@@ -24,46 +25,46 @@ namespace dbMQserver
 			m_sqlCmd.Connection = m_dbConn;
 		}
 
-        /// <summary>
-        /// Чтения таблицы из БД.
-        /// </summary>
-        /// <param name="tblname">enum нужной таблицы</param>
-        /// <returns>DataTable</returns>
-        public DataTable GetDataTable(dbTables tblname)
-        {
-            var stmnt = tableSelector.GetSelectStatement(tblname);
-            if (String.IsNullOrEmpty(stmnt))
-                return null;
-            DataTable dTable = new DataTable();
-            try
-            {
-                SQLiteDataAdapter adapter = new SQLiteDataAdapter(stmnt, m_dbConn);
-                adapter.Fill(dTable);
-            }
-            catch (SQLiteException ex)
-            {
-                //MessageBox.Show("Error: " + ex.Message);
-            }
-            return dTable;
-        }
+		/// <summary>
+		/// Чтения таблицы из БД.
+		/// </summary>
+		/// <param name="tblname">enum нужной таблицы</param>
+		/// <returns>DataTable</returns>
+		public DataTable GetDataTable(dbTables tblname)
+		{
+			var stmnt = tableSelector.GetSelectStatement(tblname);
+			if (String.IsNullOrEmpty(stmnt))
+				return null;
+			DataTable dTable = new DataTable();
+			try
+			{
+				SQLiteDataAdapter adapter = new SQLiteDataAdapter(stmnt, m_dbConn);
+				adapter.Fill(dTable);
+			}
+			catch (SQLiteException ex)
+			{
+				//MessageBox.Show("Error: " + ex.Message);
+			}
+			return dTable;
+		}
 
-        /// <summary>
-        /// Обновление таблицы в БД.
-        /// </summary>
-        /// <param name="dTable">набор данных</param>
-        /// <param name="tblname">enum нужной таблицы</param>
-        /// <returns></returns>
-        public void UpdateDataTable(DataTable dTable, dbTables tblname)
-        {
-            if (dTable == null) return;
-            var stmnt = tableSelector.GetSelectStatement(tblname);
-            if (String.IsNullOrEmpty(stmnt))
-                return;
-            m_sqlCmd.CommandText = stmnt;
-            var dataAdapter = new SQLiteDataAdapter(m_sqlCmd);
-            var commandBuilder = new SQLiteCommandBuilder(dataAdapter);
-            dataAdapter.Update(dTable);
-        }
+		/// <summary>
+		/// Обновление таблицы в БД.
+		/// </summary>
+		/// <param name="dTable">набор данных</param>
+		/// <param name="tblname">enum нужной таблицы</param>
+		/// <returns></returns>
+		public void UpdateDataTable(DataTable dTable, dbTables tblname)
+		{
+			if (dTable == null) return;
+			var stmnt = tableSelector.GetSelectStatement(tblname);
+			if (String.IsNullOrEmpty(stmnt))
+				return;
+			m_sqlCmd.CommandText = stmnt;
+			var dataAdapter = new SQLiteDataAdapter(m_sqlCmd);
+			var commandBuilder = new SQLiteCommandBuilder(dataAdapter);
+			dataAdapter.Update(dTable);
+		}
 
 		/// <summary>
 		/// Чтения контейнеров выбранного родителя из БД.
@@ -86,15 +87,18 @@ namespace dbMQserver
 			return dTable;
 		}
 
-
-        #region Функции для Документов
-        public DataTable GetDocumentsT()
+		/// <summary>
+		/// Чтения документов из выбранного контейнера.
+		/// </summary>
+		/// <param name="ct_id">ID контейнера</param>
+		/// <returns>DataTable</returns>
+		public DataTable GetDocsInContainer(long ct_id)
 		{
+			var stmnt = String.Format("SELECT doc_id, ct_id, created_at, name, parent_id FROM mDocuments WHERE ct_id = {0}", ct_id);
 			DataTable dTable = new DataTable();
-
 			try
 			{
-				SQLiteDataAdapter adapter = new SQLiteDataAdapter(""/*comSelDocuments*/, m_dbConn);
+				SQLiteDataAdapter adapter = new SQLiteDataAdapter(stmnt, m_dbConn);
 				adapter.Fill(dTable);
 			}
 			catch (SQLiteException ex)
@@ -104,12 +108,49 @@ namespace dbMQserver
 			return dTable;
 		}
 
-		public List<DocumentMap> GetDocumentsL()
+		/// <summary>
+		/// Чтения документов из множества контейнеров.
+		/// </summary>
+		/// <param name="list_ids">список ID контейнеров</param>
+		/// <returns>DataTable</returns>
+		public DataTable GetDocsInContainerList(List<string> list_ids)
+		{
+			/*StringBuilder builder = new StringBuilder();
+			foreach (var id in list_ids)
+			{
+				builder.Append(id.ToString()).Append(",");
+			}
+			string result = builder.ToString().TrimEnd(',');*/
+
+			string result = string.Join(",", list_ids.ToArray());
+
+			var stmnt = String.Format("SELECT doc_id, ct_id, created_at, name, parent_id FROM mDocuments WHERE ct_id in [{0}]", result);
+			DataTable dTable = new DataTable();
+			try
+			{
+				SQLiteDataAdapter adapter = new SQLiteDataAdapter(stmnt, m_dbConn);
+				adapter.Fill(dTable);
+			}
+			catch (SQLiteException ex)
+			{
+				//MessageBox.Show("Error: " + ex.Message);
+			}
+			return dTable;
+		}
+
+
+		/// <summary>
+		/// Чтения документов из выбранного контейнера.
+		/// </summary>
+		/// <param name="ct_id">ID контейнера</param>
+		/// <returns>Коллекцию DocumentMap</returns>
+		public List<DocumentMap> GetDocumentsL(long ct_id = -1)
 		{
 			var reslist = new List<DocumentMap>();
 			try
 			{
-                m_sqlCmd.CommandText = ""; //comSelDocuments;
+				var stmnt = String.Format("SELECT doc_id, ct_id, created_at, name, parent_id FROM mDocuments WHERE ct_id = {0}", ct_id);
+				m_sqlCmd.CommandText = stmnt;
 				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
 				while (r.Read())
 				{
@@ -127,55 +168,5 @@ namespace dbMQserver
 			}
 			return reslist;
 		}
-
-		public void UpdateDocumentsT(DataTable dTable)
-		{
-			if (dTable == null) return;
-            m_sqlCmd.CommandText = "";// comSelDocuments;
-			var dataAdapter = new SQLiteDataAdapter(m_sqlCmd);
-			var commandBuilder = new SQLiteCommandBuilder(dataAdapter);
-			dataAdapter.Update(dTable);
-		}
-
-		public void UpdateDocuments(object dTable)
-		{
-			if (dTable == null) return;
-            m_sqlCmd.CommandText = "";// comSelDocuments;
-			var dataAdapter = new SQLiteDataAdapter(m_sqlCmd);
-			var commandBuilder = new SQLiteCommandBuilder(dataAdapter);
-			if (dTable is DataTable)
-			{
-				dataAdapter.Update(dTable as DataTable);
-			}
-			else
-			{
-				var realDT = MakeDocumentsTable(dTable);
-				dataAdapter.Update(realDT);
-			}
-		}
-
-		private DataTable MakeDocumentsTable(object datasource)
-		{
-			// Create sample Customers table.
-			DataTable table = new DataTable();
-			//table.TableName = "mDocuments";
-
-			// Create two columns, ID and Name.
-			DataColumn idColumn = table.Columns.Add("doc_id", typeof(long));
-			table.Columns.Add("ct_id", typeof(long));
-			table.Columns.Add("created_at", typeof(string));
-			table.Columns.Add("name", typeof(string));
-
-			// Set the ID column as the primary key column.
-			table.PrimaryKey = new DataColumn[] { idColumn };
-
-			foreach (var rec in (BindingList<DocumentMap>)datasource)
-			{
-				table.Rows.Add(new object[] { rec.DocumentID, rec.ContainerID, rec.Created_at, rec.Name });
-			}
-			table.AcceptChanges();
-			return table;
-		}
-        #endregion
-    }
+	}
 }

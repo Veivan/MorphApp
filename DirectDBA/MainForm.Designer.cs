@@ -128,6 +128,7 @@
 			this.treeView1.Name = "treeView1";
 			this.treeView1.Size = new System.Drawing.Size(324, 426);
 			this.treeView1.TabIndex = 18;
+			this.treeView1.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeView1_BeforeExpand);
 			// 
 			// panel2
 			// 

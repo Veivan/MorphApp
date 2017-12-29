@@ -117,6 +117,14 @@ namespace DirectDBA
 		{
 			var dTable = dbConnector.dirCmd.GetChildrenContainers(Session.MainStroreID);
 			store.FillContainers(dTable);
+
+			var list_ids = new List<string>();
+			for (int i = 0; i < dTable.Rows.Count; i++)
+			{
+				var strID = dTable.Rows[i].Field<long>("ct_id");
+				list_ids.Add(strID.ToString());
+			}
+			dTable = dbConnector.dirCmd.GetDocsInContainerList(list_ids);
 			PopulateTreeView();
 		}
 
@@ -138,27 +146,26 @@ namespace DirectDBA
 
 		private void PopulateTreeDocuments(ContainerNode container, TreeNode nodeToAddTo)
 		{
+			//			 if (subSubDirs.Length != 0)
+			// GetDocsInContainer
 		}
 
-		/*
-		 private void GetDirectories(DirectoryInfo[] subDirs, 
-TreeNode nodeToAddTo)
-	 {
-		 TreeNode aNode;
-		 DirectoryInfo[] subSubDirs;
-		 foreach (DirectoryInfo subDir in subDirs)
-		 {
-			 aNode = new TreeNode(subDir.Name, 0, 0);
-			 aNode.Tag = subDir;
-	aNode.ImageKey = "folder";
-			 subSubDirs = subDir.GetDirectories();
-			 if (subSubDirs.Length != 0)
-			 {
-				 GetDirectories(subSubDirs, aNode);
-			 }
-			 nodeToAddTo.Nodes.Add(aNode);
-		 }
-	 }*/
+		private void GetDocumentsFromDB(long containerID, TreeNode nodeToAddTo)
+		{
+			//			 if (subSubDirs.Length != 0)
+			// GetDocsInContainer
+		}
+
+		private void treeView1_BeforeExpand(object sender, TreeViewCancelEventArgs e)
+		{
+			//TODO Загружать документы из БД, если не загружены
+			//GetDocumentsFromDB
+
+			//if (!HasCheckedChildNodes(e.Node)) e.Cancel = true;
+
+			//MessageBox.Show("qq");
+
+		}
 
 		#region Примеры
 
@@ -210,6 +217,7 @@ TreeNode nodeToAddTo)
 			}
 		}
 		#endregion
+
 
 
 	}
