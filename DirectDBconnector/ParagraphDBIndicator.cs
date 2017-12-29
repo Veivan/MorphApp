@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace dbMQserver
+namespace DirectDBconnector
 {
     /// <summary>
     /// Класс служит для определения необходимости и возможности обновления абзаца в БД.

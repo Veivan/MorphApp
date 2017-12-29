@@ -38,6 +38,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DirectDBA", "DirectDBA\DirectDBA.csproj", "{DB2A6054-8417-4C9B-B667-BAF09D28F23E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DirectDBconnector", "DirectDBconnector\DirectDBconnector.csproj", "{BE92F137-83A0-4F07-9EC5-2504EF561C7A}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = MorphApp.vsmdi
@@ -200,7 +202,8 @@ Global
 		{DB2A6054-8417-4C9B-B667-BAF09D28F23E}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{DB2A6054-8417-4C9B-B667-BAF09D28F23E}.Debug|Mixed Platforms.ActiveCfg = Debug|x64
 		{DB2A6054-8417-4C9B-B667-BAF09D28F23E}.Debug|Mixed Platforms.Build.0 = Debug|x64
-		{DB2A6054-8417-4C9B-B667-BAF09D28F23E}.Debug|x64.ActiveCfg = Debug|x86
+		{DB2A6054-8417-4C9B-B667-BAF09D28F23E}.Debug|x64.ActiveCfg = Debug|x64
+		{DB2A6054-8417-4C9B-B667-BAF09D28F23E}.Debug|x64.Build.0 = Debug|x64
 		{DB2A6054-8417-4C9B-B667-BAF09D28F23E}.Debug|x86.ActiveCfg = Debug|x86
 		{DB2A6054-8417-4C9B-B667-BAF09D28F23E}.Debug|x86.Build.0 = Debug|x86
 		{DB2A6054-8417-4C9B-B667-BAF09D28F23E}.Release|Any CPU.ActiveCfg = Release|x86
@@ -209,6 +212,19 @@ Global
 		{DB2A6054-8417-4C9B-B667-BAF09D28F23E}.Release|x64.ActiveCfg = Release|x86
 		{DB2A6054-8417-4C9B-B667-BAF09D28F23E}.Release|x86.ActiveCfg = Release|x86
 		{DB2A6054-8417-4C9B-B667-BAF09D28F23E}.Release|x86.Build.0 = Release|x86
+		{BE92F137-83A0-4F07-9EC5-2504EF561C7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE92F137-83A0-4F07-9EC5-2504EF561C7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE92F137-83A0-4F07-9EC5-2504EF561C7A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BE92F137-83A0-4F07-9EC5-2504EF561C7A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BE92F137-83A0-4F07-9EC5-2504EF561C7A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BE92F137-83A0-4F07-9EC5-2504EF561C7A}.Debug|x64.Build.0 = Debug|Any CPU
+		{BE92F137-83A0-4F07-9EC5-2504EF561C7A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BE92F137-83A0-4F07-9EC5-2504EF561C7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE92F137-83A0-4F07-9EC5-2504EF561C7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE92F137-83A0-4F07-9EC5-2504EF561C7A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{BE92F137-83A0-4F07-9EC5-2504EF561C7A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{BE92F137-83A0-4F07-9EC5-2504EF561C7A}.Release|x64.ActiveCfg = Release|Any CPU
+		{BE92F137-83A0-4F07-9EC5-2504EF561C7A}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

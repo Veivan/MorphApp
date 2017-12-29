@@ -8,7 +8,7 @@ using System.Text;
 using System.Data.SQLite;
 using Schemas;
 
-namespace dbMQserver
+namespace DirectDBconnector
 {
 	/// <summary>
 	/// Класс возвращает DataTable из БД

@@ -75,6 +75,10 @@
       <Project>{A2E884DE-0511-4982-BFE5-930BBC658AB7}</Project>
       <Name>dbMQserver</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DirectDBconnector\DirectDBconnector.csproj">
+      <Project>{BE92F137-83A0-4F07-9EC5-2504EF561C7A}</Project>
+      <Name>DirectDBconnector</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

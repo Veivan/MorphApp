@@ -7,7 +7,7 @@ using System.IO;
 using System.Data.SQLite;
 using Schemas;
 
-namespace dbMQserver
+namespace DirectDBconnector
 {
 	public enum OpersDB { odNone, odSelect, odInsert, odUpdate, odDelete };
 

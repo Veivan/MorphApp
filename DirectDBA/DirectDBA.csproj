@@ -99,9 +99,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\dbMQserver\dbMQserver.csproj">
-      <Project>{A2E884DE-0511-4982-BFE5-930BBC658AB7}</Project>
-      <Name>dbMQserver</Name>
+    <ProjectReference Include="..\DirectDBconnector\DirectDBconnector.csproj">
+      <Project>{BE92F137-83A0-4F07-9EC5-2504EF561C7A}</Project>
+      <Name>DirectDBconnector</Name>
     </ProjectReference>
     <ProjectReference Include="..\Schemas\Schemas.csproj">
       <Project>{BF7809E6-3E9D-49FC-888D-6D0C7187CC5B}</Project>

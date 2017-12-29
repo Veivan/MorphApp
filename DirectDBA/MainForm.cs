@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-using dbMQserver;
+using DirectDBconnector;
 using Schemas;
 
 namespace DirectDBA

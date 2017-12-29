@@ -23,5 +23,7 @@
 /dbMQserverTests/obj
 /DirectDBA/bin
 /DirectDBA/obj
+/DirectDBconnector/bin
+/DirectDBconnector/obj
 /MorphApp.suo
 /TestResults

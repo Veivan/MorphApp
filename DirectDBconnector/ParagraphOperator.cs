@@ -4,7 +4,7 @@ using System.Linq;
 using Schemas;
 using System.Data.SQLite;
 
-namespace dbMQserver
+namespace DirectDBconnector
 {
 	class ParagraphOperator
 	{

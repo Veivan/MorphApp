@@ -1,7 +1,7 @@
 ﻿using System;
 using Schemas;
 
-namespace dbMQserver
+namespace DirectDBconnector
 {
     class TableSelector
     {

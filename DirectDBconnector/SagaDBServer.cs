@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Schemas;
 
-namespace dbMQserver
+namespace DirectDBconnector
 {
-    class SagaDBServer : IdbOperator
+    public class SagaDBServer : IDataDealer
     {
         public long SaveParagraph(long pg_id, List<Schemas.SentenceMap> sentlist)
         {

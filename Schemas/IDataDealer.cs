@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Schemas;
 
-namespace dbMQserver
+namespace Schemas
 {
-	interface IdbOperator
+	public interface IDataDealer
 	{
 		/// <summary>
 		/// Сохранение абзаца в DB. Если pg_id == -1, то Insert, иначе - Update.

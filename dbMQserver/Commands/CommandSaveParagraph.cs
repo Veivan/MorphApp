@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMorph.Schema;
 using Schemas;
 using FlatBuffers;
+using DirectDBconnector;
 
 namespace dbMQserver.Commands
 {
