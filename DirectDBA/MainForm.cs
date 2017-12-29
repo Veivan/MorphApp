@@ -125,6 +125,7 @@ namespace DirectDBA
 				list_ids.Add(strID.ToString());
 			}
 			dTable = dbConnector.dirCmd.GetDocsInContainerList(list_ids);
+			store.FillDocs(dTable);
 			PopulateTreeView();
 		}
 
@@ -146,8 +147,13 @@ namespace DirectDBA
 
 		private void PopulateTreeDocuments(ContainerNode container, TreeNode nodeToAddTo)
 		{
-			//			 if (subSubDirs.Length != 0)
-			// GetDocsInContainer
+			var docs = container.GetDocuments();
+			foreach (var doc in docs)
+			{
+				var aNode = new TreeNode(doc.Name, 0, 0);
+				aNode.Tag = doc.ContainerID;
+				nodeToAddTo.Nodes.Add(aNode);
+			}
 		}
 
 		private void GetDocumentsFromDB(long containerID, TreeNode nodeToAddTo)

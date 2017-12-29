@@ -122,10 +122,12 @@ namespace dbMQserver
 			}
 			string result = builder.ToString().TrimEnd(',');*/
 
-			string result = string.Join(",", list_ids.ToArray());
-
-			var stmnt = String.Format("SELECT doc_id, ct_id, created_at, name, parent_id FROM mDocuments WHERE ct_id in [{0}]", result);
 			DataTable dTable = new DataTable();
+			string result = string.Join(",", list_ids.ToArray());
+			if (String.IsNullOrEmpty(result))
+				return dTable;
+
+			var stmnt = String.Format("SELECT doc_id, ct_id, created_at, name FROM mDocuments WHERE ct_id IN ({0})", result);
 			try
 			{
 				SQLiteDataAdapter adapter = new SQLiteDataAdapter(stmnt, m_dbConn);

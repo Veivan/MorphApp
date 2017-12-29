@@ -35,13 +35,15 @@ namespace Schemas
 		/// <summary>
 		/// Конструктор
 		/// </summary>
-		public DocumentMap(long doc_id, long ct_id, string name, DateTime created_at)
+		public DocumentMap(long doc_id, long ct_id, string name, DateTime? created_at)
         {
 			_doc_id = doc_id;
 			_ct_id = ct_id;
 			_name = name;
-			//if (created_at == null)	created_at = DateTime.Now;
-			_created_at = created_at;
+			if (created_at == null)
+				_created_at = DateTime.Now;
+			else
+				_created_at = (DateTime)created_at;
 		}
 
 	}
