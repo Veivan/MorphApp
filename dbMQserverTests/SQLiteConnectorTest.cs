@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using DirectDBconnector;
 
-namespace dbMQserverTests
+namespace DirectDBconnectorTests
 {
 	[TestClass]
 	public class SQLiteConnectorTest

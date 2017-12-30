@@ -14,6 +14,8 @@ namespace DirectDBA
 {
 	public partial class MainForm : Form
 	{
+		SagaDBServer dbServer = new SagaDBServer();
+
 		SQLiteConnector dbConnector = SQLiteConnector.Instance;
 		InnerStore store = new InnerStore();
 

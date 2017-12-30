@@ -27,7 +27,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sgBroker", "sgBroker\sgBrok
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleTest", "SimpleTest\SimpleTest.csproj", "{3FEBD270-AE10-4C76-B621-C75D45298312}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dbMQserverTests", "dbMQserverTests\dbMQserverTests.csproj", "{0DB238B5-0B97-4894-B517-CEBF9DFA865E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SagaTests", "dbMQserverTests\SagaTests.csproj", "{0DB238B5-0B97-4894-B517-CEBF9DFA865E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A948AFC7-F1E4-464E-9E9E-190064C0ECA9}"
 	ProjectSection(SolutionItems) = preProject

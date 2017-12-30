@@ -5,6 +5,8 @@ namespace Schemas
 {
 	public interface IDataDealer
 	{
+		object ReadContainers();
+
 		/// <summary>
 		/// Сохранение абзаца в DB. Если pg_id == -1, то Insert, иначе - Update.
 		/// </summary>

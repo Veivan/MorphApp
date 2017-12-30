@@ -44,6 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="absDD.cs" />
+    <Compile Include="ddDB.cs" />
     <Compile Include="DirectSQL.cs" />
     <Compile Include="ParagraphDBIndicator.cs" />
     <Compile Include="ParagraphOperator.cs" />
@@ -58,6 +60,7 @@
       <Name>Schemas</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
