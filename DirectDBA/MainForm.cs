@@ -15,8 +15,6 @@ namespace DirectDBA
 	public partial class MainForm : Form
 	{
 		SagaDBServer dbServer = new SagaDBServer();
-
-		SQLiteConnector dbConnector = SQLiteConnector.Instance;
 		InnerStore store = new InnerStore();
 
 		public MainForm()
@@ -89,8 +87,8 @@ namespace DirectDBA
 		/// </summary>
 		private void ReadContsDirect()
 		{
-			DataTable dTable = dbConnector.dirCmd.GetDataTable(dbTables.tblContainers);
-			bsContainers.DataSource = dTable;
+			var retval = dbServer.ReadContainers();
+			bsContainers.DataSource = retval.dtable;
 		}
 
 		/// <summary>
@@ -98,8 +96,8 @@ namespace DirectDBA
 		/// </summary>
 		private void ReadDocsDirect()
 		{
-			DataTable dTable = dbConnector.dirCmd.GetDataTable(dbTables.tblDocuments);
-			bsDocuments.DataSource = dTable;
+			var retval = dbServer.ReadDocuments();
+			bsDocuments.DataSource = retval.dtable;
 		}
 
 		private void navUpdate_Click(object sender, EventArgs e)
@@ -107,17 +105,18 @@ namespace DirectDBA
 			switch ((sender as ToolStripButton).Name)
 			{
 				case "btUpdDocuments":
-					dbConnector.dirCmd.UpdateDataTable((DataTable)bsDocuments.DataSource, dbTables.tblDocuments);
+					dbServer.UpdateDataTable((DataTable)bsDocuments.DataSource, dbTables.tblDocuments);
 					break;
 				case "btUpdContainers":
-					dbConnector.dirCmd.UpdateDataTable((DataTable)bsContainers.DataSource, dbTables.tblContainers);
+					dbServer.UpdateDataTable((DataTable)bsContainers.DataSource, dbTables.tblContainers);
 					break;
-			}
+			} 
 		}
 
 		private void btRefreshTree_Click(object sender, EventArgs e)
 		{
-			var dTable = dbConnector.dirCmd.GetChildrenContainers(Session.MainStroreID);
+			var retval = dbServer.GetChildrenContainers(Session.MainStroreID);
+			var dTable = retval.dtable;
 			store.FillContainers(dTable);
 
 			var list_ids = new List<string>();
@@ -126,7 +125,8 @@ namespace DirectDBA
 				var strID = dTable.Rows[i].Field<long>("ct_id");
 				list_ids.Add(strID.ToString());
 			}
-			dTable = dbConnector.dirCmd.GetDocsInContainerList(list_ids);
+			retval = dbServer.GetDocsInContainerList(list_ids);
+			dTable = retval.dtable;
 			store.FillDocs(dTable);
 			PopulateTreeView();
 		}
@@ -182,7 +182,7 @@ namespace DirectDBA
 		/// </summary>
 		private void ReadDocsFromList()
 		{
-			var dTable = dbConnector.dirCmd.GetDocumentsL();
+			List<DocumentMap> dTable = null; //dbConnector.dirCmd.GetDocumentsL();
 			var docs = new BindingList<DocumentMap>();
 			foreach (var rec in dTable)
 			{

@@ -5,14 +5,42 @@ namespace Schemas
 {
 	/// <summary>
 	/// Абстрактный класс, обобщающий методы работы с хранилищем данных.
-	/// Представляет API 
+	/// Представляет API хранилища
 	/// </summary>
 	public abstract class IDataDealer
 	{
 		/// <summary>
-		/// Получение списка контейнеров
+		/// Получение плоского списка контейнеров
 		/// </summary>
+		/// <returns>RetValue</returns>
 		public abstract RetValue ReadContainers();
+
+		/// <summary>
+		/// Получение плоского списка документов
+		/// </summary>
+		/// <returns>RetValue</returns>
+		public abstract RetValue ReadDocuments();
+
+		/// <summary>
+		/// Получение контейнеров выбранного родителя.
+		/// </summary>
+		/// <param name="parentID">ID родителя</param>
+		/// <returns>RetValue</returns>
+		public abstract RetValue GetChildrenContainers(long parentID);
+
+		/// <summary>
+		/// Получение документов из выбранного контейнера.
+		/// </summary>
+		/// <param name="ct_id">ID контейнера</param>
+		/// <returns>RetValue</returns>
+		//public abstract RetValue GetDocsInContainer(long ct_id);
+
+		/// <summary>
+		/// Чтения документов из множества контейнеров.
+		/// </summary>
+		/// <param name="list_ids">список ID контейнеров</param>
+		/// <returns>RetValue</returns>
+		public abstract RetValue GetDocsInContainerList(List<string> list_ids);
 
 		/// <summary>
 		/// Сохранение абзаца в DB. Если pg_id == -1, то Insert, иначе - Update.

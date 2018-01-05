@@ -62,6 +62,7 @@ namespace DirectDBA
 		/// <returns></returns>
 		public void FillContainers(DataTable dTable)
 		{
+			containers.Clear();
 			for (int i = 0; i < dTable.Rows.Count; i++)
 			{
 				var ct_id = dTable.Rows[i].Field<long>("ct_id");
