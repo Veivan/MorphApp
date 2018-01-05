@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IDataDealer.cs" />
+    <Compile Include="RetValue.cs" />
     <Compile Include="Session.cs" />
     <Compile Include="ObjectMaps\ContainerMap.cs" />
     <Compile Include="ObjectMaps\DocumentMap.cs" />

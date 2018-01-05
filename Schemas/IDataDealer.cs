@@ -3,9 +3,16 @@ using System.Collections.Generic;
 
 namespace Schemas
 {
-	public interface IDataDealer
+	/// <summary>
+	/// Абстрактный класс, обобщающий методы работы с хранилищем данных.
+	/// Представляет API 
+	/// </summary>
+	public abstract class IDataDealer
 	{
-		object ReadContainers();
+		/// <summary>
+		/// Получение списка контейнеров
+		/// </summary>
+		public abstract RetValue ReadContainers();
 
 		/// <summary>
 		/// Сохранение абзаца в DB. Если pg_id == -1, то Insert, иначе - Update.
@@ -13,14 +20,14 @@ namespace Schemas
 		/// <param name="pg_id">ID абзаца</param>
 		/// <param name="sentlist">упорядоченный список структур предложений</param>
 		/// <returns>ID абзаца</returns>
-		long SaveParagraph(long pg_id, List<SentenceMap> sentlist);
+		public abstract long SaveParagraph(long pg_id, List<SentenceMap> sentlist);
 
 		/// <summary>
 		/// Чтение абзаца из DB.
 		/// </summary>
 		/// <param name="pg_id">ID абзаца</param>
 		/// <returns>упорядоченный список структур предложений</returns>
-		List<SentenceMap> ReadParagraphDB(long pg_id);
+		public abstract List<SentenceMap> ReadParagraphDB(long pg_id);
 	
 		/**
 		 * Сохранение лексемы в DB. Функция проверяет, нет ли уже слова в словаре.
