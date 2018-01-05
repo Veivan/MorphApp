@@ -15,7 +15,7 @@ using (SQLiteConnection con = new SQLiteConnection([datasource])
 }
 
 
-1.2 В MorphApp сделать обращение черезе наследник абстрактного класса, а не через Courier.
+1.2 В MorphApp доделать обращение через наследник абстрактного класса, а не через Courier.
 
 1.3 Сделать клиента - просмотр документов
 

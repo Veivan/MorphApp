@@ -4,9 +4,9 @@ using System.Data;
 
 namespace Schemas
 {
-	public class RetValue
+	public class ComplexValue
 	{
 		public DataTable dtable;
-		public ArrayList list;
+		public ArrayList list = new ArrayList();
 	}
 }

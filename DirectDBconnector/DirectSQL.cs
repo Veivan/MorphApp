@@ -88,6 +88,36 @@ namespace DirectDBconnector
 		}
 
 		/// <summary>
+		/// Чтения контейнеров выбранного родителя из БД.
+		/// </summary>
+		/// <param name="parentID">ID родителя</param>
+		/// <returns>Коллекцию ContainerMap</returns>
+		public List<ContainerMap> GetChildrenContainersList(long parentID)
+		{
+			var reslist = new List<ContainerMap>();
+			try
+			{
+				var stmnt = String.Format("SELECT ct_id, created_at, name, parent_id FROM mContainers WHERE parent_id = {0}", parentID);
+				m_sqlCmd.CommandText = stmnt;
+				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
+				while (r.Read())
+				{
+					var dt = DateTime.Now;
+					var created = r["created_at"].ToString();
+					if (!String.IsNullOrEmpty(created))
+						dt = DateTime.Parse(created);
+					reslist.Add(new ContainerMap(r.GetInt64(0), r["name"].ToString(), dt, r.GetInt64(3)));
+				}
+				r.Close();
+			}
+			catch (SQLiteException ex)
+			{
+				//MessageBox.Show("Error: " + ex.Message);
+			}
+			return reslist;
+		}
+
+		/// <summary>
 		/// Чтения документов из выбранного контейнера.
 		/// </summary>
 		/// <param name="ct_id">ID контейнера</param>
@@ -170,5 +200,6 @@ namespace DirectDBconnector
 			}
 			return reslist;
 		}
+
 	}
 }

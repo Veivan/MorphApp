@@ -22,6 +22,8 @@ namespace MorphApp
 		public ComType command;
 		public ServType servType;
 
+		private long dbID = -1;
+
 		private Paragraph parastr;
 		private SentenceMap sentstr;
 
@@ -32,6 +34,15 @@ namespace MorphApp
 			var builder = SetReq(requestText);
 			var buf = builder.SizedByteArray();
 			replay = SendMess(new ZFrame(buf));
+		}
+
+		public void SendID(long ID)
+		{
+			this.dbID = ID;
+			var builder = SetReq();
+			var buf = builder.SizedByteArray();
+			replay = SendMess(new ZFrame(buf));
+			this.dbID = -1;
 		}
 
 		public void SendStruct(SentenceMap sentstr)
@@ -98,7 +109,7 @@ namespace MorphApp
 		}
 
 		/// <summary>
-		/// Получение структуры предложения из сообщения.
+		/// Получение списка структур предложений из сообщения.
 		/// </summary>
 		public List<SentenceMap> GetSentenceStructList()
 		{
@@ -110,6 +121,21 @@ namespace MorphApp
 			var message = Message.GetRootAsMessage(buf);
 			var sentlist = SentenceMap.BuildFromMessage(message);
 			return sentlist;
+		}
+
+		/// <summary>
+		/// Получение списка структур контейнеров из сообщения.
+		/// </summary>
+		public List<ContainerMap> GetContainerMapsList()
+		{
+			if (replay == null)
+				return null;
+			replay.Position = 0;
+			var bufrep = replay.Read();
+			var buf = new ByteBuffer(bufrep);
+			var message = Message.GetRootAsMessage(buf);
+			var reslist = ContainerMap.BuildFromMessage(message);
+			return reslist;
 		}
 
 		private ZFrame SendMess(ZFrame frame)
@@ -186,7 +212,6 @@ namespace MorphApp
 			var builder = new FlatBufferBuilder(1);
 			VectorOffset paracol = default(VectorOffset);
 			VectorOffset sentscol = default(VectorOffset);
-			long ParagraphID = -1;
 
 			switch (command)
 			{
@@ -226,18 +251,24 @@ namespace MorphApp
 							.OrderBy(y => y.order)
 							.Select(x => x.sentstruct).ToList();
 						sentscol = SentenceMap.BuildSentOffsetFromSentStructList(builder, senttlist);
-						ParagraphID = parastr.ParagraphID;
+						dbID = parastr.ParagraphID;
 						break;
 					}
 				case ComType.ReadPara:
 					{
-						ParagraphID = parastr.ParagraphID;
+						dbID = parastr.ParagraphID;
 						break;
 					}
                 case ComType.GetParags:
                     {
                         break;
                     }
+
+				case ComType.GetChildrenConts:
+					{
+						// dbID установлено
+						break;
+					}
             }
 
 			Message.StartMessage(builder);
@@ -246,7 +277,7 @@ namespace MorphApp
 			Message.AddComtype(builder, this.command);
 			Message.AddParams(builder, paracol);
 			Message.AddSentences(builder, sentscol);
-			Message.AddParagraphID(builder, ParagraphID);
+			Message.AddDbID(builder, dbID);
 			var req = Message.EndMessage(builder);
 			builder.Finish(req.Value);
 

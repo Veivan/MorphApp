@@ -11,17 +11,26 @@ enum ComType:long { Undef = 0,
 			// команды svSUBD
 			SaveLex = 11, GetWord = 12, SavePara = 13, ReadPara = 14,
 			//GetRecords = 15
-			GetParags = 15
+			GetParags = 15,
+			GetChildrenConts = 16
 			}   
 
 table Message {
 	messType:MessType;
 	serverType:ServType;
 	comtype:ComType = Undef;	// Enum.
-	params:[Param];		// Vector of tables.
-	sentences:[Sentence];	// Vector of tables.
-	paragraphs:[Paragraph];	// Vector of tables - массив записей из mParagraphs.
-	paragraphID : long;		// ID СУБД
+	params:[Param];				// Vector of tables.
+	sentences:[Sentence];		// Vector of tables.
+	paragraphs:[Paragraph];		// Vector of tables - массив записей из mParagraphs.
+	containers:[Container];		// Vector of tables - массив записей из mContainers.
+	dbID : long;				// произвольный ID СУБД (для передачи в качестве параметра и получения возвращаемого значения)
+}
+
+table Container {
+	ct_id :  long;		// ID СУБД
+	created_at : string;
+	name : string;
+	parent_id :  long;		
 }
 
 table Param {

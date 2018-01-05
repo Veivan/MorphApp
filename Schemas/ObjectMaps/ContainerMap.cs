@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using TMorph.Schema;
+using FlatBuffers;
 
 namespace Schemas
 {
@@ -44,6 +44,38 @@ namespace Schemas
 				_created_at = DateTime.Now;
 			else
 				_created_at = (DateTime)created_at;
+		}
+
+		public static List<ContainerMap> BuildFromMessage(Message message)
+		{
+			List<ContainerMap> reslist = new List<ContainerMap>();
+			for (int i = 0; i < message.ContainersLength; i++)
+			{
+				ContainerMap resStruct = null;
+				var cont = message.Containers(i);
+				if (cont.HasValue)
+				{
+					var contval = cont.Value;
+					var created_at = DateTime.Parse(contval.CreatedAt);
+					resStruct = new ContainerMap(contval.CtId, contval.Name, created_at, contval.ParentId);
+					reslist.Add(resStruct);
+				}
+			}
+			return reslist;
+		}
+
+		public static VectorOffset BuildOffsetFromStructList(FlatBufferBuilder builder, List<ContainerMap> list)
+		{
+			VectorOffset rescol = default(VectorOffset);
+			var sents = new Offset<Container>[list.Count];
+			for (short i = 0; i < list.Count; i++)
+			{
+				var Name = builder.CreateString(list[i].Name);
+				var Created = builder.CreateString(list[i].Created.ToString());
+				sents[i] = Container.CreateContainer(builder, list[i].ContainerID, Created, Name, list[i].ParentID);
+			}
+			rescol = Message.CreateContainersVector(builder, sents);
+			return rescol;
 		}
 	}
 }

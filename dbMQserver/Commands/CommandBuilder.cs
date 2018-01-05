@@ -27,16 +27,21 @@ namespace dbMQserver.Commands
 			command = message.Comtype;
 			switch (command)
 			{
+				case ComType.GetChildrenConts:
+					{
+						intCommand = new CommandGetchildrenContainers(message.DbID);
+						break;
+					}
 				case ComType.SavePara:
 					{
 						var senttlist = SentenceMap.BuildFromMessage(message);
-						intCommand = new CommandSaveParagraph(message.ParagraphID, senttlist);
+						intCommand = new CommandSaveParagraph(message.DbID, senttlist);
 						break;
 					}
 				case ComType.ReadPara:
 					{
-						var ParagraphID = message.ParagraphID;
-						intCommand = new CommandReadParagraph(message.ParagraphID);
+						var ParagraphID = message.DbID;
+						intCommand = new CommandReadParagraph(message.DbID);
 						break;
 					}
 				case ComType.GetWord:

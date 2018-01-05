@@ -39,7 +39,7 @@ namespace dbMQserver.Commands
 			Message.AddServerType(builder, ServType.svSUBD);
 			Message.AddComtype(builder, command);
 			Message.AddParams(builder, paracol);
-			Message.AddParagraphID(builder, ParagraphID);
+			Message.AddDbID(builder, ParagraphID);
 			var req = Message.EndMessage(builder);
 			builder.Finish(req.Value);
 			return builder.SizedByteArray();

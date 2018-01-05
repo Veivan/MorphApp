@@ -208,4 +208,14 @@ namespace Schemas
         tblContainers,
         tblDocuments
     }
+
+	/// <summary>
+	/// Тип возвращаемого значения методов чтения из БД.
+	/// </summary>
+	public enum tpList
+	{
+		tplDBtable,
+		tblList
+	}
+
 }

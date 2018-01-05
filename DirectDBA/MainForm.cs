@@ -115,19 +115,18 @@ namespace DirectDBA
 
 		private void btRefreshTree_Click(object sender, EventArgs e)
 		{
-			var retval = dbServer.GetChildrenContainers(Session.MainStroreID);
-			var dTable = retval.dtable;
-			store.FillContainers(dTable);
+			var list = dbServer.GetChildrenContainers(Session.MainStroreID, tpList.tplDBtable);
+			store.FillContainers(list);
 
+			var dTable = list.dtable;
 			var list_ids = new List<string>();
 			for (int i = 0; i < dTable.Rows.Count; i++)
 			{
 				var strID = dTable.Rows[i].Field<long>("ct_id");
 				list_ids.Add(strID.ToString());
 			}
-			retval = dbServer.GetDocsInContainerList(list_ids);
-			dTable = retval.dtable;
-			store.FillDocs(dTable);
+			list = dbServer.GetDocsInContainerList(list_ids);
+			store.FillDocs(list);
 			PopulateTreeView();
 		}
 

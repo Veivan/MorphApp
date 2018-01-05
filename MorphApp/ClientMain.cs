@@ -12,14 +12,17 @@ using Schemas;
 
 namespace MorphApp
 {
-	public partial class Form1 : Form
+	public partial class ClientMain : Form
 	{
+		SagaStoreServer dbServer = new SagaStoreServer();
+		CLInnerStore store = new CLInnerStore();
+
 		Courier courier = new Courier();
 		Paragraph para = new Paragraph();
 
 		SentenceMap sent;
 
-		public Form1()
+		public ClientMain()
 		{
 			InitializeComponent();
 		}
@@ -237,6 +240,58 @@ namespace MorphApp
 				courier.SendText(""); */
 
         }
+
+		private void btRefresh_Click(object sender, EventArgs e)
+		{
+			RefreshInnerStore();
+		}
+
+		/// <summary>
+		/// Заполнение внутреннего хранилища.
+		/// </summary>
+		private void RefreshInnerStore()
+		{
+			var list = dbServer.GetChildrenContainers(Session.MainStroreID);
+			store.FillContainers(list);
+
+			var dTable = list.list;
+			var list_ids = new List<string>();
+			for (int i = 0; i < dTable.Count; i++)
+			{
+				var strID = (dTable[i] as ContainerMap).ContainerID;
+				list_ids.Add(strID.ToString());
+			}
+			/*list = dbServer.GetDocsInContainerList(list_ids);
+			store.FillDocs(list); */
+			PopulateTreeView();
+		}
+
+		private void PopulateTreeView()
+		{
+			TreeNode rootNode;
+			treeView1.Nodes.Clear();
+
+			rootNode = new TreeNode("Хранилище");
+			foreach (var cont in store.containers)
+			{
+				var aNode = new TreeNode(cont.Name, 0, 0);
+				aNode.Tag = cont.ContainerID;
+				PopulateTreeDocuments(cont, aNode);
+				rootNode.Nodes.Add(aNode);
+			}
+			treeView1.Nodes.Add(rootNode);
+		}
+
+		private void PopulateTreeDocuments(ContainerNode container, TreeNode nodeToAddTo)
+		{
+			var docs = container.GetDocuments();
+			foreach (var doc in docs)
+			{
+				var aNode = new TreeNode(doc.Name, 0, 0);
+				aNode.Tag = doc.ContainerID;
+				nodeToAddTo.Nodes.Add(aNode);
+			}
+		}
 
 	}
 }

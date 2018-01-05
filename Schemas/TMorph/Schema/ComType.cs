@@ -18,6 +18,7 @@ public enum ComType : long
  SavePara = 13,
  ReadPara = 14,
  GetParags = 15,
+ GetChildrenConts = 16,
 };
 
 

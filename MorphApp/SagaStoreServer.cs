@@ -6,12 +6,14 @@ namespace MorphApp
 {
 	class SagaStoreServer : IDataDealer
 	{
+		Courier courier = new Courier();
+
 		#region Унаследованные методы
 		/// <summary>
 		/// Получение плоского списка контейнеров
 		/// в виде List
 		/// </summary>
-		public override RetValue ReadContainers()
+		public override ComplexValue ReadContainers()
 		{
 			throw new NotImplementedException();
 		}
@@ -20,14 +22,20 @@ namespace MorphApp
 		/// Получение плоского списка документов
 		/// в виде List
 		/// </summary>
-		public override RetValue ReadDocuments()
+		public override ComplexValue ReadDocuments()
 		{
 			throw new NotImplementedException();
 		}
 
-		public override RetValue GetChildrenContainers(long parentID)
+		public override ComplexValue GetChildrenContainers(long parentID, tpList resulttype = tpList.tblList)
 		{
-			throw new NotImplementedException();
+			courier.servType = TMorph.Schema.ServType.svSUBD;
+			courier.command = TMorph.Schema.ComType.GetChildrenConts;
+			courier.SendID(parentID);
+			var contlist = courier.GetContainerMapsList();
+			var resval = new ComplexValue();
+			resval.list.AddRange(contlist);
+			return resval;
 		}
 
 		/*public override RetValue GetDocsInContainer(long ct_id)
@@ -35,7 +43,7 @@ namespace MorphApp
 			throw new NotImplementedException();
 		}*/
 
-		public override RetValue GetDocsInContainerList(List<string> list_ids)
+		public override ComplexValue GetDocsInContainerList(List<string> list_ids)
 		{
 			throw new NotImplementedException();
 		}

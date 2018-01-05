@@ -14,9 +14,9 @@ namespace DirectDBconnector
 		/// Получение плоского списка контейнеров
 		/// в виде DataTable
 		/// </summary>
-		public override RetValue ReadContainers()
+		public override ComplexValue ReadContainers()
 		{
-			RetValue rval = new RetValue();
+			ComplexValue rval = new ComplexValue();
 			rval.dtable = dbConnector.dirCmd.GetDataTable(dbTables.tblContainers);
 			return rval;
 		}
@@ -25,17 +25,20 @@ namespace DirectDBconnector
 		/// Получение плоского списка документов
 		/// в виде DataTable
 		/// </summary>
-		public override RetValue ReadDocuments()
+		public override ComplexValue ReadDocuments()
 		{
-			RetValue rval = new RetValue();
+			ComplexValue rval = new ComplexValue();
 			rval.dtable = dbConnector.dirCmd.GetDataTable(dbTables.tblDocuments);
 			return rval;
 		}
 
-		public override RetValue GetChildrenContainers(long parentID)
+		public override ComplexValue GetChildrenContainers(long parentID, tpList resulttype)
 		{
-			RetValue rval = new RetValue();
-			rval.dtable = dbConnector.dirCmd.GetChildrenContainers(parentID);
+			ComplexValue rval = new ComplexValue();
+			if (resulttype == tpList.tplDBtable)
+				rval.dtable = dbConnector.dirCmd.GetChildrenContainers(parentID);
+			else
+				rval.list.AddRange(dbConnector.dirCmd.GetChildrenContainersList(parentID));
 			return rval;
 		}
 
@@ -45,9 +48,9 @@ namespace DirectDBconnector
 			return rval;
 		}
 */
-		public override RetValue GetDocsInContainerList(List<string> list_ids)
+		public override ComplexValue GetDocsInContainerList(List<string> list_ids)
 		{
-			RetValue rval = new RetValue();
+			ComplexValue rval = new ComplexValue();
 			rval.dtable = dbConnector.dirCmd.GetDocsInContainerList(list_ids);
 			return rval;
 		}

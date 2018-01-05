@@ -61,7 +61,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IDataDealer.cs" />
-    <Compile Include="RetValue.cs" />
+    <Compile Include="IntfInnerStore.cs" />
+    <Compile Include="ObjectMaps\ContainerNode.cs" />
+    <Compile Include="ComplexValue.cs" />
     <Compile Include="Session.cs" />
     <Compile Include="ObjectMaps\ContainerMap.cs" />
     <Compile Include="ObjectMaps\DocumentMap.cs" />
@@ -69,6 +71,7 @@
     <Compile Include="HasDict.cs" />
     <Compile Include="ObjectMaps\SentenceMap.cs" />
     <Compile Include="TMorph\Schema\ComType.cs" />
+    <Compile Include="TMorph\Schema\Container.cs" />
     <Compile Include="TMorph\Schema\Grammema.cs" />
     <Compile Include="TMorph\Schema\Lexema.cs" />
     <Compile Include="TMorph\Schema\Message.cs" />

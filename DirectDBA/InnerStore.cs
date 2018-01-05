@@ -6,62 +6,15 @@ using Schemas;
 
 namespace DirectDBA
 {
-	public class ContainerNode
-	{
-		private ContainerMap cMap;
-		private List<ContainerNode> children = new List<ContainerNode>();
-		private List<DocumentMap> Documents = new List<DocumentMap>();
-		
-		/// <summary>
-		/// Конструктор
-		/// </summary>
-		public ContainerNode(ContainerMap cMap)
-		{
-			this.cMap = cMap;
-		}
-
-		public string Name
-		{
-			get
-			{
-				return cMap.Name;
-			}
-		}
-		public long ContainerID
-		{
-			get
-			{
-				return cMap.ContainerID;
-			}
-		}
-
-		public void AddDocument(DocumentMap dMap)
-		{
-			this.Documents.Add(dMap);
-		}
-
-		public List<DocumentMap> GetDocuments()
-		{
-			var reslist = new List<DocumentMap>();
-			reslist.AddRange(Documents);
-			return reslist;
-		}
-	}
-
 	/// <summary>
-	/// Класс описывает Хранилище данных SAGA.
+	/// Реализация IntfInnerStore.
+	/// Класс описывает внутреннее хранилище данных клиента DirectDBA.
 	/// </summary>
-	public class InnerStore
+	public class InnerStore : IntfInnerStore
 	{
-		public List<ContainerNode> containers = new List<ContainerNode>();
-
-		/// <summary>
-		/// Заполнение Хранилище данными о контейнерах.
-		/// </summary>
-		/// <param name="dTable">Набор данных</param>
-		/// <returns></returns>
-		public void FillContainers(DataTable dTable)
+		public override void FillContainers(ComplexValue list)
 		{
+			DataTable dTable = list.dtable;
 			containers.Clear();
 			for (int i = 0; i < dTable.Rows.Count; i++)
 			{
@@ -76,13 +29,9 @@ namespace DirectDBA
 			}
 		}
 
-		/// <summary>
-		/// Заполнение Хранилище данными о документах.
-		/// </summary>
-		/// <param name="dTable">Набор данных</param>
-		/// <returns></returns>
-		public void FillDocs(DataTable dTable)
+		public override void FillDocs(ComplexValue list)
 		{
+			DataTable dTable = list.dtable;
 			for (int i = 0; i < dTable.Rows.Count; i++)
 			{
 				var doc_id = dTable.Rows[i].Field<long>("doc_id");

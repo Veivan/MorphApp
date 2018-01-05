@@ -13,20 +13,21 @@ namespace Schemas
 		/// Получение плоского списка контейнеров
 		/// </summary>
 		/// <returns>RetValue</returns>
-		public abstract RetValue ReadContainers();
+		public abstract ComplexValue ReadContainers();
 
 		/// <summary>
 		/// Получение плоского списка документов
 		/// </summary>
 		/// <returns>RetValue</returns>
-		public abstract RetValue ReadDocuments();
+		public abstract ComplexValue ReadDocuments();
 
 		/// <summary>
 		/// Получение контейнеров выбранного родителя.
 		/// </summary>
 		/// <param name="parentID">ID родителя</param>
+		/// <param name="resulttype">тип возвращаемого результата</param>
 		/// <returns>RetValue</returns>
-		public abstract RetValue GetChildrenContainers(long parentID);
+		public abstract ComplexValue GetChildrenContainers(long parentID, tpList resulttype);
 
 		/// <summary>
 		/// Получение документов из выбранного контейнера.
@@ -40,7 +41,7 @@ namespace Schemas
 		/// </summary>
 		/// <param name="list_ids">список ID контейнеров</param>
 		/// <returns>RetValue</returns>
-		public abstract RetValue GetDocsInContainerList(List<string> list_ids);
+		public abstract ComplexValue GetDocsInContainerList(List<string> list_ids);
 
 		/// <summary>
 		/// Сохранение абзаца в DB. Если pg_id == -1, то Insert, иначе - Update.
