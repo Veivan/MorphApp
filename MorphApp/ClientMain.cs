@@ -18,7 +18,7 @@ namespace MorphApp
 		CLInnerStore store = new CLInnerStore();
 
 		Courier courier = new Courier();
-		Paragraph para = new Paragraph();
+		ParagraphMap para = new ParagraphMap();
 
 		SentenceMap sent;
 

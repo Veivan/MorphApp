@@ -24,7 +24,7 @@ namespace MorphApp
 
 		private long dbID = -1;
 
-		private Paragraph parastr;
+		private ParagraphMap parastr;
 		private SentenceMap sentstr;
 
 		private ZFrame replay = null;
@@ -54,7 +54,7 @@ namespace MorphApp
 			this.sentstr = null;
 		}
 
-		public void SendParagraph(Paragraph parastr)
+		public void SendParagraph(ParagraphMap parastr)
 		{
 			this.parastr = parastr;
 			var builder = SetReq();

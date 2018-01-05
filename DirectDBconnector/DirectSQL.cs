@@ -170,6 +170,64 @@ namespace DirectDBconnector
 			return dTable;
 		}
 
+		/// <summary>
+		/// Чтения абзацев из множества документов.
+		/// Если list_ids == null, то выбираются все записи.
+		/// </summary>
+		/// <param name="list_ids">список ID документов</param>
+		/// <returns>DataTable</returns>
+		public DataTable ReadParagraphsInDocs(List<string> list_ids)
+		{
+			DataTable dTable = new DataTable();
+			var stmnt = "SELECT pg_id, doc_id, created_at, ph_id FROM mParagraphs ";
+			if (list_ids != null)
+			{
+				string result = string.Join(",", list_ids.ToArray());
+				if (!String.IsNullOrEmpty(result))
+					stmnt = stmnt + String.Format(" WHERE doc_id IN ({0})", result);
+			}
+			try
+			{
+				SQLiteDataAdapter adapter = new SQLiteDataAdapter(stmnt, m_dbConn);
+				adapter.Fill(dTable);
+			}
+			catch (SQLiteException ex)
+			{
+				//MessageBox.Show("Error: " + ex.Message);
+			}
+			return dTable;
+		}
+
+		internal System.Collections.ICollection ReadParagraphsInDocsList(List<string> list_ids)
+		{
+			var reslist = new List<ParagraphMap>();
+			var stmnt = "SELECT pg_id, doc_id, created_at, ph_id FROM mParagraphs ";
+			if (list_ids != null)
+			{
+				string result = string.Join(",", list_ids.ToArray());
+				if (!String.IsNullOrEmpty(result))
+					stmnt = stmnt + String.Format(" WHERE doc_id IN ({0})", result);
+			}
+			try
+			{
+				m_sqlCmd.CommandText = stmnt;
+				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
+				while (r.Read())
+				{
+					var dt = DateTime.Now;
+					var created = r["created_at"].ToString();
+					if (!String.IsNullOrEmpty(created))
+						dt = DateTime.Parse(created);
+//TODO переделать					reslist.Add(new ParagraphMap(r.GetInt64(0), r.GetInt64(1), r["name"].ToString(), dt));
+				}
+				r.Close();
+			}
+			catch (SQLiteException ex)
+			{
+				//MessageBox.Show("Error: " + ex.Message);
+			}
+			return reslist;
+		}
 
 		/// <summary>
 		/// Чтения документов из выбранного контейнера.
@@ -200,6 +258,5 @@ namespace DirectDBconnector
 			}
 			return reslist;
 		}
-
 	}
 }

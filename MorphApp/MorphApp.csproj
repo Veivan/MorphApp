@@ -83,7 +83,6 @@
     <Compile Include="ClientMain.Designer.cs">
       <DependentUpon>ClientMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="Paragraph.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SagaStoreServer.cs" />

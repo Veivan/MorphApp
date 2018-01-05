@@ -64,6 +64,7 @@
     <Compile Include="IntfInnerStore.cs" />
     <Compile Include="ObjectMaps\ContainerNode.cs" />
     <Compile Include="ComplexValue.cs" />
+    <Compile Include="ObjectMaps\ParagraphMap.cs" />
     <Compile Include="Session.cs" />
     <Compile Include="ObjectMaps\ContainerMap.cs" />
     <Compile Include="ObjectMaps\DocumentMap.cs" />

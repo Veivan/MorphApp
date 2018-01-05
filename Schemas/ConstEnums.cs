@@ -206,16 +206,19 @@ namespace Schemas
     public enum dbTables
     {
         tblContainers,
-        tblDocuments
+        tblDocuments,
+		tblParagraphs
     }
 
 	/// <summary>
 	/// Тип возвращаемого значения методов чтения из БД.
 	/// </summary>
-	public enum tpList
-	{
-		tplDBtable,
-		tblList
-	}
+	public enum tpList {tplDBtable,	tblList};
+
+	/// <summary>
+	/// enstAll - выбор всех предложений абзаца.
+	/// enstNotActual - выбор неактуальных предложений абзаца.
+	/// </summary>
+	public enum SentTypes { enstAll, enstNotActual };
 
 }

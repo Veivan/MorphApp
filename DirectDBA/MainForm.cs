@@ -69,6 +69,29 @@ namespace DirectDBA
 				HeaderText = "name"
 			});
 			#endregion
+			
+			#region Создание колонок для Абзацев
+			dgvParagraphs.Columns.Add(new DataGridViewTextBoxColumn
+			{
+				DataPropertyName = "pg_id",
+				HeaderText = "pg_id"
+			});
+			dgvParagraphs.Columns.Add(new DataGridViewTextBoxColumn
+			{
+				DataPropertyName = "doc_id",
+				HeaderText = "doc_id"
+			});
+			dgvParagraphs.Columns.Add(new DataGridViewTextBoxColumn
+			{
+				DataPropertyName = "Created_at",
+				HeaderText = "Создан"
+			});
+			dgvParagraphs.Columns.Add(new DataGridViewTextBoxColumn
+			{
+				DataPropertyName = "ph_id",
+				HeaderText = "ph_id"
+			});
+			#endregion
 		}
 
 		private void btRefreshContainers_Click(object sender, EventArgs e)
@@ -80,6 +103,11 @@ namespace DirectDBA
 		{
 			ReadDocsDirect();
 			//ReadDocsFromList();
+		}
+
+		private void btRefreshParagraphs_Click(object sender, EventArgs e)
+		{
+			ReadParagraphsDirect();
 		}
 
 		/// <summary>
@@ -100,6 +128,15 @@ namespace DirectDBA
 			bsDocuments.DataSource = retval.dtable;
 		}
 
+		/// <summary>
+		/// Чтения Абзацев напрямую из БД.
+		/// </summary>
+		private void ReadParagraphsDirect()
+		{
+			var retval = dbServer.ReadParagraphsInDocsList(tpList.tplDBtable);
+			bsParagraphs.DataSource = retval.dtable;
+		}
+
 		private void navUpdate_Click(object sender, EventArgs e)
 		{
 			switch ((sender as ToolStripButton).Name)
@@ -109,6 +146,9 @@ namespace DirectDBA
 					break;
 				case "btUpdContainers":
 					dbServer.UpdateDataTable((DataTable)bsContainers.DataSource, dbTables.tblContainers);
+					break;
+				case "btUpdParagraphs":
+					dbServer.UpdateDataTable((DataTable)bsParagraphs.DataSource, dbTables.tblParagraphs);
 					break;
 			} 
 		}
@@ -224,8 +264,6 @@ namespace DirectDBA
 			}
 		}
 		#endregion
-
-
 
 	}
 }

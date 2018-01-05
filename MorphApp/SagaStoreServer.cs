@@ -27,6 +27,11 @@ namespace MorphApp
 			throw new NotImplementedException();
 		}
 
+		public override ComplexValue ReadParagraphsInDocsList(tpList resulttype, List<string> list_ids = null)
+		{
+			throw new NotImplementedException();
+		}
+
 		public override ComplexValue GetChildrenContainers(long parentID, tpList resulttype = tpList.tblList)
 		{
 			courier.servType = TMorph.Schema.ServType.svSUBD;
@@ -58,7 +63,5 @@ namespace MorphApp
 			throw new NotImplementedException();
 		}
 		#endregion
-
-
 	}
 }

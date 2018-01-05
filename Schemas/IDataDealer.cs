@@ -12,14 +12,21 @@ namespace Schemas
 		/// <summary>
 		/// Получение плоского списка контейнеров
 		/// </summary>
-		/// <returns>RetValue</returns>
+		/// <returns>ComplexValue</returns>
 		public abstract ComplexValue ReadContainers();
 
 		/// <summary>
 		/// Получение плоского списка документов
 		/// </summary>
-		/// <returns>RetValue</returns>
+		/// <returns>ComplexValue</returns>
 		public abstract ComplexValue ReadDocuments();
+
+		/// <summary>
+		/// Получение плоского списка абзацев
+		/// </summary>
+		/// <param name="doc_id">ID документа</param>
+		/// <returns>ComplexValue</returns>
+		public abstract ComplexValue ReadParagraphsInDocsList(tpList resulttype, List<string> list_ids = null);
 
 		/// <summary>
 		/// Получение контейнеров выбранного родителя.

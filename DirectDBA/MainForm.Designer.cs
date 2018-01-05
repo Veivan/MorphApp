@@ -75,6 +75,27 @@
 			this.bindingNavigatorSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.btUpdDocuments = new System.Windows.Forms.ToolStripButton();
+			this.tabParagraphs = new System.Windows.Forms.TabPage();
+			this.dgvParagraphs = new System.Windows.Forms.DataGridView();
+			this.panel4 = new System.Windows.Forms.Panel();
+			this.btRefreshParagraphs = new System.Windows.Forms.Button();
+			this.navParagraphs = new System.Windows.Forms.BindingNavigator(this.components);
+			this.toolStripButton7 = new System.Windows.Forms.ToolStripButton();
+			this.bsParagraphs = new System.Windows.Forms.BindingSource(this.components);
+			this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
+			this.toolStripButton8 = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton9 = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton10 = new System.Windows.Forms.ToolStripButton();
+			this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripTextBox2 = new System.Windows.Forms.ToolStripTextBox();
+			this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripButton11 = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton12 = new System.Windows.Forms.ToolStripButton();
+			this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
+			this.btUpdParagraphs = new System.Windows.Forms.ToolStripButton();
+			this.tabSentencies = new System.Windows.Forms.TabPage();
+			this.tabWords = new System.Windows.Forms.TabPage();
 			this.binding1 = new System.Windows.Forms.BindingSource(this.components);
 			this.tabControl1.SuspendLayout();
 			this.tabTree.SuspendLayout();
@@ -92,6 +113,12 @@
 			this.panel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.navDocuments)).BeginInit();
 			this.navDocuments.SuspendLayout();
+			this.tabParagraphs.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.dgvParagraphs)).BeginInit();
+			this.panel4.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.navParagraphs)).BeginInit();
+			this.navParagraphs.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.bsParagraphs)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.binding1)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -100,6 +127,9 @@
 			this.tabControl1.Controls.Add(this.tabTree);
 			this.tabControl1.Controls.Add(this.tabPageContainers);
 			this.tabControl1.Controls.Add(this.tabDocuments);
+			this.tabControl1.Controls.Add(this.tabParagraphs);
+			this.tabControl1.Controls.Add(this.tabSentencies);
+			this.tabControl1.Controls.Add(this.tabWords);
 			this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabControl1.Location = new System.Drawing.Point(0, 0);
 			this.tabControl1.Name = "tabControl1";
@@ -511,6 +541,197 @@
 			this.btUpdDocuments.Size = new System.Drawing.Size(23, 22);
 			this.btUpdDocuments.Click += new System.EventHandler(this.navUpdate_Click);
 			// 
+			// tabParagraphs
+			// 
+			this.tabParagraphs.Controls.Add(this.dgvParagraphs);
+			this.tabParagraphs.Controls.Add(this.panel4);
+			this.tabParagraphs.Location = new System.Drawing.Point(4, 22);
+			this.tabParagraphs.Name = "tabParagraphs";
+			this.tabParagraphs.Padding = new System.Windows.Forms.Padding(3);
+			this.tabParagraphs.Size = new System.Drawing.Size(817, 489);
+			this.tabParagraphs.TabIndex = 3;
+			this.tabParagraphs.Text = "Абзацы";
+			this.tabParagraphs.UseVisualStyleBackColor = true;
+			// 
+			// dgvParagraphs
+			// 
+			this.dgvParagraphs.AutoGenerateColumns = false;
+			this.dgvParagraphs.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.dgvParagraphs.DataSource = this.bsParagraphs;
+			this.dgvParagraphs.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.dgvParagraphs.Location = new System.Drawing.Point(3, 3);
+			this.dgvParagraphs.Name = "dgvParagraphs";
+			this.dgvParagraphs.Size = new System.Drawing.Size(811, 421);
+			this.dgvParagraphs.TabIndex = 3;
+			// 
+			// panel4
+			// 
+			this.panel4.Controls.Add(this.btRefreshParagraphs);
+			this.panel4.Controls.Add(this.navParagraphs);
+			this.panel4.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.panel4.Location = new System.Drawing.Point(3, 424);
+			this.panel4.Name = "panel4";
+			this.panel4.Size = new System.Drawing.Size(811, 62);
+			this.panel4.TabIndex = 2;
+			// 
+			// btRefreshParagraphs
+			// 
+			this.btRefreshParagraphs.Location = new System.Drawing.Point(5, 28);
+			this.btRefreshParagraphs.Name = "btRefreshParagraphs";
+			this.btRefreshParagraphs.Size = new System.Drawing.Size(77, 29);
+			this.btRefreshParagraphs.TabIndex = 1;
+			this.btRefreshParagraphs.Text = "Refresh";
+			this.btRefreshParagraphs.UseVisualStyleBackColor = true;
+			this.btRefreshParagraphs.Click += new System.EventHandler(this.btRefreshParagraphs_Click);
+			// 
+			// navParagraphs
+			// 
+			this.navParagraphs.AddNewItem = this.toolStripButton7;
+			this.navParagraphs.BindingSource = this.bsParagraphs;
+			this.navParagraphs.CountItem = this.toolStripLabel2;
+			this.navParagraphs.DeleteItem = this.toolStripButton8;
+			this.navParagraphs.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButton9,
+            this.toolStripButton10,
+            this.toolStripSeparator6,
+            this.toolStripTextBox2,
+            this.toolStripLabel2,
+            this.toolStripSeparator7,
+            this.toolStripButton11,
+            this.toolStripButton12,
+            this.toolStripSeparator8,
+            this.toolStripButton7,
+            this.toolStripButton8,
+            this.toolStripSeparator9,
+            this.btUpdParagraphs});
+			this.navParagraphs.Location = new System.Drawing.Point(0, 0);
+			this.navParagraphs.MoveFirstItem = this.toolStripButton9;
+			this.navParagraphs.MoveLastItem = this.toolStripButton12;
+			this.navParagraphs.MoveNextItem = this.toolStripButton11;
+			this.navParagraphs.MovePreviousItem = this.toolStripButton10;
+			this.navParagraphs.Name = "navParagraphs";
+			this.navParagraphs.PositionItem = this.toolStripTextBox2;
+			this.navParagraphs.Size = new System.Drawing.Size(811, 25);
+			this.navParagraphs.TabIndex = 0;
+			this.navParagraphs.Text = "bindingNavigator1";
+			// 
+			// toolStripButton7
+			// 
+			this.toolStripButton7.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton7.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton7.Image")));
+			this.toolStripButton7.Name = "toolStripButton7";
+			this.toolStripButton7.RightToLeftAutoMirrorImage = true;
+			this.toolStripButton7.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton7.Text = "Добавить";
+			// 
+			// toolStripLabel2
+			// 
+			this.toolStripLabel2.Name = "toolStripLabel2";
+			this.toolStripLabel2.Size = new System.Drawing.Size(43, 22);
+			this.toolStripLabel2.Text = "для {0}";
+			this.toolStripLabel2.ToolTipText = "Общее число элементов";
+			// 
+			// toolStripButton8
+			// 
+			this.toolStripButton8.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton8.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton8.Image")));
+			this.toolStripButton8.Name = "toolStripButton8";
+			this.toolStripButton8.RightToLeftAutoMirrorImage = true;
+			this.toolStripButton8.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton8.Text = "Удалить";
+			// 
+			// toolStripButton9
+			// 
+			this.toolStripButton9.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton9.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton9.Image")));
+			this.toolStripButton9.Name = "toolStripButton9";
+			this.toolStripButton9.RightToLeftAutoMirrorImage = true;
+			this.toolStripButton9.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton9.Text = "Переместить в начало";
+			// 
+			// toolStripButton10
+			// 
+			this.toolStripButton10.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton10.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton10.Image")));
+			this.toolStripButton10.Name = "toolStripButton10";
+			this.toolStripButton10.RightToLeftAutoMirrorImage = true;
+			this.toolStripButton10.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton10.Text = "Переместить назад";
+			// 
+			// toolStripSeparator6
+			// 
+			this.toolStripSeparator6.Name = "toolStripSeparator6";
+			this.toolStripSeparator6.Size = new System.Drawing.Size(6, 25);
+			// 
+			// toolStripTextBox2
+			// 
+			this.toolStripTextBox2.AccessibleName = "Положение";
+			this.toolStripTextBox2.AutoSize = false;
+			this.toolStripTextBox2.Name = "toolStripTextBox2";
+			this.toolStripTextBox2.Size = new System.Drawing.Size(50, 23);
+			this.toolStripTextBox2.Text = "0";
+			this.toolStripTextBox2.ToolTipText = "Текущее положение";
+			// 
+			// toolStripSeparator7
+			// 
+			this.toolStripSeparator7.Name = "toolStripSeparator7";
+			this.toolStripSeparator7.Size = new System.Drawing.Size(6, 25);
+			// 
+			// toolStripButton11
+			// 
+			this.toolStripButton11.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton11.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton11.Image")));
+			this.toolStripButton11.Name = "toolStripButton11";
+			this.toolStripButton11.RightToLeftAutoMirrorImage = true;
+			this.toolStripButton11.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton11.Text = "Переместить вперед";
+			// 
+			// toolStripButton12
+			// 
+			this.toolStripButton12.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripButton12.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton12.Image")));
+			this.toolStripButton12.Name = "toolStripButton12";
+			this.toolStripButton12.RightToLeftAutoMirrorImage = true;
+			this.toolStripButton12.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton12.Text = "Переместить в конец";
+			// 
+			// toolStripSeparator8
+			// 
+			this.toolStripSeparator8.Name = "toolStripSeparator8";
+			this.toolStripSeparator8.Size = new System.Drawing.Size(6, 25);
+			// 
+			// toolStripSeparator9
+			// 
+			this.toolStripSeparator9.Name = "toolStripSeparator9";
+			this.toolStripSeparator9.Size = new System.Drawing.Size(6, 25);
+			// 
+			// btUpdParagraphs
+			// 
+			this.btUpdParagraphs.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.btUpdParagraphs.Image = ((System.Drawing.Image)(resources.GetObject("btUpdParagraphs.Image")));
+			this.btUpdParagraphs.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.btUpdParagraphs.Name = "btUpdParagraphs";
+			this.btUpdParagraphs.Size = new System.Drawing.Size(23, 22);
+			this.btUpdParagraphs.Click += new System.EventHandler(this.navUpdate_Click);
+			// 
+			// tabSentencies
+			// 
+			this.tabSentencies.Location = new System.Drawing.Point(4, 22);
+			this.tabSentencies.Name = "tabSentencies";
+			this.tabSentencies.Size = new System.Drawing.Size(817, 489);
+			this.tabSentencies.TabIndex = 4;
+			this.tabSentencies.Text = "Предложения";
+			this.tabSentencies.UseVisualStyleBackColor = true;
+			// 
+			// tabWords
+			// 
+			this.tabWords.Location = new System.Drawing.Point(4, 22);
+			this.tabWords.Name = "tabWords";
+			this.tabWords.Size = new System.Drawing.Size(817, 489);
+			this.tabWords.TabIndex = 5;
+			this.tabWords.Text = "Слова";
+			this.tabWords.UseVisualStyleBackColor = true;
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -540,6 +761,14 @@
 			((System.ComponentModel.ISupportInitialize)(this.navDocuments)).EndInit();
 			this.navDocuments.ResumeLayout(false);
 			this.navDocuments.PerformLayout();
+			this.tabParagraphs.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.dgvParagraphs)).EndInit();
+			this.panel4.ResumeLayout(false);
+			this.panel4.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.navParagraphs)).EndInit();
+			this.navParagraphs.ResumeLayout(false);
+			this.navParagraphs.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.bsParagraphs)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.binding1)).EndInit();
 			this.ResumeLayout(false);
 
@@ -593,6 +822,27 @@
         private System.Windows.Forms.ToolStripButton btUpdContainers;
         private System.Windows.Forms.Button btRefreshContainers;
 		private System.Windows.Forms.TreeView treeView1;
+		private System.Windows.Forms.TabPage tabParagraphs;
+		private System.Windows.Forms.DataGridView dgvParagraphs;
+		private System.Windows.Forms.Panel panel4;
+		private System.Windows.Forms.Button btRefreshParagraphs;
+		private System.Windows.Forms.BindingNavigator navParagraphs;
+		private System.Windows.Forms.ToolStripButton toolStripButton7;
+		private System.Windows.Forms.BindingSource bsParagraphs;
+		private System.Windows.Forms.ToolStripLabel toolStripLabel2;
+		private System.Windows.Forms.ToolStripButton toolStripButton8;
+		private System.Windows.Forms.ToolStripButton toolStripButton9;
+		private System.Windows.Forms.ToolStripButton toolStripButton10;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+		private System.Windows.Forms.ToolStripTextBox toolStripTextBox2;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
+		private System.Windows.Forms.ToolStripButton toolStripButton11;
+		private System.Windows.Forms.ToolStripButton toolStripButton12;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
+		private System.Windows.Forms.ToolStripButton btUpdParagraphs;
+		private System.Windows.Forms.TabPage tabSentencies;
+		private System.Windows.Forms.TabPage tabWords;
 	}
 }
 

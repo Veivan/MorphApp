@@ -3,12 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-using Schemas;
-
-namespace MorphApp
+namespace Schemas
 {
-	enum SentTypes { enstAll, enstNotActual };
-	class SentProps
+	public class SentProps
 	{
 		public int order;
 		public string sentence;
@@ -20,7 +17,7 @@ namespace MorphApp
 	/// <summary>
 	/// Класс представляет хранилище предложений одного абзаца.
 	/// </summary>
-	class Paragraph
+	public class ParagraphMap
 	{
 		private long _pgID = -1;
 		/// <summary>
@@ -37,7 +34,7 @@ namespace MorphApp
 		/// Добавление предложений абзаца в хранилище.
 		/// При добавлении вычисляется хэш предложения и по жэшу происходит поиск существующего предложения в хранилище.
 		/// Если предложение есть, то структура переносится в новый список,
-		/// если нет , то добавляется новая структура с признаком "Неактальная".
+		/// если нет, то добавляется новая структура с признаком "Неактуальная".
 		/// Для "Неактуальных" надо делать синтаксический анализ.
 		/// По окончании новый список заменяет предыдущее содержание хранилища.
 		/// </summary>
@@ -116,7 +113,6 @@ namespace MorphApp
 			sprop.order = order;
 			sprop.sentstruct = new SentenceMap(sentstruct);
 			innerPara.Add(sprop);
-
 		}
 
 	}

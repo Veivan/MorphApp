@@ -32,6 +32,28 @@ namespace DirectDBconnector
 			return rval;
 		}
 
+		/// <summary>
+		/// Получение плоского списка абзацев
+		/// </summary>
+		/// <param name="resulttype">тип возвращаемого результата</param>
+		/// <param name="list_ids">Список ID документов</param>
+		/// <returns>ComplexValue</returns>
+		public override ComplexValue ReadParagraphsInDocsList(tpList resulttype, List<string> list_ids = null)
+		{
+			ComplexValue rval = new ComplexValue();
+			if (resulttype == tpList.tplDBtable)
+				rval.dtable = dbConnector.dirCmd.ReadParagraphsInDocs(list_ids);
+			else
+				rval.list.AddRange(dbConnector.dirCmd.ReadParagraphsInDocsList(list_ids));
+			return rval;
+		}
+
+		/// <summary>
+		/// Получение плоского списка контейнеров
+		/// в виде DataTable
+		/// </summary>
+		/// <param name="resulttype">тип возвращаемого результата</param>
+		/// <returns>ComplexValue</returns>
 		public override ComplexValue GetChildrenContainers(long parentID, tpList resulttype)
 		{
 			ComplexValue rval = new ComplexValue();
