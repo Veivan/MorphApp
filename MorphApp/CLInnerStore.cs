@@ -7,6 +7,7 @@ namespace MorphApp
 	/// <summary>
 	/// Реализация IntfInnerStore.
 	/// Класс описывает внутреннее хранилище данных клиента MorphApp.
+	/// Данные приходят из хранилища в виде списков.
 	/// </summary>
 	public class CLInnerStore : IntfInnerStore
 	{

@@ -76,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CLInnerStore.cs" />
+    <Compile Include="CLInnerStoreDB.cs" />
     <Compile Include="Courier.cs" />
     <Compile Include="ClientMain.cs">
       <SubType>Form</SubType>
@@ -109,6 +110,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DirectDBconnector\DirectDBconnector.csproj">
+      <Project>{BE92F137-83A0-4F07-9EC5-2504EF561C7A}</Project>
+      <Name>DirectDBconnector</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Schemas\Schemas.csproj">
       <Project>{BF7809E6-3E9D-49FC-888D-6D0C7187CC5B}</Project>
       <Name>Schemas</Name>

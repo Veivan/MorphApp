@@ -33,10 +33,14 @@
 			this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.tabPage1 = new System.Windows.Forms.TabPage();
+			this.panel3 = new System.Windows.Forms.Panel();
+			this.btRefresh = new System.Windows.Forms.Button();
+			this.panel2 = new System.Windows.Forms.Panel();
+			this.treeView1 = new System.Windows.Forms.TreeView();
 			this.tabPage2 = new System.Windows.Forms.TabPage();
-			this.panel1 = new System.Windows.Forms.Panel();
-			this.memoInp = new System.Windows.Forms.TextBox();
 			this.memoOut = new System.Windows.Forms.TextBox();
+			this.memoInp = new System.Windows.Forms.TextBox();
+			this.panel1 = new System.Windows.Forms.Panel();
 			this.btSelect = new System.Windows.Forms.Button();
 			this.btReadPara = new System.Windows.Forms.Button();
 			this.btSavePara = new System.Windows.Forms.Button();
@@ -46,17 +50,13 @@
 			this.btDBGetWord = new System.Windows.Forms.Button();
 			this.btMakeSynAn = new System.Windows.Forms.Button();
 			this.btGetMorph = new System.Windows.Forms.Button();
-			this.panel2 = new System.Windows.Forms.Panel();
-			this.panel3 = new System.Windows.Forms.Panel();
-			this.treeView1 = new System.Windows.Forms.TreeView();
-			this.btRefresh = new System.Windows.Forms.Button();
 			this.statusStrip1.SuspendLayout();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
+			this.panel3.SuspendLayout();
+			this.panel2.SuspendLayout();
 			this.tabPage2.SuspendLayout();
 			this.panel1.SuspendLayout();
-			this.panel2.SuspendLayout();
-			this.panel3.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// statusStrip1
@@ -104,6 +104,43 @@
 			this.tabPage1.Text = "tabPage1";
 			this.tabPage1.UseVisualStyleBackColor = true;
 			// 
+			// panel3
+			// 
+			this.panel3.Controls.Add(this.btRefresh);
+			this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.panel3.Location = new System.Drawing.Point(3, 555);
+			this.panel3.Name = "panel3";
+			this.panel3.Size = new System.Drawing.Size(619, 64);
+			this.panel3.TabIndex = 22;
+			// 
+			// btRefresh
+			// 
+			this.btRefresh.Location = new System.Drawing.Point(5, 14);
+			this.btRefresh.Name = "btRefresh";
+			this.btRefresh.Size = new System.Drawing.Size(87, 26);
+			this.btRefresh.TabIndex = 0;
+			this.btRefresh.Text = "Refresh";
+			this.btRefresh.UseVisualStyleBackColor = true;
+			this.btRefresh.Click += new System.EventHandler(this.btRefresh_Click);
+			// 
+			// panel2
+			// 
+			this.panel2.Controls.Add(this.treeView1);
+			this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel2.Location = new System.Drawing.Point(3, 3);
+			this.panel2.Name = "panel2";
+			this.panel2.Size = new System.Drawing.Size(619, 616);
+			this.panel2.TabIndex = 21;
+			// 
+			// treeView1
+			// 
+			this.treeView1.Dock = System.Windows.Forms.DockStyle.Left;
+			this.treeView1.Location = new System.Drawing.Point(0, 0);
+			this.treeView1.Name = "treeView1";
+			this.treeView1.Size = new System.Drawing.Size(324, 616);
+			this.treeView1.TabIndex = 21;
+			this.treeView1.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeView1_BeforeExpand);
+			// 
 			// tabPage2
 			// 
 			this.tabPage2.Controls.Add(this.memoOut);
@@ -116,6 +153,27 @@
 			this.tabPage2.TabIndex = 1;
 			this.tabPage2.Text = "tabPage2";
 			this.tabPage2.UseVisualStyleBackColor = true;
+			// 
+			// memoOut
+			// 
+			this.memoOut.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.memoOut.Location = new System.Drawing.Point(3, 251);
+			this.memoOut.Multiline = true;
+			this.memoOut.Name = "memoOut";
+			this.memoOut.ReadOnly = true;
+			this.memoOut.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+			this.memoOut.Size = new System.Drawing.Size(619, 268);
+			this.memoOut.TabIndex = 6;
+			// 
+			// memoInp
+			// 
+			this.memoInp.Dock = System.Windows.Forms.DockStyle.Top;
+			this.memoInp.Location = new System.Drawing.Point(3, 3);
+			this.memoInp.Multiline = true;
+			this.memoInp.Name = "memoInp";
+			this.memoInp.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+			this.memoInp.Size = new System.Drawing.Size(619, 248);
+			this.memoInp.TabIndex = 4;
 			// 
 			// panel1
 			// 
@@ -133,27 +191,6 @@
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(619, 100);
 			this.panel1.TabIndex = 0;
-			// 
-			// memoInp
-			// 
-			this.memoInp.Dock = System.Windows.Forms.DockStyle.Top;
-			this.memoInp.Location = new System.Drawing.Point(3, 3);
-			this.memoInp.Multiline = true;
-			this.memoInp.Name = "memoInp";
-			this.memoInp.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.memoInp.Size = new System.Drawing.Size(619, 248);
-			this.memoInp.TabIndex = 4;
-			// 
-			// memoOut
-			// 
-			this.memoOut.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.memoOut.Location = new System.Drawing.Point(3, 251);
-			this.memoOut.Multiline = true;
-			this.memoOut.Name = "memoOut";
-			this.memoOut.ReadOnly = true;
-			this.memoOut.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.memoOut.Size = new System.Drawing.Size(619, 268);
-			this.memoOut.TabIndex = 6;
 			// 
 			// btSelect
 			// 
@@ -236,42 +273,6 @@
 			this.btGetMorph.Text = "MorphAn";
 			this.btGetMorph.UseVisualStyleBackColor = true;
 			// 
-			// panel2
-			// 
-			this.panel2.Controls.Add(this.treeView1);
-			this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel2.Location = new System.Drawing.Point(3, 3);
-			this.panel2.Name = "panel2";
-			this.panel2.Size = new System.Drawing.Size(619, 616);
-			this.panel2.TabIndex = 21;
-			// 
-			// panel3
-			// 
-			this.panel3.Controls.Add(this.btRefresh);
-			this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.panel3.Location = new System.Drawing.Point(3, 555);
-			this.panel3.Name = "panel3";
-			this.panel3.Size = new System.Drawing.Size(619, 64);
-			this.panel3.TabIndex = 22;
-			// 
-			// treeView1
-			// 
-			this.treeView1.Dock = System.Windows.Forms.DockStyle.Left;
-			this.treeView1.Location = new System.Drawing.Point(0, 0);
-			this.treeView1.Name = "treeView1";
-			this.treeView1.Size = new System.Drawing.Size(324, 616);
-			this.treeView1.TabIndex = 21;
-			// 
-			// btRefresh
-			// 
-			this.btRefresh.Location = new System.Drawing.Point(5, 14);
-			this.btRefresh.Name = "btRefresh";
-			this.btRefresh.Size = new System.Drawing.Size(87, 26);
-			this.btRefresh.TabIndex = 0;
-			this.btRefresh.Text = "Refresh";
-			this.btRefresh.UseVisualStyleBackColor = true;
-			this.btRefresh.Click += new System.EventHandler(this.btRefresh_Click);
-			// 
 			// ClientMain
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -287,11 +288,11 @@
 			this.statusStrip1.PerformLayout();
 			this.tabControl1.ResumeLayout(false);
 			this.tabPage1.ResumeLayout(false);
+			this.panel3.ResumeLayout(false);
+			this.panel2.ResumeLayout(false);
 			this.tabPage2.ResumeLayout(false);
 			this.tabPage2.PerformLayout();
 			this.panel1.ResumeLayout(false);
-			this.panel2.ResumeLayout(false);
-			this.panel3.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

@@ -9,13 +9,19 @@ using System.Windows.Forms;
 
 using System.Collections;
 using Schemas;
+using DirectDBconnector;
 
 namespace MorphApp
 {
 	public partial class ClientMain : Form
 	{
+		/*/ Работа с БД через сервер сообщений
 		SagaStoreServer dbServer = new SagaStoreServer();
-		CLInnerStore store = new CLInnerStore();
+		CLInnerStore store = new CLInnerStore(); */
+
+		// Работа с БД напрямую
+		SagaDBServer dbServer = new SagaDBServer();
+		CLInnerStoreDB store = new CLInnerStoreDB();
 
 		Courier courier = new Courier();
 		ParagraphMap para = new ParagraphMap();
@@ -251,7 +257,21 @@ namespace MorphApp
 		/// </summary>
 		private void RefreshInnerStore()
 		{
-			var list = dbServer.GetChildrenContainers(Session.MainStroreID);
+			var list = dbServer.GetChildrenContainers(Session.MainStroreID, tpList.tplDBtable);
+			store.FillContainers(list);
+
+			var dTable = list.dtable;
+			var list_ids = new List<string>();
+			for (int i = 0; i < dTable.Rows.Count; i++)
+			{
+				var strID = dTable.Rows[i].Field<long>("ct_id");
+				list_ids.Add(strID.ToString());
+			}
+			list = dbServer.GetDocsInContainerList(list_ids);
+			store.FillDocs(list);
+			PopulateTreeView();
+
+			/*var list = dbServer.GetChildrenContainers(Session.MainStroreID);
 			store.FillContainers(list);
 
 			var dTable = list.list;
@@ -261,21 +281,22 @@ namespace MorphApp
 				var strID = (dTable[i] as ContainerMap).ContainerID;
 				list_ids.Add(strID.ToString());
 			}
-			/*list = dbServer.GetDocsInContainerList(list_ids);
+			list = dbServer.GetDocsInContainerList(list_ids);
 			store.FillDocs(list); */
 			PopulateTreeView();
 		}
 
 		private void PopulateTreeView()
 		{
-			TreeNode rootNode;
+			TreeNode rootNode; 
 			treeView1.Nodes.Clear();
 
 			rootNode = new TreeNode("Хранилище");
 			foreach (var cont in store.containers)
 			{
 				var aNode = new TreeNode(cont.Name, 0, 0);
-				aNode.Tag = cont.ContainerID;
+				aNode.Name = cont.ContainerID.ToString();
+				aNode.Tag = clNodeType.clnContainer;
 				PopulateTreeDocuments(cont, aNode);
 				rootNode.Nodes.Add(aNode);
 			}
@@ -288,9 +309,17 @@ namespace MorphApp
 			foreach (var doc in docs)
 			{
 				var aNode = new TreeNode(doc.Name, 0, 0);
-				aNode.Tag = doc.ContainerID;
+				aNode.Name = doc.DocumentID.ToString();
+				aNode.Tag = clNodeType.clnContainer;
 				nodeToAddTo.Nodes.Add(aNode);
 			}
+		}
+
+		private void treeView1_BeforeExpand(object sender, TreeViewCancelEventArgs e)
+		{
+			//TODO Если Загружать документы из БД, если не загружены
+			TreeNode aNode = null;
+
 		}
 
 	}

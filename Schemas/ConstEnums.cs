@@ -221,4 +221,9 @@ namespace Schemas
 	/// </summary>
 	public enum SentTypes { enstAll, enstNotActual };
 
+	/// <summary>
+	/// Тип узла в клиентском дереве отображения объектов хранилища.
+	/// </summary>
+	public enum clNodeType { clnContainer, clnDocument, clnParagraph };
+
 }
