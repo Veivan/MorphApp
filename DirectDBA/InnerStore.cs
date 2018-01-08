@@ -44,5 +44,10 @@ namespace DirectDBA
 				cont.AddDocument(dMap);
 			}
 		}
+
+		public override void FillDocsParagraphs(ComplexValue list)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

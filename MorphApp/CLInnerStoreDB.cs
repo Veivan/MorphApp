@@ -41,8 +41,27 @@ namespace MorphApp
 				var created_at = dTable.Rows[i].Field<DateTime?>("created_at");
 
 				var dMap = new DocumentMap(doc_id, ct_id, name, created_at);
-				var cont = containers.Where(x => x.ContainerID == dMap.ContainerID).FirstOrDefault();
+				// TODO надо переделать поиск контейнеров. Этот вариант поднения двух уровней хранилища.
+				var cont = containers.Where(x => x.ContainerID == ct_id).FirstOrDefault();
 				cont.AddDocument(dMap);
+			}
+		}
+
+		public override void FillDocsParagraphs(ComplexValue list)
+		{
+			DataTable dTable = list.dtable;
+			for (int i = 0; i < dTable.Rows.Count; i++)
+			{
+				var pg_id = dTable.Rows[i].Field<long>("pg_id");
+				var doc_id = dTable.Rows[i].Field<long>("doc_id");
+				var ph_id = dTable.Rows[i].Field<long>("ph_id");
+				var created_at = dTable.Rows[i].Field<DateTime?>("created_at");
+				var ct_id = dTable.Rows[i].Field<long>("ct_id");
+
+				var pMap = new ParagraphMap(pg_id, doc_id, ph_id, created_at);
+				var cont = containers.Where(x => x.ContainerID == ct_id).FirstOrDefault();
+				var doc = cont.GetDocuments().Where(x => x.DocumentID == doc_id).FirstOrDefault();
+				doc.AddParagraph(pMap);
 			}
 		}
 	}

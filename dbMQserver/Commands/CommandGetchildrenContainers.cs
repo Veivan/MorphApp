@@ -10,7 +10,7 @@ namespace dbMQserver.Commands
 {
 	class CommandGetchildrenContainers : ICommand
 	{
-		private ComType command = ComType.ReadPara;
+		private ComType command = ComType.GetChildrenConts;
 		private List<ContainerMap> reslist = new List<ContainerMap>();
 		private long ParentID;
 

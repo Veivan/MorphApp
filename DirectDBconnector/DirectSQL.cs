@@ -179,12 +179,12 @@ namespace DirectDBconnector
 		public DataTable ReadParagraphsInDocs(List<string> list_ids)
 		{
 			DataTable dTable = new DataTable();
-			var stmnt = "SELECT pg_id, doc_id, created_at, ph_id FROM mParagraphs ";
+			var stmnt = "SELECT P.pg_id, P.doc_id, P.created_at, P.ph_id, D.ct_id FROM mParagraphs P JOIN mDocuments D ON D.doc_id = P.doc_id";
 			if (list_ids != null)
 			{
 				string result = string.Join(",", list_ids.ToArray());
 				if (!String.IsNullOrEmpty(result))
-					stmnt = stmnt + String.Format(" WHERE doc_id IN ({0})", result);
+					stmnt = stmnt + String.Format(" WHERE P.doc_id IN ({0})", result);
 			}
 			try
 			{
@@ -198,15 +198,21 @@ namespace DirectDBconnector
 			return dTable;
 		}
 
-		internal System.Collections.ICollection ReadParagraphsInDocsList(List<string> list_ids)
+		/// <summary>
+		/// Чтения абзацев из множества документов.
+		/// Если list_ids == null, то выбираются все записи.
+		/// </summary>
+		/// <param name="list_ids">список ID документов</param>
+		/// <returns>List of ParagraphMap</returns>
+		public List<ParagraphMap> ReadParagraphsInDocsList(List<string> list_ids)
 		{
 			var reslist = new List<ParagraphMap>();
-			var stmnt = "SELECT pg_id, doc_id, created_at, ph_id FROM mParagraphs ";
+			var stmnt = "SELECT P.pg_id, P.doc_id, P.created_at, P.ph_id, D.ct_id FROM mParagraphs P JOIN mDocuments D ON D.doc_id = P.doc_id";
 			if (list_ids != null)
 			{
 				string result = string.Join(",", list_ids.ToArray());
 				if (!String.IsNullOrEmpty(result))
-					stmnt = stmnt + String.Format(" WHERE doc_id IN ({0})", result);
+					stmnt = stmnt + String.Format(" WHERE P.doc_id IN ({0})", result);
 			}
 			try
 			{
@@ -218,7 +224,7 @@ namespace DirectDBconnector
 					var created = r["created_at"].ToString();
 					if (!String.IsNullOrEmpty(created))
 						dt = DateTime.Parse(created);
-//TODO переделать					reslist.Add(new ParagraphMap(r.GetInt64(0), r.GetInt64(1), r["name"].ToString(), dt));
+					reslist.Add(new ParagraphMap(r.GetInt64(0), r.GetInt64(1), r.GetInt64(2), dt));
 				}
 				r.Close();
 			}
@@ -258,5 +264,6 @@ namespace DirectDBconnector
 			}
 			return reslist;
 		}
+
 	}
 }

@@ -19,16 +19,34 @@ namespace Schemas
 	/// </summary>
 	public class ParagraphMap
 	{
-		private long _pgID = -1;
+		private long _pg_id = -1;
+		private long _doc_id = -1;
+		private long _ph_id = -1;
+		private DateTime _created_at;
+
 		/// <summary>
 		/// Идентификатор абзаца в БД.
 		/// </summary>
-		public long ParagraphID { get { return _pgID; } set { _pgID = value; } }
+		public long ParagraphID { get { return _pg_id; } set { _pg_id = value; } }
 
 		/// <summary>
 		/// Список предназначен для хранения предложений абзаца.
 		/// </summary>
 		private List<SentProps> innerPara = new List<SentProps>();
+
+		/// <summary>
+		/// Конструктор
+		/// </summary>
+		public ParagraphMap(long pg_id = -1, long doc_id = -1, long ph_id = -1, DateTime? created_at = null)
+        {
+			_pg_id = pg_id;
+			_doc_id = doc_id;
+			_ph_id = ph_id;
+			if (created_at == null)
+				_created_at = DateTime.Now;
+			else
+				_created_at = (DateTime)created_at;
+		}
 
 		/// <summary>
 		/// Добавление предложений абзаца в хранилище.
@@ -75,7 +93,7 @@ namespace Schemas
 		{
 			List<SentProps> versionPara = new List<SentProps>();
 			if (sttype == SentTypes.enstAll)
-				versionPara.AddRange(innerPara);
+				versionPara.AddRange(innerPara); //TODO переделать - это не копия
 			else
 				versionPara = innerPara.Where(x => x.IsActual == false).ToList();
 			return versionPara;

@@ -103,12 +103,7 @@ namespace MorphApp
 		private void ReadParagraphBD()
 		{
 			this.para.ParagraphID = 7;
-			courier.servType = TMorph.Schema.ServType.svSUBD;
-			courier.command = TMorph.Schema.ComType.ReadPara;
-			courier.SendParagraph(this.para);
-			// Через параметры передать -1 в случае ошибки, либо ID параграфа
-			var paramlist = courier.GetParamsList();
-			var sentlist = courier.GetSentenceStructList();
+			var sentlist = dbServer.ReadParagraphDB(this.para.ParagraphID);
 			para.RefreshParagraph(new ArrayList(sentlist));
 
 			//TODO прочитался параграф из БД - надо его ресторить и выдать на просмотр
@@ -269,6 +264,16 @@ namespace MorphApp
 			}
 			list = dbServer.GetDocsInContainerList(list_ids);
 			store.FillDocs(list);
+			list_ids.Clear();
+			dTable = list.dtable;
+			for (int i = 0; i < dTable.Rows.Count; i++)
+			{
+				var strID = dTable.Rows[i].Field<long>("doc_id");
+				list_ids.Add(strID.ToString());
+			}
+			list = dbServer.ReadParagraphsInDocsList(tpList.tplDBtable, list_ids);
+			store.FillDocsParagraphs(list);
+
 			PopulateTreeView();
 
 			/*var list = dbServer.GetChildrenContainers(Session.MainStroreID);
@@ -310,7 +315,20 @@ namespace MorphApp
 			{
 				var aNode = new TreeNode(doc.Name, 0, 0);
 				aNode.Name = doc.DocumentID.ToString();
-				aNode.Tag = clNodeType.clnContainer;
+				aNode.Tag = clNodeType.clnDocument;
+				PopulateTreeParags(doc, aNode);
+				nodeToAddTo.Nodes.Add(aNode);
+			}
+		}
+
+		private void PopulateTreeParags(DocumentMap dMap, TreeNode nodeToAddTo)
+		{
+			var parags = dMap.GetParagraphs();
+			foreach (var paragraph in parags)
+			{
+				var aNode = new TreeNode();
+				aNode.Name = paragraph.ParagraphID.ToString();
+				aNode.Tag = clNodeType.clnParagraph;
 				nodeToAddTo.Nodes.Add(aNode);
 			}
 		}
@@ -318,7 +336,22 @@ namespace MorphApp
 		private void treeView1_BeforeExpand(object sender, TreeViewCancelEventArgs e)
 		{
 			//TODO Если Загружать документы из БД, если не загружены
-			TreeNode aNode = null;
+			
+			TreeNode aNode = e.Node;
+			switch ((clNodeType)aNode.Tag)
+			{
+				case clNodeType.clnDocument:
+					{
+						// Найти ID абзаца
+						this.para.ParagraphID = 7;
+						// Чтение данных о структурах предложений и заголовка абзаца из БД
+						var sentlist = dbServer.ReadParagraphDB(this.para.ParagraphID);
+						para.RefreshParagraph(new ArrayList(sentlist));
+						// Восстановить заголовок по данным структуры
+						//aNode.Name = dbServer.ReadParagraphsInDocsList(tpList.tplDBtable, list_ids);
+						break;
+					}
+			}
 
 		}
 

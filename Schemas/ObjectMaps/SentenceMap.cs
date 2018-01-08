@@ -26,7 +26,14 @@ namespace Schemas
         /// </summary>
         public long SentenceID { get { return _phID; } set { _phID = value; } }
 
-        /// <summary>
+		private long _order = -1;
+		/// <summary>
+		/// Порядок предложения в абзаце.
+		/// У заголовка _order = -1;
+		/// </summary>
+		public long Order { get { return _order; } set { _order = value; } }
+		
+		/// <summary>
         /// Хранилище структур слов предложения.
         /// </summary>
         private SortedList<int, WordMap> words = new SortedList<int, WordMap>();

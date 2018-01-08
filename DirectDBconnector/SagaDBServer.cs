@@ -33,22 +33,6 @@ namespace DirectDBconnector
 		}
 
 		/// <summary>
-		/// Получение плоского списка абзацев
-		/// </summary>
-		/// <param name="resulttype">тип возвращаемого результата</param>
-		/// <param name="list_ids">Список ID документов</param>
-		/// <returns>ComplexValue</returns>
-		public override ComplexValue ReadParagraphsInDocsList(tpList resulttype, List<string> list_ids = null)
-		{
-			ComplexValue rval = new ComplexValue();
-			if (resulttype == tpList.tplDBtable)
-				rval.dtable = dbConnector.dirCmd.ReadParagraphsInDocs(list_ids);
-			else
-				rval.list.AddRange(dbConnector.dirCmd.ReadParagraphsInDocsList(list_ids));
-			return rval;
-		}
-
-		/// <summary>
 		/// Получение плоского списка контейнеров
 		/// в виде DataTable
 		/// </summary>
@@ -74,6 +58,22 @@ namespace DirectDBconnector
 		{
 			ComplexValue rval = new ComplexValue();
 			rval.dtable = dbConnector.dirCmd.GetDocsInContainerList(list_ids);
+			return rval;
+		}
+
+		/// <summary>
+		/// Получение плоского списка абзацев
+		/// </summary>
+		/// <param name="resulttype">тип возвращаемого результата</param>
+		/// <param name="list_ids">Список ID документов</param>
+		/// <returns>ComplexValue</returns>
+		public override ComplexValue ReadParagraphsInDocsList(tpList resulttype, List<string> list_ids = null)
+		{
+			ComplexValue rval = new ComplexValue();
+			if (resulttype == tpList.tplDBtable)
+				rval.dtable = dbConnector.dirCmd.ReadParagraphsInDocs(list_ids);
+			else
+				rval.list.AddRange(dbConnector.dirCmd.ReadParagraphsInDocsList(list_ids));
 			return rval;
 		}
 
@@ -107,6 +107,5 @@ namespace DirectDBconnector
 		}
 		
 		#endregion
-
 	}
 }

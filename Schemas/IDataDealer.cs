@@ -22,13 +22,6 @@ namespace Schemas
 		public abstract ComplexValue ReadDocuments();
 
 		/// <summary>
-		/// Получение плоского списка абзацев
-		/// </summary>
-		/// <param name="doc_id">ID документа</param>
-		/// <returns>ComplexValue</returns>
-		public abstract ComplexValue ReadParagraphsInDocsList(tpList resulttype, List<string> list_ids = null);
-
-		/// <summary>
 		/// Получение контейнеров выбранного родителя.
 		/// </summary>
 		/// <param name="parentID">ID родителя</param>
@@ -49,6 +42,13 @@ namespace Schemas
 		/// <param name="list_ids">список ID контейнеров</param>
 		/// <returns>RetValue</returns>
 		public abstract ComplexValue GetDocsInContainerList(List<string> list_ids);
+
+		/// <summary>
+		/// Получение плоского списка абзацев
+		/// </summary>
+		/// <param name="doc_id">ID документа</param>
+		/// <returns>ComplexValue</returns>
+		public abstract ComplexValue ReadParagraphsInDocsList(tpList resulttype, List<string> list_ids = null);
 
 		/// <summary>
 		/// Сохранение абзаца в DB. Если pg_id == -1, то Insert, иначе - Update.

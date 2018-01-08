@@ -26,5 +26,10 @@ namespace MorphApp
 		{
 			throw new NotImplementedException();
 		}
+
+		public override void FillDocsParagraphs(ComplexValue list)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

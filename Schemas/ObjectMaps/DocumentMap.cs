@@ -15,6 +15,8 @@ namespace Schemas
 		private DateTime _created_at;
 		private string _name = "";
 
+		private List<ParagraphMap> Paragraphs = new List<ParagraphMap>();
+
 		/// <summary>
 		/// Идентификатор документа в БД.
 		/// </summary>
@@ -44,6 +46,18 @@ namespace Schemas
 				_created_at = DateTime.Now;
 			else
 				_created_at = (DateTime)created_at;
+		}
+
+		public void AddParagraph(ParagraphMap pMap)
+		{
+			this.Paragraphs.Add(pMap);
+		}
+
+		public List<ParagraphMap> GetParagraphs()
+		{
+			var reslist = new List<ParagraphMap>();
+			reslist.AddRange(Paragraphs);
+			return reslist;
 		}
 
 	}
