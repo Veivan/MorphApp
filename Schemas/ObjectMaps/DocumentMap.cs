@@ -55,9 +55,7 @@ namespace Schemas
 
 		public List<ParagraphMap> GetParagraphs()
 		{
-			var reslist = new List<ParagraphMap>();
-			reslist.AddRange(Paragraphs);
-			return reslist;
+            return Paragraphs;
 		}
 
 	}

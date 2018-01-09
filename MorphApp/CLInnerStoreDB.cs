@@ -1,19 +1,95 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using Schemas;
+using DirectDBconnector;
 
 namespace MorphApp
 {
-	/// <summary>
+ 
+    /// <summary>
 	/// Реализация IntfInnerStore.
 	/// Класс описывает внутреннее хранилище данных клиента MorphApp.
 	/// Данные приходят из хранилища в виде DataTable - напрямую из БД.
 	/// </summary>
 	public class CLInnerStoreDB : IntfInnerStore
 	{
-		public override void FillContainers(ComplexValue list)
+        Courier courier = new Courier();
+        
+        // Работа с БД напрямую
+        SagaDBServer dbServer = new SagaDBServer();
+
+        /// <summary>
+        /// Заполнение внутреннего хранилища.
+        /// </summary>
+        public override void Refresh()
+        {
+            var list = dbServer.GetChildrenContainers(Session.MainStroreID, tpList.tplDBtable);
+            this.FillContainers(list);
+
+            var dTable = list.dtable;
+            var list_ids = new List<string>();
+            for (int i = 0; i < dTable.Rows.Count; i++)
+            {
+                var strID = dTable.Rows[i].Field<long>("ct_id");
+                list_ids.Add(strID.ToString());
+            }
+            list = dbServer.GetDocsInContainerList(list_ids);
+            this.FillDocs(list);
+            list_ids.Clear();
+            dTable = list.dtable;
+            for (int i = 0; i < dTable.Rows.Count; i++)
+            {
+                var strID = dTable.Rows[i].Field<long>("doc_id");
+                list_ids.Add(strID.ToString());
+            }
+            list = dbServer.ReadParagraphsInDocsList(tpList.tplDBtable, list_ids);
+            this.FillDocsParagraphs(list);
+
+
+            /*var list = dbServer.GetChildrenContainers(Session.MainStroreID);
+            store.FillContainers(list);
+
+            var dTable = list.list;
+            var list_ids = new List<string>();
+            for (int i = 0; i < dTable.Count; i++)
+            {
+                var strID = (dTable[i] as ContainerMap).ContainerID;
+                list_ids.Add(strID.ToString());
+            }
+            list = dbServer.GetDocsInContainerList(list_ids);
+            store.FillDocs(list); 
+            */
+        }
+
+        public override DocumentMap RefreshParagraphs(long contID, long docID)
+        {
+            var container = GetContainerByID(contID);
+            var dMap = container.GetDocumentByID(docID);
+            var parags = dMap.GetParagraphs();
+            foreach (var paragraph in parags)
+            {
+                // Чтение данных о структурах предложений и заголовка абзаца из БД
+                var sentlist = dbServer.ReadParagraphDB(paragraph.ParagraphID);
+                courier.servType = TMorph.Schema.ServType.svMorph;
+                courier.command = TMorph.Schema.ComType.Repar;
+                int i = -1;
+                foreach (var sentstruct in sentlist)
+                {
+                    courier.SendStruct(sentstruct);
+                    var sentlistRep = courier.GetSeparatedSentsList();
+                    string phrase = "";
+                    if (sentlistRep != null && sentlistRep.Count > 0)
+                        phrase = sentlistRep[0];
+                    paragraph.RefreshSentProp(i, phrase, sentstruct, true);
+                }
+            }
+            return dMap;
+        }
+        
+        public override void FillContainers(ComplexValue list)
 		{
 			DataTable dTable = list.dtable;
 			containers.Clear();
@@ -64,5 +140,6 @@ namespace MorphApp
 				doc.AddParagraph(pMap);
 			}
 		}
-	}
+
+    } 
 }

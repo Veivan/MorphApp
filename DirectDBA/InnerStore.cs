@@ -49,5 +49,16 @@ namespace DirectDBA
 		{
 			throw new NotImplementedException();
 		}
-	}
+
+
+        public override void Refresh()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override DocumentMap RefreshParagraphs(long contID, long docID)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

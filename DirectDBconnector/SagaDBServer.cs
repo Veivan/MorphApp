@@ -9,7 +9,7 @@ namespace DirectDBconnector
     {
 		SQLiteConnector dbConnector = SQLiteConnector.Instance;
 
-		#region Унаследованные методы
+        #region Унаследованные методы
 		/// <summary>
 		/// Получение плоского списка контейнеров
 		/// в виде DataTable
