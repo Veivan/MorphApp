@@ -21,12 +21,15 @@ namespace Schemas
     public class SentenceMap
     {
         private long _phID = -1;
+        private long _pg_id = -1;
+        private long _order = -1;
+        private DateTime _created_at;
+
         /// <summary>
         /// Идентификатор предложения в БД.
         /// </summary>
         public long SentenceID { get { return _phID; } set { _phID = value; } }
 
-		private long _order = -1;
 		/// <summary>
 		/// Порядок предложения в абзаце.
 		/// У заголовка _order = -1;
@@ -49,6 +52,20 @@ namespace Schemas
         public SentenceMap()
         {
         }
+
+		/// <summary>
+		/// Конструктор
+		/// </summary>
+        public SentenceMap(long ph_id = -1, long pg_id = -1, int order = -1, DateTime? created_at = null)
+        {
+            _phID = ph_id;
+			_pg_id = pg_id;
+            _order = order;
+			if (created_at == null)
+				_created_at = DateTime.Now;
+			else
+				_created_at = (DateTime)created_at;
+		}
 
         /// <summary>
         /// Конструктор - копировщик.

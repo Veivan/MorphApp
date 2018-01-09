@@ -170,7 +170,37 @@ namespace DirectDBconnector
 			return dTable;
 		}
 
-		/// <summary>
+        /// <summary>
+        /// Чтения документов из выбранного контейнера.
+        /// </summary>
+        /// <param name="ct_id">ID контейнера</param>
+        /// <returns>Коллекцию DocumentMap</returns>
+        public List<DocumentMap> GetDocumentsL(long ct_id = -1)
+        {
+            var reslist = new List<DocumentMap>();
+            try
+            {
+                var stmnt = String.Format("SELECT doc_id, ct_id, created_at, name, parent_id FROM mDocuments WHERE ct_id = {0}", ct_id);
+                m_sqlCmd.CommandText = stmnt;
+                SQLiteDataReader r = m_sqlCmd.ExecuteReader();
+                while (r.Read())
+                {
+                    var dt = DateTime.Now;
+                    var created = r["created_at"].ToString();
+                    if (!String.IsNullOrEmpty(created))
+                        dt = DateTime.Parse(created);
+                    reslist.Add(new DocumentMap(r.GetInt64(0), r.GetInt64(1), r["name"].ToString(), dt));
+                }
+                r.Close();
+            }
+            catch (SQLiteException ex)
+            {
+                //MessageBox.Show("Error: " + ex.Message);
+            }
+            return reslist;
+        }
+        
+        /// <summary>
 		/// Чтения абзацев из множества документов.
 		/// Если list_ids == null, то выбираются все записи.
 		/// </summary>
@@ -235,35 +265,70 @@ namespace DirectDBconnector
 			return reslist;
 		}
 
-		/// <summary>
-		/// Чтения документов из выбранного контейнера.
-		/// </summary>
-		/// <param name="ct_id">ID контейнера</param>
-		/// <returns>Коллекцию DocumentMap</returns>
-		public List<DocumentMap> GetDocumentsL(long ct_id = -1)
-		{
-			var reslist = new List<DocumentMap>();
-			try
-			{
-				var stmnt = String.Format("SELECT doc_id, ct_id, created_at, name, parent_id FROM mDocuments WHERE ct_id = {0}", ct_id);
-				m_sqlCmd.CommandText = stmnt;
-				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
-				while (r.Read())
-				{
-					var dt = DateTime.Now;
-					var created = r["created_at"].ToString();
-					if (!String.IsNullOrEmpty(created))
-						dt = DateTime.Parse(created);
-					reslist.Add(new DocumentMap(r.GetInt64(0), r.GetInt64(1), r["name"].ToString(), dt));
-				}
-				r.Close();
-			}
-			catch (SQLiteException ex)
-			{
-				//MessageBox.Show("Error: " + ex.Message);
-			}
-			return reslist;
-		}
+        /// <summary>
+        /// Чтения предложений из множества абзацев.
+        /// Если list_ids == null, то выбираются все записи.
+        /// </summary>
+        /// <param name="list_ids">список ID абзацев</param>
+        /// <returns>DataTable</returns>
+        public DataTable ReadPhrasesInParagraphs(List<string> list_ids)
+        {
+            DataTable dTable = new DataTable();
+            var stmnt = "SELECT P.ph_id, P.pg_id, P.sorder, P.created_at FROM mPhrases P ";
+            if (list_ids != null)
+            {
+                string result = string.Join(",", list_ids.ToArray());
+                if (!String.IsNullOrEmpty(result))
+                    stmnt = stmnt + String.Format(" WHERE P.pg_id IN ({0})", result);
+            }
+            try
+            {
+                SQLiteDataAdapter adapter = new SQLiteDataAdapter(stmnt, m_dbConn);
+                adapter.Fill(dTable);
+            }
+            catch (SQLiteException ex)
+            {
+                //MessageBox.Show("Error: " + ex.Message);
+            }
+            return dTable;
+        }
+
+        /// <summary>
+        /// Чтения абзацев из множества документов.
+        /// Если list_ids == null, то выбираются все записи.
+        /// </summary>
+        /// <param name="list_ids">список ID документов</param>
+        /// <returns>List of ParagraphMap</returns>
+        public List<SentenceMap> ReadPhrasesInParagraphsList(List<string> list_ids)
+        {
+            var reslist = new List<SentenceMap>();
+            var stmnt = "SELECT P.ph_id, P.pg_id, P.sorder, P.created_at FROM mPhrases P ";
+            if (list_ids != null)
+            {
+                string result = string.Join(",", list_ids.ToArray());
+                if (!String.IsNullOrEmpty(result))
+                    stmnt = stmnt + String.Format(" WHERE P.pg_id IN ({0})", result);
+            }
+            try
+            {
+                m_sqlCmd.CommandText = stmnt;
+                SQLiteDataReader r = m_sqlCmd.ExecuteReader();
+                while (r.Read())
+                {
+                    var dt = DateTime.Now;
+                    var created = r["created_at"].ToString();
+                    if (!String.IsNullOrEmpty(created))
+                        dt = DateTime.Parse(created);
+                    reslist.Add(new SentenceMap(r.GetInt64(0), r.GetInt64(1), r.GetInt32(2), dt));
+                }
+                r.Close();
+            }
+            catch (SQLiteException ex)
+            {
+                //MessageBox.Show("Error: " + ex.Message);
+            }
+            return reslist;
+        }
 
 	}
 }

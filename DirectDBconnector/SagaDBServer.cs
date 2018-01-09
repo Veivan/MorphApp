@@ -77,7 +77,17 @@ namespace DirectDBconnector
 			return rval;
 		}
 
-		public override long SaveParagraph(long pg_id, List<Schemas.SentenceMap> sentlist)
+        public override ComplexValue ReadPhrasesInParagraphsList(tpList resulttype, List<string> list_ids = null)
+        {
+            ComplexValue rval = new ComplexValue();
+            if (resulttype == tpList.tplDBtable)
+                rval.dtable = dbConnector.dirCmd.ReadPhrasesInParagraphs(list_ids);
+            else
+                rval.list.AddRange(dbConnector.dirCmd.ReadPhrasesInParagraphsList(list_ids));
+            return rval;
+        }
+        
+        public override long SaveParagraph(long pg_id, List<Schemas.SentenceMap> sentlist)
         {
             var paraOper = new ParagraphOperator(pg_id, sentlist, pg_id == -1 ? OpersDB.odInsert : OpersDB.odUpdate);
             paraOper.Update();
@@ -107,5 +117,6 @@ namespace DirectDBconnector
 		}
 		
 		#endregion
-	}
+
+    }
 }

@@ -297,7 +297,8 @@ namespace MorphApp
 			treeView1.Nodes.Clear();
 
 			rootNode = new TreeNode("Хранилище");
-			foreach (var cont in store.containers)
+            rootNode.Tag = clNodeType.clnContainer;
+            foreach (var cont in store.containers)
 			{
 				var aNode = new TreeNode(cont.Name, 0, 0);
 				aNode.Name = cont.ContainerID.ToString();
@@ -338,12 +339,12 @@ namespace MorphApp
 			//TODO Если Загружать документы из БД, если не загружены
 			
 			TreeNode aNode = e.Node;
-			switch ((clNodeType)aNode.Tag)
+ 			switch ((clNodeType)aNode.Tag)
 			{
 				case clNodeType.clnDocument:
 					{
 						// Найти ID абзаца
-						this.para.ParagraphID = 7;
+						this.para.ParagraphID = 1;
 						// Чтение данных о структурах предложений и заголовка абзаца из БД
 						var sentlist = dbServer.ReadParagraphDB(this.para.ParagraphID);
 						para.RefreshParagraph(new ArrayList(sentlist));

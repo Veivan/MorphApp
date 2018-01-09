@@ -92,12 +92,36 @@ namespace DirectDBA
 				HeaderText = "ph_id"
 			});
 			#endregion
-		}
+
+            #region Создание колонок для Предложений
+            dgvSents.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "ph_id",
+                HeaderText = "ph_id"
+            });
+            dgvSents.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "pg_id",
+                HeaderText = "pg_id"
+            });
+            dgvSents.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "sorder",
+                HeaderText = "sorder"
+            });
+            dgvSents.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "Created_at",
+                HeaderText = "Создан"
+            });
+            #endregion
+        }
 
 		private void btRefreshContainers_Click(object sender, EventArgs e)
 		{
-			ReadContsDirect();
-		}
+            var retval = dbServer.ReadContainers();
+            bsContainers.DataSource = retval.dtable;
+        }
 
 		private void btRefreshDocuments_Click(object sender, EventArgs e)
 		{
@@ -107,17 +131,16 @@ namespace DirectDBA
 
 		private void btRefreshParagraphs_Click(object sender, EventArgs e)
 		{
-			ReadParagraphsDirect();
-		}
+            var retval = dbServer.ReadParagraphsInDocsList(tpList.tplDBtable);
+            bsParagraphs.DataSource = retval.dtable;
+        }
 
-		/// <summary>
-		/// Чтения Контейнеров напрямую из БД.
-		/// </summary>
-		private void ReadContsDirect()
-		{
-			var retval = dbServer.ReadContainers();
-			bsContainers.DataSource = retval.dtable;
-		}
+        private void btRefreshSents_Click(object sender, EventArgs e)
+        {
+            var retval = dbServer.ReadPhrasesInParagraphsList(tpList.tplDBtable);
+            bsSents.DataSource = retval.dtable;
+        }
+        
 
 		/// <summary>
 		/// Чтения Документов напрямую из БД.
@@ -128,14 +151,6 @@ namespace DirectDBA
 			bsDocuments.DataSource = retval.dtable;
 		}
 
-		/// <summary>
-		/// Чтения Абзацев напрямую из БД.
-		/// </summary>
-		private void ReadParagraphsDirect()
-		{
-			var retval = dbServer.ReadParagraphsInDocsList(tpList.tplDBtable);
-			bsParagraphs.DataSource = retval.dtable;
-		}
 
 		private void navUpdate_Click(object sender, EventArgs e)
 		{
@@ -150,6 +165,11 @@ namespace DirectDBA
 				case "btUpdParagraphs":
 					dbServer.UpdateDataTable((DataTable)bsParagraphs.DataSource, dbTables.tblParagraphs);
 					break;
+                case "btUpdSents":
+                    dbServer.UpdateDataTable((DataTable)bsSents.DataSource, dbTables.tblSents);
+					break;
+
+                    
 			} 
 		}
 
@@ -264,6 +284,7 @@ namespace DirectDBA
 			}
 		}
 		#endregion
+
 
 	}
 }

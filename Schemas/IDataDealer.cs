@@ -46,11 +46,18 @@ namespace Schemas
 		/// <summary>
 		/// Получение плоского списка абзацев
 		/// </summary>
-		/// <param name="doc_id">ID документа</param>
+        /// <param name="list_ids">список ID документов</param>
 		/// <returns>ComplexValue</returns>
 		public abstract ComplexValue ReadParagraphsInDocsList(tpList resulttype, List<string> list_ids = null);
 
-		/// <summary>
+        /// <summary>
+        /// Получение плоского списка предложений
+        /// </summary>
+        /// <param name="list_ids">список ID абзацев</param>
+        /// <returns>ComplexValue</returns>
+        public abstract ComplexValue ReadPhrasesInParagraphsList(tpList resulttype, List<string> list_ids = null);
+        
+        /// <summary>
 		/// Сохранение абзаца в DB. Если pg_id == -1, то Insert, иначе - Update.
 		/// </summary>
 		/// <param name="pg_id">ID абзаца</param>

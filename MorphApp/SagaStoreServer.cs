@@ -53,7 +53,12 @@ namespace MorphApp
 			throw new NotImplementedException();
 		}
 
-		public override long SaveParagraph(long pg_id, List<SentenceMap> sentlist)
+        public override ComplexValue ReadPhrasesInParagraphsList(tpList resulttype, List<string> list_ids = null)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public override long SaveParagraph(long pg_id, List<SentenceMap> sentlist)
 		{
 			throw new NotImplementedException();
 		}
@@ -69,6 +74,5 @@ namespace MorphApp
 			return sentlist;
 		}
 		#endregion
-
-	}
+    }
 }
