@@ -84,6 +84,7 @@ namespace MorphApp
                     if (sentlistRep != null && sentlistRep.Count > 0)
                         phrase = sentlistRep[0];
                     paragraph.RefreshSentProp(i, phrase, sentstruct, true);
+					i++;
                 }
             }
             return dMap;

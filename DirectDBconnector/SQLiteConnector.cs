@@ -569,6 +569,9 @@ namespace DirectDBconnector
 					case "mSiLinks":
 						m_sqlCmd.CommandText = "SELECT ln_id, linktype FROM mSiLinks";
 						break;
+					case "mLemms":
+						m_sqlCmd.CommandText = "SELECT lx_id, sp_id, lemma FROM mLemms";
+						break;
 					case "mContainers":
 						m_sqlCmd.CommandText = "SELECT ct_id, created_at, name, parent_id FROM mContainers";
 						break;
@@ -606,6 +609,9 @@ namespace DirectDBconnector
 							break;
 						case "mSiLinks":
 							line = r["ln_id"].ToString() + ", " + r["linktype"];
+							break;
+						case "mLemms":
+							line = r["lx_id"].ToString() + ", " + r["sp_id"].ToString() + ", " + r["lemma"];
 							break;
 						case "mContainers":
 							line = r["ct_id"].ToString() + ", " + r["created_at"].ToString() + ", " + r["name"] + ", " + r["parent_id"].ToString();

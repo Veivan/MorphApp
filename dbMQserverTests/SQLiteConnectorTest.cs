@@ -39,7 +39,7 @@ namespace DirectDBconnectorTests
 			// arrange
 			SQLiteConnector dbConnector = SQLiteConnector.Instance;
 			// act
-			dbConnector.selectAll("mDocuments");
+			dbConnector.selectAll("mLemms");
 			// assert
 			Assert.AreEqual(0, 0);
 		}

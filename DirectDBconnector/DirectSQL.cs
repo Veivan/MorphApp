@@ -209,7 +209,7 @@ namespace DirectDBconnector
 		public DataTable ReadParagraphsInDocs(List<string> list_ids)
 		{
 			DataTable dTable = new DataTable();
-			var stmnt = "SELECT P.pg_id, P.doc_id, P.created_at, P.ph_id, D.ct_id FROM mParagraphs P JOIN mDocuments D ON D.doc_id = P.doc_id";
+			var stmnt = "SELECT P.pg_id, P.doc_id, P.created_at, P.ph_id, D.ct_id FROM mParagraphs P LEFT JOIN mDocuments D ON D.doc_id = P.doc_id";
 			if (list_ids != null)
 			{
 				string result = string.Join(",", list_ids.ToArray());

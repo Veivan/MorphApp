@@ -305,10 +305,10 @@ namespace MorphApp
                         var dMap = store.RefreshParagraphs(contID, docID);
 
                         var parags = dMap.GetParagraphs();
-                        foreach (var node in aNode.Nodes)
+						foreach (TreeNode node in aNode.Nodes)
                         {
-                            var paragraph = parags.Where(x => x.ParagraphID == Convert.ToInt64(aNode.Name)).FirstOrDefault();
-                            (node as TreeNode).Text = paragraph.GetSentenseByOrder(-1);
+                            var paragraph = parags.Where(x => x.ParagraphID == Convert.ToInt64(node.Name)).FirstOrDefault();
+                            node.Text = paragraph.GetSentenseByOrder(-1);
                         }
                         break;
                     }
