@@ -41,7 +41,6 @@
 			this.memoOut = new System.Windows.Forms.TextBox();
 			this.memoInp = new System.Windows.Forms.TextBox();
 			this.panel1 = new System.Windows.Forms.Panel();
-			this.btSelect = new System.Windows.Forms.Button();
 			this.btReadPara = new System.Windows.Forms.Button();
 			this.btSavePara = new System.Windows.Forms.Button();
 			this.btRestore = new System.Windows.Forms.Button();
@@ -177,7 +176,6 @@
 			// 
 			// panel1
 			// 
-			this.panel1.Controls.Add(this.btSelect);
 			this.panel1.Controls.Add(this.btReadPara);
 			this.panel1.Controls.Add(this.btSavePara);
 			this.panel1.Controls.Add(this.btRestore);
@@ -191,16 +189,6 @@
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(619, 100);
 			this.panel1.TabIndex = 0;
-			// 
-			// btSelect
-			// 
-			this.btSelect.Location = new System.Drawing.Point(149, 66);
-			this.btSelect.Name = "btSelect";
-			this.btSelect.Size = new System.Drawing.Size(75, 23);
-			this.btSelect.TabIndex = 22;
-			this.btSelect.Text = "Select";
-			this.btSelect.UseVisualStyleBackColor = true;
-			this.btSelect.Click += new System.EventHandler(this.btSelect_Click);
 			// 
 			// btReadPara
 			// 
@@ -321,7 +309,6 @@
 		private System.Windows.Forms.TextBox memoOut;
 		private System.Windows.Forms.TextBox memoInp;
 		private System.Windows.Forms.Panel panel1;
-		private System.Windows.Forms.Button btSelect;
 		private System.Windows.Forms.Button btReadPara;
 		private System.Windows.Forms.Button btSavePara;
 		private System.Windows.Forms.Button btRestore;

@@ -87,14 +87,14 @@ namespace DirectDBconnector
             return rval;
         }
         
-        public override long SaveParagraph(long pg_id, List<Schemas.SentenceMap> sentlist)
+        public override long SaveParagraph(long pg_id, List<SentenceMap> sentlist)
         {
             var paraOper = new ParagraphOperator(pg_id, sentlist, pg_id == -1 ? OpersDB.odInsert : OpersDB.odUpdate);
             paraOper.Update();
 			return paraOper.ParagraphID;
         }
 
-		public override List<Schemas.SentenceMap> ReadParagraphDB(long pg_id)
+		public override List<SentenceMap> ReadParagraphDB(long pg_id)
 		{
 			var paraOper = new ParagraphOperator(pg_id, null, OpersDB.odSelect);
 			paraOper.Read();

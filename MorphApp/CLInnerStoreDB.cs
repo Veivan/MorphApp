@@ -89,7 +89,7 @@ namespace MorphApp
             }
             return dMap;
         }
-        
+
         public override void FillContainers(ComplexValue list)
 		{
 			DataTable dTable = list.dtable;
@@ -142,5 +142,48 @@ namespace MorphApp
 			}
 		}
 
-    } 
+		#region Методы работы с GREN
+
+		/// <summary>
+		/// Выполнение синтана текста.
+		/// </summary>
+		public List<SentenceMap> MorphMakeSyntan(string text)
+		{
+			courier.servType = TMorph.Schema.ServType.svMorph;
+			courier.command = TMorph.Schema.ComType.Synt;
+			courier.SendText(text);
+			var sentlistRep = courier.GetSentenceStructList();
+			return sentlistRep;
+		}
+
+		/// <summary>
+		/// Получение списка восстановленных текстов предложений от сервиса.
+		/// </summary>
+		public List<string> MorphGetReparedSentsList(List<SentenceMap> sentlist)
+		{
+			var outlist = new List<string>();
+			courier.servType = TMorph.Schema.ServType.svMorph;
+			courier.command = TMorph.Schema.ComType.Repar;
+			foreach (var sent in sentlist)
+			{
+				courier.SendStruct(sent);
+				var sents = courier.GetSeparatedSentsList();
+				outlist.AddRange(sents);
+			}
+			return outlist;
+		}
+
+		/// <summary>
+		/// Разделение текста на предложения с помощью сервиса.
+		/// </summary>
+		public List<string> MorphGetSeparatedSentsList(string text)
+		{
+			courier.servType = TMorph.Schema.ServType.svMorph;
+			courier.command = TMorph.Schema.ComType.Separ;
+			courier.SendText(text);
+			var outlist = courier.GetSeparatedSentsList();
+			return outlist;
+		}
+		#endregion
+	} 
 }

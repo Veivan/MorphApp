@@ -35,8 +35,8 @@ namespace MorphApp
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //memoInp.Text = "Мама мыла";
-			memoInp.Text = "Абзац 1";
+            memoInp.Text = "Мама мыла раму";
+			//memoInp.Text = "Абзац 1";
         }
 
         private void btSavePara_Click(object sender, EventArgs e)
@@ -55,24 +55,17 @@ namespace MorphApp
         /// </summary>
         private void UpdateParagraph()
         {
-            // Разделение текста на предложения
-            courier.servType = TMorph.Schema.ServType.svMorph;
-            courier.command = TMorph.Schema.ComType.Separ;
-            courier.SendText(memoInp.Text);
-            var sents = courier.GetSeparatedSentsList();
+			var sents = store.MorphGetSeparatedSentsList(memoInp.Text);
             para.RefreshParagraph(new ArrayList(sents));
 
             // Выполнение синтана для неактуальных предложений.
-            courier.servType = TMorph.Schema.ServType.svMorph;
-            courier.command = TMorph.Schema.ComType.Synt;
-            var sentlist = para.GetParagraph(SentTypes.enstNotActual);
-            foreach (var sent in sentlist)
-            {
-                courier.SendText(sent.sentence);
-                var sentlistRep = courier.GetSentenceStructList();
-                if (sentlistRep.Count > 0)
-                    para.UpdateSentStruct(sent.order, sentlistRep[0]);
-            }
+			var sentlist = para.GetParagraph(SentTypes.enstNotActual);
+			foreach (var sent in sentlist)
+			{
+				var sentlistRep = store.MorphMakeSyntan(sent.sentence);
+				if (sentlistRep.Count > 0)
+					para.UpdateSentStruct(sent.order, sentlistRep[0]);
+			}
         }
 
         /// <summary>
@@ -103,41 +96,33 @@ namespace MorphApp
         /// </summary>
         private void ReadParagraphBD()
         {
-            this.para.ParagraphID = 5;
-            var sentlist = dbServer.ReadParagraphDB(this.para.ParagraphID);
-            para.RefreshParagraph(new ArrayList(sentlist));
+            var ParagraphID = 1;
+            var sentlist = dbServer.ReadParagraphDB(ParagraphID);
 
-            //TODO прочитался параграф из БД - надо его ресторить и выдать на просмотр
+            // прочитался параграф из БД - надо его ресторить и выдать на просмотр
 
             var sb = new StringBuilder();
-            courier.servType = TMorph.Schema.ServType.svMorph;
-            courier.command = TMorph.Schema.ComType.Repar;
-            foreach (var sent in sentlist)
-            {
-                courier.SendStruct(sent);
-                var sents = courier.GetSeparatedSentsList();
-                foreach (var sentrep in sents)
-                    sb.Append(sentrep + "\r\n");
+			var reparedsents = store.MorphGetReparedSentsList(sentlist);
+			foreach (var sentrep in reparedsents)
+				sb.Append(sentrep + "\r\n");
 
-                // Отображение синт связей
-                var ordlist = sent.GetTreeList();
-                foreach (var x in ordlist)
-                {
-                    sb.Append(new String('\t', x.Level) +
-                        String.Format("{0} Level {1} link {2} \r\n",
-                            sent.GetWordByOrder(x.index).EntryName, x.Level, x.linktype));
-                }
-
-            }
+			// Отображение синт связей
+			foreach (var sent in sentlist)
+			{
+				var ordlist = sent.GetTreeList();
+				foreach (var x in ordlist)
+				{
+					sb.Append(new String('\t', x.Level) +
+						String.Format("{0} Level {1} link {2} \r\n",
+							sent.GetWordByOrder(x.index).EntryName, x.Level, x.linktype));
+				}
+			}
             memoOut.Text = sb.ToString();
         }
 
         private void btTokenize_Click(object sender, EventArgs e)
         {
-            courier.servType = TMorph.Schema.ServType.svMorph;
-            courier.command = TMorph.Schema.ComType.Separ;
-            courier.SendText(memoInp.Text);
-            var sents = courier.GetSeparatedSentsList();
+			var sents = store.MorphGetSeparatedSentsList(memoInp.Text);
             var sb = new StringBuilder();
             foreach (var sent in sents)
                 sb.Append(sent + "\r\n");
@@ -146,16 +131,12 @@ namespace MorphApp
 
         private void btMakeSynAn_Click(object sender, EventArgs e)
         {
-            courier.servType = TMorph.Schema.ServType.svMorph;
-            courier.command = TMorph.Schema.ComType.Synt;
-            courier.SendText(memoInp.Text);
-            var sentlistRep = courier.GetSentenceStructList();
-            if (sentlistRep.Count > 0)
-                sent = sentlistRep[0];
-            else
-                return;
-
-            this.para.AddSentStruct(5, sent);
+			var sentlistRep = store.MorphMakeSyntan(memoInp.Text);
+			if (sentlistRep == null || sentlistRep.Count == 0)
+				return;
+			
+			sent = sentlistRep[0];
+			this.para.AddSentStruct(5, sent);
 
             var sb = new StringBuilder();
             for (int i = 0; i < sent.Capasity; i++)
@@ -178,21 +159,14 @@ namespace MorphApp
 
         private void btRestore_Click(object sender, EventArgs e)
         {
-            courier.servType = TMorph.Schema.ServType.svMorph;
-            courier.command = TMorph.Schema.ComType.Synt;
-            courier.SendText(memoInp.Text);
-            var sentstr = courier.GetSentenceStructList();
-            if (sentstr == null) return;
-            var sentlistRep = courier.GetSentenceStructList();
-            if (sentlistRep.Count == 0)
+			var sentlistRep = store.MorphMakeSyntan(memoInp.Text);
+            if (sentlistRep == null || sentlistRep.Count == 0)
                 return;
 
-            courier.servType = TMorph.Schema.ServType.svMorph;
-            courier.command = TMorph.Schema.ComType.Repar;
-            courier.SendStruct(sentlistRep[0]);
-            var sents = courier.GetSeparatedSentsList();
+			var reparedsents = store.MorphGetReparedSentsList(sentlistRep);
+			
             var sb = new StringBuilder();
-            foreach (var sent in sents)
+			foreach (var sent in reparedsents)
                 sb.Append(sent + "\r\n");
             memoOut.Text = sb.ToString();
         }
@@ -229,19 +203,9 @@ namespace MorphApp
 
         private void btGetMorph_Click(object sender, EventArgs e)
         {
-            courier.servType = TMorph.Schema.ServType.svMorph;
-            courier.command = TMorph.Schema.ComType.Morph;
-            courier.SendText(memoInp.Text);
-            memoOut.Text = "";
+			// Морф.анализ не нужен - он выполняется в синтане
         }
 
-        private void btSelect_Click(object sender, EventArgs e)
-        {
-            /*   courier.servType = TMorph.Schema.ServType.svSUBD;
-                courier.command = TMorph.Schema.ComType.GetParags;
-                courier.SendText(""); */
-
-        }
 
         private void btRefresh_Click(object sender, EventArgs e)
         {

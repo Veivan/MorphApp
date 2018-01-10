@@ -53,14 +53,28 @@ namespace MorphApp
 			throw new NotImplementedException();
 		}
 
-        public override ComplexValue ReadPhrasesInParagraphsList(tpList resulttype, List<string> list_ids = null)
-        {
-            throw new NotImplementedException();
-        }
-        
-        public override long SaveParagraph(long pg_id, List<SentenceMap> sentlist)
+		public override ComplexValue ReadPhrasesInParagraphsList(tpList resulttype, List<string> list_ids = null)
 		{
 			throw new NotImplementedException();
+		}
+
+		public override long SaveParagraph(long pg_id, List<SentenceMap> sentlist)
+		{
+			long ParagraphID = -1;
+			courier.servType = TMorph.Schema.ServType.svSUBD;
+			courier.command = TMorph.Schema.ComType.SavePara;
+			courier.SendParagraph(new ParagraphMap(pg_id));
+			var paramlist = courier.GetParamsList();
+			if (paramlist == null)
+			{
+				foreach (var par in paramlist)
+					if (par.Name == "ParagraphID")
+					{
+						ParagraphID = Convert.ToInt32(par.Value, 10);
+						break;
+					}
+			}
+			return ParagraphID;
 		}
 
 		public override List<SentenceMap> ReadParagraphDB(long pg_id)
@@ -74,5 +88,5 @@ namespace MorphApp
 			return sentlist;
 		}
 		#endregion
-    }
+	}
 }
