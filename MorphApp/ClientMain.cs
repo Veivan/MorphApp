@@ -35,12 +35,13 @@ namespace MorphApp
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            memoInp.Text = "Мама мыла";
+            //memoInp.Text = "Мама мыла";
+			memoInp.Text = "Абзац 1";
         }
 
         private void btSavePara_Click(object sender, EventArgs e)
         {
-            //UpdateParagraph();
+            UpdateParagraph();
             SaveParagraphBD();
         }
 
@@ -102,7 +103,7 @@ namespace MorphApp
         /// </summary>
         private void ReadParagraphBD()
         {
-            this.para.ParagraphID = 7;
+            this.para.ParagraphID = 5;
             var sentlist = dbServer.ReadParagraphDB(this.para.ParagraphID);
             para.RefreshParagraph(new ArrayList(sentlist));
 

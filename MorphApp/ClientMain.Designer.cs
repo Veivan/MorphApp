@@ -200,6 +200,7 @@
 			this.btSelect.TabIndex = 22;
 			this.btSelect.Text = "Select";
 			this.btSelect.UseVisualStyleBackColor = true;
+			this.btSelect.Click += new System.EventHandler(this.btSelect_Click);
 			// 
 			// btReadPara
 			// 
@@ -209,6 +210,7 @@
 			this.btReadPara.TabIndex = 21;
 			this.btReadPara.Text = "Read Para";
 			this.btReadPara.UseVisualStyleBackColor = true;
+			this.btReadPara.Click += new System.EventHandler(this.btReadPara_Click);
 			// 
 			// btSavePara
 			// 
@@ -218,6 +220,7 @@
 			this.btSavePara.TabIndex = 20;
 			this.btSavePara.Text = "Save para";
 			this.btSavePara.UseVisualStyleBackColor = true;
+			this.btSavePara.Click += new System.EventHandler(this.btSavePara_Click);
 			// 
 			// btRestore
 			// 
@@ -227,6 +230,7 @@
 			this.btRestore.TabIndex = 19;
 			this.btRestore.Text = "Restore";
 			this.btRestore.UseVisualStyleBackColor = true;
+			this.btRestore.Click += new System.EventHandler(this.btRestore_Click);
 			// 
 			// btTokenize
 			// 
@@ -236,6 +240,7 @@
 			this.btTokenize.TabIndex = 18;
 			this.btTokenize.Text = "Tokenize";
 			this.btTokenize.UseVisualStyleBackColor = true;
+			this.btTokenize.Click += new System.EventHandler(this.btTokenize_Click);
 			// 
 			// btSaveLex
 			// 
@@ -245,6 +250,7 @@
 			this.btSaveLex.TabIndex = 17;
 			this.btSaveLex.Text = "SaveLex";
 			this.btSaveLex.UseVisualStyleBackColor = true;
+			this.btSaveLex.Click += new System.EventHandler(this.btSaveLex_Click);
 			// 
 			// btDBGetWord
 			// 
@@ -254,6 +260,7 @@
 			this.btDBGetWord.TabIndex = 16;
 			this.btDBGetWord.Text = "DBGetWord";
 			this.btDBGetWord.UseVisualStyleBackColor = true;
+			this.btDBGetWord.Click += new System.EventHandler(this.btDBGetWord_Click);
 			// 
 			// btMakeSynAn
 			// 
@@ -263,6 +270,7 @@
 			this.btMakeSynAn.TabIndex = 15;
 			this.btMakeSynAn.Text = "SynAn";
 			this.btMakeSynAn.UseVisualStyleBackColor = true;
+			this.btMakeSynAn.Click += new System.EventHandler(this.btMakeSynAn_Click);
 			// 
 			// btGetMorph
 			// 
@@ -272,6 +280,7 @@
 			this.btGetMorph.TabIndex = 14;
 			this.btGetMorph.Text = "MorphAn";
 			this.btGetMorph.UseVisualStyleBackColor = true;
+			this.btGetMorph.Click += new System.EventHandler(this.btGetMorph_Click);
 			// 
 			// ClientMain
 			// 
