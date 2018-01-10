@@ -44,6 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Properties\DirectDBC.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>DirectDBC.settings</DependentUpon>
+    </Compile>
     <Compile Include="DirectSQL.cs" />
     <Compile Include="ParagraphDBIndicator.cs" />
     <Compile Include="ParagraphOperator.cs" />
@@ -58,7 +63,13 @@
       <Name>Schemas</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Properties\DirectDBC.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>DirectDBC.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

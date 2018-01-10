@@ -102,6 +102,11 @@
     <Compile Include="Commands\CommandSepar.cs" />
     <Compile Include="Commands\CommandSyntAn.cs" />
     <Compile Include="Commands\ICommand.cs" />
+    <Compile Include="Properties\MorphMQsrvr.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>MorphMQsrvr.settings</DependentUpon>
+    </Compile>
     <Compile Include="TestForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -149,7 +154,13 @@
       <DependentUpon>TestForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Properties\MorphMQsrvr.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>MorphMQsrvr.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

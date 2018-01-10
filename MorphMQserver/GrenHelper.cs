@@ -12,13 +12,12 @@ namespace MorphMQserver
 
 	public class GrenHelper
 	{
-		const string dict = @"c:\Work\Framework\GrammarEngine\src\bin-windows64\dictionary.xml";
-
 		private bool IsReady = false;
 		private IntPtr hEngine = IntPtr.Zero;
 
 		public void Init()
 		{
+			var dict = Properties.MorphMQsrvr.Default.DictPath;
 			// Загружаем грамматический словарь в ленивом режиме, то есть словарные статьи нам сейчас не нужны сразу все в оперативной памяти.
 			// IntPtr hEngine = GrammarEngine.sol_CreateGrammarEngineExW(dict_path, GrammarEngine.SOL_GREN_LAZY_LEXICON);
 
@@ -29,7 +28,7 @@ namespace MorphMQserver
 				MessageBox.Show("Could not load the dictionary");
 			}
 			else
-				IsReady = true;
+				IsReady = true;				
 		}
 
 		public string GetDictVersion()

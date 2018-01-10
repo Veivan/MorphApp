@@ -24,7 +24,6 @@ namespace DirectDBconnector
 		private static readonly Lazy<SQLiteConnector> instanceHolder =
 			new Lazy<SQLiteConnector>(() => new SQLiteConnector());
 
-		private String dbFileName = @"c:\temp\saga.sqlite";
 		private SQLiteConnection m_dbConn;
 		private SQLiteCommand m_sqlCmd = new SQLiteCommand();
 
@@ -32,6 +31,7 @@ namespace DirectDBconnector
 
 		private SQLiteConnector()
 		{
+			String dbFileName = Properties.DirectDBC.Default.dbFileName;
 			if (!File.Exists(dbFileName))
 				SQLiteConnection.CreateFile(dbFileName);
 			try
