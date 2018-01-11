@@ -50,7 +50,11 @@ namespace MorphApp
 
         public override List<SimpleParam> SaveParagraphBD(ParagraphMap pMap)
         {
-            throw new NotImplementedException();
+            courier.servType = TMorph.Schema.ServType.svSUBD;
+            courier.command = TMorph.Schema.ComType.SavePara;
+            courier.SendParagraph(pMap);
+            var paramlist = courier.GetParamsList();
+            return paramlist;
         }
 
         public override List<SentenceMap> ReadParagraphDB(long pg_id)

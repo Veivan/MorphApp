@@ -118,7 +118,7 @@ namespace DirectDBconnector
 					" CREATE TABLE IF NOT EXISTS mDocuments (doc_id integer PRIMARY KEY, \n"
 						+ "	ct_id integer, created_at DATETIME DEFAULT CURRENT_TIMESTAMP, name text);" +
 					" CREATE TABLE IF NOT EXISTS mParagraphs (pg_id integer PRIMARY KEY, \n"
-						+ "doc_id integer, created_at DATETIME DEFAULT CURRENT_TIMESTAMP, ph_id integer);" +
+						+ "doc_id integer, created_at DATETIME DEFAULT CURRENT_TIMESTAMP);" +
 					"CREATE TABLE IF NOT EXISTS mPhrases (\n"
 						+ "	ph_id integer PRIMARY KEY, pg_id integer, sorder integer, \n"
 						+ " created_at DATETIME DEFAULT CURRENT_TIMESTAMP);" +
@@ -156,9 +156,10 @@ namespace DirectDBconnector
 					m_sqlCmd.Parameters.Add(new SQLiteParameter("@lemma", lemma.ToLower()));
 					m_sqlCmd.ExecuteNonQuery();
 
-					m_sqlCmd.CommandText = "SELECT last_insert_rowid()";
+					/*m_sqlCmd.CommandText = "SELECT last_insert_rowid()";
 					m_sqlCmd.Parameters.Clear();
-					result = (long)m_sqlCmd.ExecuteScalar();
+					result = (long)m_sqlCmd.ExecuteScalar(); */
+                    result = m_dbConn.LastInsertRowId;
 				}
 				catch (SQLiteException ex)
 				{
@@ -549,6 +550,32 @@ namespace DirectDBconnector
 		{
 		}
 
+        public void DropColumn()
+        {
+            //SQLiteTransaction transaction = null;
+            try
+			{
+                //transaction = m_dbConn.BeginTransaction();
+
+                m_sqlCmd.CommandText = 
+                    "BEGIN TRANSACTION;\n" +
+                    "CREATE TABLE IF NOT EXISTS mParagraphs_back (pg_id integer PRIMARY KEY, \n" +
+                        "doc_id integer, created_at DATETIME DEFAULT CURRENT_TIMESTAMP);\n" +
+                    "INSERT INTO mParagraphs_back SELECT pg_id, doc_id, created_at FROM mParagraphs;\n" +
+                    "DROP TABLE mParagraphs;\n" +
+                    "ALTER TABLE mParagraphs_back RENAME TO mParagraphs;\n" +
+                    "COMMIT;\n";
+                m_sqlCmd.ExecuteNonQuery();
+
+                //transaction.Commit();
+            }
+            catch (SQLiteException ex)
+            {
+                //transaction.Rollback();
+                Console.WriteLine("DropColumn Error: " + ex.Message);
+            }
+
+        }
 
 
 		///
@@ -579,7 +606,7 @@ namespace DirectDBconnector
 						m_sqlCmd.CommandText = "SELECT doc_id, ct_id, created_at, name FROM mDocuments";
 						break;
 					case "mParagraphs":
-						m_sqlCmd.CommandText = "SELECT pg_id, created_at FROM mParagraphs";
+                        m_sqlCmd.CommandText = "SELECT pg_id, doc_id, created_at FROM mParagraphs";
 						break;
 					case "mPhrases":
 						m_sqlCmd.CommandText = "SELECT ph_id, pg_id, sorder, created_at FROM mPhrases";
@@ -620,7 +647,7 @@ namespace DirectDBconnector
 							line = r["doc_id"].ToString() + ", " + r["ct_id"].ToString() + ", " + r["created_at"].ToString() + ", " + r["name"];
 							break;
 						case "mParagraphs":
-							line = r["pg_id"].ToString() + ", " + r["created_at"].ToString();
+                            line = r["pg_id"].ToString() + ", " + r["doc_id"].ToString() + ", " + r["created_at"].ToString();
 							break;
 						case "mPhrases":
 							line = r["ph_id"].ToString() + ", " + r["pg_id"].ToString() + ", " + r["sorder"].ToString();

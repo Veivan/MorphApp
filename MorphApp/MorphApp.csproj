@@ -56,6 +56,9 @@
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
     <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>accessoriesdictionaryicon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="FlatBuffers">
       <HintPath>..\flatbuffers\FlatBuffers.dll</HintPath>
@@ -118,6 +121,9 @@
       <Project>{BF7809E6-3E9D-49FC-888D-6D0C7187CC5B}</Project>
       <Name>Schemas</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="accessoriesdictionaryicon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

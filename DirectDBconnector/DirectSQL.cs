@@ -209,7 +209,7 @@ namespace DirectDBconnector
 		public DataTable ReadParagraphsInDocs(List<string> list_ids)
 		{
 			DataTable dTable = new DataTable();
-			var stmnt = "SELECT P.pg_id, P.doc_id, P.created_at, P.ph_id, D.ct_id FROM mParagraphs P LEFT JOIN mDocuments D ON D.doc_id = P.doc_id";
+			var stmnt = "SELECT P.pg_id, P.doc_id, P.created_at, D.ct_id FROM mParagraphs P LEFT JOIN mDocuments D ON D.doc_id = P.doc_id";
 			if (list_ids != null)
 			{
 				string result = string.Join(",", list_ids.ToArray());
@@ -237,7 +237,7 @@ namespace DirectDBconnector
 		public List<ParagraphMap> ReadParagraphsInDocsList(List<string> list_ids)
 		{
 			var reslist = new List<ParagraphMap>();
-			var stmnt = "SELECT P.pg_id, P.doc_id, P.created_at, P.ph_id, D.ct_id FROM mParagraphs P JOIN mDocuments D ON D.doc_id = P.doc_id";
+			var stmnt = "SELECT P.pg_id, P.doc_id, P.created_at, D.ct_id FROM mParagraphs P JOIN mDocuments D ON D.doc_id = P.doc_id";
 			if (list_ids != null)
 			{
 				string result = string.Join(",", list_ids.ToArray());
@@ -254,7 +254,7 @@ namespace DirectDBconnector
 					var created = r["created_at"].ToString();
 					if (!String.IsNullOrEmpty(created))
 						dt = DateTime.Parse(created);
-					reslist.Add(new ParagraphMap(r.GetInt64(0), r.GetInt64(1), r.GetInt64(2), dt));
+                    reslist.Add(new ParagraphMap(r.GetInt64(0), r.GetInt64(1), dt, r.GetInt64(3)));
 				}
 				r.Close();
 			}

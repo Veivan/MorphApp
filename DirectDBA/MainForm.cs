@@ -86,11 +86,6 @@ namespace DirectDBA
 				DataPropertyName = "Created_at",
 				HeaderText = "Создан"
 			});
-			dgvParagraphs.Columns.Add(new DataGridViewTextBoxColumn
-			{
-				DataPropertyName = "ph_id",
-				HeaderText = "ph_id"
-			});
 			#endregion
 
             #region Создание колонок для Предложений

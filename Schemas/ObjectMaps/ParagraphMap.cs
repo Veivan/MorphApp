@@ -21,7 +21,7 @@ namespace Schemas
     {
         private long _pg_id = -1;
         private long _doc_id = -1;
-        private long _ph_id = -1;
+        private long _ct_id = -1;
         private DateTime _created_at;
 
         /// <summary>
@@ -47,11 +47,11 @@ namespace Schemas
         /// <summary>
         /// Конструктор
         /// </summary>
-        public ParagraphMap(long pg_id = -1, long doc_id = -1, long ph_id = -1, DateTime? created_at = null)
+        public ParagraphMap(long pg_id = -1, long doc_id = -1, DateTime? created_at = null, long ct_id = -1)
         {
             _pg_id = pg_id;
             _doc_id = doc_id;
-            _ph_id = ph_id;
+            _ct_id = ct_id;
             if (created_at == null)
                 _created_at = DateTime.Now;
             else
