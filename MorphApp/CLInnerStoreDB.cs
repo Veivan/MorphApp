@@ -21,6 +21,7 @@ namespace MorphApp
         // Работа с БД напрямую
         SagaDBServer dbServer = new SagaDBServer();
 
+        #region Методы работы с БД
         /// <summary>
         /// Заполнение внутреннего хранилища.
         /// </summary>
@@ -142,7 +143,43 @@ namespace MorphApp
 			}
 		}
 
-		#region Методы работы с GREN
+        public override List<SimpleParam> SaveParagraphBD(ParagraphMap pMap)
+        {
+            courier.servType = TMorph.Schema.ServType.svSUBD;
+            courier.command = TMorph.Schema.ComType.SavePara;
+            courier.SendParagraph(pMap);
+            var paramlist = courier.GetParamsList();
+            return paramlist;
+        }
+
+        public override List<SentenceMap> ReadParagraphDB(long pg_id)
+        {
+            var ParagraphID = 1;
+            var sentlist = dbServer.ReadParagraphDB(ParagraphID);
+            return sentlist;
+        }
+
+        public override List<SimpleParam> GetLexema(string word)
+        {
+            courier.servType = TMorph.Schema.ServType.svSUBD;
+            courier.command = TMorph.Schema.ComType.GetWord;
+            courier.SendText(word);
+            var paramlist = courier.GetParamsList();
+            return paramlist;
+        }
+
+        public override List<SimpleParam> SaveLexema(string word)
+        {
+            courier.servType = TMorph.Schema.ServType.svSUBD;
+            courier.command = TMorph.Schema.ComType.SaveLex;
+            courier.SendText(word);
+            var paramlist = courier.GetParamsList();
+            return paramlist;
+        }
+
+        #endregion
+       
+        #region Методы работы с GREN
 
 		/// <summary>
 		/// Выполнение синтана текста.
@@ -185,5 +222,6 @@ namespace MorphApp
 			return outlist;
 		}
 		#endregion
-	} 
+
+    } 
 }

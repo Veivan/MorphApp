@@ -227,4 +227,13 @@ namespace Schemas
 	/// </summary>
 	public enum clNodeType { clnContainer, clnDocument, clnParagraph };
 
+    /// <summary>
+    /// Структура используется в обмене сообщениями с серверами.
+    /// </summary>
+    public struct SimpleParam
+    {
+        public string Name;
+        public string Value;
+    }
+
 }

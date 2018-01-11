@@ -13,6 +13,35 @@ namespace Schemas
 
         public List<ContainerNode> containers = new List<ContainerNode>();
 
+        #region Собственные непереопределяемые методы работы с хранилищем
+        /// <summary>
+        /// Поиск контейнера в хранилище по его ID.
+        /// </summary>
+        /// <param name="ContainerID">ID контейнера</param>
+        /// <returns>ContainerNode</returns>
+        public ContainerNode GetContainerByID(long ContainerID)
+        {
+            var result = RecursGetContainerByID(containers, ContainerID);
+            return result;
+        }
+
+        private ContainerNode RecursGetContainerByID(List<ContainerNode> containers, long ContainerID)
+        {
+            var result = containers.Where(x => x.ContainerID == ContainerID).FirstOrDefault();
+            if (result == null)
+                foreach (var cont in containers)
+                {
+                    var children = cont.Children();
+                    result = RecursGetContainerByID(cont.Children(), ContainerID);
+                    if (result != null)
+                        break;
+                }
+            return result;
+        }
+
+        #endregion
+
+        #region Методы работы с БД
         /// <summary>
         /// Заполнение внутреннего хранилища.
         /// </summary>
@@ -45,30 +74,38 @@ namespace Schemas
         public abstract void FillDocsParagraphs(ComplexValue list);
 
         /// <summary>
-        /// Поиск контейнера в хранилище по его ID.
+        /// Сохранение абзаца в БД.
         /// </summary>
-        /// <param name="ContainerID">ID контейнера</param>
-        /// <returns>ContainerNode</returns>
-        public ContainerNode GetContainerByID(long ContainerID)
-        {
-            var result = RecursGetContainerByID(containers, ContainerID);
-            return result;
-        }
+        /// <param name="pMap">ParagraphMap</param>
+        /// <returns>List of SimpleParam</returns>
+        public abstract List<SimpleParam> SaveParagraphBD(ParagraphMap pMap);
 
-        private ContainerNode RecursGetContainerByID(List<ContainerNode> containers, long ContainerID)
-        {
-            var result = containers.Where(x => x.ContainerID == ContainerID).FirstOrDefault();
-            if (result == null)
-                foreach (var cont in containers)
-                {
-                    var children = cont.Children();
-                    result = RecursGetContainerByID(cont.Children(), ContainerID);
-                    if (result != null)
-                        break;
-                }
-            return result;
-        }
+        /// <summary>
+        /// Чтение одного абзаца из БД.
+        /// </summary>
+        /// <param name="pg_id">ID абзаца</param>
+        /// <returns>List of SentenceMap</returns>
+        public abstract List<SentenceMap> ReadParagraphDB(long pg_id);
 
+        /// <summary>
+        /// Поиск слова в БД.
+        /// </summary>
+        /// <param name="word">слово</param>
+        /// <returns>List of SimpleParam</returns>
+        public abstract List<SimpleParam> GetLexema(string word);
+
+        /// <summary>
+        /// Сохранение слова в БД.
+        /// </summary>
+        /// <param name="word">слово</param>
+        /// <returns>List of SimpleParam</returns>
+        public abstract List<SimpleParam> SaveLexema(string word);
+        
+        #endregion
+
+        #region Методы работы с GREN
+
+        #endregion
     }
 }
 

@@ -11,12 +11,6 @@ using Schemas;
 
 namespace MorphApp
 {
-	public struct SimpleParam
-	{
-		public string Name;
-		public string Value;
-	}
-
 	class Courier
 	{
 		public ComType command;

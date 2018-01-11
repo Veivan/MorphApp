@@ -11,7 +11,12 @@ namespace MorphApp
 	/// </summary>
 	public class CLInnerStore : IntfInnerStore
 	{
-		public override void FillContainers(ComplexValue list)
+        Courier courier = new Courier();
+
+        // Работа с БД через сервер сообщений
+        SagaStoreServer dbServer = new SagaStoreServer();
+        
+        public override void FillContainers(ComplexValue list)
 		{
 			var dTable = list.list;
 			containers.Clear();
@@ -39,6 +44,26 @@ namespace MorphApp
         }
 
         public override DocumentMap RefreshParagraphs(long contID, long docID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override List<SimpleParam> SaveParagraphBD(ParagraphMap pMap)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override List<SentenceMap> ReadParagraphDB(long pg_id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override List<SimpleParam> GetLexema(string word)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override List<SimpleParam> SaveLexema(string word)
         {
             throw new NotImplementedException();
         }

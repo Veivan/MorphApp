@@ -60,5 +60,25 @@ namespace DirectDBA
         {
             throw new NotImplementedException();
         }
+
+        public override List<SimpleParam> SaveParagraphBD(ParagraphMap pMap)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override List<SentenceMap> ReadParagraphDB(long pg_id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override List<SimpleParam> GetLexema(string word)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override List<SimpleParam> SaveLexema(string word)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
