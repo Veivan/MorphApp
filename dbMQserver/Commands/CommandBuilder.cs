@@ -35,7 +35,8 @@ namespace dbMQserver.Commands
 				case ComType.SavePara:
 					{
 						var senttlist = SentenceMap.BuildFromMessage(message);
-						intCommand = new CommandSaveParagraph(message.DbID, senttlist);
+                        var docID = -1; // TODO docID надо передавать в первом элементе таблицы documents сообщения
+                        intCommand = new CommandSaveParagraph(message.DbID, docID, senttlist);
 						break;
 					}
 				case ComType.ReadPara:

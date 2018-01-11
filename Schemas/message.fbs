@@ -22,8 +22,14 @@ table Message {
 	params:[Param];				// Vector of tables.
 	sentences:[Sentence];		// Vector of tables.
 	paragraphs:[Paragraph];		// Vector of tables - массив записей из mParagraphs.
+	documents:[Document];		// Vector of tables - массив записей из mDocuments.
 	containers:[Container];		// Vector of tables - массив записей из mContainers.
 	dbID : long;				// произвольный ID СУБД (для передачи в качестве параметра и получения возвращаемого значения)
+}
+
+table Param {
+	name:string;
+	value:string;
 }
 
 table Container {
@@ -33,9 +39,17 @@ table Container {
 	parent_id :  long;		
 }
 
-table Param {
-	name:string;
-	value:string;
+table Document {
+	doc_id :  long;		// ID СУБД
+	ct_id : string;		// ссылка на контейнер
+	created_at : string;
+	name : string;
+}
+
+table Paragraph {
+	pg_id :  long;		// ID СУБД
+	doc_id : long;
+	created_at : string;
 }
 
 table Sentence {
@@ -51,7 +65,7 @@ table Node
 	ID : short;			// Порядок добавления в дерево, для сортировки в виде плоского списка
 	Level : short;		// Уровень вложенности, для отображения
 	index : short;		// порядковый номер в предложении
-	linktype : short;		// тип взаимосвязи с родителем
+	linktype : short;	// тип взаимосвязи с родителем
 	NodeID : long;		// ID СУБД
 }
 
@@ -67,11 +81,6 @@ table Lexema {
 table Grammema {
   key:short;
   value:short;
-}
-
-table Paragraph {
-	pg_id :  long;		// ID СУБД
-	created_at : long;
 }
 
 root_type Message;

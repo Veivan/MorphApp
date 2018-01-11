@@ -155,10 +155,6 @@ namespace DirectDBconnector
 					m_sqlCmd.Parameters.Add(new SQLiteParameter("@sp_id", sp_id));
 					m_sqlCmd.Parameters.Add(new SQLiteParameter("@lemma", lemma.ToLower()));
 					m_sqlCmd.ExecuteNonQuery();
-
-					/*m_sqlCmd.CommandText = "SELECT last_insert_rowid()";
-					m_sqlCmd.Parameters.Clear();
-					result = (long)m_sqlCmd.ExecuteScalar(); */
                     result = m_dbConn.LastInsertRowId;
 				}
 				catch (SQLiteException ex)
@@ -208,9 +204,7 @@ namespace DirectDBconnector
             {
 				m_sqlCmd.CommandText = String.Format("INSERT INTO mContainers(ct_id, name, parent_id) VALUES(NULL, '{0}', {1})", name, parent_id);
                 m_sqlCmd.ExecuteNonQuery();
-
-                m_sqlCmd.CommandText = "SELECT last_insert_rowid()";
-                ct_id = (long)m_sqlCmd.ExecuteScalar();
+                ct_id = m_dbConn.LastInsertRowId;
             }
             catch (SQLiteException ex)
             {
@@ -231,9 +225,7 @@ namespace DirectDBconnector
 				m_sqlCmd.CommandText = String.Format("INSERT INTO mDocuments(doc_id, ct_id, name) VALUES(NULL, {0}, '{1}')",
 					8, "doc1");
 				m_sqlCmd.ExecuteNonQuery();
-
-				m_sqlCmd.CommandText = "SELECT last_insert_rowid()";
-				doc_id = (long)m_sqlCmd.ExecuteScalar();
+                doc_id = m_dbConn.LastInsertRowId;
 			}
 			catch (SQLiteException ex)
 			{
@@ -266,17 +258,14 @@ namespace DirectDBconnector
 		/// Вставка в mParagraphs.
 		/// </summary>
 		/// <returns>ID параграфа</returns>
-		public long InsertParagraphDB()
+        public long InsertParagraphDB(long doc_id)
 		{
 			long pg_id = -1;
 			try
 			{
-				// Нужно только создать ID
-				m_sqlCmd.CommandText = "INSERT INTO mParagraphs(pg_id) VALUES(NULL)";
-				m_sqlCmd.ExecuteNonQuery();
-
-				m_sqlCmd.CommandText = "SELECT last_insert_rowid()";
-				pg_id = (long)m_sqlCmd.ExecuteScalar();
+                m_sqlCmd.CommandText = String.Format("INSERT INTO mParagraphs(pg_id, doc_id) VALUES(NULL, {0})", doc_id);
+                m_sqlCmd.ExecuteNonQuery();
+                pg_id = m_dbConn.LastInsertRowId;
 			}
 			catch (SQLiteException ex)
 			{
@@ -297,9 +286,7 @@ namespace DirectDBconnector
 				m_sqlCmd.CommandText =
 					String.Format("INSERT INTO mPhrases(ph_id, pg_id, sorder) VALUES(NULL, {0}, {1})", pg_id, sorder);
 				m_sqlCmd.ExecuteNonQuery();
-
-				m_sqlCmd.CommandText = "SELECT last_insert_rowid()";
-				ph_id = (long)m_sqlCmd.ExecuteScalar();
+                ph_id = m_dbConn.LastInsertRowId;
 			}
 			catch (SQLiteException ex)
 			{
@@ -323,9 +310,7 @@ namespace DirectDBconnector
 				m_sqlCmd.Parameters.Add(new SQLiteParameter("@lx_id", lx_id));
 				m_sqlCmd.Parameters.Add(new SQLiteParameter("@sorder", sorder));
 				m_sqlCmd.ExecuteNonQuery();
-
-				m_sqlCmd.CommandText = "SELECT last_insert_rowid()";
-				result = (long)m_sqlCmd.ExecuteScalar();
+                result = m_dbConn.LastInsertRowId;
 			}
 			catch (SQLiteException ex)
 			{
@@ -347,10 +332,8 @@ namespace DirectDBconnector
 					String.Format("INSERT INTO mGrammems(gr_id, с_id, sg_id, intval) VALUES(NULL, {0}, {1}, {2})",
 					с_id, sg_id, intval);
 				m_sqlCmd.ExecuteNonQuery();
-
-				m_sqlCmd.CommandText = "SELECT last_insert_rowid()";
-				result = (long)m_sqlCmd.ExecuteScalar();
-			}
+                result = m_dbConn.LastInsertRowId;
+            }
 			catch (SQLiteException ex)
 			{
 				Console.WriteLine("Error InsertGrammemDB: " + ex.Message);
@@ -371,10 +354,8 @@ namespace DirectDBconnector
 					String.Format("INSERT INTO mSyntNodes(sn_id, с_id, ln_id, level) VALUES(NULL, {0}, {1}, {2})",
 					с_id, ln_id, level);
 				m_sqlCmd.ExecuteNonQuery();
-
-				m_sqlCmd.CommandText = "SELECT last_insert_rowid()";
-				result = (long)m_sqlCmd.ExecuteScalar();
-			}
+                result = m_dbConn.LastInsertRowId;
+            }
 			catch (SQLiteException ex)
 			{
 				Console.WriteLine("Error InsertSyntNodesDB: " + ex.Message);

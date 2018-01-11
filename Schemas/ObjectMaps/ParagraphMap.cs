@@ -30,6 +30,12 @@ namespace Schemas
         public long ParagraphID { get { return _pg_id; } set { _pg_id = value; } }
 
         /// <summary>
+        /// Идентификатор документа, к которобу относится абзац.
+        /// Ссылка на абзаца в БД.
+        /// </summary>
+        public long DocumentID { get { return _doc_id; } set { _doc_id = value; } }
+
+        /// <summary>
         /// Возвращает предложение абзаца по порядку order.
         /// Заголовок имеет order = -1;
         /// </summary>

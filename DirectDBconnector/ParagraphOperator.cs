@@ -10,14 +10,16 @@ namespace DirectDBconnector
 	{
 		private List<SentenceMap> sentlist = new List<SentenceMap>();
 		private long paragraphID = -1;
-		public long ParagraphID { get { return paragraphID; } }
+        private long docID = -1;
+        public long ParagraphID { get { return paragraphID; } }
 
 		private ParagraphDBIndicator indicator = new ParagraphDBIndicator();
 		SQLiteConnector dbConnector = SQLiteConnector.Instance;
 
-		public ParagraphOperator(long ParagraphID, List<SentenceMap> sentlist, OpersDB operDB)
+		public ParagraphOperator(long ParagraphID, long DocID, List<SentenceMap> sentlist, OpersDB operDB)
 		{
 			this.paragraphID = ParagraphID;
+            this.docID = DocID;
 			if (sentlist != null)
 				this.sentlist.AddRange(sentlist);
 			if (operDB != OpersDB.odSelect)
@@ -32,7 +34,7 @@ namespace DirectDBconnector
 			{
 				case OpersDB.odInsert:
 					{
-						paragraphID = dbConnector.InsertParagraphDB();
+                        paragraphID = dbConnector.InsertParagraphDB(this.docID);
 						for (short k = 0; k < sentlist.Count; k++)
 						{
 							var sent = sentlist[k];
@@ -59,7 +61,7 @@ namespace DirectDBconnector
 					}
 				case OpersDB.odUpdate:
 					{
-						paragraphID = dbConnector.InsertParagraphDB();
+                        paragraphID = dbConnector.InsertParagraphDB(this.docID);
 						break;
 					}
 			}

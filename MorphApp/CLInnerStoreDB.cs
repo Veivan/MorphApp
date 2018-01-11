@@ -144,10 +144,13 @@ namespace MorphApp
 
         public override List<SimpleParam> SaveParagraphBD(ParagraphMap pMap)
         {
-            courier.servType = TMorph.Schema.ServType.svSUBD;
-            courier.command = TMorph.Schema.ComType.SavePara;
-            courier.SendParagraph(pMap);
-            var paramlist = courier.GetParamsList();
+            var listSmaps = pMap.GetParagraphSents().Select(x => x.sentstruct).OrderBy(x => x.Order).ToList();
+            var ParagraphID = dbServer.SaveParagraph(pMap.ParagraphID, pMap.DocumentID, listSmaps);
+ 			var paramlist = new List<SimpleParam>();
+            var param = new SimpleParam();
+            param.Name = "ParagraphID";
+            param.Value = ParagraphID.ToString();
+            paramlist.Add(param);
             return paramlist;
         }
 

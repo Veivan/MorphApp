@@ -18,20 +18,25 @@ public struct Paragraph : IFlatbufferObject
   public Paragraph __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
   public long PgId { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetLong(o + __p.bb_pos) : (long)0; } }
-  public long CreatedAt { get { int o = __p.__offset(6); return o != 0 ? __p.bb.GetLong(o + __p.bb_pos) : (long)0; } }
+  public long DocId { get { int o = __p.__offset(6); return o != 0 ? __p.bb.GetLong(o + __p.bb_pos) : (long)0; } }
+  public string CreatedAt { get { int o = __p.__offset(8); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
+  public ArraySegment<byte>? GetCreatedAtBytes() { return __p.__vector_as_arraysegment(8); }
 
   public static Offset<Paragraph> CreateParagraph(FlatBufferBuilder builder,
       long pg_id = 0,
-      long created_at = 0) {
-    builder.StartObject(2);
-    Paragraph.AddCreatedAt(builder, created_at);
+      long doc_id = 0,
+      StringOffset created_atOffset = default(StringOffset)) {
+    builder.StartObject(3);
+    Paragraph.AddDocId(builder, doc_id);
     Paragraph.AddPgId(builder, pg_id);
+    Paragraph.AddCreatedAt(builder, created_atOffset);
     return Paragraph.EndParagraph(builder);
   }
 
-  public static void StartParagraph(FlatBufferBuilder builder) { builder.StartObject(2); }
+  public static void StartParagraph(FlatBufferBuilder builder) { builder.StartObject(3); }
   public static void AddPgId(FlatBufferBuilder builder, long pgId) { builder.AddLong(0, pgId, 0); }
-  public static void AddCreatedAt(FlatBufferBuilder builder, long createdAt) { builder.AddLong(1, createdAt, 0); }
+  public static void AddDocId(FlatBufferBuilder builder, long docId) { builder.AddLong(1, docId, 0); }
+  public static void AddCreatedAt(FlatBufferBuilder builder, StringOffset createdAtOffset) { builder.AddOffset(2, createdAtOffset.Value, 0); }
   public static Offset<Paragraph> EndParagraph(FlatBufferBuilder builder) {
     int o = builder.EndObject();
     return new Offset<Paragraph>(o);

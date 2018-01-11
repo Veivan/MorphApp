@@ -73,6 +73,7 @@
     <Compile Include="ObjectMaps\SentenceMap.cs" />
     <Compile Include="TMorph\Schema\ComType.cs" />
     <Compile Include="TMorph\Schema\Container.cs" />
+    <Compile Include="TMorph\Schema\Document.cs" />
     <Compile Include="TMorph\Schema\Grammema.cs" />
     <Compile Include="TMorph\Schema\Lexema.cs" />
     <Compile Include="TMorph\Schema\Message.cs" />

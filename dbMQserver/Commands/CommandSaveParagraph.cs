@@ -11,18 +11,20 @@ namespace dbMQserver.Commands
 	{
 		private ComType command = ComType.SavePara;
 		private List<SentenceMap> sentlist = new List<SentenceMap>();
-		private long ParagraphID;
+        private long ParagraphID;
+        private long DocID;
 
-		public CommandSaveParagraph(long ParagraphID, List<SentenceMap> sentlist)
+		public CommandSaveParagraph(long ParagraphID, long DocID, List<SentenceMap> sentlist)
 		{
-			this.ParagraphID = ParagraphID;
-			this.sentlist.AddRange(sentlist);
+            this.ParagraphID = ParagraphID;
+            this.DocID = DocID;
+            this.sentlist.AddRange(sentlist);
 		}
 
 		public void Execute()
 		{
 			var dbServer = new SagaDBServer();
-			ParagraphID = dbServer.SaveParagraph(ParagraphID, sentlist);
+            ParagraphID = dbServer.SaveParagraph(ParagraphID, DocID, sentlist);
 		}
 
 		public byte[] GetResultBytes()
