@@ -240,7 +240,7 @@ namespace MorphApp
 					}
 				case ComType.SavePara:
 					{
-						var innersents = parastr.GetParagraph();
+						var innersents = parastr.GetParagraphSents();
 						var senttlist = innersents
 							.OrderBy(y => y.order)
 							.Select(x => x.sentstruct).ToList();

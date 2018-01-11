@@ -76,7 +76,7 @@ namespace MorphApp
             para.RefreshParagraph(new ArrayList(sents));
 
             // Выполнение синтана для неактуальных предложений.
-            var sentlist = para.GetParagraph(SentTypes.enstNotActual);
+            var sentlist = para.GetParagraphSents(SentTypes.enstNotActual);
             foreach (var sent in sentlist)
             {
                 var sentlistRep = store.MorphMakeSyntan(sent.sentence);
@@ -253,6 +253,29 @@ namespace MorphApp
                             var paragraph = parags.Where(x => x.ParagraphID == Convert.ToInt64(node.Name)).FirstOrDefault();
                             node.Text = paragraph.GetSentenseByOrder(-1);
                         }
+                        break;
+                    }
+            }
+
+        }
+
+        private void treeView1_DoubleClick(object sender, EventArgs e)
+        {
+            var tree = sender as TreeView;
+            TreeNode aNode = tree.SelectedNode;
+            if (aNode == null) return;
+
+            switch ((clNodeType)aNode.Tag)
+            {
+                case clNodeType.clnParagraph:
+                    {
+                        var docNode = aNode.Parent;
+                        var docID = Convert.ToInt64(docNode.Name);
+                        var contID = Convert.ToInt64(docNode.Parent.Name);
+                        var parID = Convert.ToInt64(aNode.Name);
+                        var pMap = store.GetParagraph(contID, docID, parID);
+                        memoHeader.Text = string.Join("", pMap.GetParagraphPhrases(SentTypes.enstHeader).ToArray());
+                        memoBody.Text = string.Join(" ", pMap.GetParagraphPhrases(SentTypes.enstBody).ToArray());
                         break;
                     }
             }

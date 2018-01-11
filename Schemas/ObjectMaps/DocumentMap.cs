@@ -58,5 +58,10 @@ namespace Schemas
             return Paragraphs;
 		}
 
+        public ParagraphMap GetParagraph(long ParagraphID)
+        {
+            return Paragraphs.Where(x => x.ParagraphID == ParagraphID).FirstOrDefault();
+        }
+
 	}
 }

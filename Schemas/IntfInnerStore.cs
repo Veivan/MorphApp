@@ -14,6 +14,7 @@ namespace Schemas
         public List<ContainerNode> containers = new List<ContainerNode>();
 
         #region Собственные непереопределяемые методы работы с хранилищем
+       
         /// <summary>
         /// Поиск контейнера в хранилище по его ID.
         /// </summary>
@@ -37,6 +38,22 @@ namespace Schemas
                         break;
                 }
             return result;
+        }
+
+        /// <summary>
+        /// Поиск параграфа в хранилище.
+        /// </summary>
+        /// <param name="contID">ID контейнера</param>
+        /// <param name="docID">ID документа</param>
+        /// <param name="parID">ID параграфа</param>
+        /// <returns>pMap</returns>
+        public ParagraphMap GetParagraph(long contID, long docID, long parID)
+        {
+            var container = GetContainerByID(contID);
+            if (container == null) return null;
+            var dMap = container.GetDocumentByID(docID);
+            if (dMap == null) return null;
+            return dMap.GetParagraph(parID);          
         }
 
         #endregion
@@ -94,7 +111,7 @@ namespace Schemas
         /// <returns>List of SimpleParam</returns>
         public abstract List<SimpleParam> GetLexema(string word);
 
-        /// <summary>
+        /// <summary>   
         /// Сохранение слова в БД.
         /// </summary>
         /// <param name="word">слово</param>
