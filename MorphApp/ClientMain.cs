@@ -9,7 +9,6 @@ using System.Windows.Forms;
 
 using System.Collections;
 using Schemas;
-using DirectDBconnector;
 
 namespace MorphApp
 {
@@ -262,7 +261,42 @@ namespace MorphApp
         private void treeView1_DoubleClick(object sender, EventArgs e)
         {
             var tree = sender as TreeView;
-            TreeNode aNode = tree.SelectedNode;
+            EditNode(tree.SelectedNode);
+        }
+
+        private void btAddPara_Click(object sender, EventArgs e)
+        {
+            TreeNode aNode = treeView1.SelectedNode;
+            if (aNode == null) return;
+
+            long docID = -1;
+            switch ((clNodeType)aNode.Tag)
+            {
+                case clNodeType.clnDocument:
+                    {
+                        docID = Convert.ToInt64(aNode.Name);
+                        break;
+                    }
+                case clNodeType.clnParagraph:
+                    {
+                        var docNode = aNode.Parent;
+                        docID = Convert.ToInt64(docNode.Name);
+                        break;
+                    }
+            }
+            if (docID == -1) return;
+            var fParaEdit = new FormParaEdit();
+            fParaEdit.paraMap = new ParagraphMap(-1, docID);
+            fParaEdit.Show();
+        }
+
+        private void btEdit_Click(object sender, EventArgs e)
+        {
+            EditNode(treeView1.SelectedNode);
+        }
+
+        private void EditNode(TreeNode aNode)
+        {
             if (aNode == null) return;
 
             switch ((clNodeType)aNode.Tag)
@@ -274,13 +308,14 @@ namespace MorphApp
                         var contID = Convert.ToInt64(docNode.Parent.Name);
                         var parID = Convert.ToInt64(aNode.Name);
                         var pMap = store.GetParagraph(contID, docID, parID);
-                        memoHeader.Text = string.Join("", pMap.GetParagraphPhrases(SentTypes.enstHeader).ToArray());
-                        memoBody.Text = string.Join(" ", pMap.GetParagraphPhrases(SentTypes.enstBody).ToArray());
+                        var fParaEdit = new FormParaEdit();
+                        fParaEdit.paraMap = pMap;
+                        fParaEdit.Show();
                         break;
                     }
             }
-
         }
+
 
     }
 }

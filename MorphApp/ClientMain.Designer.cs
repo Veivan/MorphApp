@@ -35,13 +35,9 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.treeView1 = new System.Windows.Forms.TreeView();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.memoBody = new System.Windows.Forms.TextBox();
-            this.panel4 = new System.Windows.Forms.Panel();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.memoHeader = new System.Windows.Forms.TextBox();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.btEdit = new System.Windows.Forms.Button();
+            this.btAddPara = new System.Windows.Forms.Button();
             this.btRefresh = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.memoOut = new System.Windows.Forms.TextBox();
@@ -60,10 +56,7 @@
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            this.panel2.SuspendLayout();
-            this.panel4.SuspendLayout();
             this.panel3.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -123,13 +116,8 @@
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.Controls.Add(this.treeView1);
-            // 
-            // splitContainer1.Panel2
-            // 
-            this.splitContainer1.Panel2.Controls.Add(this.panel2);
-            this.splitContainer1.Panel2.Controls.Add(this.panel4);
             this.splitContainer1.Size = new System.Drawing.Size(596, 566);
-            this.splitContainer1.SplitterDistance = 198;
+            this.splitContainer1.SplitterDistance = 318;
             this.splitContainer1.TabIndex = 23;
             // 
             // treeView1
@@ -137,71 +125,15 @@
             this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeView1.Location = new System.Drawing.Point(0, 0);
             this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(198, 566);
+            this.treeView1.Size = new System.Drawing.Size(318, 566);
             this.treeView1.TabIndex = 22;
             this.treeView1.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeView1_BeforeExpand);
             this.treeView1.DoubleClick += new System.EventHandler(this.treeView1_DoubleClick);
             // 
-            // panel2
-            // 
-            this.panel2.Controls.Add(this.textBox3);
-            this.panel2.Controls.Add(this.memoBody);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Location = new System.Drawing.Point(0, 66);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(394, 500);
-            this.panel2.TabIndex = 23;
-            // 
-            // textBox3
-            // 
-            this.textBox3.Location = new System.Drawing.Point(0, 97);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.ReadOnly = true;
-            this.textBox3.Size = new System.Drawing.Size(100, 20);
-            this.textBox3.TabIndex = 27;
-            this.textBox3.Text = "Содержание";
-            // 
-            // memoBody
-            // 
-            this.memoBody.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.memoBody.Location = new System.Drawing.Point(0, 123);
-            this.memoBody.Multiline = true;
-            this.memoBody.Name = "memoBody";
-            this.memoBody.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.memoBody.Size = new System.Drawing.Size(394, 377);
-            this.memoBody.TabIndex = 25;
-            // 
-            // panel4
-            // 
-            this.panel4.Controls.Add(this.textBox2);
-            this.panel4.Controls.Add(this.memoHeader);
-            this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel4.Location = new System.Drawing.Point(0, 0);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(394, 66);
-            this.panel4.TabIndex = 22;
-            // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(3, 3);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.ReadOnly = true;
-            this.textBox2.Size = new System.Drawing.Size(100, 20);
-            this.textBox2.TabIndex = 26;
-            this.textBox2.Text = "Заголовок";
-            // 
-            // memoHeader
-            // 
-            this.memoHeader.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.memoHeader.Location = new System.Drawing.Point(0, 29);
-            this.memoHeader.Multiline = true;
-            this.memoHeader.Name = "memoHeader";
-            this.memoHeader.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.memoHeader.Size = new System.Drawing.Size(394, 37);
-            this.memoHeader.TabIndex = 25;
-            // 
             // panel3
             // 
+            this.panel3.Controls.Add(this.btEdit);
+            this.panel3.Controls.Add(this.btAddPara);
             this.panel3.Controls.Add(this.btRefresh);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel3.Location = new System.Drawing.Point(3, 569);
@@ -209,13 +141,33 @@
             this.panel3.Size = new System.Drawing.Size(596, 64);
             this.panel3.TabIndex = 22;
             // 
+            // btEdit
+            // 
+            this.btEdit.Location = new System.Drawing.Point(98, 14);
+            this.btEdit.Name = "btEdit";
+            this.btEdit.Size = new System.Drawing.Size(99, 26);
+            this.btEdit.TabIndex = 2;
+            this.btEdit.Text = "Редактировать";
+            this.btEdit.UseVisualStyleBackColor = true;
+            this.btEdit.Click += new System.EventHandler(this.btEdit_Click);
+            // 
+            // btAddPara
+            // 
+            this.btAddPara.Location = new System.Drawing.Point(203, 14);
+            this.btAddPara.Name = "btAddPara";
+            this.btAddPara.Size = new System.Drawing.Size(87, 26);
+            this.btAddPara.TabIndex = 1;
+            this.btAddPara.Text = "Новый абзац";
+            this.btAddPara.UseVisualStyleBackColor = true;
+            this.btAddPara.Click += new System.EventHandler(this.btAddPara_Click);
+            // 
             // btRefresh
             // 
             this.btRefresh.Location = new System.Drawing.Point(5, 14);
             this.btRefresh.Name = "btRefresh";
             this.btRefresh.Size = new System.Drawing.Size(87, 26);
             this.btRefresh.TabIndex = 0;
-            this.btRefresh.Text = "Refresh";
+            this.btRefresh.Text = "Обновить";
             this.btRefresh.UseVisualStyleBackColor = true;
             this.btRefresh.Click += new System.EventHandler(this.btRefresh_Click);
             // 
@@ -365,13 +317,8 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
-            this.panel4.ResumeLayout(false);
-            this.panel4.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
@@ -404,12 +351,8 @@
 		private System.Windows.Forms.Button btRefresh;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.TreeView treeView1;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.TextBox memoBody;
-        private System.Windows.Forms.Panel panel4;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox memoHeader;
+        private System.Windows.Forms.Button btAddPara;
+        private System.Windows.Forms.Button btEdit;
     }
 }
 
