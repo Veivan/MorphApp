@@ -13,18 +13,21 @@ namespace dbMQserver.Commands
 		private List<SentenceMap> sentlist = new List<SentenceMap>();
         private long ParagraphID;
         private long DocID;
+		private ParagraphMap pMap;
 
 		public CommandSaveParagraph(long ParagraphID, long DocID, List<SentenceMap> sentlist)
 		{
             this.ParagraphID = ParagraphID;
             this.DocID = DocID;
             this.sentlist.AddRange(sentlist);
+
+			pMap = new ParagraphMap(ParagraphID, DocID);
 		}
 
 		public void Execute()
 		{
 			var dbServer = new SagaDBServer();
-            ParagraphID = dbServer.SaveParagraph(ParagraphID, DocID, sentlist);
+			ParagraphID = dbServer.SaveParagraph(pMap);
 		}
 
 		public byte[] GetResultBytes()

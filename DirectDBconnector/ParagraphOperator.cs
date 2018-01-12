@@ -8,6 +8,7 @@ namespace DirectDBconnector
 {
 	class ParagraphOperator
 	{
+		private List<long> sent2Del = new List<long>();
 		private List<SentenceMap> sentlist = new List<SentenceMap>();
 		private long paragraphID = -1;
         private long docID = -1;
@@ -16,12 +17,14 @@ namespace DirectDBconnector
 		private ParagraphDBIndicator indicator = new ParagraphDBIndicator();
 		SQLiteConnector dbConnector = SQLiteConnector.Instance;
 
-		public ParagraphOperator(long ParagraphID, long DocID, List<SentenceMap> sentlist, OpersDB operDB)
+		public ParagraphOperator(ParagraphMap pMap, OpersDB operDB)
 		{
-			this.paragraphID = ParagraphID;
-            this.docID = DocID;
-			if (sentlist != null)
+			this.paragraphID = pMap.ParagraphID;
+			this.docID = pMap.DocumentID;
+			var listSmaps = pMap.GetParagraphSents().Select(x => x.sentstruct).OrderBy(x => x.Order).ToList();
+			if (listSmaps != null)
 				this.sentlist.AddRange(sentlist);
+			this.sent2Del = pMap.GetDeleted();
 			if (operDB != OpersDB.odSelect)
 				indicator.Fill(ParagraphID);
 		}
@@ -61,6 +64,14 @@ namespace DirectDBconnector
 					}
 				case OpersDB.odUpdate:
 					{
+						// Удаление предложений // TODO доделать
+						dbConnector.DeletePhrasesList(null;
+
+						IEnumerator<long> etr = sent2Del.GetEnumerator();
+						while (etr.MoveNext())
+							Console.Write(etr.Current + "\t");
+
+  
                         paragraphID = dbConnector.InsertParagraphDB(this.docID);
 						break;
 					}

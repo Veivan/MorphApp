@@ -497,6 +497,35 @@ namespace DirectDBconnector
 			return reslist;
 		}
 
+		/// <summary>
+		/// Удаление записей из mPhrases.
+		/// </summary>
+		/// <param name="parentID">ID родителя</param>
+		/// <returns>Коллекцию ContainerMap</returns>
+		public void DeletePhrasesList(List<string> list_ids)
+		{
+			var reslist = new List<ContainerMap>();
+			try
+			{
+				var stmnt = String.Format("SELECT ct_id, created_at, name, parent_id FROM mContainers WHERE parent_id = {0}", parentID);
+				m_sqlCmd.CommandText = stmnt;
+				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
+				while (r.Read())
+				{
+					var dt = DateTime.Now;
+					var created = r["created_at"].ToString();
+					if (!String.IsNullOrEmpty(created))
+						dt = DateTime.Parse(created);
+					reslist.Add(new ContainerMap(r.GetInt64(0), r["name"].ToString(), dt, r.GetInt64(3)));
+				}
+				r.Close();
+			}
+			catch (SQLiteException ex)
+			{
+				//MessageBox.Show("Error: " + ex.Message);
+			}
+		}
+
 		/*// <summary>
 		/// Удаление записей из mPhrases, относящихся к абзацу pg_id и порядок в предложении у которых больше maxcnt.
 		/// </summary>

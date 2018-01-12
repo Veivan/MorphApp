@@ -31,7 +31,8 @@ namespace MorphApp
         
         private void btParaSave_Click(object sender, EventArgs e)
         {
-			store.UpdateParagraph(this.paraMap, memoBody.Text);
+			store.UpdateParagraph(this.paraMap, memoHeader.Text, true);
+			store.UpdateParagraph(this.paraMap, memoBody.Text, false);
 			var paramlist = store.SaveParagraphBD(this.paraMap);
         }
 

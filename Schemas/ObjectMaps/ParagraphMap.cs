@@ -37,7 +37,7 @@ namespace Schemas
 
         /// <summary>
         /// Возвращает предложение абзаца по порядку order.
-        /// Заголовок имеет order = -1;
+        /// Предложения заголовка имеет order < 0;
         /// </summary>
         public string GetSentenseByOrder(int order)
         {
@@ -50,7 +50,29 @@ namespace Schemas
         /// </summary>
         private List<SentProps> innerPara = new List<SentProps>();
 
-        /// <summary>
+		/// <summary>
+		/// В списке хранятся ID предложений абзаца, которые нужно удалить при сохранении в БД.
+		/// </summary>
+		private List<long> sents2Del = new List<long>();
+		
+        public List<long> GetDeleted() { return sents2Del; } 
+
+		/// <summary>
+		/// Ссхранение списка ID предложений абзаца, которые надо удалить при сохранении.
+		/// </summary>
+		private void SetDeleted(List<SentProps> versionPara)
+		{
+			sents2Del.Clear();
+
+			var listBefore = innerPara.Select(x => x.sentstruct.SentenceID).ToArray();
+			var listAfter = versionPara
+				.Where(x => x.sentstruct.SentenceID != -1)
+				.Select(x => x.sentstruct.SentenceID)
+				.ToArray();
+			sents2Del.AddRange(listBefore.Except(listAfter));
+		}
+
+		/// <summary>
         /// Конструктор
         /// </summary>
         public ParagraphMap(long pg_id = -1, long doc_id = -1, DateTime? created_at = null, long ct_id = -1)
@@ -72,11 +94,12 @@ namespace Schemas
         /// Для "Неактуальных" надо делать синтаксический анализ.
         /// По окончании новый список заменяет предыдущее содержание хранилища.
         /// </summary>
-        public void RefreshParagraph(ArrayList input)
+        public void RefreshParagraph(ArrayList input, bool IsHeader)
         {
             List<SentProps> versionPara = new List<SentProps>();
 
             int i = 0;
+			if (IsHeader) i = -1 * input.Count;
             foreach (var sent in input)
             {
                 SentProps newsprops;
@@ -96,8 +119,10 @@ namespace Schemas
                 }
                 newsprops.order = i;
                 versionPara.Add(newsprops);
+				i++;
             }
 
+			SetDeleted(versionPara);
             innerPara.Clear();
             innerPara.AddRange(versionPara);
         }
@@ -117,10 +142,14 @@ namespace Schemas
                     versionPara = innerPara.Where(x => x.IsActual == false).ToList();
                     break;
                 case SentTypes.enstHeader:
-                    versionPara.AddRange(innerPara.Where(x => x.order == -1).ToList());
+                    versionPara.AddRange(innerPara.Where(x => x.order < 0)
+						.OrderBy(x => x.order)
+						.ToList());
                     break;
                 case SentTypes.enstBody:
-                    versionPara.AddRange(innerPara.Where(x => x.order != -1).ToList());
+                    versionPara.AddRange(innerPara.Where(x => x.order > -1)
+						.OrderBy(x => x.order)
+						.ToList());
                     break;
             }
             return versionPara;

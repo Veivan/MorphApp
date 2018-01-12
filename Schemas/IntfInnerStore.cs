@@ -62,10 +62,10 @@ namespace Schemas
         /// <param name="pMap">объект ParagraphMap</param>
         /// <param name="input">текстовое содержание абзаца</param>
         /// <returns></returns>
-		public void UpdateParagraph(ParagraphMap pMap, string input) 
+		public void UpdateParagraph(ParagraphMap pMap, string input, bool IsHeader) 
 		{
 			var sents = this.MorphGetSeparatedSentsList(input);
-			pMap.RefreshParagraph(new ArrayList(sents));
+			pMap.RefreshParagraph(new ArrayList(sents), IsHeader);
 
 			// Выполнение синтана для неактуальных предложений.
 			var sentlist = pMap.GetParagraphSents(SentTypes.enstNotActual);
@@ -74,8 +74,7 @@ namespace Schemas
 				var sentlistRep = this.MorphMakeSyntan(sent.sentence);
 				if (sentlistRep.Count > 0)
 					pMap.UpdateSentStruct(sent.order, sentlistRep[0]);
-			}
-		
+			}		
 		}
 
         #endregion

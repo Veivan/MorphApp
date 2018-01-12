@@ -34,25 +34,6 @@ namespace MorphApp
             //memoInp.Text = "Абзац 1";
         }
 
-
-		/*// <summary>
-        /// Формирование содержимого внутреннего объекта Paragraph.
-        /// </summary>
-        private void UpdateParagraph()
-        {
-            var sents = store.MorphGetSeparatedSentsList(memoInp.Text);
-            para.RefreshParagraph(new ArrayList(sents));
-
-            // Выполнение синтана для неактуальных предложений.
-            var sentlist = para.GetParagraphSents(SentTypes.enstNotActual);
-            foreach (var sent in sentlist)
-            {
-                var sentlistRep = store.MorphMakeSyntan(sent.sentence);
-                if (sentlistRep.Count > 0)
-                    para.UpdateSentStruct(sent.order, sentlistRep[0]);
-            }
-        }*/
-
         private void btRefresh_Click(object sender, EventArgs e)
         {
             store.Refresh();
@@ -118,7 +99,8 @@ namespace MorphApp
                         foreach (TreeNode node in aNode.Nodes)
                         {
                             var paragraph = parags.Where(x => x.ParagraphID == Convert.ToInt64(node.Name)).FirstOrDefault();
-                            node.Text = paragraph.GetSentenseByOrder(-1);
+							node.Text = String.Join("", paragraph.GetParagraphSents(SentTypes.enstHeader)
+								.Select(x => x.sentence).ToList() );
                         }
                         break;
                     }
@@ -188,7 +170,7 @@ namespace MorphApp
 
 		private void btSavePara_Click(object sender, EventArgs e)
 		{
-			store.UpdateParagraph(this.para, memoInp.Text);
+			store.UpdateParagraph(this.para, memoInp.Text, false);
 
 			var paramlist = store.SaveParagraphBD(this.para);
 			if (paramlist == null)

@@ -58,12 +58,12 @@ namespace MorphApp
 			throw new NotImplementedException();
 		}
 
-		public override long SaveParagraph(long pg_id, long doc_id, List<SentenceMap> sentlist)
+		public override long SaveParagraph(ParagraphMap pMap)
 		{
 			long ParagraphID = -1;
 			courier.servType = TMorph.Schema.ServType.svSUBD;
 			courier.command = TMorph.Schema.ComType.SavePara;
-            courier.SendParagraph(new ParagraphMap(pg_id, doc_id));
+			courier.SendParagraph(pMap);
 			var paramlist = courier.GetParamsList();
 			if (paramlist == null)
 			{

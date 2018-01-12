@@ -144,8 +144,7 @@ namespace MorphApp
 
         public override List<SimpleParam> SaveParagraphBD(ParagraphMap pMap)
         {
-            var listSmaps = pMap.GetParagraphSents().Select(x => x.sentstruct).OrderBy(x => x.Order).ToList();
-            var ParagraphID = dbServer.SaveParagraph(pMap.ParagraphID, pMap.DocumentID, listSmaps);
+			var ParagraphID = dbServer.SaveParagraph(pMap);
  			var paramlist = new List<SimpleParam>();
             var param = new SimpleParam();
             param.Name = "ParagraphID";

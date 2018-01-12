@@ -63,7 +63,7 @@ namespace Schemas
 		/// <param name="pg_id">ID абзаца</param>
 		/// <param name="sentlist">упорядоченный список структур предложений</param>
 		/// <returns>ID абзаца</returns>
-        public abstract long SaveParagraph(long pg_id, long doc_id, List<SentenceMap> sentlist);
+		public abstract long SaveParagraph(ParagraphMap pMap);
 
 		/// <summary>
 		/// Чтение абзаца из DB.
