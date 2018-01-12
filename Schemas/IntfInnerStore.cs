@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
-using System.Text;
 
 namespace Schemas
 {
@@ -55,6 +55,28 @@ namespace Schemas
             if (dMap == null) return null;
             return dMap.GetParagraph(parID);          
         }
+
+		/// <summary>
+        /// Формирование содержимого внутреннего объекта ParagraphMap.
+        /// </summary>
+        /// <param name="pMap">объект ParagraphMap</param>
+        /// <param name="input">текстовое содержание абзаца</param>
+        /// <returns></returns>
+		public void UpdateParagraph(ParagraphMap pMap, string input) 
+		{
+			var sents = this.MorphGetSeparatedSentsList(input);
+			pMap.RefreshParagraph(new ArrayList(sents));
+
+			// Выполнение синтана для неактуальных предложений.
+			var sentlist = pMap.GetParagraphSents(SentTypes.enstNotActual);
+			foreach (var sent in sentlist)
+			{
+				var sentlistRep = this.MorphMakeSyntan(sent.sentence);
+				if (sentlistRep.Count > 0)
+					pMap.UpdateSentStruct(sent.order, sentlistRep[0]);
+			}
+		
+		}
 
         #endregion
 
@@ -121,8 +143,23 @@ namespace Schemas
         #endregion
 
         #region Методы работы с GREN
+		
+		/// <summary>
+		/// Выполнение синтана текста.
+		/// </summary>
+		public abstract List<SentenceMap> MorphMakeSyntan(string text);
 
-        #endregion
+			/// <summary>
+		/// Получение списка восстановленных текстов предложений от сервиса.
+		/// </summary>
+		public abstract List<string> MorphGetReparedSentsList(List<SentenceMap> sentlist);
+
+		/// <summary>
+		/// Разделение текста на предложения с помощью сервиса.
+		/// </summary>
+		public abstract List<string> MorphGetSeparatedSentsList(string text);
+
+		#endregion
     }
 }
 

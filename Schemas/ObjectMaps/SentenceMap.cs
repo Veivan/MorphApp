@@ -9,7 +9,7 @@ namespace Schemas
 {
     public struct tNode
     {
-        public short ID; // Порядок добавления в дерево, для сортировки в виде плоского списка
+        public int ID; // Порядок добавления в дерево, для сортировки в виде плоского списка
         public int Level; // Уровень вложенности, для отображения
         public int index; // порядковый номер в предложении
         public int linktype; // тип взаимосвязи с родителем
@@ -22,7 +22,7 @@ namespace Schemas
     {
         private long _phID = -1;
         private long _pg_id = -1;
-        private long _order = -1;
+		private int _order = -1;
         private DateTime _created_at;
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace Schemas
 		/// Порядок предложения в абзаце.
 		/// У заголовка _order = -1;
 		/// </summary>
-		public long Order { get { return _order; } set { _order = value; } }
+		public int Order { get { return _order; } set { _order = value; } }
 		
 		/// <summary>
         /// Хранилище структур слов предложения.
@@ -56,7 +56,7 @@ namespace Schemas
 		/// <summary>
 		/// Конструктор
 		/// </summary>
-        public SentenceMap(long ph_id = -1, long pg_id = -1, int order = -1, DateTime? created_at = null)
+		public SentenceMap(long ph_id = -1, long pg_id = -1, int order = -1, DateTime? created_at = null)
         {
             _phID = ph_id;
 			_pg_id = pg_id;
@@ -117,9 +117,9 @@ namespace Schemas
         /// <returns></returns>
         public void AddNode(int order, int Level, int linktype)
         {
-            short maxID = 0;
+            int maxID = 0;
             if (treeList.Count > 0)
-                maxID = (short)(treeList.OrderByDescending(x => x.Level).First().ID + 1);
+                maxID = (int)(treeList.OrderByDescending(x => x.Level).First().ID + 1);
             var node = new tNode();
             node.ID = maxID;
             node.Level = Level;
@@ -179,10 +179,9 @@ namespace Schemas
         /// <summary>
         /// Получение из сообщения списка структур tNode, сортированных в порядке слов в предложении.
         /// </summary>
-        private static SortedList<short, tNode> GetNodesFromMessSentence(Sentence sent)
+        private static SortedList<int, tNode> GetNodesFromMessSentence(Sentence sent)
         {
-            SortedList<short, tNode> outlist = null;
-            outlist = new SortedList<short, tNode>();
+            var outlist = new SortedList<int, tNode>();
             // Чтение узлов
             for (int i = 0; i < sent.NodesLength; i++)
             {
@@ -216,7 +215,7 @@ namespace Schemas
         {
             VectorOffset sentscol = default(VectorOffset);
             var sents = new Offset<Sentence>[sentlist.Count];
-            for (short i = 0; i < sentlist.Count; i++)
+            for (int i = 0; i < sentlist.Count; i++)
             {
                 sents[i] = BuildSingleFlatSent(builder, sentlist[i], i);
             }
@@ -224,11 +223,11 @@ namespace Schemas
             return sentscol;
         }
 
-        private static Offset<Sentence> BuildSingleFlatSent(FlatBufferBuilder builder, SentenceMap sentence, short order)
+        private static Offset<Sentence> BuildSingleFlatSent(FlatBufferBuilder builder, SentenceMap sentence, int order)
         {
             // Чтение слов
             var words = new Offset<Lexema>[sentence.Capasity];
-            for (short i = 0; i < sentence.Capasity; i++)
+            for (int i = 0; i < sentence.Capasity; i++)
             {
                 var word = sentence.GetWordByOrder(i);
                 var EntryName = builder.CreateString(word.EntryName);
@@ -236,14 +235,14 @@ namespace Schemas
                 // Чтение граммем
                 var pairs = word.GetPairs();
                 var grammems = new Offset<Grammema>[pairs.Count];
-                short j = 0;
+                int j = 0;
                 foreach (var pair in pairs)
                 {
-                    grammems[j] = Grammema.CreateGrammema(builder, (short)pair.Key, (short)pair.Value);
+                    grammems[j] = Grammema.CreateGrammema(builder, pair.Key, pair.Value);
                     j++;
                 }
                 var gramsCol = Lexema.CreateGrammemsVector(builder, grammems);
-                words[i] = Lexema.CreateLexema(builder, i, EntryName, word.ID_Entry, (short)word.ID_PartOfSpeech, gramsCol);
+                words[i] = Lexema.CreateLexema(builder, i, EntryName, word.ID_Entry, word.ID_PartOfSpeech, gramsCol);
             }
             var wordsCol = Sentence.CreateWordsVector(builder, words);
 
@@ -251,10 +250,10 @@ namespace Schemas
             var treelist = sentence.GetTreeList();
             var nodes = new Offset<Node>[treelist.Count];
 
-            for (short i = 0; i < treelist.Count; i++)
+            for (int i = 0; i < treelist.Count; i++)
             {
-                nodes[i] = Node.CreateNode(builder, treelist[i].ID, (short)treelist[i].Level,
-                    (short)treelist[i].index, (short)treelist[i].linktype);
+                nodes[i] = Node.CreateNode(builder, treelist[i].ID, treelist[i].Level,
+                    treelist[i].index, treelist[i].linktype);
             }
             var nodesCol = Sentence.CreateNodesVector(builder, nodes);
 

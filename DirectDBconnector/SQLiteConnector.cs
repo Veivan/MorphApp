@@ -278,7 +278,7 @@ namespace DirectDBconnector
 		/// Вставка в mPhrases.
 		/// </summary>
 		/// <returns>ID предложения</returns>
-		public long InsertPhraseDB(long pg_id, short sorder)
+		public long InsertPhraseDB(long pg_id, int sorder)
 		{
 			long ph_id = -1;
 			try
@@ -299,7 +299,7 @@ namespace DirectDBconnector
 		/// Вставка в mPhraseContent.
 		/// </summary>
 		/// <returns>ID</returns>
-		public long InsertWordDB(long ph_id, long lx_id, short sorder)
+		public long InsertWordDB(long ph_id, long lx_id, int sorder)
 		{
 			long result = -1;
 			try
@@ -367,13 +367,13 @@ namespace DirectDBconnector
 		/// Чтение записей из mPhrases, относящихся к абзацу pg_id.
 		/// </summary>
 		/// <param name="pg_id">ID параграфа</param>
-		/// <returns>Список ID предложений</returns>
-		public List<long> ReadPhraseDB(long pg_id)
+		/// <returns>Список SentenceMap</returns>
+		public List<SentenceMap> ReadPhraseDB(long pg_id)
 		{
-			var listID = new List<long>();
+			var reslist = new List<SentenceMap>();
 			try
 			{
-				m_sqlCmd.CommandText = "SELECT ph_id FROM mPhrases WHERE pg_id = @pg_id ORDER BY sorder";
+				m_sqlCmd.CommandText = "SELECT ph_id, sorder, created_at FROM mPhrases WHERE pg_id = @pg_id ORDER BY sorder";
 				m_sqlCmd.Parameters.Clear();
 				m_sqlCmd.Parameters.Add(new SQLiteParameter("@pg_id", pg_id));
 
@@ -381,7 +381,12 @@ namespace DirectDBconnector
 				string line = String.Empty;
 				while (r.Read())
 				{
-					listID.Add((long)r["ph_id"]);
+					var dt = DateTime.Now;
+					var created = r["created_at"].ToString();
+					if (!String.IsNullOrEmpty(created))
+						dt = DateTime.Parse(created);
+					var sent = new SentenceMap(r.GetInt64(0), pg_id, r.GetInt16(1), dt);
+					reslist.Add(sent);
 				}
 				r.Close();
 			}
@@ -390,7 +395,7 @@ namespace DirectDBconnector
 				Console.WriteLine("Error: " + ex.Message);
 				System.Diagnostics.Debug.WriteLine(ex.Message);
 			}
-			return listID;
+			return reslist;
 		}
 
 		/// <summary>
@@ -471,7 +476,7 @@ namespace DirectDBconnector
 					"JOIN mPhraseContent B ON B.с_id = A.с_id WHERE B.ph_id = {0} ORDER BY A.sn_id", ph_id);
 				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
 				string line = String.Empty;
-				short i = 0;
+				int i = 0;
 				while (r.Read())
 				{
 					var node = new tNode();

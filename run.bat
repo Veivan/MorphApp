@@ -7,6 +7,6 @@ rem )
 
 rem start "" "sgBroker\bin\Debug\sgBroker.exe"
 start "" "MorphMQserver\bin\x64\Debug\MorphMQserver.exe"
-start "" "dbMQserver\bin\\x64\Debug\dbMQserver.exe"
+rem start "" "dbMQserver\bin\\x64\Debug\dbMQserver.exe"
 start "" "MorphApp\bin\x64\Debug\MorphApp.exe"
 exit /b 0

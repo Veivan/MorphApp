@@ -68,7 +68,7 @@ namespace Schemas
 		{
 			VectorOffset rescol = default(VectorOffset);
 			var sents = new Offset<Container>[list.Count];
-			for (short i = 0; i < list.Count; i++)
+			for (int i = 0; i < list.Count; i++)
 			{
 				var Name = builder.CreateString(list[i].Name);
 				var Created = builder.CreateString(list[i].Created.ToString());

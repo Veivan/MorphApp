@@ -11,7 +11,7 @@ namespace Schemas
 	{
 		public HasDict xPart = null;
 		public string EntryName = "";
-		public short order; // Порядок слова в предложении
+		public int order; // Порядок слова в предложении
 
 		/// <summary>
 		/// ID словарной статьи.
@@ -73,12 +73,11 @@ namespace Schemas
 		/// <summary>
 		/// Получение из предложения (в сообщении) списка структур WordMap, сортированных в порядке слов в предложении.
 		/// </summary>
-		public static SortedList<short, WordMap> GetWordsFromMessSentence(Sentence sent)
+		public static SortedList<int, WordMap> GetWordsFromMessSentence(Sentence sent)
 		{
-			SortedList<short, WordMap> outlist = null;
-			outlist = new SortedList<short, WordMap>();
+			var outlist = new SortedList<int, WordMap>();
 			// Чтение слов
-			for (short i = 0; i < sent.WordsLength; i++)
+			for (int i = 0; i < sent.WordsLength; i++)
 			{
 				var word = BuildFromLexema(sent.Words(i));
 				outlist.Add(word.order, word);

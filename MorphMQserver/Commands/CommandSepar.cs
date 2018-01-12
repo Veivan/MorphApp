@@ -25,7 +25,7 @@ namespace MorphMQserver.Commands
 		{
 			var builder = new FlatBufferBuilder(1);
 			var sents = new Offset<Sentence>[separated.Count];
-			for (short i = 0; i < separated.Count; i++)
+			for (int i = 0; i < separated.Count; i++)
 			{
 				var sentVal = builder.CreateString(separated[i]);
 				sents[i] = Sentence.CreateSentence(builder, i, default(VectorOffset), default(VectorOffset), sentVal);

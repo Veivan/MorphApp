@@ -80,5 +80,20 @@ namespace DirectDBA
         {
             throw new NotImplementedException();
         }
-    }
+
+		public override List<SentenceMap> MorphMakeSyntan(string text)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override List<string> MorphGetReparedSentsList(List<SentenceMap> sentlist)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override List<string> MorphGetSeparatedSentsList(string text)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

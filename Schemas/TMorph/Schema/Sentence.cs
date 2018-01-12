@@ -17,7 +17,7 @@ public struct Sentence : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p.bb_pos = _i; __p.bb = _bb; }
   public Sentence __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public short Order { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetShort(o + __p.bb_pos) : (short)0; } }
+  public int Order { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
   public Node? Nodes(int j) { int o = __p.__offset(6); return o != 0 ? (Node?)(new Node()).__assign(__p.__indirect(__p.__vector(o) + j * 4), __p.bb) : null; }
   public int NodesLength { get { int o = __p.__offset(6); return o != 0 ? __p.__vector_len(o) : 0; } }
   public Lexema? Words(int j) { int o = __p.__offset(8); return o != 0 ? (Lexema?)(new Lexema()).__assign(__p.__indirect(__p.__vector(o) + j * 4), __p.bb) : null; }
@@ -27,7 +27,7 @@ public struct Sentence : IFlatbufferObject
   public long SentenceID { get { int o = __p.__offset(12); return o != 0 ? __p.bb.GetLong(o + __p.bb_pos) : (long)0; } }
 
   public static Offset<Sentence> CreateSentence(FlatBufferBuilder builder,
-      short order = 0,
+      int order = 0,
       VectorOffset nodesOffset = default(VectorOffset),
       VectorOffset wordsOffset = default(VectorOffset),
       StringOffset phraseOffset = default(StringOffset),
@@ -42,7 +42,7 @@ public struct Sentence : IFlatbufferObject
   }
 
   public static void StartSentence(FlatBufferBuilder builder) { builder.StartObject(5); }
-  public static void AddOrder(FlatBufferBuilder builder, short order) { builder.AddShort(0, order, 0); }
+  public static void AddOrder(FlatBufferBuilder builder, int order) { builder.AddInt(0, order, 0); }
   public static void AddNodes(FlatBufferBuilder builder, VectorOffset nodesOffset) { builder.AddOffset(1, nodesOffset.Value, 0); }
   public static VectorOffset CreateNodesVector(FlatBufferBuilder builder, Offset<Node>[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
   public static void StartNodesVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }

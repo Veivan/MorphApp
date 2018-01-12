@@ -186,7 +186,7 @@ namespace MorphApp
 		/// <summary>
 		/// Выполнение синтана текста.
 		/// </summary>
-		public List<SentenceMap> MorphMakeSyntan(string text)
+		public override List<SentenceMap> MorphMakeSyntan(string text)
 		{
 			courier.servType = TMorph.Schema.ServType.svMorph;
 			courier.command = TMorph.Schema.ComType.Synt;
@@ -198,7 +198,7 @@ namespace MorphApp
 		/// <summary>
 		/// Получение списка восстановленных текстов предложений от сервиса.
 		/// </summary>
-		public List<string> MorphGetReparedSentsList(List<SentenceMap> sentlist)
+		public override List<string> MorphGetReparedSentsList(List<SentenceMap> sentlist)
 		{
 			var outlist = new List<string>();
 			courier.servType = TMorph.Schema.ServType.svMorph;
@@ -215,7 +215,7 @@ namespace MorphApp
 		/// <summary>
 		/// Разделение текста на предложения с помощью сервиса.
 		/// </summary>
-		public List<string> MorphGetSeparatedSentsList(string text)
+		public override List<string> MorphGetSeparatedSentsList(string text)
 		{
 			courier.servType = TMorph.Schema.ServType.svMorph;
 			courier.command = TMorph.Schema.ComType.Separ;

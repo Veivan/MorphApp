@@ -17,12 +17,12 @@ public struct Grammema : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p.bb_pos = _i; __p.bb = _bb; }
   public Grammema __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public short Key { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetShort(o + __p.bb_pos) : (short)0; } }
-  public short Value { get { int o = __p.__offset(6); return o != 0 ? __p.bb.GetShort(o + __p.bb_pos) : (short)0; } }
+  public int Key { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
+  public int Value { get { int o = __p.__offset(6); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
 
   public static Offset<Grammema> CreateGrammema(FlatBufferBuilder builder,
-      short key = 0,
-      short value = 0) {
+      int key = 0,
+      int value = 0) {
     builder.StartObject(2);
     Grammema.AddValue(builder, value);
     Grammema.AddKey(builder, key);
@@ -30,8 +30,8 @@ public struct Grammema : IFlatbufferObject
   }
 
   public static void StartGrammema(FlatBufferBuilder builder) { builder.StartObject(2); }
-  public static void AddKey(FlatBufferBuilder builder, short key) { builder.AddShort(0, key, 0); }
-  public static void AddValue(FlatBufferBuilder builder, short value) { builder.AddShort(1, value, 0); }
+  public static void AddKey(FlatBufferBuilder builder, int key) { builder.AddInt(0, key, 0); }
+  public static void AddValue(FlatBufferBuilder builder, int value) { builder.AddInt(1, value, 0); }
   public static Offset<Grammema> EndGrammema(FlatBufferBuilder builder) {
     int o = builder.EndObject();
     return new Offset<Grammema>(o);

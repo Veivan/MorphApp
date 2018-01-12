@@ -35,13 +35,13 @@ namespace DirectDBconnector
 				case OpersDB.odInsert:
 					{
                         paragraphID = dbConnector.InsertParagraphDB(this.docID);
-						for (short k = 0; k < sentlist.Count; k++)
+						for (int k = 0; k < sentlist.Count; k++)
 						{
 							var sent = sentlist[k];
-							var ph_id = dbConnector.InsertPhraseDB(paragraphID, k);
+							var ph_id = dbConnector.InsertPhraseDB(paragraphID, sent.Order);
                             var nodes = sent.GetTreeList();
                             // Сохранение слов предложения в БД
-							for (short i = 0; i < sent.Capasity; i++)
+							for (int i = 0; i < sent.Capasity; i++)
 							{
 								var word = sent.GetWordByOrder(i);
 								var lx_id = dbConnector.SaveLex(word.EntryName.ToLower(), word.ID_PartOfSpeech);
@@ -89,11 +89,10 @@ namespace DirectDBconnector
 			if (!dbConnector.IsParagraphExists(paragraphID))
 				return;
 			// Чтение списка предложений
-			var list_phID = dbConnector.ReadPhraseDB(paragraphID);
-			foreach (var phID in list_phID)
+			var sMapList = dbConnector.ReadPhraseDB(paragraphID);
+			foreach (var sent in sMapList)
 			{
-				var sent = new SentenceMap();
-				sent.SentenceID = phID;
+				var phID = sent.SentenceID;
 				// Чтение данных о словах
 				var wstructs = dbConnector.ReadPhraseContentDB(phID);
 				for (int i = 0; i < wstructs.Count; i++)
@@ -112,7 +111,7 @@ namespace DirectDBconnector
 				}
 				// Чтение списка синтаксических связей предложения
                 var nodelist = dbConnector.ReadSyntNodesDB(phID);
-				for (short i = 0; i < nodelist.Count; i++)
+				for (int i = 0; i < nodelist.Count; i++)
 				{
                     var node = nodelist[i];
                     sent.AddNode(i, node.Level, node.linktype);

@@ -34,39 +34,8 @@ namespace MorphApp
             //memoInp.Text = "Абзац 1";
         }
 
-        private void btSavePara_Click(object sender, EventArgs e)
-        {
-            UpdateParagraph();
-            SaveParagraphBD();
-        }
 
-        private void btReadPara_Click(object sender, EventArgs e)
-        {
-            var ParagraphID = 1;
-            var sentlist = store.ReadParagraphDB(ParagraphID);
-
-            // прочитался параграф из БД - надо его ресторить и выдать на просмотр
-
-            var sb = new StringBuilder();
-            var reparedsents = store.MorphGetReparedSentsList(sentlist);
-            foreach (var sentrep in reparedsents)
-                sb.Append(sentrep + "\r\n");
-
-            // Отображение синт связей
-            foreach (var sent in sentlist)
-            {
-                var ordlist = sent.GetTreeList();
-                foreach (var x in ordlist)
-                {
-                    sb.Append(new String('\t', x.Level) +
-                        String.Format("{0} Level {1} link {2} \r\n",
-                            sent.GetWordByOrder(x.index).EntryName, x.Level, x.linktype));
-                }
-            }
-            memoOut.Text = sb.ToString();
-        }
-
-        /// <summary>
+		/*// <summary>
         /// Формирование содержимого внутреннего объекта Paragraph.
         /// </summary>
         private void UpdateParagraph()
@@ -82,108 +51,7 @@ namespace MorphApp
                 if (sentlistRep.Count > 0)
                     para.UpdateSentStruct(sent.order, sentlistRep[0]);
             }
-        }
-
-        /// <summary>
-        /// Сохранение внутреннего объекта Paragraph в БД.
-        /// </summary>
-        private void SaveParagraphBD()
-        {
-            var paramlist = store.SaveParagraphBD(this.para);
-            if (paramlist == null)
-            {
-                return;
-            }
-
-            foreach (var par in paramlist)
-                if (par.Name == "ParagraphID")
-                {
-                    this.para.ParagraphID = Convert.ToInt32(par.Value, 10);
-                    break;
-                }
-            memoOut.Text = this.para.ParagraphID.ToString();
-        }
-
-        private void btTokenize_Click(object sender, EventArgs e)
-        {
-            var sents = store.MorphGetSeparatedSentsList(memoInp.Text);
-            var sb = new StringBuilder();
-            foreach (var sent in sents)
-                sb.Append(sent + "\r\n");
-            memoOut.Text = sb.ToString();
-        }
-
-        private void btMakeSynAn_Click(object sender, EventArgs e)
-        {
-            var sentlistRep = store.MorphMakeSyntan(memoInp.Text);
-            if (sentlistRep == null || sentlistRep.Count == 0)
-                return;
-
-            sent = sentlistRep[0];
-            this.para.AddSentStruct(5, sent);
-
-            var sb = new StringBuilder();
-            for (int i = 0; i < sent.Capasity; i++)
-            {
-                var word = sent.GetWordByOrder(i);
-                sb.Append(word.EntryName + "\r\n");
-            }
-
-            // Отображение синт связей
-            var ordlist = sent.GetTreeList();
-            foreach (var x in ordlist)
-            {
-                sb.Append(new String('\t', x.Level) +
-                    String.Format("{0} Level {1} link {2} \r\n",
-                        sent.GetWordByOrder(x.index).EntryName, x.Level, x.linktype));
-            }
-
-            memoOut.Text = sb.ToString();
-        }
-
-        private void btRestore_Click(object sender, EventArgs e)
-        {
-            var sentlistRep = store.MorphMakeSyntan(memoInp.Text);
-            if (sentlistRep == null || sentlistRep.Count == 0)
-                return;
-
-            var reparedsents = store.MorphGetReparedSentsList(sentlistRep);
-
-            var sb = new StringBuilder();
-            foreach (var sent in reparedsents)
-                sb.Append(sent + "\r\n");
-            memoOut.Text = sb.ToString();
-        }
-
-        private void btDBGetWord_Click(object sender, EventArgs e)
-        {
-            var paramlist = store.GetLexema(memoInp.Text);
-            var sb = new StringBuilder();
-            if (paramlist == null)
-                sb.Append("Empty params \r\n");
-            else
-                foreach (var par in paramlist)
-                    sb.Append(par.Name + "\t" + par.Value + "\r\n");
-            memoOut.Text = sb.ToString();
-        }
-
-        private void btSaveLex_Click(object sender, EventArgs e)
-        {
-            var paramlist = store.SaveLexema(memoInp.Text);
-            var sb = new StringBuilder();
-            if (paramlist == null)
-                sb.Append("Empty params \r\n");
-            else
-                foreach (var par in paramlist)
-                    sb.Append(par.Name + "\t" + par.Value + "\r\n");
-            memoOut.Text = sb.ToString();
-        }
-
-        private void btGetMorph_Click(object sender, EventArgs e)
-        {
-            // Морф.анализ не нужен - он выполняется в синтане
-        }
-
+        }*/
 
         private void btRefresh_Click(object sender, EventArgs e)
         {
@@ -316,6 +184,134 @@ namespace MorphApp
             }
         }
 
+		#region Тестовые методы
+
+		private void btSavePara_Click(object sender, EventArgs e)
+		{
+			store.UpdateParagraph(this.para, memoInp.Text);
+
+			var paramlist = store.SaveParagraphBD(this.para);
+			if (paramlist == null)
+			{
+				return;
+			}
+
+			foreach (var par in paramlist)
+				if (par.Name == "ParagraphID")
+				{
+					this.para.ParagraphID = Convert.ToInt32(par.Value, 10);
+					break;
+				}
+			memoOut.Text = this.para.ParagraphID.ToString();
+
+		}
+		
+		private void btReadPara_Click(object sender, EventArgs e)
+		{
+			var ParagraphID = 1;
+			var sentlist = store.ReadParagraphDB(ParagraphID);
+
+			// прочитался параграф из БД - надо его ресторить и выдать на просмотр
+
+			var sb = new StringBuilder();
+			var reparedsents = store.MorphGetReparedSentsList(sentlist);
+			foreach (var sentrep in reparedsents)
+				sb.Append(sentrep + "\r\n");
+
+			// Отображение синт связей
+			foreach (var sent in sentlist)
+			{
+				var ordlist = sent.GetTreeList();
+				foreach (var x in ordlist)
+				{
+					sb.Append(new String('\t', x.Level) +
+						String.Format("{0} Level {1} link {2} \r\n",
+							sent.GetWordByOrder(x.index).EntryName, x.Level, x.linktype));
+				}
+			}
+			memoOut.Text = sb.ToString();
+		}
+
+		private void btTokenize_Click(object sender, EventArgs e)
+		{
+			var sents = store.MorphGetSeparatedSentsList(memoInp.Text);
+			var sb = new StringBuilder();
+			foreach (var sent in sents)
+				sb.Append(sent + "\r\n");
+			memoOut.Text = sb.ToString();
+		}
+
+		private void btMakeSynAn_Click(object sender, EventArgs e)
+		{
+			var sentlistRep = store.MorphMakeSyntan(memoInp.Text);
+			if (sentlistRep == null || sentlistRep.Count == 0)
+				return;
+
+			sent = sentlistRep[0];
+			this.para.AddSentStruct(5, sent);
+
+			var sb = new StringBuilder();
+			for (int i = 0; i < sent.Capasity; i++)
+			{
+				var word = sent.GetWordByOrder(i);
+				sb.Append(word.EntryName + "\r\n");
+			}
+
+			// Отображение синт связей
+			var ordlist = sent.GetTreeList();
+			foreach (var x in ordlist)
+			{
+				sb.Append(new String('\t', x.Level) +
+					String.Format("{0} Level {1} link {2} \r\n",
+						sent.GetWordByOrder(x.index).EntryName, x.Level, x.linktype));
+			}
+
+			memoOut.Text = sb.ToString();
+		}
+
+		private void btRestore_Click(object sender, EventArgs e)
+		{
+			var sentlistRep = store.MorphMakeSyntan(memoInp.Text);
+			if (sentlistRep == null || sentlistRep.Count == 0)
+				return;
+
+			var reparedsents = store.MorphGetReparedSentsList(sentlistRep);
+
+			var sb = new StringBuilder();
+			foreach (var sent in reparedsents)
+				sb.Append(sent + "\r\n");
+			memoOut.Text = sb.ToString();
+		}
+
+		private void btDBGetWord_Click(object sender, EventArgs e)
+		{
+			var paramlist = store.GetLexema(memoInp.Text);
+			var sb = new StringBuilder();
+			if (paramlist == null)
+				sb.Append("Empty params \r\n");
+			else
+				foreach (var par in paramlist)
+					sb.Append(par.Name + "\t" + par.Value + "\r\n");
+			memoOut.Text = sb.ToString();
+		}
+
+		private void btSaveLex_Click(object sender, EventArgs e)
+		{
+			var paramlist = store.SaveLexema(memoInp.Text);
+			var sb = new StringBuilder();
+			if (paramlist == null)
+				sb.Append("Empty params \r\n");
+			else
+				foreach (var par in paramlist)
+					sb.Append(par.Name + "\t" + par.Value + "\r\n");
+			memoOut.Text = sb.ToString();
+		}
+
+		private void btGetMorph_Click(object sender, EventArgs e)
+		{
+			// Морф.анализ не нужен - он выполняется в синтане
+		}
+		#endregion
 
     }
 }
