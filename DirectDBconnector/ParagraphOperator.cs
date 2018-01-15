@@ -107,7 +107,7 @@ namespace DirectDBconnector
 			while (etr.MoveNext())
 				list_ids.Add(etr.Current.ToString());
 			// Удаление предложений 
-			var res = dbConnector.DeletePhrasesList(list_ids);
+			var res = dbConnector.DeletePhrasesListTrans(list_ids);
 			if (res < 0)
 			{
 				string strlist = string.Join(",", list_ids.ToArray());
@@ -122,7 +122,7 @@ namespace DirectDBconnector
 			while (etr.MoveNext())
 				list_ids.Add(etr.Current.ToString());
 			// Удаление действительных предложений
-			res = dbConnector.DeletePhrasesList(list_ids);
+			res = dbConnector.DeletePhrasesListTrans(list_ids);
 			if (res < 0)
 			{
 				string strlist = string.Join(",", list_ids.ToArray());

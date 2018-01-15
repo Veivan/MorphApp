@@ -102,6 +102,13 @@ namespace DirectDBconnector
 			return paraOper.GetSentList();
 		}
 
+		public override void DelParagraphDB(long pg_id)
+		{
+			var pMap = new ParagraphMap(pg_id);
+			var paraOper = new ParagraphOperator(pMap, OpersDB.odDelete);
+			paraOper.Execute();
+		}
+
 		#endregion
 
 	
@@ -119,5 +126,6 @@ namespace DirectDBconnector
 		
 		#endregion
 
-    }
+
+	}
 }

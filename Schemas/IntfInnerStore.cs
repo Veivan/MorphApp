@@ -125,7 +125,14 @@ namespace Schemas
         /// <returns>List of SentenceMap</returns>
         public abstract List<SentenceMap> ReadParagraphDB(long pg_id);
 
-        /// <summary>
+		/// <summary>
+		/// Удаление одного абзаца из БД.
+		/// </summary>
+		/// <param name="pg_id">ID абзаца</param>
+		/// <returns></returns>
+		public abstract void DelParagraph(long ct_id, long doc_id, long pg_id);
+		
+		/// <summary>
         /// Поиск слова в БД.
         /// </summary>
         /// <param name="word">слово</param>

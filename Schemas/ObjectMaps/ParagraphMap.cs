@@ -64,9 +64,11 @@ namespace Schemas
 		{
 			sents2Del.Clear();
 
-			var listBefore = innerPara.Select(x => x.sentstruct.SentenceID).ToArray();
+			var listBefore = innerPara
+				.Where(x => x.sentstruct != null && x.sentstruct.SentenceID != -1)
+				.Select(x => x.sentstruct.SentenceID).ToArray();
 			var listAfter = versionPara
-				.Where(x => x.sentstruct.SentenceID != -1)
+				.Where(x => x.sentstruct != null && x.sentstruct.SentenceID != -1)
 				.Select(x => x.sentstruct.SentenceID)
 				.ToArray();
 			sents2Del.AddRange(listBefore.Except(listAfter));

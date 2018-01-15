@@ -166,6 +166,34 @@ namespace MorphApp
             }
         }
 
+		private void DelNode(TreeNode aNode)
+		{
+			if (aNode == null) return;
+
+			switch ((clNodeType)aNode.Tag)
+			{
+				case clNodeType.clnParagraph:
+					{
+						var docNode = aNode.Parent;
+						var docID = Convert.ToInt64(docNode.Name);
+
+						var contID = Convert.ToInt64(docNode.Parent.Name);
+						var parID = Convert.ToInt64(aNode.Name);
+						try
+						{
+							store.DelParagraph(contID, parID, parID);
+							aNode.Remove();
+						}
+						catch (Exception ex)
+						{
+							MessageBox.Show(ex.Message);
+						}
+
+						break;
+					}
+			}
+		}
+
 		#region Тестовые методы
 
 		private void btSavePara_Click(object sender, EventArgs e)
@@ -294,6 +322,13 @@ namespace MorphApp
 			// Морф.анализ не нужен - он выполняется в синтане
 		}
 		#endregion
+
+		private void btParaDel_Click(object sender, EventArgs e)
+		{
+			TreeNode aNode = treeView1.SelectedNode;
+			if (aNode == null) return;
+			DelNode(aNode);
+		}
 
     }
 }

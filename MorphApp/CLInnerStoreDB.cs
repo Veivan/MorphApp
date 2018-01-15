@@ -160,7 +160,15 @@ namespace MorphApp
             return sentlist;
         }
 
-        public override List<SimpleParam> GetLexema(string word)
+		public override void DelParagraph(long ct_id, long doc_id, long pg_id)
+		{
+			dbServer.DelParagraphDB(pg_id);
+			var cont = containers.Where(x => x.ContainerID == ct_id).FirstOrDefault();
+			var doc = cont.GetDocuments().Where(x => x.DocumentID == doc_id).FirstOrDefault();
+			doc.RemoveParagraph(pg_id);
+		}
+		
+		public override List<SimpleParam> GetLexema(string word)
         {
             courier.servType = TMorph.Schema.ServType.svSUBD;
             courier.command = TMorph.Schema.ComType.GetWord;
@@ -223,6 +231,5 @@ namespace MorphApp
 			return outlist;
 		}
 		#endregion
-
-    } 
+	} 
 }

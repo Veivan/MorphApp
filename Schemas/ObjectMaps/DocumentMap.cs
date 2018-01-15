@@ -63,5 +63,12 @@ namespace Schemas
             return Paragraphs.Where(x => x.ParagraphID == ParagraphID).FirstOrDefault();
         }
 
+		public void RemoveParagraph(long ParagraphID)
+		{
+			var pMap = Paragraphs.Where(x => x.ParagraphID == ParagraphID).FirstOrDefault();
+			if (pMap != null)
+				Paragraphs.Remove(pMap);
+		}
+
 	}
 }

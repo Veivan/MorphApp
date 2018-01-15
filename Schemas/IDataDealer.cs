@@ -71,7 +71,14 @@ namespace Schemas
 		/// <param name="pg_id">ID абзаца</param>
 		/// <returns>упорядоченный список структур предложений</returns>
 		public abstract List<SentenceMap> ReadParagraphDB(long pg_id);
-	
+
+		/// <summary>
+		/// Удаление одного абзаца из БД.
+		/// </summary>
+		/// <param name="pg_id">ID абзаца</param>
+		/// <returns></returns>
+		public abstract void DelParagraphDB(long pg_id);
+
 		/**
 		 * Сохранение лексемы в DB. Функция проверяет, нет ли уже слова в словаре.
 		 * Если слово отсутствует, то происходит добавление.

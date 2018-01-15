@@ -110,7 +110,7 @@ namespace DirectDBconnector
 		{
 			try
 			{
-				m_sqlCmd.CommandText = 
+				m_sqlCmd.CommandText =
 					"CREATE TABLE IF NOT EXISTS mLemms (\n"
 						+ "	lx_id integer PRIMARY KEY, sp_id integer, lemma text NOT NULL);" +
 					" CREATE TABLE IF NOT EXISTS mContainers (\n"
@@ -124,7 +124,7 @@ namespace DirectDBconnector
 						+ " created_at DATETIME DEFAULT CURRENT_TIMESTAMP);" +
 					"CREATE TABLE IF NOT EXISTS mPhraseContent (\n"
 						+ "	с_id integer PRIMARY KEY, ph_id integer, lx_id integer, sorder integer);" +
-					"CREATE TABLE IF NOT EXISTS mGrammems (\n" + 
+					"CREATE TABLE IF NOT EXISTS mGrammems (\n" +
 						" gr_id integer PRIMARY KEY, с_id integer, sg_id integer, intval integer);" +
 					"CREATE TABLE IF NOT EXISTS mSyntNodes (\n" +
 						" sn_id integer PRIMARY KEY, с_id integer, ln_id integer, level integer);";
@@ -161,7 +161,7 @@ namespace DirectDBconnector
 		#endregion
 
 		#region Методы работы с документами
-        /// <summary>
+		/// <summary>
 		/// Вставка в mDocuments.
 		/// </summary>
 		/// <returns>ID документа</returns>
@@ -173,15 +173,15 @@ namespace DirectDBconnector
 				m_sqlCmd.CommandText = String.Format("INSERT INTO mDocuments(doc_id, ct_id, name) VALUES(NULL, {0}, '{1}')",
 					8, "doc1");
 				m_sqlCmd.ExecuteNonQuery();
-                doc_id = m_dbConn.LastInsertRowId;
+				doc_id = m_dbConn.LastInsertRowId;
 			}
 			catch (SQLiteException ex)
 			{
 				Console.WriteLine("InsertDocumentDB Error: " + ex.Message);
 			}
 			return doc_id;
-		}		
-		
+		}
+
 		#endregion
 
 		#region Методы работы с абзацами
@@ -236,8 +236,8 @@ namespace DirectDBconnector
 				return 0;
 			string strlist = string.Join(",", list_ids.ToArray());
 
-			IEnumerator<string> etr = list_ids.GetEnumerator();
 			var list_ph = new List<string>();
+			IEnumerator<string> etr = list_ids.GetEnumerator();
 
 			var result = -1;
 			SQLiteTransaction transaction = null;
@@ -257,13 +257,13 @@ namespace DirectDBconnector
 					}
 					r.Close();
 					//Удаление фраз абзаца
-					DeletePhrasesList(list_ph);
+					DeletePhrasesListInner(list_ph);
 					// Удаление фраз
 					m_sqlCmd.CommandText = String.Format("DELETE FROM mParagraphs WHERE pg_id = ({0})", pg_id);
 					m_sqlCmd.ExecuteNonQuery();
 				}
-				transaction.Commit();
 				result = 0;
+				transaction.Commit();
 			}
 			catch (SQLiteException ex)
 			{
@@ -295,7 +295,7 @@ namespace DirectDBconnector
 			}
 			return ph_id;
 		}
-		
+
 		/// <summary>
 		/// Чтение записей из mPhrases, относящихся к абзацу pg_id.
 		/// </summary>
@@ -332,32 +332,20 @@ namespace DirectDBconnector
 		}
 
 		/// <summary>
-		/// Удаление предложений.
+		/// Удаление абзацев.
 		/// </summary>
 		/// <param name="list_ids">Перечень удаляемых ID</param>
 		/// <returns>int</returns>
-		public int DeletePhrasesList(List<string> list_ids)
+		public int DeletePhrasesListTrans(List<string> list_ids)
 		{
 			if (list_ids.Count == 0)
 				return 0;
-			string strlist = string.Join(",", list_ids.ToArray());
-
 			var result = -1;
 			SQLiteTransaction transaction = null;
 			try
 			{
 				transaction = m_dbConn.BeginTransaction();
-
-				//Удаление синтаксических связей
-				DeleteSyntNodesOfPhrase(list_ids);
-				//Удаление граммем
-				DeleteGrammemsOfPhrase(list_ids);
-				//Удаление состава фраз
-				DeleteContentOfPhrase(list_ids);
-				// Удаление фраз
-				m_sqlCmd.CommandText = String.Format("DELETE FROM mPhrases WHERE ph_id IN ({0})", strlist);
-				m_sqlCmd.ExecuteNonQuery();
-
+				DeletePhrasesListInner(list_ids);
 				transaction.Commit();
 				result = 0;
 			}
@@ -367,6 +355,29 @@ namespace DirectDBconnector
 				//MessageBox.Show("Error: " + ex.Message);
 			}
 			return result;
+		}
+
+		/// <summary>
+		/// Удаление предложений без транзакции.
+		/// Используется при удалении абзаца (внутри его транзакции).
+		/// </summary>
+		/// <param name="list_ids">Перечень удаляемых ID</param>
+		/// <returns></returns>
+		private void DeletePhrasesListInner(List<string> list_ids)
+		{
+			if (list_ids.Count == 0)
+				return;
+			string strlist = string.Join(",", list_ids.ToArray());
+
+			//Удаление синтаксических связей
+			DeleteSyntNodesOfPhrase(list_ids);
+			//Удаление граммем
+			DeleteGrammemsOfPhrase(list_ids);
+			//Удаление состава фраз
+			DeleteContentOfPhrase(list_ids);
+			// Удаление фраз
+			m_sqlCmd.CommandText = String.Format("DELETE FROM mPhrases WHERE ph_id IN ({0})", strlist);
+			m_sqlCmd.ExecuteNonQuery();
 		}
 		#endregion
 
@@ -504,8 +515,8 @@ namespace DirectDBconnector
 		private void DeleteGrammemsOfPhrase(List<string> list_ids)
 		{
 			string strlist = string.Join(",", list_ids.ToArray());
-			m_sqlCmd.CommandText = "DELETE FROM mGrammems N JOIN mPhraseContent C ON C.с_id = N.с_id " +
-				String.Format("WHERE C.ph_id IN ({0})", strlist);
+			m_sqlCmd.CommandText = "DELETE FROM mGrammems WHERE с_id IN (SELECT N.с_id FROM mGrammems N JOIN mPhraseContent C ON C.с_id = N.с_id " +
+				String.Format("WHERE C.ph_id IN ({0}) )", strlist);
 			m_sqlCmd.ExecuteNonQuery();
 		}
 
@@ -577,8 +588,8 @@ namespace DirectDBconnector
 		private void DeleteSyntNodesOfPhrase(List<string> list_ids)
 		{
 			string strlist = string.Join(",", list_ids.ToArray());
-			m_sqlCmd.CommandText = "DELETE FROM mSyntNodes N JOIN mPhraseContent C ON C.с_id = N.с_id " +
-				String.Format("WHERE C.ph_id IN ({0})", strlist);
+			m_sqlCmd.CommandText = "DELETE FROM mSyntNodes WHERE с_id IN (SELECT N.с_id FROM mSyntNodes N JOIN mPhraseContent C ON C.с_id = N.с_id " +
+				String.Format("WHERE C.ph_id IN ({0}) )", strlist);
 			m_sqlCmd.ExecuteNonQuery();
 		}
 

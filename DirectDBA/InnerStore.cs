@@ -95,5 +95,10 @@ namespace DirectDBA
 		{
 			throw new NotImplementedException();
 		}
+
+		public override void DelParagraph(long ct_id, long doc_id, long pg_id)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

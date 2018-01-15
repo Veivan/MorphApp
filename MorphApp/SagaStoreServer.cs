@@ -88,5 +88,10 @@ namespace MorphApp
 			return sentlist;
 		}
 		#endregion
+
+		public override void DelParagraphDB(long pg_id)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
