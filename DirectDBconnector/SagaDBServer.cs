@@ -90,7 +90,7 @@ namespace DirectDBconnector
 		public override long SaveParagraph(ParagraphMap pMap)
         {
 			var paraOper = new ParagraphOperator(pMap, pMap.ParagraphID == -1 ? OpersDB.odInsert : OpersDB.odUpdate);
-            paraOper.Update();
+            paraOper.Execute();
 			return paraOper.ParagraphID;
         }
 
@@ -98,7 +98,7 @@ namespace DirectDBconnector
 		{
 			var pMap = new ParagraphMap(pg_id);
 			var paraOper = new ParagraphOperator(pMap, OpersDB.odSelect);
-			paraOper.Read();
+			paraOper.Execute();
 			return paraOper.GetSentList();
 		}
 

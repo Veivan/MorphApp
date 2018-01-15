@@ -72,6 +72,11 @@ namespace Schemas
 			sents2Del.AddRange(listBefore.Except(listAfter));
 		}
 
+		public void ClearDeleted()
+		{
+			this.sents2Del.Clear();
+		}
+
 		/// <summary>
         /// Конструктор
         /// </summary>
@@ -173,7 +178,17 @@ namespace Schemas
             return phrases;
         }
 
-        /// <summary>
+		/// <summary>
+		/// Получение списка ID предложений абзаца.
+		/// </summary>
+		public List<long> GetParagraphSentsIDs()
+		{
+			List<long> list_ids = new List<long>();
+			list_ids.AddRange(innerPara.Select(x => x.sentstruct.SentenceID).ToList());
+			return list_ids;
+		}
+		
+		/// <summary>
         /// Запиcь в хранилище предложения новой структуры синтана этого предложения.
         /// </summary>
         public void UpdateSentStruct(int order, SentenceMap sentstruct)
@@ -214,5 +229,5 @@ namespace Schemas
             sprop.IsActual = true;
         }
 
-    }
+	}
 }
