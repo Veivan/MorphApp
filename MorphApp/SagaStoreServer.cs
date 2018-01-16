@@ -9,23 +9,6 @@ namespace MorphApp
 		Courier courier = new Courier();
 
 		#region Унаследованные методы
-		/// <summary>
-		/// Получение плоского списка контейнеров
-		/// в виде List
-		/// </summary>
-		public override ComplexValue ReadContainers()
-		{
-			throw new NotImplementedException();
-		}
-
-		/// <summary>
-		/// Получение плоского списка документов
-		/// в виде List
-		/// </summary>
-		public override ComplexValue ReadDocuments()
-		{
-			throw new NotImplementedException();
-		}
 
 		public override ComplexValue GetChildrenContainers(long parentID, tpList resulttype = tpList.tblList)
 		{

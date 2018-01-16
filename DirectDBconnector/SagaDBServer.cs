@@ -10,27 +10,7 @@ namespace DirectDBconnector
 		SQLiteConnector dbConnector = SQLiteConnector.Instance;
 
         #region Унаследованные методы
-		/// <summary>
-		/// Получение плоского списка контейнеров
-		/// в виде DataTable
-		/// </summary>
-		public override ComplexValue ReadContainers()
-		{
-			ComplexValue rval = new ComplexValue();
-			rval.dtable = dbConnector.dirCmd.GetDataTable(dbTables.tblContainers);
-			return rval;
-		}
 
-		/// <summary>
-		/// Получение плоского списка документов
-		/// в виде DataTable
-		/// </summary>
-		public override ComplexValue ReadDocuments()
-		{
-			ComplexValue rval = new ComplexValue();
-			rval.dtable = dbConnector.dirCmd.GetDataTable(dbTables.tblDocuments);
-			return rval;
-		}
 
 		/// <summary>
 		/// Получение плоского списка контейнеров
@@ -112,7 +92,7 @@ namespace DirectDBconnector
 		#endregion
 
 	
-		#region Собственные методы
+		#region Собственные методы - для приложения DirectDBA
 		/// <summary>
 		/// Обновление таблицы в БД.
 		/// </summary>
@@ -123,9 +103,19 @@ namespace DirectDBconnector
 		{
 			dbConnector.dirCmd.UpdateDataTable(dTable, tblname);	
 		}
-		
-		#endregion
 
+        /// <summary>
+        /// Получение содержимого таблицы
+        /// в виде DataTable
+        /// </summary>
+        public ComplexValue ReadDataTable(dbTables tblname)
+        {
+            ComplexValue rval = new ComplexValue();
+            rval.dtable = dbConnector.dirCmd.GetDataTable(tblname);
+            return rval;
+        }
+               
+        #endregion
 
-	}
+    }
 }

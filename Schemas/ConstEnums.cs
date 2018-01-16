@@ -207,8 +207,10 @@ namespace Schemas
     {
         tblContainers,
         tblDocuments,
-		tblParagraphs,
-        tblSents
+        tblParagraphs,
+        tblSents,
+        tblPhraseContent,
+        tblLemms
     }
 
 	/// <summary>

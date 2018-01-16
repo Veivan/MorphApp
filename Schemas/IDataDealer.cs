@@ -10,18 +10,6 @@ namespace Schemas
 	public abstract class IDataDealer
 	{
 		/// <summary>
-		/// Получение плоского списка контейнеров
-		/// </summary>
-		/// <returns>ComplexValue</returns>
-		public abstract ComplexValue ReadContainers();
-
-		/// <summary>
-		/// Получение плоского списка документов
-		/// </summary>
-		/// <returns>ComplexValue</returns>
-		public abstract ComplexValue ReadDocuments();
-
-		/// <summary>
 		/// Получение контейнеров выбранного родителя.
 		/// </summary>
 		/// <param name="parentID">ID родителя</param>

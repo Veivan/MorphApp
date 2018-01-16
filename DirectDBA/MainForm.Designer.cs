@@ -32,9 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabTree = new System.Windows.Forms.TabPage();
-            this.treeView1 = new System.Windows.Forms.TreeView();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.btRefreshTree = new System.Windows.Forms.Button();
             this.dgvViewer = new System.Windows.Forms.DataGridView();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.tabPageContainers = new System.Windows.Forms.TabPage();
@@ -95,6 +93,7 @@
             this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
             this.btUpdParagraphs = new System.Windows.Forms.ToolStripButton();
             this.tabSentencies = new System.Windows.Forms.TabPage();
+            this.dgvSents = new System.Windows.Forms.DataGridView();
             this.bsSents = new System.Windows.Forms.BindingSource(this.components);
             this.panel5 = new System.Windows.Forms.Panel();
             this.btRefreshSents = new System.Windows.Forms.Button();
@@ -112,12 +111,47 @@
             this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripSeparator13 = new System.Windows.Forms.ToolStripSeparator();
             this.btUpdSents = new System.Windows.Forms.ToolStripButton();
-            this.tabWords = new System.Windows.Forms.TabPage();
+            this.tabPhraseContent = new System.Windows.Forms.TabPage();
+            this.dgvPhraseContent = new System.Windows.Forms.DataGridView();
+            this.bsPhraseContent = new System.Windows.Forms.BindingSource(this.components);
+            this.panel6 = new System.Windows.Forms.Panel();
+            this.btRefreshPhraseContent = new System.Windows.Forms.Button();
+            this.navPhraseContent = new System.Windows.Forms.BindingNavigator(this.components);
+            this.toolStripButton19 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripLabel4 = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripButton20 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton21 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton22 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator14 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripTextBox4 = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripSeparator15 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButton23 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton24 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator16 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator17 = new System.Windows.Forms.ToolStripSeparator();
+            this.btUpdPhContent = new System.Windows.Forms.ToolStripButton();
             this.binding1 = new System.Windows.Forms.BindingSource(this.components);
-            this.dgvSents = new System.Windows.Forms.DataGridView();
+            this.tabLemms = new System.Windows.Forms.TabPage();
+            this.dgvLemms = new System.Windows.Forms.DataGridView();
+            this.panel7 = new System.Windows.Forms.Panel();
+            this.btRefreshLemms = new System.Windows.Forms.Button();
+            this.navLemms = new System.Windows.Forms.BindingNavigator(this.components);
+            this.toolStripButton25 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripLabel5 = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripButton26 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton27 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton28 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator18 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripTextBox5 = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripSeparator19 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButton29 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton30 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator20 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator21 = new System.Windows.Forms.ToolStripSeparator();
+            this.btUpdLemms = new System.Windows.Forms.ToolStripButton();
+            this.bsLemms = new System.Windows.Forms.BindingSource(this.components);
             this.tabControl1.SuspendLayout();
             this.tabTree.SuspendLayout();
-            this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvViewer)).BeginInit();
             this.tabPageContainers.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvContainers)).BeginInit();
@@ -138,22 +172,35 @@
             ((System.ComponentModel.ISupportInitialize)(this.navParagraphs)).BeginInit();
             this.navParagraphs.SuspendLayout();
             this.tabSentencies.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvSents)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsSents)).BeginInit();
             this.panel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.navSents)).BeginInit();
             this.navSents.SuspendLayout();
+            this.tabPhraseContent.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvPhraseContent)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bsPhraseContent)).BeginInit();
+            this.panel6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.navPhraseContent)).BeginInit();
+            this.navPhraseContent.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.binding1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvSents)).BeginInit();
+            this.tabLemms.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvLemms)).BeginInit();
+            this.panel7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.navLemms)).BeginInit();
+            this.navLemms.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bsLemms)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
             // 
-            this.tabControl1.Controls.Add(this.tabTree);
             this.tabControl1.Controls.Add(this.tabPageContainers);
             this.tabControl1.Controls.Add(this.tabDocuments);
             this.tabControl1.Controls.Add(this.tabParagraphs);
             this.tabControl1.Controls.Add(this.tabSentencies);
-            this.tabControl1.Controls.Add(this.tabWords);
+            this.tabControl1.Controls.Add(this.tabPhraseContent);
+            this.tabControl1.Controls.Add(this.tabLemms);
+            this.tabControl1.Controls.Add(this.tabTree);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
@@ -163,7 +210,6 @@
             // 
             // tabTree
             // 
-            this.tabTree.Controls.Add(this.treeView1);
             this.tabTree.Controls.Add(this.panel2);
             this.tabTree.Controls.Add(this.dgvViewer);
             this.tabTree.Controls.Add(this.listBox1);
@@ -175,33 +221,13 @@
             this.tabTree.Text = "Хранилище";
             this.tabTree.UseVisualStyleBackColor = true;
             // 
-            // treeView1
-            // 
-            this.treeView1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.treeView1.Location = new System.Drawing.Point(3, 3);
-            this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(324, 426);
-            this.treeView1.TabIndex = 18;
-            this.treeView1.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeView1_BeforeExpand);
-            // 
             // panel2
             // 
-            this.panel2.Controls.Add(this.btRefreshTree);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel2.Location = new System.Drawing.Point(3, 429);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(811, 57);
             this.panel2.TabIndex = 17;
-            // 
-            // btRefreshTree
-            // 
-            this.btRefreshTree.Location = new System.Drawing.Point(5, 15);
-            this.btRefreshTree.Name = "btRefreshTree";
-            this.btRefreshTree.Size = new System.Drawing.Size(75, 23);
-            this.btRefreshTree.TabIndex = 14;
-            this.btRefreshTree.Text = "Refresh";
-            this.btRefreshTree.UseVisualStyleBackColor = true;
-            this.btRefreshTree.Click += new System.EventHandler(this.btRefreshTree_Click);
             // 
             // dgvViewer
             // 
@@ -749,6 +775,17 @@
             this.tabSentencies.Text = "Предложения";
             this.tabSentencies.UseVisualStyleBackColor = true;
             // 
+            // dgvSents
+            // 
+            this.dgvSents.AutoGenerateColumns = false;
+            this.dgvSents.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvSents.DataSource = this.bsSents;
+            this.dgvSents.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvSents.Location = new System.Drawing.Point(0, 0);
+            this.dgvSents.Name = "dgvSents";
+            this.dgvSents.Size = new System.Drawing.Size(817, 427);
+            this.dgvSents.TabIndex = 8;
+            // 
             // panel5
             // 
             this.panel5.Controls.Add(this.btRefreshSents);
@@ -899,25 +936,349 @@
             this.btUpdSents.Size = new System.Drawing.Size(23, 22);
             this.btUpdSents.Click += new System.EventHandler(this.navUpdate_Click);
             // 
-            // tabWords
+            // tabPhraseContent
             // 
-            this.tabWords.Location = new System.Drawing.Point(4, 22);
-            this.tabWords.Name = "tabWords";
-            this.tabWords.Size = new System.Drawing.Size(817, 489);
-            this.tabWords.TabIndex = 5;
-            this.tabWords.Text = "Слова";
-            this.tabWords.UseVisualStyleBackColor = true;
+            this.tabPhraseContent.Controls.Add(this.dgvPhraseContent);
+            this.tabPhraseContent.Controls.Add(this.panel6);
+            this.tabPhraseContent.Location = new System.Drawing.Point(4, 22);
+            this.tabPhraseContent.Name = "tabPhraseContent";
+            this.tabPhraseContent.Size = new System.Drawing.Size(817, 489);
+            this.tabPhraseContent.TabIndex = 5;
+            this.tabPhraseContent.Text = "Содержание фразы";
+            this.tabPhraseContent.UseVisualStyleBackColor = true;
             // 
-            // dgvSents
+            // dgvPhraseContent
             // 
-            this.dgvSents.AutoGenerateColumns = false;
-            this.dgvSents.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvSents.DataSource = this.bsSents;
-            this.dgvSents.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvSents.Location = new System.Drawing.Point(0, 0);
-            this.dgvSents.Name = "dgvSents";
-            this.dgvSents.Size = new System.Drawing.Size(817, 427);
-            this.dgvSents.TabIndex = 8;
+            this.dgvPhraseContent.AutoGenerateColumns = false;
+            this.dgvPhraseContent.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvPhraseContent.DataSource = this.bsPhraseContent;
+            this.dgvPhraseContent.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvPhraseContent.Location = new System.Drawing.Point(0, 0);
+            this.dgvPhraseContent.Name = "dgvPhraseContent";
+            this.dgvPhraseContent.Size = new System.Drawing.Size(817, 427);
+            this.dgvPhraseContent.TabIndex = 9;
+            // 
+            // panel6
+            // 
+            this.panel6.Controls.Add(this.btRefreshPhraseContent);
+            this.panel6.Controls.Add(this.navPhraseContent);
+            this.panel6.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel6.Location = new System.Drawing.Point(0, 427);
+            this.panel6.Name = "panel6";
+            this.panel6.Size = new System.Drawing.Size(817, 62);
+            this.panel6.TabIndex = 7;
+            // 
+            // btRefreshPhraseContent
+            // 
+            this.btRefreshPhraseContent.Location = new System.Drawing.Point(5, 28);
+            this.btRefreshPhraseContent.Name = "btRefreshPhraseContent";
+            this.btRefreshPhraseContent.Size = new System.Drawing.Size(77, 29);
+            this.btRefreshPhraseContent.TabIndex = 1;
+            this.btRefreshPhraseContent.Text = "Refresh";
+            this.btRefreshPhraseContent.UseVisualStyleBackColor = true;
+            this.btRefreshPhraseContent.Click += new System.EventHandler(this.btRefreshPhraseContent_Click);
+            // 
+            // navPhraseContent
+            // 
+            this.navPhraseContent.AddNewItem = this.toolStripButton19;
+            this.navPhraseContent.BindingSource = this.bsSents;
+            this.navPhraseContent.CountItem = this.toolStripLabel4;
+            this.navPhraseContent.DeleteItem = this.toolStripButton20;
+            this.navPhraseContent.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButton21,
+            this.toolStripButton22,
+            this.toolStripSeparator14,
+            this.toolStripTextBox4,
+            this.toolStripLabel4,
+            this.toolStripSeparator15,
+            this.toolStripButton23,
+            this.toolStripButton24,
+            this.toolStripSeparator16,
+            this.toolStripButton19,
+            this.toolStripButton20,
+            this.toolStripSeparator17,
+            this.btUpdPhContent});
+            this.navPhraseContent.Location = new System.Drawing.Point(0, 0);
+            this.navPhraseContent.MoveFirstItem = this.toolStripButton21;
+            this.navPhraseContent.MoveLastItem = this.toolStripButton24;
+            this.navPhraseContent.MoveNextItem = this.toolStripButton23;
+            this.navPhraseContent.MovePreviousItem = this.toolStripButton22;
+            this.navPhraseContent.Name = "navPhraseContent";
+            this.navPhraseContent.PositionItem = this.toolStripTextBox4;
+            this.navPhraseContent.Size = new System.Drawing.Size(817, 25);
+            this.navPhraseContent.TabIndex = 0;
+            this.navPhraseContent.Text = "bindingNavigator1";
+            // 
+            // toolStripButton19
+            // 
+            this.toolStripButton19.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton19.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton19.Image")));
+            this.toolStripButton19.Name = "toolStripButton19";
+            this.toolStripButton19.RightToLeftAutoMirrorImage = true;
+            this.toolStripButton19.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton19.Text = "Добавить";
+            // 
+            // toolStripLabel4
+            // 
+            this.toolStripLabel4.Name = "toolStripLabel4";
+            this.toolStripLabel4.Size = new System.Drawing.Size(43, 22);
+            this.toolStripLabel4.Text = "для {0}";
+            this.toolStripLabel4.ToolTipText = "Общее число элементов";
+            // 
+            // toolStripButton20
+            // 
+            this.toolStripButton20.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton20.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton20.Image")));
+            this.toolStripButton20.Name = "toolStripButton20";
+            this.toolStripButton20.RightToLeftAutoMirrorImage = true;
+            this.toolStripButton20.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton20.Text = "Удалить";
+            // 
+            // toolStripButton21
+            // 
+            this.toolStripButton21.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton21.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton21.Image")));
+            this.toolStripButton21.Name = "toolStripButton21";
+            this.toolStripButton21.RightToLeftAutoMirrorImage = true;
+            this.toolStripButton21.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton21.Text = "Переместить в начало";
+            // 
+            // toolStripButton22
+            // 
+            this.toolStripButton22.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton22.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton22.Image")));
+            this.toolStripButton22.Name = "toolStripButton22";
+            this.toolStripButton22.RightToLeftAutoMirrorImage = true;
+            this.toolStripButton22.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton22.Text = "Переместить назад";
+            // 
+            // toolStripSeparator14
+            // 
+            this.toolStripSeparator14.Name = "toolStripSeparator14";
+            this.toolStripSeparator14.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripTextBox4
+            // 
+            this.toolStripTextBox4.AccessibleName = "Положение";
+            this.toolStripTextBox4.AutoSize = false;
+            this.toolStripTextBox4.Name = "toolStripTextBox4";
+            this.toolStripTextBox4.Size = new System.Drawing.Size(50, 23);
+            this.toolStripTextBox4.Text = "0";
+            this.toolStripTextBox4.ToolTipText = "Текущее положение";
+            // 
+            // toolStripSeparator15
+            // 
+            this.toolStripSeparator15.Name = "toolStripSeparator15";
+            this.toolStripSeparator15.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripButton23
+            // 
+            this.toolStripButton23.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton23.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton23.Image")));
+            this.toolStripButton23.Name = "toolStripButton23";
+            this.toolStripButton23.RightToLeftAutoMirrorImage = true;
+            this.toolStripButton23.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton23.Text = "Переместить вперед";
+            // 
+            // toolStripButton24
+            // 
+            this.toolStripButton24.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton24.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton24.Image")));
+            this.toolStripButton24.Name = "toolStripButton24";
+            this.toolStripButton24.RightToLeftAutoMirrorImage = true;
+            this.toolStripButton24.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton24.Text = "Переместить в конец";
+            // 
+            // toolStripSeparator16
+            // 
+            this.toolStripSeparator16.Name = "toolStripSeparator16";
+            this.toolStripSeparator16.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripSeparator17
+            // 
+            this.toolStripSeparator17.Name = "toolStripSeparator17";
+            this.toolStripSeparator17.Size = new System.Drawing.Size(6, 25);
+            // 
+            // btUpdPhContent
+            // 
+            this.btUpdPhContent.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btUpdPhContent.Image = ((System.Drawing.Image)(resources.GetObject("btUpdPhContent.Image")));
+            this.btUpdPhContent.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btUpdPhContent.Name = "btUpdPhContent";
+            this.btUpdPhContent.Size = new System.Drawing.Size(23, 22);
+            this.btUpdPhContent.Click += new System.EventHandler(this.navUpdate_Click);
+            // 
+            // tabLemms
+            // 
+            this.tabLemms.Controls.Add(this.dgvLemms);
+            this.tabLemms.Controls.Add(this.panel7);
+            this.tabLemms.Location = new System.Drawing.Point(4, 22);
+            this.tabLemms.Name = "tabLemms";
+            this.tabLemms.Size = new System.Drawing.Size(817, 489);
+            this.tabLemms.TabIndex = 6;
+            this.tabLemms.Text = "Леммы";
+            this.tabLemms.UseVisualStyleBackColor = true;
+            // 
+            // dgvLemms
+            // 
+            this.dgvLemms.AutoGenerateColumns = false;
+            this.dgvLemms.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvLemms.DataSource = this.bsLemms;
+            this.dgvLemms.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvLemms.Location = new System.Drawing.Point(0, 0);
+            this.dgvLemms.Name = "dgvLemms";
+            this.dgvLemms.Size = new System.Drawing.Size(817, 427);
+            this.dgvLemms.TabIndex = 11;
+            // 
+            // panel7
+            // 
+            this.panel7.Controls.Add(this.btRefreshLemms);
+            this.panel7.Controls.Add(this.navLemms);
+            this.panel7.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel7.Location = new System.Drawing.Point(0, 427);
+            this.panel7.Name = "panel7";
+            this.panel7.Size = new System.Drawing.Size(817, 62);
+            this.panel7.TabIndex = 10;
+            // 
+            // btRefreshLemms
+            // 
+            this.btRefreshLemms.Location = new System.Drawing.Point(5, 28);
+            this.btRefreshLemms.Name = "btRefreshLemms";
+            this.btRefreshLemms.Size = new System.Drawing.Size(77, 29);
+            this.btRefreshLemms.TabIndex = 1;
+            this.btRefreshLemms.Text = "Refresh";
+            this.btRefreshLemms.UseVisualStyleBackColor = true;
+            this.btRefreshLemms.Click += new System.EventHandler(this.btRefreshLemms_Click);
+            // 
+            // navLemms
+            // 
+            this.navLemms.AddNewItem = this.toolStripButton25;
+            this.navLemms.BindingSource = this.bsSents;
+            this.navLemms.CountItem = this.toolStripLabel5;
+            this.navLemms.DeleteItem = this.toolStripButton26;
+            this.navLemms.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButton27,
+            this.toolStripButton28,
+            this.toolStripSeparator18,
+            this.toolStripTextBox5,
+            this.toolStripLabel5,
+            this.toolStripSeparator19,
+            this.toolStripButton29,
+            this.toolStripButton30,
+            this.toolStripSeparator20,
+            this.toolStripButton25,
+            this.toolStripButton26,
+            this.toolStripSeparator21,
+            this.btUpdLemms});
+            this.navLemms.Location = new System.Drawing.Point(0, 0);
+            this.navLemms.MoveFirstItem = this.toolStripButton27;
+            this.navLemms.MoveLastItem = this.toolStripButton30;
+            this.navLemms.MoveNextItem = this.toolStripButton29;
+            this.navLemms.MovePreviousItem = this.toolStripButton28;
+            this.navLemms.Name = "navLemms";
+            this.navLemms.PositionItem = this.toolStripTextBox5;
+            this.navLemms.Size = new System.Drawing.Size(817, 25);
+            this.navLemms.TabIndex = 0;
+            this.navLemms.Text = "bindingNavigator1";
+            // 
+            // toolStripButton25
+            // 
+            this.toolStripButton25.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton25.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton25.Image")));
+            this.toolStripButton25.Name = "toolStripButton25";
+            this.toolStripButton25.RightToLeftAutoMirrorImage = true;
+            this.toolStripButton25.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton25.Text = "Добавить";
+            // 
+            // toolStripLabel5
+            // 
+            this.toolStripLabel5.Name = "toolStripLabel5";
+            this.toolStripLabel5.Size = new System.Drawing.Size(43, 22);
+            this.toolStripLabel5.Text = "для {0}";
+            this.toolStripLabel5.ToolTipText = "Общее число элементов";
+            // 
+            // toolStripButton26
+            // 
+            this.toolStripButton26.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton26.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton26.Image")));
+            this.toolStripButton26.Name = "toolStripButton26";
+            this.toolStripButton26.RightToLeftAutoMirrorImage = true;
+            this.toolStripButton26.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton26.Text = "Удалить";
+            // 
+            // toolStripButton27
+            // 
+            this.toolStripButton27.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton27.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton27.Image")));
+            this.toolStripButton27.Name = "toolStripButton27";
+            this.toolStripButton27.RightToLeftAutoMirrorImage = true;
+            this.toolStripButton27.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton27.Text = "Переместить в начало";
+            // 
+            // toolStripButton28
+            // 
+            this.toolStripButton28.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton28.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton28.Image")));
+            this.toolStripButton28.Name = "toolStripButton28";
+            this.toolStripButton28.RightToLeftAutoMirrorImage = true;
+            this.toolStripButton28.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton28.Text = "Переместить назад";
+            // 
+            // toolStripSeparator18
+            // 
+            this.toolStripSeparator18.Name = "toolStripSeparator18";
+            this.toolStripSeparator18.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripTextBox5
+            // 
+            this.toolStripTextBox5.AccessibleName = "Положение";
+            this.toolStripTextBox5.AutoSize = false;
+            this.toolStripTextBox5.Name = "toolStripTextBox5";
+            this.toolStripTextBox5.Size = new System.Drawing.Size(50, 23);
+            this.toolStripTextBox5.Text = "0";
+            this.toolStripTextBox5.ToolTipText = "Текущее положение";
+            // 
+            // toolStripSeparator19
+            // 
+            this.toolStripSeparator19.Name = "toolStripSeparator19";
+            this.toolStripSeparator19.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripButton29
+            // 
+            this.toolStripButton29.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton29.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton29.Image")));
+            this.toolStripButton29.Name = "toolStripButton29";
+            this.toolStripButton29.RightToLeftAutoMirrorImage = true;
+            this.toolStripButton29.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton29.Text = "Переместить вперед";
+            // 
+            // toolStripButton30
+            // 
+            this.toolStripButton30.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton30.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton30.Image")));
+            this.toolStripButton30.Name = "toolStripButton30";
+            this.toolStripButton30.RightToLeftAutoMirrorImage = true;
+            this.toolStripButton30.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton30.Text = "Переместить в конец";
+            // 
+            // toolStripSeparator20
+            // 
+            this.toolStripSeparator20.Name = "toolStripSeparator20";
+            this.toolStripSeparator20.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripSeparator21
+            // 
+            this.toolStripSeparator21.Name = "toolStripSeparator21";
+            this.toolStripSeparator21.Size = new System.Drawing.Size(6, 25);
+            // 
+            // btUpdLemms
+            // 
+            this.btUpdLemms.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btUpdLemms.Image = ((System.Drawing.Image)(resources.GetObject("btUpdLemms.Image")));
+            this.btUpdLemms.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btUpdLemms.Name = "btUpdLemms";
+            this.btUpdLemms.Size = new System.Drawing.Size(23, 22);
+            this.btUpdLemms.Click += new System.EventHandler(this.navUpdate_Click);
             // 
             // MainForm
             // 
@@ -930,7 +1291,6 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabTree.ResumeLayout(false);
-            this.panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvViewer)).EndInit();
             this.tabPageContainers.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvContainers)).EndInit();
@@ -957,14 +1317,30 @@
             this.navParagraphs.ResumeLayout(false);
             this.navParagraphs.PerformLayout();
             this.tabSentencies.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvSents)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsSents)).EndInit();
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.navSents)).EndInit();
             this.navSents.ResumeLayout(false);
             this.navSents.PerformLayout();
+            this.tabPhraseContent.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvPhraseContent)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bsPhraseContent)).EndInit();
+            this.panel6.ResumeLayout(false);
+            this.panel6.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.navPhraseContent)).EndInit();
+            this.navPhraseContent.ResumeLayout(false);
+            this.navPhraseContent.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.binding1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvSents)).EndInit();
+            this.tabLemms.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvLemms)).EndInit();
+            this.panel7.ResumeLayout(false);
+            this.panel7.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.navLemms)).EndInit();
+            this.navLemms.ResumeLayout(false);
+            this.navLemms.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bsLemms)).EndInit();
             this.ResumeLayout(false);
 
 		}
@@ -993,8 +1369,7 @@
 		private System.Windows.Forms.ListBox listBox1;
 		private System.Windows.Forms.DataGridView dgvViewer;
 		private System.Windows.Forms.BindingSource binding1;
-		private System.Windows.Forms.Panel panel2;
-		private System.Windows.Forms.Button btRefreshTree;
+        private System.Windows.Forms.Panel panel2;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 		private System.Windows.Forms.ToolStripButton btUpdDocuments;
         private System.Windows.Forms.TabPage tabPageContainers;
@@ -1016,7 +1391,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripButton btUpdContainers;
         private System.Windows.Forms.Button btRefreshContainers;
-		private System.Windows.Forms.TreeView treeView1;
 		private System.Windows.Forms.TabPage tabParagraphs;
 		private System.Windows.Forms.DataGridView dgvParagraphs;
 		private System.Windows.Forms.Panel panel4;
@@ -1037,7 +1411,7 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
 		private System.Windows.Forms.ToolStripButton btUpdParagraphs;
 		private System.Windows.Forms.TabPage tabSentencies;
-		private System.Windows.Forms.TabPage tabWords;
+		private System.Windows.Forms.TabPage tabPhraseContent;
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.Button btRefreshSents;
         private System.Windows.Forms.BindingNavigator navSents;
@@ -1056,6 +1430,43 @@
         private System.Windows.Forms.ToolStripButton btUpdSents;
         private System.Windows.Forms.BindingSource bsSents;
         private System.Windows.Forms.DataGridView dgvSents;
+        private System.Windows.Forms.DataGridView dgvPhraseContent;
+        private System.Windows.Forms.Panel panel6;
+        private System.Windows.Forms.Button btRefreshPhraseContent;
+        private System.Windows.Forms.BindingNavigator navPhraseContent;
+        private System.Windows.Forms.ToolStripButton toolStripButton19;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel4;
+        private System.Windows.Forms.ToolStripButton toolStripButton20;
+        private System.Windows.Forms.ToolStripButton toolStripButton21;
+        private System.Windows.Forms.ToolStripButton toolStripButton22;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator14;
+        private System.Windows.Forms.ToolStripTextBox toolStripTextBox4;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator15;
+        private System.Windows.Forms.ToolStripButton toolStripButton23;
+        private System.Windows.Forms.ToolStripButton toolStripButton24;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator16;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator17;
+        private System.Windows.Forms.ToolStripButton btUpdPhContent;
+        private System.Windows.Forms.BindingSource bsPhraseContent;
+        private System.Windows.Forms.TabPage tabLemms;
+        private System.Windows.Forms.DataGridView dgvLemms;
+        private System.Windows.Forms.Panel panel7;
+        private System.Windows.Forms.Button btRefreshLemms;
+        private System.Windows.Forms.BindingNavigator navLemms;
+        private System.Windows.Forms.ToolStripButton toolStripButton25;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel5;
+        private System.Windows.Forms.ToolStripButton toolStripButton26;
+        private System.Windows.Forms.ToolStripButton toolStripButton27;
+        private System.Windows.Forms.ToolStripButton toolStripButton28;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator18;
+        private System.Windows.Forms.ToolStripTextBox toolStripTextBox5;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator19;
+        private System.Windows.Forms.ToolStripButton toolStripButton29;
+        private System.Windows.Forms.ToolStripButton toolStripButton30;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator20;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator21;
+        private System.Windows.Forms.ToolStripButton btUpdLemms;
+        private System.Windows.Forms.BindingSource bsLemms;
 	}
 }
 
