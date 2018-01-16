@@ -28,7 +28,7 @@ namespace DirectDBconnector
 			this.docID = pMap.DocumentID;
 			var listSmaps = pMap.GetParagraphSents().Select(x => x.sentstruct).OrderBy(x => x.Order).ToList();
 			if (listSmaps != null)
-				this.sentlist.AddRange(sentlist);
+                this.sentlist.AddRange(listSmaps);
 			this.sent2Del = pMap.GetDeleted();
 			if (operDB != OpersDB.odSelect)
 				indicator.Fill(ParagraphID);

@@ -76,7 +76,6 @@ namespace MorphApp
                 var sentlist = dbServer.ReadParagraphDB(paragraph.ParagraphID);
                 courier.servType = TMorph.Schema.ServType.svMorph;
                 courier.command = TMorph.Schema.ComType.Repar;
-                int i = -1;
                 foreach (var sentstruct in sentlist)
                 {
                     courier.SendStruct(sentstruct);
@@ -84,8 +83,7 @@ namespace MorphApp
                     string phrase = "";
                     if (sentlistRep != null && sentlistRep.Count > 0)
                         phrase = sentlistRep[0];
-                    paragraph.RefreshSentProp(i, phrase, sentstruct, true);
-					i++;
+                    paragraph.RefreshSentProp(phrase, sentstruct, true);
                 }
             }
             return dMap;
@@ -135,7 +133,7 @@ namespace MorphApp
 				var created_at = dTable.Rows[i].Field<DateTime?>("created_at");
 				var ct_id = dTable.Rows[i].Field<long>("ct_id");
 
-				var pMap = new ParagraphMap(pg_id, doc_id, created_at);
+                var pMap = new ParagraphMap(pg_id, doc_id, created_at, ct_id);
 				var cont = containers.Where(x => x.ContainerID == ct_id).FirstOrDefault();
 				var doc = cont.GetDocuments().Where(x => x.DocumentID == doc_id).FirstOrDefault();
 				doc.AddParagraph(pMap);

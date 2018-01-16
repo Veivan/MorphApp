@@ -26,6 +26,11 @@ namespace Schemas
         private DateTime _created_at;
 
         /// <summary>
+        /// Идентификатор абзаца в БД.
+        /// </summary>
+        public long ParagraphID { get { return _pg_id; } set { _pg_id = value; } }
+
+        /// <summary>
         /// Идентификатор предложения в БД.
         /// </summary>
         public long SentenceID { get { return _phID; } set { _phID = value; } }
@@ -72,7 +77,10 @@ namespace Schemas
         /// </summary>
         public SentenceMap(SentenceMap map)
         {
-            this.SentenceID = map.SentenceID;
+            this._phID = map._phID;
+            this._pg_id = map._pg_id;
+            this._order = map._order;
+            this._created_at = map._created_at;
             foreach (var w in map.words)
                 this.words.Add(w.Key, w.Value);
             this.treeList.AddRange(map.treeList);

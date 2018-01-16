@@ -50,36 +50,34 @@ namespace Schemas
         /// </summary>
         private List<SentProps> innerPara = new List<SentProps>();
 
-		/// <summary>
-		/// В списке хранятся ID предложений абзаца, которые нужно удалить при сохранении в БД.
-		/// </summary>
-		private List<long> sents2Del = new List<long>();
-		
-        public List<long> GetDeleted() { return sents2Del; } 
+        /// <summary>
+        /// В списке хранятся ID предложений абзаца, которые нужно удалить при сохранении в БД.
+        /// </summary>
+        private List<long> sents2Del = new List<long>();
 
-		/// <summary>
-		/// Ссхранение списка ID предложений абзаца, которые надо удалить при сохранении.
-		/// </summary>
-		private void SetDeleted(List<SentProps> versionPara)
-		{
-			sents2Del.Clear();
+        public List<long> GetDeleted() { return sents2Del; }
 
-			var listBefore = innerPara
-				.Where(x => x.sentstruct != null && x.sentstruct.SentenceID != -1)
-				.Select(x => x.sentstruct.SentenceID).ToArray();
-			var listAfter = versionPara
-				.Where(x => x.sentstruct != null && x.sentstruct.SentenceID != -1)
-				.Select(x => x.sentstruct.SentenceID)
-				.ToArray();
-			sents2Del.AddRange(listBefore.Except(listAfter));
-		}
+        /// <summary>
+        /// Ссхранение списка ID предложений абзаца, которые надо удалить при сохранении.
+        /// </summary>
+        private void SetDeleted(List<SentProps> versionPara, bool IsHeader)
+        {
+            var listBefore = innerPara
+                .Where(x => x.sentstruct != null && x.sentstruct.SentenceID != -1)
+                .Select(x => x.sentstruct.SentenceID).ToArray();
+            var listAfter = versionPara
+                .Where(x => x.sentstruct != null && x.sentstruct.SentenceID != -1)
+                .Select(x => x.sentstruct.SentenceID)
+                .ToArray();
+            sents2Del.AddRange(listBefore.Except(listAfter));
+        }
 
-		public void ClearDeleted()
-		{
-			this.sents2Del.Clear();
-		}
+        public void ClearDeleted()
+        {
+            this.sents2Del.Clear();
+        }
 
-		/// <summary>
+        /// <summary>
         /// Конструктор
         /// </summary>
         public ParagraphMap(long pg_id = -1, long doc_id = -1, DateTime? created_at = null, long ct_id = -1)
@@ -93,6 +91,16 @@ namespace Schemas
                 _created_at = (DateTime)created_at;
         }
 
+        private static bool Belongs2Header(SentProps p)
+        {
+            return p.order < 0;
+        }
+
+        private static bool Belongs2Body(SentProps p)
+        {
+            return p.order > -1;
+        }
+
         /// <summary>
         /// Добавление предложений абзаца в хранилище.
         /// При добавлении вычисляется хэш предложения и по жэшу происходит поиск существующего предложения в хранилище.
@@ -104,15 +112,14 @@ namespace Schemas
         public void RefreshParagraph(ArrayList input, bool IsHeader)
         {
             List<SentProps> versionPara = new List<SentProps>();
-
             int i = 0;
-			if (IsHeader) i = -1 * input.Count;
+            if (IsHeader) i = -1 * input.Count;
             foreach (var sent in input)
             {
                 SentProps newsprops;
                 var ihash = sent.GetHashCode();
-                var sentex = innerPara.Where(x => x.hash.Equals(ihash)).ToList();
-                if (sentex.Count == 0)
+                var sentprops = innerPara.Where(x => x.hash.Equals(ihash) && (Belongs2Header(x) == IsHeader)).ToList();
+                if (sentprops.Count == 0)
                 {
                     newsprops = new SentProps();
                     newsprops.sentence = sent as string;
@@ -121,16 +128,19 @@ namespace Schemas
                 }
                 else
                 {
-                    newsprops = sentex[0];
+                    newsprops = sentprops[0];
                     newsprops.IsActual = true;
                 }
                 newsprops.order = i;
                 versionPara.Add(newsprops);
-				i++;
+                i++;
             }
 
-			SetDeleted(versionPara);
-            innerPara.Clear();
+            SetDeleted(versionPara, IsHeader);
+            if (IsHeader)
+                innerPara.RemoveAll(Belongs2Header);
+            else
+                innerPara.RemoveAll(Belongs2Body);
             innerPara.AddRange(versionPara);
         }
 
@@ -150,54 +160,40 @@ namespace Schemas
                     break;
                 case SentTypes.enstHeader:
                     versionPara.AddRange(innerPara.Where(x => x.order < 0)
-						.OrderBy(x => x.order)
-						.ToList());
+                        .OrderBy(x => x.order)
+                        .ToList());
                     break;
                 case SentTypes.enstBody:
                     versionPara.AddRange(innerPara.Where(x => x.order > -1)
-						.OrderBy(x => x.order)
-						.ToList());
+                        .OrderBy(x => x.order)
+                        .ToList());
                     break;
             }
             return versionPara;
         }
 
         /// <summary>
-        /// Получение списка предложений абзаца.
+        /// Получение списка ID предложений абзаца.
         /// </summary>
-        public List<string> GetParagraphPhrases(SentTypes sttype)
+        public List<long> GetParagraphSentsIDs()
         {
-            List<string> phrases = new List<string>();
-            switch (sttype)
-            {
-                case SentTypes.enstHeader:
-                    phrases.AddRange(innerPara.Where(x => x.order == -1).Select(x => x.sentence).ToList());
-                    break;
-                case SentTypes.enstBody:
-                    phrases.AddRange(innerPara.Where(x => x.order != -1).Select(x => x.sentence).ToList());
-                    break;
-            }
-            return phrases;
+            List<long> list_ids = new List<long>();
+            list_ids.AddRange(innerPara.Select(x => x.sentstruct.SentenceID).ToList());
+            return list_ids;
         }
 
-		/// <summary>
-		/// Получение списка ID предложений абзаца.
-		/// </summary>
-		public List<long> GetParagraphSentsIDs()
-		{
-			List<long> list_ids = new List<long>();
-			list_ids.AddRange(innerPara.Select(x => x.sentstruct.SentenceID).ToList());
-			return list_ids;
-		}
-		
-		/// <summary>
+        /// <summary>
         /// Запиcь в хранилище предложения новой структуры синтана этого предложения.
         /// </summary>
         public void UpdateSentStruct(int order, SentenceMap sentstruct)
         {
             var sent = innerPara.Where(x => x.order == order).FirstOrDefault();
             if (sent.sentstruct == null)
+            {
+                sentstruct.ParagraphID = this.ParagraphID;
+                sentstruct.Order = order;
                 sent.sentstruct = new SentenceMap(sentstruct);
+            }
             sent.IsActual = true;
         }
 
@@ -208,6 +204,8 @@ namespace Schemas
         {
             var sprop = new SentProps();
             sprop.order = order;
+            sentstruct.ParagraphID = this.ParagraphID;
+            sentstruct.Order = order;
             sprop.sentstruct = new SentenceMap(sentstruct);
             innerPara.Add(sprop);
         }
@@ -215,8 +213,9 @@ namespace Schemas
         /// <summary>
         /// Обновление элемента хранения предложения.
         /// </summary>
-        public void RefreshSentProp(int order, string sentence, SentenceMap sentstruct, bool IsActual)
+        public void RefreshSentProp(string sentence, SentenceMap sentstruct, bool IsActual)
         {
+            int order = sentstruct.Order;
             SentProps sprop = innerPara.Where(x => x.order == order).FirstOrDefault();
             if (sprop == null)
             {
@@ -228,8 +227,15 @@ namespace Schemas
             if (sprop.sentstruct == null)
                 sprop.sentstruct = new SentenceMap(sentstruct);
             sprop.sentence = sentence;
+            sprop.hash = sentence.GetHashCode();
             sprop.IsActual = true;
         }
 
-	}
+
+        public string GetHeader()
+        {
+            return String.Join("", this.GetParagraphSents(SentTypes.enstHeader)
+                                .Select(x => x.sentence).ToList());
+        }
+    }
 }

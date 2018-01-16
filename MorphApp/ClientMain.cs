@@ -99,8 +99,7 @@ namespace MorphApp
                         foreach (TreeNode node in aNode.Nodes)
                         {
                             var paragraph = parags.Where(x => x.ParagraphID == Convert.ToInt64(node.Name)).FirstOrDefault();
-							node.Text = String.Join("", paragraph.GetParagraphSents(SentTypes.enstHeader)
-								.Select(x => x.sentence).ToList() );
+                            node.Text = paragraph.GetHeader();
                         }
                         break;
                     }
@@ -161,6 +160,9 @@ namespace MorphApp
                         var fParaEdit = new FormParaEdit();
                         fParaEdit.paraMap = pMap;
                         fParaEdit.Show();
+                        // TODO надо придумать другой механизм
+                        //aNode.Text = pMap.GetHeader();
+                        //aNode.Name = pMap.ParagraphID.ToString();
                         break;
                     }
             }
