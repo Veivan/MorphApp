@@ -132,25 +132,48 @@ namespace DirectDBA
                 HeaderText = "sorder"
             });
             #endregion
-        
-            #region Создание колонок для Лемм
-            dgvLemms.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "lx_id",
-                HeaderText = "lx_id"
-            });
-            dgvLemms.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "sp_id",
-                HeaderText = "sp_id"
-            });
-            dgvLemms.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "lemma",
-                HeaderText = "lemma"
-            });
-            #endregion 
-        }
+
+			#region Создание колонок для Лемм
+			dgvLemms.Columns.Add(new DataGridViewTextBoxColumn
+			{
+				DataPropertyName = "lx_id",
+				HeaderText = "lx_id"
+			});
+			dgvLemms.Columns.Add(new DataGridViewTextBoxColumn
+			{
+				DataPropertyName = "sp_id",
+				HeaderText = "sp_id"
+			});
+			dgvLemms.Columns.Add(new DataGridViewTextBoxColumn
+			{
+				DataPropertyName = "lemma",
+				HeaderText = "lemma"
+			});
+			#endregion
+
+			#region Создание колонок для Граммем
+			dgvGrammems.Columns.Add(new DataGridViewTextBoxColumn
+			{
+				DataPropertyName = "gr_id",
+				HeaderText = "gr_id"
+			});
+			dgvGrammems.Columns.Add(new DataGridViewTextBoxColumn
+			{
+				DataPropertyName = "с_id",
+				HeaderText = "с_id"
+			});
+			dgvGrammems.Columns.Add(new DataGridViewTextBoxColumn
+			{
+				DataPropertyName = "sg_id",
+				HeaderText = "sg_id"
+			});
+			dgvGrammems.Columns.Add(new DataGridViewTextBoxColumn
+			{
+				DataPropertyName = "intval",
+				HeaderText = "intval"
+			});
+			#endregion 
+		}
 
         private void btRefreshContainers_Click(object sender, EventArgs e)
         {
@@ -188,7 +211,13 @@ namespace DirectDBA
             bsLemms.DataSource = retval.dtable;
         }
 
-        /// <summary>
+		private void btRefreshGrammems_Click(object sender, EventArgs e)
+		{
+			var retval = dbServer.ReadDataTable(dbTables.tbGrammems);
+			bsGrammems.DataSource = retval.dtable;
+		}
+
+		/// <summary>
         /// Чтения Документов напрямую из БД.
         /// </summary>
         private void ReadDocsDirect()
@@ -219,6 +248,9 @@ namespace DirectDBA
                 case "btUpdLemms":
                     dbServer.UpdateDataTable((DataTable)bsLemms.DataSource, dbTables.tblLemms);
                     break;
+				case "btUpdGrammems":
+					dbServer.UpdateDataTable((DataTable)bsLemms.DataSource, dbTables.tbGrammems);
+                    break;				
 
             }
         }

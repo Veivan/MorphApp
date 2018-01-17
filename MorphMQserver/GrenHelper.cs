@@ -461,6 +461,8 @@ namespace MorphMQserver
 				int id_partofspeech = GrammarEngine.sol_GetEntryClass(hEngine, id_entry);
 				wmap = new WordMap(id_entry, id_partofspeech);
 				wmap.EntryName = GrammarEngine.sol_GetEntryNameFX(hEngine, id_entry);
+				if (wmap.EntryName == "???")
+					wmap.EntryName = "дубль";
 				// Определение типа класса по ID части речи
 				var xType = Gren.sgAPI.GetTypeClassByID((GrenPart)id_partofspeech);
 				if (xType != null)
