@@ -78,11 +78,14 @@ namespace MorphApp
                 courier.command = TMorph.Schema.ComType.Repar;
                 foreach (var sentstruct in sentlist)
                 {
-                    courier.SendStruct(sentstruct);
-                    var sentlistRep = courier.GetSeparatedSentsList();
-                    string phrase = "";
-                    if (sentlistRep != null && sentlistRep.Count > 0)
-                        phrase = sentlistRep[0];
+					string phrase = "";
+					if (sentstruct.Capasity > 0)
+					{
+						courier.SendStruct(sentstruct);
+						var sentlistRep = courier.GetSeparatedSentsList();
+						if (sentlistRep != null && sentlistRep.Count > 0)
+							phrase = sentlistRep[0];
+					}
                     paragraph.RefreshSentProp(phrase, sentstruct, true);
                 }
             }

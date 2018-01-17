@@ -185,6 +185,7 @@ namespace DirectDBconnector
 					// В БД не хранится ID словарной статьи GREN. 
 					var word = new WordMap(-1, wstr.sp_id);
 					word.EntryName = wstr.lemma;
+					word.order = i;
 					// Чтение граммем слова
 					var grammems = dbConnector.ReadGrammemsDB(wstr.с_id);
 					foreach (var pair in grammems)

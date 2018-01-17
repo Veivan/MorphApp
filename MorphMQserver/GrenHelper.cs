@@ -158,7 +158,7 @@ namespace MorphMQserver
 					{
 						word = char.ToUpper(word[0]) + word.Substring(1);
 					}
-					if (i > 0 && i < sentence.Capasity-1)
+					if (i > 0 && i < sentence.Capasity)
 						sb.Append(" ");
 					sb.Append(word);
 				}
