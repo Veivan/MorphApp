@@ -158,7 +158,7 @@ namespace MorphMQserver
 					{
 						word = char.ToUpper(word[0]) + word.Substring(1);
 					}
-					if (i > 0 && i < sentence.Capasity)
+					if (i > 0 && i < sentence.Capasity && wmap.ID_PartOfSpeech != GrammarEngineAPI.PUNCTUATION_class)
 						sb.Append(" ");
 					sb.Append(word);
 				}

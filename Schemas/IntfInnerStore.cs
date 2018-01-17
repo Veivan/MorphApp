@@ -72,8 +72,10 @@ namespace Schemas
 			var sents = this.MorphGetSeparatedSentsList(input);
 			pMap.RefreshParagraph(new ArrayList(sents), IsHeader);
 
-			// Выполнение синтана для неактуальных предложений.
 			var sentlist = pMap.GetParagraphSents(SentTypes.enstNotActual);
+			if (sentlist.Count == 0)
+				return;
+			// Выполнение синтана для неактуальных предложений.
 			foreach (var sent in sentlist)
 			{
 				var sentlistRep = this.MorphMakeSyntan(sent.sentence);

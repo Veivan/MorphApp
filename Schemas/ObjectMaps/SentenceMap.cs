@@ -127,7 +127,7 @@ namespace Schemas
         {
             int maxID = 0;
             if (treeList.Count > 0)
-                maxID = (int)(treeList.OrderByDescending(x => x.Level).First().ID + 1);
+                maxID = (int)(treeList.OrderByDescending(x => x.ID).First().ID + 1);
             var node = new tNode();
             node.ID = maxID;
             node.Level = Level;
