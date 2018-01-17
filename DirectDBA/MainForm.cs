@@ -15,9 +15,8 @@ namespace DirectDBA
     public partial class MainForm : Form
     {
         SagaDBServer dbServer = new SagaDBServer();
-        InnerStore store = new InnerStore();
 
-        public MainForm()
+		public MainForm()
         {
             InitializeComponent();
         }

@@ -22,9 +22,9 @@ namespace DirectDBconnector
 		{
 			ComplexValue rval = new ComplexValue();
 			if (resulttype == tpList.tplDBtable)
-				rval.dtable = dbConnector.dirCmd.GetChildrenContainers(parentID);
+				rval.dtable = dbConnector.GetChildrenContainers(parentID);
 			else
-				rval.list.AddRange(dbConnector.dirCmd.GetChildrenContainersList(parentID));
+				rval.list.AddRange(dbConnector.GetChildrenContainersList(parentID));
 			return rval;
 		}
 
@@ -37,7 +37,7 @@ namespace DirectDBconnector
 		public override ComplexValue GetDocsInContainerList(List<string> list_ids)
 		{
 			ComplexValue rval = new ComplexValue();
-			rval.dtable = dbConnector.dirCmd.GetDocsInContainerList(list_ids);
+			rval.dtable = dbConnector.GetDocsInContainerList(list_ids);
 			return rval;
 		}
 
@@ -51,9 +51,9 @@ namespace DirectDBconnector
 		{
 			ComplexValue rval = new ComplexValue();
 			if (resulttype == tpList.tplDBtable)
-				rval.dtable = dbConnector.dirCmd.ReadParagraphsInDocs(list_ids);
+				rval.dtable = dbConnector.ReadParagraphsInDocs(list_ids);
 			else
-				rval.list.AddRange(dbConnector.dirCmd.ReadParagraphsInDocsList(list_ids));
+				rval.list.AddRange(dbConnector.ReadParagraphsInDocsList(list_ids));
 			return rval;
 		}
 
@@ -61,9 +61,9 @@ namespace DirectDBconnector
         {
             ComplexValue rval = new ComplexValue();
             if (resulttype == tpList.tplDBtable)
-                rval.dtable = dbConnector.dirCmd.ReadPhrasesInParagraphs(list_ids);
+                rval.dtable = dbConnector.ReadPhrasesInParagraphs(list_ids);
             else
-                rval.list.AddRange(dbConnector.dirCmd.ReadPhrasesInParagraphsList(list_ids));
+                rval.list.AddRange(dbConnector.ReadPhrasesInParagraphsList(list_ids));
             return rval;
         }
 
