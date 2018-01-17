@@ -234,8 +234,24 @@ namespace Schemas
 
         public string GetHeader()
         {
-            return String.Join("", this.GetParagraphSents(SentTypes.enstHeader)
+            return String.Join(" ", this.GetParagraphSents(SentTypes.enstHeader)
                                 .Select(x => x.sentence).ToList());
         }
-    }
+
+		public string GetBody()
+		{
+			return String.Join(" ", this.GetParagraphSents(SentTypes.enstBody)
+								.Select(x => x.sentence).ToList());
+		}
+
+		public int GetHashCode(bool IsHeader)
+		{
+			string str;
+			if (IsHeader)
+				str = GetHeader();
+			else
+				str = GetBody();
+			return str.GetHashCode();
+		}
+	}
 }

@@ -64,6 +64,11 @@ namespace Schemas
         /// <returns></returns>
 		public void UpdateParagraph(ParagraphMap pMap, string input, bool IsHeader) 
 		{
+			var ihash = input.GetHashCode();
+			int currenthash = pMap.GetHashCode(IsHeader);
+			if (ihash == currenthash)
+				return;
+
 			var sents = this.MorphGetSeparatedSentsList(input);
 			pMap.RefreshParagraph(new ArrayList(sents), IsHeader);
 
