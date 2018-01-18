@@ -173,7 +173,35 @@ namespace DirectDBA
 				HeaderText = "intval"
 			});
 			#endregion 
-		}
+
+            #region Создание колонок для Синт.узлов
+            dgvSyntNodes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "sn_id",
+                HeaderText = "sn_id"
+            });
+            dgvSyntNodes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "с_id",
+                HeaderText = "с_id"
+            });
+            dgvSyntNodes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "ln_id",
+                HeaderText = "ln_id"
+            });
+            dgvSyntNodes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "level",
+                HeaderText = "level"
+            });
+            dgvSyntNodes.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "pс_id",
+                HeaderText = "pс_id"
+            });
+            #endregion
+        }
 
         private void btRefreshContainers_Click(object sender, EventArgs e)
         {
@@ -213,11 +241,17 @@ namespace DirectDBA
 
 		private void btRefreshGrammems_Click(object sender, EventArgs e)
 		{
-			var retval = dbServer.ReadDataTable(dbTables.tbGrammems);
+			var retval = dbServer.ReadDataTable(dbTables.tblGrammems);
 			bsGrammems.DataSource = retval.dtable;
 		}
 
-		/// <summary>
+        private void btRefreshSyntNodes_Click(object sender, EventArgs e)
+        {
+            var retval = dbServer.ReadDataTable(dbTables.tblSyntNodes);
+            bsSyntNodes.DataSource = retval.dtable;
+        }
+        
+        /// <summary>
         /// Чтения Документов напрямую из БД.
         /// </summary>
         private void ReadDocsDirect()
@@ -249,9 +283,11 @@ namespace DirectDBA
                     dbServer.UpdateDataTable((DataTable)bsLemms.DataSource, dbTables.tblLemms);
                     break;
 				case "btUpdGrammems":
-					dbServer.UpdateDataTable((DataTable)bsLemms.DataSource, dbTables.tbGrammems);
+					dbServer.UpdateDataTable((DataTable)bsLemms.DataSource, dbTables.tblGrammems);
                     break;				
-
+                case "btUpdSyntNodes":
+                    dbServer.UpdateDataTable((DataTable)bsLemms.DataSource, dbTables.tblSyntNodes);
+                    break;
             }
         }
 
@@ -305,7 +341,6 @@ namespace DirectDBA
             }
         }
         #endregion
-
 
     }
 }

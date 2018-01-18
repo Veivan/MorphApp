@@ -203,16 +203,17 @@ namespace Schemas
 		SECOND_VERB_link = 114
 	}
 
-	public enum dbTables
-	{
-		tblContainers,
-		tblDocuments,
-		tblParagraphs,
-		tblSents,
-		tblPhraseContent,
-		tblLemms,
-		tbGrammems
-	}
+    public enum dbTables
+    {
+        tblContainers,
+        tblDocuments,
+        tblParagraphs,
+        tblSents,
+        tblPhraseContent,
+        tblLemms,
+        tblGrammems,
+        tblSyntNodes
+    }
 
 	/// <summary>
 	/// Тип возвращаемого значения методов чтения из БД.

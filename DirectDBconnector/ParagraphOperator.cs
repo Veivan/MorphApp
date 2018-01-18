@@ -73,29 +73,9 @@ namespace DirectDBconnector
 		private void Insert()
 		{
 			paragraphID = dbConnector.InsertParagraphDB(this.docID);
-			for (int k = 0; k < sentlist.Count; k++)
-			{
-				var sent = sentlist[k];
-				var ph_id = dbConnector.InsertPhraseDB(paragraphID, sent.Order);
-				var nodes = sent.GetTreeList();
-				// Сохранение слов предложения в БД
-				for (int i = 0; i < sent.Capasity; i++)
-				{
-					var word = sent.GetWordByOrder(i);
-					var lx_id = dbConnector.SaveLex(word.EntryName.ToLower(), word.ID_PartOfSpeech);
-					var c_id = dbConnector.InsertWordDB(ph_id, lx_id, word.order);
-					// Сохранение граммем слова в БД
-					var grammems = word.GetPairs();
-					var keys = grammems.Keys;
-					foreach (var key in keys)
-					{
-						dbConnector.InsertGrammemDB(c_id, key, grammems[key]);
-					}
-					// Сохранение списка синтаксических связей предложения в БД
-					InsertNode(nodes, word.order, c_id);
-				}
-			}
-		}
+            // Сохранение предложений в БД
+            InsertSents(sentlist);
+        }
 
 		private void Update()
 		{
@@ -128,45 +108,53 @@ namespace DirectDBconnector
 				string strlist = string.Join(",", list_ids.ToArray());
 				throw new Exception(String.Format("Сохранение абзаца.Ошибка удаления предложений с ID :{0}", strlist));
 			}
-
-			for (int k = 0; k < sentlist.Count; k++)
-			{
-				var sent = sentlist[k];
-				var ph_id = dbConnector.InsertPhraseDB(paragraphID, sent.Order);
-				var nodes = sent.GetTreeList();
-				// Сохранение слов предложения в БД
-				for (int i = 0; i < sent.Capasity; i++)
-				{
-					var word = sent.GetWordByOrder(i);
-					var lx_id = dbConnector.SaveLex(word.EntryName.ToLower(), word.ID_PartOfSpeech);
-					var c_id = dbConnector.InsertWordDB(ph_id, lx_id, word.order);
-					// Сохранение граммем слова в БД
-					var grammems = word.GetPairs();
-					var keys = grammems.Keys;
-					foreach (var key in keys)
-					{
-						dbConnector.InsertGrammemDB(c_id, key, grammems[key]);
-					}
-					// Сохранение списка синтаксических связей предложения в БД
-					InsertNode(nodes, word.order, c_id);
-				}
-			}
+            // Сохранение предложений в БД
+            InsertSents(sentlist);
 		}
 
 		/// <summary>
-		/// Определение узла в синтаксическом дереве предложения по порядковому номеру слова в предложении.
-		/// Запись в mSyntNodes.
+        /// Сохранение предложений в БД
 		/// </summary>
 		/// <returns></returns>
-		private void InsertNode(List<tNode> nodes, int order, long c_id)
-		{
-			var cnt = nodes.Where(x => x.index == order).Count();
-			if (cnt > 0)
-			{
-				var node = nodes.Where(x => x.index == order).First();
-				dbConnector.InsertSyntNodesDB(c_id, node.linktype, node.Level);
-			}
-		}
+        private void InsertSents(List<SentenceMap> sentlist)
+        {
+            for (int k = 0; k < sentlist.Count; k++)
+            {
+                var sent = sentlist[k];
+                var ph_id = dbConnector.InsertPhraseDB(paragraphID, sent.Order);
+                var nodes = sent.GetTreeList();
+                // Сохранение слов предложения в БД
+                for (int i = 0; i < sent.Capasity; i++)
+                {
+                    var word = sent.GetWordByOrder(i);
+                    var lx_id = dbConnector.SaveLex(word.EntryName.ToLower(), word.ID_PartOfSpeech);
+                    var c_id = dbConnector.InsertWordDB(ph_id, lx_id, word.order);
+                    word.WordID = c_id;
+                    // Сохранение граммем слова в БД
+                    var grammems = word.GetPairs();
+                    var keys = grammems.Keys;
+                    foreach (var key in keys)
+                    {
+                        dbConnector.InsertGrammemDB(c_id, key, grammems[key]);
+                    }
+                }
+                // Сохранение списка синтаксических связей предложения в БД
+                // Связи сохраняются отдельно, потому что в них есть ссылки на родительские слова.
+                // Поэтому сначала сохраняются все слова, а зетем связи
+                for (int i = 0; i < sent.Capasity; i++)
+                {
+                    var word = sent.GetWordByOrder(i);
+                    // Определение узла в синтаксическом дереве предложения по порядковому номеру слова в предложении.
+                    var cnt = nodes.Where(x => x.index == word.order).Count();
+                    if (cnt > 0)
+                    {
+                        var node = nodes.Where(x => x.index == word.order).First();
+                        var parentWord = sent.GetWordByOrder(node.parentind);
+                        dbConnector.InsertSyntNodesDB(word.WordID, node.linktype, node.Level, parentWord.WordID);
+                    }
+                }
+            }
+        }
 
 		private void Read()
 		{

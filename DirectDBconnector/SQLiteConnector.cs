@@ -128,7 +128,7 @@ namespace DirectDBconnector
 					"CREATE TABLE IF NOT EXISTS mGrammems (\n" +
 						" gr_id integer PRIMARY KEY, с_id integer, sg_id integer, intval integer);" +
 					"CREATE TABLE IF NOT EXISTS mSyntNodes (\n" +
-						" sn_id integer PRIMARY KEY, с_id integer, ln_id integer, level integer);";
+                        " sn_id integer PRIMARY KEY, с_id integer, ln_id integer, level integer, pс_id integer);";
 				m_sqlCmd.ExecuteNonQuery();
 			}
 			catch (SQLiteException ex)
@@ -762,14 +762,14 @@ namespace DirectDBconnector
 		/// Вставка в mSyntNodes.
 		/// </summary>
 		/// <returns>ID</returns>
-		public long InsertSyntNodesDB(long с_id, int ln_id, int level)
-		{
+        public long InsertSyntNodesDB(long с_id, int ln_id, int level, long pс_id)
+        {
 			long result = -1;
 			try
 			{
 				m_sqlCmd.CommandText =
-					String.Format("INSERT INTO mSyntNodes(sn_id, с_id, ln_id, level) VALUES(NULL, {0}, {1}, {2})",
-					с_id, ln_id, level);
+                    String.Format("INSERT INTO mSyntNodes(sn_id, с_id, ln_id, level, pс_id) VALUES(NULL, {0}, {1}, {2}, {3})",
+                    с_id, ln_id, level, pс_id);
 				m_sqlCmd.ExecuteNonQuery();
 				result = m_dbConn.LastInsertRowId;
 			}
@@ -790,7 +790,7 @@ namespace DirectDBconnector
 			var reslist = new List<tNode>();
 			try
 			{
-				m_sqlCmd.CommandText = String.Format("SELECT A.ln_id, A.level, B.sorder FROM mSyntNodes A " +
+				m_sqlCmd.CommandText = String.Format("SELECT A.ln_id, A.level, A.pc_id, B.sorder FROM mSyntNodes A " +
 					"JOIN mPhraseContent B ON B.с_id = A.с_id WHERE B.ph_id = {0} ORDER BY A.sn_id", ph_id);
 				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
 				string line = String.Empty;
@@ -897,7 +897,7 @@ namespace DirectDBconnector
 			{
 				//transaction = m_dbConn.BeginTransaction();
 
-				m_sqlCmd.CommandText =
+                var stmt =
 					"BEGIN TRANSACTION;\n" +
 					"CREATE TABLE IF NOT EXISTS mParagraphs_back (pg_id integer PRIMARY KEY, \n" +
 						"doc_id integer, created_at DATETIME DEFAULT CURRENT_TIMESTAMP);\n" +
@@ -905,7 +905,8 @@ namespace DirectDBconnector
 					"DROP TABLE mParagraphs;\n" +
 					"ALTER TABLE mParagraphs_back RENAME TO mParagraphs;\n" +
 					"COMMIT;\n";
-				m_sqlCmd.ExecuteNonQuery();
+                m_sqlCmd.CommandText = stmt;
+                m_sqlCmd.ExecuteNonQuery();
 
 				//transaction.Commit();
 			}
@@ -916,6 +917,22 @@ namespace DirectDBconnector
 			}
 
 		}
+
+        public void AddColumn()
+        {
+            try
+            {
+                var stmt =
+                    "ALTER TABLE mSyntNodes ADD COLUMN pс_id integer;";
+                m_sqlCmd.CommandText = stmt;
+                m_sqlCmd.ExecuteNonQuery();
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("DropColumn Error: " + ex.Message);
+            }
+
+        }
 
 		///
 		/// select all rows in the mPhrases table
@@ -957,7 +974,7 @@ namespace DirectDBconnector
 						m_sqlCmd.CommandText = "SELECT gr_id, с_id, sg_id, intval FROM mGrammems";
 						break;
 					case "mSyntNodes":
-						m_sqlCmd.CommandText = "SELECT sn_id, с_id, ln_id, level FROM mSyntNodes";
+                        m_sqlCmd.CommandText = "SELECT sn_id, с_id, ln_id, level, pс_id FROM mSyntNodes";
 						break;
 				}
 
@@ -998,7 +1015,7 @@ namespace DirectDBconnector
 							line = r["gr_id"].ToString() + ", " + r["с_id"].ToString() + ", " + r["sg_id"].ToString() + ", " + r["intval"].ToString();
 							break;
 						case "mSyntNodes":
-							line = r["sn_id"].ToString() + ", " + r["с_id"].ToString() + ", " + r["ln_id"].ToString() + ", " + r["level"].ToString();
+                            line = r["sn_id"].ToString() + ", " + r["с_id"].ToString() + ", " + r["ln_id"].ToString() + ", " + r["level"].ToString() + ", " + r["pс_id"].ToString();
 							break;
 					}
 					//Console.WriteLine(line);

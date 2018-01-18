@@ -37,7 +37,13 @@ namespace Schemas
 			}
 		}
 
-		public WordMap(int _id_entry, int _id_partofspeech)
+        /// <summary>
+        /// Идентификатор слова в БД.
+        /// </summary>
+        private long c_id = -1;
+        public long WordID { get { return c_id; } set { c_id = value; } }
+        
+        public WordMap(int _id_entry, int _id_partofspeech)
 		{
 			id_entry = _id_entry;
 			id_partofspeech = _id_partofspeech;

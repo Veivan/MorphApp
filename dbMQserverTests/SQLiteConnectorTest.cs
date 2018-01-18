@@ -39,7 +39,7 @@ namespace DirectDBconnectorTests
 			// arrange
 			SQLiteConnector dbConnector = SQLiteConnector.Instance;
 			// act
-            dbConnector.selectAll("mParagraphs");
+            dbConnector.selectAll("mSyntNodes");
 			// assert
 			Assert.AreEqual(0, 0);
 		}
@@ -129,5 +129,16 @@ namespace DirectDBconnectorTests
             Assert.AreNotEqual(-1, 0);
         }
 
-	}
+        [TestMethod]
+        public void TestAddColumnDB()
+        {
+            // arrange
+            SQLiteConnector dbConnector = SQLiteConnector.Instance;
+            // act
+            dbConnector.AddColumn();
+            dbConnector.selectAll("mSyntNodes");
+            // assert
+            Assert.AreNotEqual(-1, 0);
+        }
+    }
 }
