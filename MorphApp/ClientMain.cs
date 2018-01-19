@@ -144,7 +144,14 @@ namespace MorphApp
             EditNode(treeView1.SelectedNode);
         }
 
-        private void EditNode(TreeNode aNode)
+		private void btParaDel_Click(object sender, EventArgs e)
+		{
+			TreeNode aNode = treeView1.SelectedNode;
+			if (aNode == null) return;
+			DelNode(aNode);
+		}
+
+		private void EditNode(TreeNode aNode)
         {
             if (aNode == null) return;
 
@@ -324,13 +331,6 @@ namespace MorphApp
 			// Морф.анализ не нужен - он выполняется в синтане
 		}
 		#endregion
-
-		private void btParaDel_Click(object sender, EventArgs e)
-		{
-			TreeNode aNode = treeView1.SelectedNode;
-			if (aNode == null) return;
-			DelNode(aNode);
-		}
 
     }
 }

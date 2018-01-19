@@ -23,6 +23,11 @@ namespace Schemas
         private long _doc_id = -1;
         private long _ct_id = -1;
         private DateTime _created_at;
+		
+		/// <summary>
+		/// Список предназначен для хранения предложений абзаца.
+		/// </summary>
+		private List<SentProps> innerPara = new List<SentProps>();
 
         /// <summary>
         /// Идентификатор абзаца в БД.
@@ -44,11 +49,6 @@ namespace Schemas
             SentProps sprop = innerPara.Where(x => x.order == order).FirstOrDefault();
             return sprop == null ? "" : sprop.sentence;
         }
-
-        /// <summary>
-        /// Список предназначен для хранения предложений абзаца.
-        /// </summary>
-        private List<SentProps> innerPara = new List<SentProps>();
 
         /// <summary>
         /// В списке хранятся ID предложений абзаца, которые нужно удалить при сохранении в БД.
@@ -91,7 +91,25 @@ namespace Schemas
                 _created_at = (DateTime)created_at;
         }
 
-        private static bool Belongs2Header(SentProps p)
+		/// <summary>
+		/// Конструктор - копировщик
+		/// </summary>
+		public ParagraphMap(ParagraphMap pMap)
+		{
+			this._pg_id = pMap._pg_id;
+			this._doc_id = pMap._doc_id;
+			this._ct_id = pMap._ct_id;
+			this._created_at = pMap._created_at;
+			var innerPara = pMap.GetParagraphSents();
+			foreach (var sentprop in pMap.innerPara)
+			{
+				this.AddSentStruct(sentprop.order, sentprop.sentstruct);
+				this.innerPara[sentprop.order].hash = sentprop.hash;
+				this.innerPara[sentprop.order].IsActual = sentprop.IsActual;
+			}
+		}
+		
+		private static bool Belongs2Header(SentProps p)
         {
             return p.order < 0;
         }

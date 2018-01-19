@@ -59,6 +59,9 @@
   <PropertyGroup>
     <ApplicationIcon>accessoriesdictionaryicon.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>MorphApp.Program</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="FlatBuffers">
       <HintPath>..\flatbuffers\FlatBuffers.dll</HintPath>
