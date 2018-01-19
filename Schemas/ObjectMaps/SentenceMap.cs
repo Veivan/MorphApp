@@ -11,7 +11,7 @@ namespace Schemas
     {
         public int ID;          // Порядок добавления в дерево, для сортировки в виде плоского списка
         public int Level;       // Уровень вложенности, для отображения
-        public int index;       // порядковый номер слова (ребёнка в синт.связи в предложении
+        public int index;       // порядковый номер слова (ребёнка в синт.связи) в предложении
         public int linktype;    // тип взаимосвязи с родителем
         public int parentind;   // порядковый номер слова (родителя в синт.связи) в предложении
     }
@@ -103,29 +103,25 @@ namespace Schemas
         /// </summary>
         /// <param name="order">Порядок следования слова в предложении</param>
         /// <param name="word">Структура слова</param>
-        /// <param name="Level">Уровень вложенности синтаксического узла</param>
-        /// <param name="linktype">тип взаимосвязи с родителем</param>
         /// <returns></returns>
-        public void AddWord(int order, WordMap word, int Level = -1, int linktype = -1)
+		public void AddWord(int order, WordMap word)
         {
-            if (words.ContainsKey(order) || word == null)
-                return;
-            words.Add(order, word);
-            if (Level > -1 && linktype > -1)
-            {
-                this.AddNode(order, Level, linktype);
-            }
+            if (!words.ContainsKey(order) && word != null)
+	            words.Add(order, word);           
         }
 
         /// <summary>
         /// Добавление синт.узла во внутреннее хранилище.
         /// </summary>
-        /// <param name="order">Порядок следования слова в предложении</param>
+		/// <param name="order">порядковый номер слова (ребёнка в синт.связи) в предложении</param>
         /// <param name="Level">Уровень вложенности синтаксического узла</param>
         /// <param name="linktype">тип взаимосвязи с родителем</param>
-        /// <returns></returns>
-        public void AddNode(int order, int Level, int linktype)
+		/// <param name="parentind">порядковый номер слова (родителя в синт.связи) в предложении</param>
+		/// <returns></returns>
+		public void AddNode(int order, int Level, int linktype, int parentind)
         {
+			if (Level == -1)
+				return;
             int maxID = 0;
             if (treeList.Count > 0)
                 maxID = (int)(treeList.OrderByDescending(x => x.ID).First().ID + 1);
@@ -133,8 +129,9 @@ namespace Schemas
             node.ID = maxID;
             node.Level = Level;
             node.index = order;
-            node.linktype = linktype;
-            treeList.Add(node);
+			node.linktype = linktype;
+			node.parentind = parentind;
+			treeList.Add(node);
         }
 
         /// <summary>
@@ -262,7 +259,7 @@ namespace Schemas
             for (int i = 0; i < treelist.Count; i++)
             {
                 nodes[i] = Node.CreateNode(builder, treelist[i].ID, treelist[i].Level,
-                    treelist[i].index, treelist[i].linktype);
+					treelist[i].index, treelist[i].linktype, treelist[i].parentind);
             }
             var nodesCol = Sentence.CreateNodesVector(builder, nodes);
 

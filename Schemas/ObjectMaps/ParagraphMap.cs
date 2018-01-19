@@ -147,7 +147,9 @@ namespace Schemas
         /// <summary>
         /// Получение списка структур предложений абзаца.
         /// </summary>
-        public List<SentProps> GetParagraphSents(SentTypes sttype = SentTypes.enstAll)
+		/// <param name="sttype">диапазон выбираемых предложений</param>
+		/// <returns>List of SentProps</returns>
+		public List<SentProps> GetParagraphSents(SentTypes sttype = SentTypes.enstAll)
         {
             List<SentProps> versionPara = new List<SentProps>();
             switch (sttype)
@@ -155,10 +157,17 @@ namespace Schemas
                 case SentTypes.enstAll:
                     versionPara.AddRange(innerPara);
                     break;
-                case SentTypes.enstNotActual:
-                    versionPara = innerPara.Where(x => x.IsActual == false).ToList();
-                    break;
-                case SentTypes.enstHeader:
+				case SentTypes.enstNotActualHead:
+					versionPara.AddRange(innerPara.Where(x => x.order < 0 && !x.IsActual)
+						.OrderBy(x => x.order)
+						.ToList());
+					break;
+				case SentTypes.enstNotActualBody:
+					versionPara.AddRange(innerPara.Where(x => x.order > -1 && !x.IsActual)
+						.OrderBy(x => x.order)
+						.ToList());
+					break;
+				case SentTypes.enstHeader:
                     versionPara.AddRange(innerPara.Where(x => x.order < 0)
                         .OrderBy(x => x.order)
                         .ToList());

@@ -66,13 +66,15 @@ namespace Schemas
 		{
 			var ihash = input.GetHashCode();
 			int currenthash = pMap.GetHashCode(IsHeader);
-			if (ihash == currenthash)
+			var range = IsHeader ? SentTypes.enstNotActualHead : SentTypes.enstNotActualBody;
+			var sentlist = pMap.GetParagraphSents(range);
+			if (ihash == currenthash && sentlist.Count == 0)
 				return;
 
 			var sents = this.MorphGetSeparatedSentsList(input);
 			pMap.RefreshParagraph(new ArrayList(sents), IsHeader);
 
-			var sentlist = pMap.GetParagraphSents(SentTypes.enstNotActual);
+			sentlist = pMap.GetParagraphSents(range);
 			if (sentlist.Count == 0)
 				return;
 			// Выполнение синтана для неактуальных предложений.

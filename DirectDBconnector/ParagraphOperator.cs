@@ -187,7 +187,7 @@ namespace DirectDBconnector
 				for (int i = 0; i < nodelist.Count; i++)
 				{
 					var node = nodelist[i];
-					sent.AddNode(i, node.Level, node.linktype);
+					sent.AddNode(i, node.Level, node.linktype, node.parentind);
 				}
 				sentlist.Add(sent);
 			}

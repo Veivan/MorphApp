@@ -790,8 +790,10 @@ namespace DirectDBconnector
 			var reslist = new List<tNode>();
 			try
 			{
-				m_sqlCmd.CommandText = String.Format("SELECT A.ln_id, A.level, A.pc_id, B.sorder FROM mSyntNodes A " +
-					"JOIN mPhraseContent B ON B.с_id = A.с_id WHERE B.ph_id = {0} ORDER BY A.sn_id", ph_id);
+				m_sqlCmd.CommandText = String.Format("SELECT A.ln_id, A.level, B.sorder, C.sorder FROM mSyntNodes A " +
+					"JOIN mPhraseContent B ON B.с_id = A.с_id " +
+					"LEFT JOIN mPhraseContent C ON C.с_id = A.pс_id " +
+					"WHERE B.ph_id = {0} ORDER BY A.sn_id", ph_id);
 				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
 				string line = String.Empty;
 				int i = 0;
@@ -802,6 +804,7 @@ namespace DirectDBconnector
 					node.Level = r.GetInt32(1);
 					node.index = r.GetInt32(2);
 					node.linktype = r.GetInt32(0);
+					node.parentind = r[3] as int? ?? -1; ;
 					reslist.Add(node);
 					i++;
 				}

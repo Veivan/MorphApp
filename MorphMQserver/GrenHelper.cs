@@ -451,9 +451,19 @@ namespace MorphMQserver
 			return result;
 		}
 
+		/// <summary>
+		/// Рекурсивное сохранени структуры слова и синт.инфы в структуру предложения.
+		/// </summary>
+		/// <param name="hNode">Указатель на сохраняемый узел/param>
+		/// <param name="sent">структура предложения</param>
+		/// <param name="Level">Уровень вложенности</param>
+		/// <param name="hParentNode">Указатель на родительский узел/param>
+		/// <param name="LeafIndex">порядковый номер сохраняемого узла</param>
+		/// <returns></returns>
 		private void SaveNodeReq(IntPtr hNode, SentenceMap sent, int Level, IntPtr hParentNode, int LeafIndex)
 		{
 			WordMap wmap = null;
+			int ParentPosition = -1;
 			int Position = GrammarEngine.sol_GetNodePosition(hNode);
 			if (Position > -1)
 			{
@@ -481,8 +491,10 @@ namespace MorphMQserver
 					if (hParentNode != IntPtr.Zero)
 					{
 						linktype = GrammarEngine.sol_GetLeafLinkType(hParentNode, LeafIndex);
+						ParentPosition = GrammarEngine.sol_GetNodePosition(hParentNode);
 					}
-					sent.AddWord(Position, wmap, Level, linktype);
+					sent.AddWord(Position, wmap);
+					sent.AddNode(Position, Level, linktype, ParentPosition);
 				}
 				Int32 n_leaf = GrammarEngine.sol_CountLeafs(hNode);				
 				for (int ileaf = 0; ileaf < n_leaf; ileaf++)

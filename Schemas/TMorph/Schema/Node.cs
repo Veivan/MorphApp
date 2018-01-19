@@ -21,16 +21,19 @@ public struct Node : IFlatbufferObject
   public int Level { get { int o = __p.__offset(6); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
   public int Index { get { int o = __p.__offset(8); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
   public int Linktype { get { int o = __p.__offset(10); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
-  public long NodeID { get { int o = __p.__offset(12); return o != 0 ? __p.bb.GetLong(o + __p.bb_pos) : (long)0; } }
+  public int Parentind { get { int o = __p.__offset(12); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
+  public long NodeID { get { int o = __p.__offset(14); return o != 0 ? __p.bb.GetLong(o + __p.bb_pos) : (long)0; } }
 
   public static Offset<Node> CreateNode(FlatBufferBuilder builder,
       int ID = 0,
       int Level = 0,
       int index = 0,
       int linktype = 0,
+      int parentind = 0,
       long NodeID = 0) {
-    builder.StartObject(5);
+    builder.StartObject(6);
     Node.AddNodeID(builder, NodeID);
+    Node.AddParentind(builder, parentind);
     Node.AddLinktype(builder, linktype);
     Node.AddIndex(builder, index);
     Node.AddLevel(builder, Level);
@@ -38,12 +41,13 @@ public struct Node : IFlatbufferObject
     return Node.EndNode(builder);
   }
 
-  public static void StartNode(FlatBufferBuilder builder) { builder.StartObject(5); }
+  public static void StartNode(FlatBufferBuilder builder) { builder.StartObject(6); }
   public static void AddID(FlatBufferBuilder builder, int ID) { builder.AddInt(0, ID, 0); }
   public static void AddLevel(FlatBufferBuilder builder, int Level) { builder.AddInt(1, Level, 0); }
   public static void AddIndex(FlatBufferBuilder builder, int index) { builder.AddInt(2, index, 0); }
   public static void AddLinktype(FlatBufferBuilder builder, int linktype) { builder.AddInt(3, linktype, 0); }
-  public static void AddNodeID(FlatBufferBuilder builder, long NodeID) { builder.AddLong(4, NodeID, 0); }
+  public static void AddParentind(FlatBufferBuilder builder, int parentind) { builder.AddInt(4, parentind, 0); }
+  public static void AddNodeID(FlatBufferBuilder builder, long NodeID) { builder.AddLong(5, NodeID, 0); }
   public static Offset<Node> EndNode(FlatBufferBuilder builder) {
     int o = builder.EndObject();
     return new Offset<Node>(o);

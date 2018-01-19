@@ -222,11 +222,12 @@ namespace Schemas
 
 	/// <summary>
 	/// enstAll - выбор всех предложений абзаца.
-	/// enstNotActual - выбор неактуальных предложений абзаца.
-    /// enstHeader - выбор заголовка абзаца.
+	/// enstNotActualHead - выбор неактуальных предложений заголовка абзаца.
+	/// enstNotActualBody - выбор неактуальных предложений содержимого абзаца.
+	/// enstHeader - выбор заголовка абзаца.
     /// enstBody - выбор предложений содержимого абзаца.
 	/// </summary>
-    public enum SentTypes { enstAll, enstNotActual, enstHeader, enstBody };
+	public enum SentTypes { enstAll, enstNotActualHead, enstNotActualBody, enstHeader, enstBody };
 
 	/// <summary>
 	/// Тип узла в клиентском дереве отображения объектов хранилища.
