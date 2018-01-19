@@ -150,7 +150,10 @@ namespace DirectDBconnector
                     {
                         var node = nodes.Where(x => x.index == word.order).First();
                         var parentWord = sent.GetWordByOrder(node.parentind);
-                        dbConnector.InsertSyntNodesDB(word.WordID, node.linktype, node.Level, parentWord.WordID);
+						long WordID = -1;
+						if (parentWord != null)
+							WordID = parentWord.WordID;
+						dbConnector.InsertSyntNodesDB(word.WordID, node.linktype, node.Level, WordID);
                     }
                 }
             }

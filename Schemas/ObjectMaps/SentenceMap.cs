@@ -210,8 +210,9 @@ namespace Schemas
             node.ID = innodeval.ID;
             node.Level = innodeval.Level;
             node.index = innodeval.Index;
-            node.linktype = innodeval.Linktype;
-            return node;
+			node.linktype = innodeval.Linktype;
+			node.parentind = innodeval.Parentind;
+			return node;
         }
 
         /// <summary>

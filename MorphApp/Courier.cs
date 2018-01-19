@@ -107,13 +107,15 @@ namespace MorphApp
 		/// </summary>
 		public List<SentenceMap> GetSentenceStructList()
 		{
-			if (replay == null)
-				return null;
-			replay.Position = 0;
-			var bufrep = replay.Read();
-			var buf = new ByteBuffer(bufrep);
-			var message = Message.GetRootAsMessage(buf);
-			var sentlist = SentenceMap.BuildFromMessage(message);
+			List<SentenceMap> sentlist = new List<SentenceMap>();
+			if (replay != null)
+			{
+				replay.Position = 0;
+				var bufrep = replay.Read();
+				var buf = new ByteBuffer(bufrep);
+				var message = Message.GetRootAsMessage(buf);
+				sentlist = SentenceMap.BuildFromMessage(message);
+			}
 			return sentlist;
 		}
 
@@ -159,7 +161,7 @@ namespace MorphApp
 				}
 
 				// Process messages from both sockets
-				if (requesterMorph.PollIn(poll, out msg, out error, TimeSpan.FromMilliseconds(1000)))
+				if (requesterMorph.PollIn(poll, out msg, out error, TimeSpan.FromMilliseconds(3000)))
 				//if (requesterMorph.PollIn(poll, out msg, out error))
 				{
 					// Process task
@@ -173,7 +175,7 @@ namespace MorphApp
 						throw new ZException(error);
 				}
 
-				if (requesterDB.PollIn(poll, out msg, out error, TimeSpan.FromMilliseconds(1000)))
+				if (requesterDB.PollIn(poll, out msg, out error, TimeSpan.FromMilliseconds(3000)))
 				{
 					// Process task
 					replay = msg[0];
