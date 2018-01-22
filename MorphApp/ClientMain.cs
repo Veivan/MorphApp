@@ -118,24 +118,26 @@ namespace MorphApp
             TreeNode aNode = treeView1.SelectedNode;
             if (aNode == null) return;
 
-            long docID = -1;
-            switch ((clNodeType)aNode.Tag)
+			TreeNode docNode = null;
+			switch ((clNodeType)aNode.Tag)
             {
                 case clNodeType.clnDocument:
-                    {
-                        docID = Convert.ToInt64(aNode.Name);
-                        break;
-                    }
+ 						docNode = aNode;
+						break;
                 case clNodeType.clnParagraph:
-                    {
-                        var docNode = aNode.Parent;
-                        docID = Convert.ToInt64(docNode.Name);
+                        docNode = aNode.Parent;
                         break;
-                    }
+ 				default :
+					docNode = null;
+					break;
             }
-            if (docID == -1) return;
-            var fParaEdit = new FormParaEdit();
-            fParaEdit.paraMap = new ParagraphMap(-1, docID);
+			if (docNode == null) return;
+
+			long docID = Convert.ToInt64(docNode.Name);
+			long contID = Convert.ToInt64(docNode.Parent.Name);
+			long parID = -1;
+			var fParaEdit = new FormParaEdit(store);
+			fParaEdit.SetContext(contID, docID, parID, docNode, treeOper.toAdd);
             fParaEdit.Show();
         }
 
@@ -163,9 +165,9 @@ namespace MorphApp
                         var docID = Convert.ToInt64(docNode.Name);
                         var contID = Convert.ToInt64(docNode.Parent.Name);
                         var parID = Convert.ToInt64(aNode.Name);
-                        var pMap = store.GetParagraph(contID, docID, parID);
-                        var fParaEdit = new FormParaEdit();
-                        fParaEdit.paraMap = pMap;
+                        //var pMap = store.GetParagraph(contID, docID, parID);
+						var fParaEdit = new FormParaEdit(store);
+						fParaEdit.SetContext(contID, docID, parID, aNode, treeOper.toEdit);
                         fParaEdit.Show();
                         // TODO надо придумать другой механизм
                         //aNode.Text = pMap.GetHeader();
@@ -190,7 +192,7 @@ namespace MorphApp
 						var parID = Convert.ToInt64(aNode.Name);
 						try
 						{
-							store.DelParagraph(contID, parID, parID);
+							store.DelParagraph(contID, docID, parID);
 							aNode.Remove();
 						}
 						catch (Exception ex)

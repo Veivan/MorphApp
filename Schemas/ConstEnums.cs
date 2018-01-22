@@ -234,7 +234,12 @@ namespace Schemas
 	/// </summary>
 	public enum clNodeType { clnContainer, clnDocument, clnParagraph };
 
-    /// <summary>
+	/// <summary>
+	/// Тип операции в клиентском дереве.
+	/// </summary>
+	public enum treeOper { toAdd, toEdit, toDelete };
+	
+	/// <summary>
     /// Структура используется в обмене сообщениями с серверами.
     /// </summary>
     public struct SimpleParam

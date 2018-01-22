@@ -14,36 +14,46 @@ namespace MorphApp
 	public partial class FormParaEdit : Form
 	{
 		// Работа с БД напрямую
-		private CLInnerStoreDB store = new CLInnerStoreDB();
+		private CLInnerStoreDB store;
 
-		public ParagraphMap paraMap;
-		private long docID;
+		private treeOper typeOper;
+		private ParagraphMap paraMap;
 		private long contID;
-		private long parID = -1;
+		private long docID;
+		private long parID;
 		private TreeNode theNode;
 
-		public FormParaEdit()
+		public FormParaEdit(CLInnerStoreDB store)
 		{
+			this.store = store; 
 			InitializeComponent();
 		}
 
-		public void SetContext(long contID, long docID, TreeNode theNode)
+		public void SetContext(long contID, long docID, long parID, TreeNode theNode, treeOper tOper)
 		{
+			this.typeOper = tOper;
+			this.contID = contID;
+			this.docID = docID;
+			this.parID = parID;
 			this.theNode = theNode;
-			if (theNode != null)
-			{
-				this.parID = Convert.ToInt64(theNode.Name);
-				var pMap = store.GetParagraph(contID, docID, parID);
-				this.paraMap = new ParagraphMap(pMap);
+			ParagraphMap pMap = null;
+
+			switch (tOper)
+			{ 
+				case(treeOper.toEdit) :
+					pMap = store.GetParagraph(contID, docID, parID);
+					break;
+				case(treeOper.toAdd) : 
+					pMap = new ParagraphMap(-1, docID);
+					break;
 			}
+			this.paraMap = new ParagraphMap(pMap);
 		}
 
 		private void FormParaEdit_Load(object sender, EventArgs e)
 		{
-			memoHeader.Text = String.Join("", paraMap.GetParagraphSents(SentTypes.enstHeader)
-								.Select(x => x.sentence).ToList());
-			memoBody.Text = String.Join("", paraMap.GetParagraphSents(SentTypes.enstBody)
-								.Select(x => x.sentence).ToList());
+			memoHeader.Text = paraMap.GetHeader();
+			memoBody.Text = paraMap.GetBody();
 		}
 
 		private void btParaSave_Click(object sender, EventArgs e)
@@ -53,9 +63,13 @@ namespace MorphApp
 				store.UpdateParagraph(this.paraMap, memoHeader.Text, true);
 				store.UpdateParagraph(this.paraMap, memoBody.Text, false);
 				var paramlist = store.SaveParagraphBD(this.paraMap);
-				var pMap = store.GetParagraph(contID, docID, parID);
-				if (pMap != null)
-					pMap = this.paraMap;
+
+				if (this.typeOper == treeOper.toEdit)
+				{
+					var pMap = store.GetParagraph(contID, docID, parID);
+					if (pMap != null)
+						pMap = this.paraMap;
+				}
 			}
 			catch (Exception ex)
 			{
@@ -65,11 +79,22 @@ namespace MorphApp
 
 		private void btClose_Click(object sender, EventArgs e)
 		{
-			/*if (theNode != null) // TODO похоже не работает
+			switch (this.typeOper)
 			{
-				theNode.Text = "qq";
-				theNode.TreeView.Refresh();
-			}*/
+				case (treeOper.toEdit):
+					if (theNode != null) 
+					{
+						theNode.Text = memoHeader.Text; // TODO сделать механизм проверки того, что нужно обновлять
+					}
+					break;
+				case (treeOper.toAdd):
+					if (theNode != null) 
+					{
+						theNode.TreeView.Refresh();
+					}
+					break;
+			}
+
 			this.Close();
 		}
 	}

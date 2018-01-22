@@ -104,8 +104,10 @@ namespace Schemas
 			foreach (var sentprop in pMap.innerPara)
 			{
 				this.AddSentStruct(sentprop.order, sentprop.sentstruct);
-				this.innerPara[sentprop.order].hash = sentprop.hash;
-				this.innerPara[sentprop.order].IsActual = sentprop.IsActual;
+				var newSprop = this.innerPara.Last();
+				newSprop.sentence = sentprop.sentence;
+				newSprop.hash = sentprop.hash;
+				newSprop.IsActual = sentprop.IsActual;
 			}
 		}
 		
