@@ -36,6 +36,7 @@
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			this.treeView1 = new System.Windows.Forms.TreeView();
 			this.panel3 = new System.Windows.Forms.Panel();
+			this.btParaDel = new System.Windows.Forms.Button();
 			this.btEdit = new System.Windows.Forms.Button();
 			this.btAddPara = new System.Windows.Forms.Button();
 			this.btRefresh = new System.Windows.Forms.Button();
@@ -51,7 +52,8 @@
 			this.btDBGetWord = new System.Windows.Forms.Button();
 			this.btMakeSynAn = new System.Windows.Forms.Button();
 			this.btGetMorph = new System.Windows.Forms.Button();
-			this.btParaDel = new System.Windows.Forms.Button();
+			this.btAddDoc = new System.Windows.Forms.Button();
+			this.btAddCont = new System.Windows.Forms.Button();
 			this.statusStrip1.SuspendLayout();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
@@ -117,7 +119,7 @@
 			// splitContainer1.Panel1
 			// 
 			this.splitContainer1.Panel1.Controls.Add(this.treeView1);
-			this.splitContainer1.Size = new System.Drawing.Size(596, 566);
+			this.splitContainer1.Size = new System.Drawing.Size(596, 508);
 			this.splitContainer1.SplitterDistance = 318;
 			this.splitContainer1.TabIndex = 23;
 			// 
@@ -126,28 +128,40 @@
 			this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.treeView1.Location = new System.Drawing.Point(0, 0);
 			this.treeView1.Name = "treeView1";
-			this.treeView1.Size = new System.Drawing.Size(318, 566);
+			this.treeView1.Size = new System.Drawing.Size(318, 508);
 			this.treeView1.TabIndex = 22;
 			this.treeView1.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeView1_BeforeExpand);
 			this.treeView1.DoubleClick += new System.EventHandler(this.treeView1_DoubleClick);
 			// 
 			// panel3
 			// 
+			this.panel3.Controls.Add(this.btAddCont);
+			this.panel3.Controls.Add(this.btAddDoc);
 			this.panel3.Controls.Add(this.btParaDel);
 			this.panel3.Controls.Add(this.btEdit);
 			this.panel3.Controls.Add(this.btAddPara);
 			this.panel3.Controls.Add(this.btRefresh);
 			this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.panel3.Location = new System.Drawing.Point(3, 569);
+			this.panel3.Location = new System.Drawing.Point(3, 511);
 			this.panel3.Name = "panel3";
-			this.panel3.Size = new System.Drawing.Size(596, 64);
+			this.panel3.Size = new System.Drawing.Size(596, 122);
 			this.panel3.TabIndex = 22;
+			// 
+			// btParaDel
+			// 
+			this.btParaDel.Location = new System.Drawing.Point(5, 78);
+			this.btParaDel.Name = "btParaDel";
+			this.btParaDel.Size = new System.Drawing.Size(87, 26);
+			this.btParaDel.TabIndex = 3;
+			this.btParaDel.Text = "Удалить абзац";
+			this.btParaDel.UseVisualStyleBackColor = true;
+			this.btParaDel.Click += new System.EventHandler(this.btParaDel_Click);
 			// 
 			// btEdit
 			// 
 			this.btEdit.Location = new System.Drawing.Point(98, 14);
 			this.btEdit.Name = "btEdit";
-			this.btEdit.Size = new System.Drawing.Size(99, 26);
+			this.btEdit.Size = new System.Drawing.Size(107, 26);
 			this.btEdit.TabIndex = 2;
 			this.btEdit.Text = "Редактировать";
 			this.btEdit.UseVisualStyleBackColor = true;
@@ -155,7 +169,7 @@
 			// 
 			// btAddPara
 			// 
-			this.btAddPara.Location = new System.Drawing.Point(203, 14);
+			this.btAddPara.Location = new System.Drawing.Point(5, 46);
 			this.btAddPara.Name = "btAddPara";
 			this.btAddPara.Size = new System.Drawing.Size(87, 26);
 			this.btAddPara.TabIndex = 1;
@@ -303,15 +317,24 @@
 			this.btGetMorph.UseVisualStyleBackColor = true;
 			this.btGetMorph.Click += new System.EventHandler(this.btGetMorph_Click);
 			// 
-			// btParaDel
+			// btAddDoc
 			// 
-			this.btParaDel.Location = new System.Drawing.Point(296, 14);
-			this.btParaDel.Name = "btParaDel";
-			this.btParaDel.Size = new System.Drawing.Size(79, 26);
-			this.btParaDel.TabIndex = 3;
-			this.btParaDel.Text = "Удалить абзац";
-			this.btParaDel.UseVisualStyleBackColor = true;
-			this.btParaDel.Click += new System.EventHandler(this.btParaDel_Click);
+			this.btAddDoc.Location = new System.Drawing.Point(98, 49);
+			this.btAddDoc.Name = "btAddDoc";
+			this.btAddDoc.Size = new System.Drawing.Size(107, 23);
+			this.btAddDoc.TabIndex = 4;
+			this.btAddDoc.Text = "Новый документ";
+			this.btAddDoc.UseVisualStyleBackColor = true;
+			// 
+			// btAddCont
+			// 
+			this.btAddCont.Location = new System.Drawing.Point(211, 49);
+			this.btAddCont.Name = "btAddCont";
+			this.btAddCont.Size = new System.Drawing.Size(107, 23);
+			this.btAddCont.TabIndex = 5;
+			this.btAddCont.Text = "Новый контейнер";
+			this.btAddCont.UseVisualStyleBackColor = true;
+			this.btAddCont.Click += new System.EventHandler(this.btAddCont_Click);
 			// 
 			// ClientMain
 			// 
@@ -366,6 +389,8 @@
         private System.Windows.Forms.Button btAddPara;
         private System.Windows.Forms.Button btEdit;
 		private System.Windows.Forms.Button btParaDel;
+		private System.Windows.Forms.Button btAddCont;
+		private System.Windows.Forms.Button btAddDoc;
     }
 }
 

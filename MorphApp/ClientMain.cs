@@ -47,6 +47,7 @@ namespace MorphApp
 
             rootNode = new TreeNode("Хранилище");
             rootNode.Tag = clNodeType.clnContainer;
+			rootNode.Name = "1";
             foreach (var cont in store.containers)
             {
                 var aNode = new TreeNode(cont.Name, 0, 0);
@@ -152,6 +153,21 @@ namespace MorphApp
 			if (aNode == null) return;
 			DelNode(aNode);
 		}
+
+		private void btAddCont_Click(object sender, EventArgs e)
+		{
+			TreeNode aNode = treeView1.SelectedNode;
+			if (aNode == null) return;
+			if ( (clNodeType)aNode.Tag != clNodeType.clnContainer) 
+				return;
+			string result = Microsoft.VisualBasic.Interaction.InputBox("Введите имя контейнера:");
+			if (String.IsNullOrEmpty(result))
+				return;
+			var ParentContID = Convert.ToInt64(aNode.Name);
+			var id = store.SaveContainerBD(result, ParentContID);
+
+		}
+
 
 		private void EditNode(TreeNode aNode)
         {

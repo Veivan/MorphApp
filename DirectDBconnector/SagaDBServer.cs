@@ -11,7 +11,6 @@ namespace DirectDBconnector
 
         #region Унаследованные методы
 
-
 		/// <summary>
 		/// Получение плоского списка контейнеров
 		/// в виде DataTable
@@ -89,8 +88,13 @@ namespace DirectDBconnector
 			paraOper.Execute();
 		}
 
-		#endregion
+		public override long SaveContainerBD(string name, long parentID = -1)
+		{
+			var id = dbConnector.InsertContainerDB(name, parentID);
+			return id;
+		}
 
+		#endregion
 	
 		#region Собственные методы - для приложения DirectDBA
 		/// <summary>
@@ -116,6 +120,5 @@ namespace DirectDBconnector
         }
                
         #endregion
-
-    }
+	}
 }

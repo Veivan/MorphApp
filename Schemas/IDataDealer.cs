@@ -14,7 +14,7 @@ namespace Schemas
 		/// </summary>
 		/// <param name="parentID">ID родителя</param>
 		/// <param name="resulttype">тип возвращаемого результата</param>
-		/// <returns>RetValue</returns>
+		/// <returns>ComplexValue</returns>
 		public abstract ComplexValue GetChildrenContainers(long parentID, tpList resulttype);
 
 		/// <summary>
@@ -28,7 +28,7 @@ namespace Schemas
 		/// Чтения документов из множества контейнеров.
 		/// </summary>
 		/// <param name="list_ids">список ID контейнеров</param>
-		/// <returns>RetValue</returns>
+		/// <returns>ComplexValue</returns>
 		public abstract ComplexValue GetDocsInContainerList(List<string> list_ids);
 
 		/// <summary>
@@ -46,10 +46,9 @@ namespace Schemas
         public abstract ComplexValue ReadPhrasesInParagraphsList(tpList resulttype, List<string> list_ids = null);
         
         /// <summary>
-		/// Сохранение абзаца в DB. Если pg_id == -1, то Insert, иначе - Update.
+		/// Сохранение абзаца в DB. 
 		/// </summary>
-		/// <param name="pg_id">ID абзаца</param>
-		/// <param name="sentlist">упорядоченный список структур предложений</param>
+		/// <param name="pMap">Структура абзаца</param>
 		/// <returns>ID абзаца</returns>
 		public abstract long SaveParagraph(ParagraphMap pMap);
 
@@ -66,6 +65,14 @@ namespace Schemas
 		/// <param name="pg_id">ID абзаца</param>
 		/// <returns></returns>
 		public abstract void DelParagraphDB(long pg_id);
+
+		/// <summary>
+		/// Сохранение контейнера в БД.
+		/// </summary>
+		/// <param name="name">имя контейнера</param>
+		/// <param name="parentID">ID родительского контейнера</param>
+		/// <returns>List of SimpleParam</returns>
+		public abstract long SaveContainerBD(string name, long parentID = -1);
 
 		/**
 		 * Сохранение лексемы в DB. Функция проверяет, нет ли уже слова в словаре.

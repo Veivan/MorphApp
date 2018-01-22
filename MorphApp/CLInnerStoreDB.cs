@@ -143,7 +143,18 @@ namespace MorphApp
 			}
 		}
 
-        public override List<SimpleParam> SaveParagraphBD(ParagraphMap pMap)
+		public override List<SimpleParam> SaveContainerBD(string name, long parentID = -1)
+		{
+			var ContainerID = dbServer.SaveContainerBD(name, parentID);
+			var paramlist = new List<SimpleParam>();
+			var param = new SimpleParam();
+			param.Name = "ContainerID";
+			param.Value = ContainerID.ToString();
+			paramlist.Add(param);
+			return paramlist;
+		}
+		
+		public override List<SimpleParam> SaveParagraphBD(ParagraphMap pMap)
         {
 			var ParagraphID = dbServer.SaveParagraph(pMap);
  			var paramlist = new List<SimpleParam>();
@@ -232,5 +243,6 @@ namespace MorphApp
 			return outlist;
 		}
 		#endregion
+
 	} 
 }

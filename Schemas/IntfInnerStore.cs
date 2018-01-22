@@ -120,7 +120,15 @@ namespace Schemas
         /// <returns></returns>
         public abstract void FillDocsParagraphs(ComplexValue list);
 
-        /// <summary>
+		/// <summary>
+		/// Сохранение контейнера в БД.
+		/// </summary>
+		/// <param name="name">имя контейнера</param>
+		/// <param name="parentID">ID родительского контейнера</param>
+		/// <returns>List of SimpleParam</returns>
+		public abstract List<SimpleParam> SaveContainerBD(string name, long parentID = -1);
+		
+		/// <summary>
         /// Сохранение абзаца в БД.
         /// </summary>
         /// <param name="pMap">ParagraphMap</param>

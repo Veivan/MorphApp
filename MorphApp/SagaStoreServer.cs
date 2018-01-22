@@ -70,11 +70,16 @@ namespace MorphApp
 			var sentlist = courier.GetSentenceStructList();
 			return sentlist;
 		}
-		#endregion
 
 		public override void DelParagraphDB(long pg_id)
 		{
 			throw new NotImplementedException();
 		}
+
+		public override long SaveContainerBD(string name, long parentID = -1)
+		{
+			throw new NotImplementedException();
+		}
+		#endregion
 	}
 }
