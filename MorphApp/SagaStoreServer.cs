@@ -80,6 +80,21 @@ namespace MorphApp
 		{
 			throw new NotImplementedException();
 		}
-		#endregion
-	}
+
+        public override long SaveDocumentBD(string name, long ct_ID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void DelDocumentDB(long doc_id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void DelContainerDB(long c_id)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+    }
 }

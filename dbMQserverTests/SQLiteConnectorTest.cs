@@ -98,7 +98,7 @@ namespace DirectDBconnectorTests
 			// arrange
 			SQLiteConnector dbConnector = SQLiteConnector.Instance;
 			// act
-			dbConnector.InsertDocumentDB();
+			dbConnector.InsertDocumentDB("docN", 1);
 			dbConnector.selectAll("mDocuments");
 			// assert
 			Assert.AreEqual(0, 0);

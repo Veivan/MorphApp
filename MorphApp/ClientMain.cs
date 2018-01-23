@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-
-using System.Collections;
 using Schemas;
 
 namespace MorphApp
@@ -42,17 +37,17 @@ namespace MorphApp
 
         private void PopulateTreeView()
         {
-            TreeNode rootNode;
+            MorphNode rootNode;
             treeView1.Nodes.Clear();
 
-            rootNode = new TreeNode("Хранилище");
-            rootNode.Tag = clNodeType.clnContainer;
-			rootNode.Name = "1";
+            rootNode = new MorphNode("Хранилище");
+            rootNode.NodeType = clNodeType.clnContainer;
+			rootNode.bdID = 1;
             foreach (var cont in store.containers)
             {
-                var aNode = new TreeNode(cont.Name, 0, 0);
-                aNode.Name = cont.ContainerID.ToString();
-                aNode.Tag = clNodeType.clnContainer;
+                var aNode = new MorphNode(cont.Name);
+                aNode.NodeType = clNodeType.clnContainer;
+                aNode.bdID = cont.ContainerID;
                 PopulateTreeDocuments(cont, aNode);
                 rootNode.Nodes.Add(aNode);
             }
@@ -64,9 +59,9 @@ namespace MorphApp
             var docs = container.GetDocuments();
             foreach (var doc in docs)
             {
-                var aNode = new TreeNode(doc.Name, 0, 0);
-                aNode.Name = doc.DocumentID.ToString();
-                aNode.Tag = clNodeType.clnDocument;
+                var aNode = new MorphNode(doc.Name);
+                aNode.NodeType = clNodeType.clnDocument;
+                aNode.bdID = doc.DocumentID;
                 PopulateTreeParags(doc, aNode);
                 nodeToAddTo.Nodes.Add(aNode);
             }
@@ -77,29 +72,29 @@ namespace MorphApp
             var parags = dMap.GetParagraphs();
             foreach (var paragraph in parags)
             {
-                var aNode = new TreeNode();
-                aNode.Name = paragraph.ParagraphID.ToString();
-                aNode.Tag = clNodeType.clnParagraph;
+                var aNode = new MorphNode("");
+                aNode.NodeType = clNodeType.clnParagraph;
+                aNode.bdID = paragraph.ParagraphID;
                 nodeToAddTo.Nodes.Add(aNode);
             }
         }
 
         private void treeView1_BeforeExpand(object sender, TreeViewCancelEventArgs e)
         {
-            TreeNode aNode = e.Node;
-            switch ((clNodeType)aNode.Tag)
+            var aNode = (MorphNode)e.Node;
+            switch (aNode.NodeType)
             {
                 case clNodeType.clnDocument:
                     {
                         // Обновление заголовков абзацев в дереве
-                        var contID = Convert.ToInt64(aNode.Parent.Name);
-                        var docID = Convert.ToInt64(aNode.Name);
+                        var contID = (aNode.Parent as MorphNode).bdID;
+                        var docID = aNode.bdID;
                         var dMap = store.RefreshParagraphs(contID, docID);
 
                         var parags = dMap.GetParagraphs();
-                        foreach (TreeNode node in aNode.Nodes)
+                        foreach (MorphNode node in aNode.Nodes)
                         {
-                            var paragraph = parags.Where(x => x.ParagraphID == Convert.ToInt64(node.Name)).FirstOrDefault();
+                            var paragraph = parags.Where(x => x.ParagraphID == node.bdID).FirstOrDefault();
                             node.Text = paragraph.GetHeader();
                         }
                         break;
@@ -111,22 +106,22 @@ namespace MorphApp
         private void treeView1_DoubleClick(object sender, EventArgs e)
         {
             var tree = sender as TreeView;
-            EditNode(tree.SelectedNode);
+            EditNode(tree.SelectedNode as MorphNode);
         }
 
         private void btAddPara_Click(object sender, EventArgs e)
         {
-            TreeNode aNode = treeView1.SelectedNode;
+            var  aNode = treeView1.SelectedNode as MorphNode;
             if (aNode == null) return;
 
-			TreeNode docNode = null;
-			switch ((clNodeType)aNode.Tag)
+            MorphNode docNode = null;
+            switch (aNode.NodeType)
             {
                 case clNodeType.clnDocument:
  						docNode = aNode;
 						break;
                 case clNodeType.clnParagraph:
-                        docNode = aNode.Parent;
+                        docNode = aNode.Parent as MorphNode;
                         break;
  				default :
 					docNode = null;
@@ -134,9 +129,9 @@ namespace MorphApp
             }
 			if (docNode == null) return;
 
-			long docID = Convert.ToInt64(docNode.Name);
-			long contID = Convert.ToInt64(docNode.Parent.Name);
-			long parID = -1;
+            var docID = docNode.bdID;
+            var contID = (docNode.Parent as MorphNode).bdID;
+            long parID = -1;
 			var fParaEdit = new FormParaEdit(store);
 			fParaEdit.SetContext(contID, docID, parID, docNode, treeOper.toAdd);
             fParaEdit.Show();
@@ -144,82 +139,61 @@ namespace MorphApp
 
         private void btEdit_Click(object sender, EventArgs e)
         {
-            EditNode(treeView1.SelectedNode);
+            EditNode(treeView1.SelectedNode as MorphNode);
         }
 
 		private void btParaDel_Click(object sender, EventArgs e)
 		{
-			TreeNode aNode = treeView1.SelectedNode;
+			var aNode = treeView1.SelectedNode as MorphNode;
 			if (aNode == null) return;
-			DelNode(aNode);
+            aNode.Delete(store);
 		}
 
 		private void btAddCont_Click(object sender, EventArgs e)
 		{
-			TreeNode aNode = treeView1.SelectedNode;
-			if (aNode == null) return;
-			if ( (clNodeType)aNode.Tag != clNodeType.clnContainer) 
+            var aNode = treeView1.SelectedNode as MorphNode;
+            if (aNode == null) return;
+			if ( aNode.NodeType != clNodeType.clnContainer) 
 				return;
 			string result = Microsoft.VisualBasic.Interaction.InputBox("Введите имя контейнера:");
 			if (String.IsNullOrEmpty(result))
 				return;
-			var ParentContID = Convert.ToInt64(aNode.Name);
+			var ParentContID = aNode.bdID;
 			var id = store.SaveContainerBD(result, ParentContID);
-
 		}
 
+        private void btAddDoc_Click(object sender, EventArgs e)
+        {
+            var aNode = treeView1.SelectedNode as MorphNode;
+            if (aNode == null) return;
+            if (aNode.NodeType != clNodeType.clnContainer)
+                return;
+            string result = Microsoft.VisualBasic.Interaction.InputBox("Введите имя документа:");
+            if (String.IsNullOrEmpty(result))
+                return;
+            var ContID = aNode.bdID;
+            var id = store.SaveDocumentBD(result, ContID);
+        }
 
-		private void EditNode(TreeNode aNode)
+        private void EditNode(MorphNode aNode)
         {
             if (aNode == null) return;
 
-            switch ((clNodeType)aNode.Tag)
+            switch (aNode.NodeType)
             {
                 case clNodeType.clnParagraph:
                     {
-                        var docNode = aNode.Parent;
-                        var docID = Convert.ToInt64(docNode.Name);
-                        var contID = Convert.ToInt64(docNode.Parent.Name);
-                        var parID = Convert.ToInt64(aNode.Name);
-                        //var pMap = store.GetParagraph(contID, docID, parID);
+                        var docNode = aNode.Parent as MorphNode;
+                        var docID = docNode.bdID;
+                        var contID = (docNode.Parent as MorphNode).bdID;
+                        var parID = aNode.bdID;
 						var fParaEdit = new FormParaEdit(store);
 						fParaEdit.SetContext(contID, docID, parID, aNode, treeOper.toEdit);
                         fParaEdit.Show();
-                        // TODO надо придумать другой механизм
-                        //aNode.Text = pMap.GetHeader();
-                        //aNode.Name = pMap.ParagraphID.ToString();
                         break;
                     }
             }
         }
-
-		private void DelNode(TreeNode aNode)
-		{
-			if (aNode == null) return;
-
-			switch ((clNodeType)aNode.Tag)
-			{
-				case clNodeType.clnParagraph:
-					{
-						var docNode = aNode.Parent;
-						var docID = Convert.ToInt64(docNode.Name);
-
-						var contID = Convert.ToInt64(docNode.Parent.Name);
-						var parID = Convert.ToInt64(aNode.Name);
-						try
-						{
-							store.DelParagraph(contID, docID, parID);
-							aNode.Remove();
-						}
-						catch (Exception ex)
-						{
-							MessageBox.Show(ex.Message);
-						}
-
-						break;
-					}
-			}
-		}
 
 		#region Тестовые методы
 
@@ -348,7 +322,7 @@ namespace MorphApp
 		{
 			// Морф.анализ не нужен - он выполняется в синтане
 		}
-		#endregion
+        #endregion
 
     }
 }

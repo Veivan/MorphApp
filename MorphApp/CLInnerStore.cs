@@ -96,5 +96,20 @@ namespace MorphApp
 		{
 			throw new NotImplementedException();
 		}
-	}
+
+        public override List<SimpleParam> SaveDocumentBD(string name, long ct_ID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void DelDocument(long ct_id, long doc_id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void DelContainer(long ct_id)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

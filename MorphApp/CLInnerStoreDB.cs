@@ -153,8 +153,19 @@ namespace MorphApp
 			paramlist.Add(param);
 			return paramlist;
 		}
-		
-		public override List<SimpleParam> SaveParagraphBD(ParagraphMap pMap)
+
+        public override List<SimpleParam> SaveDocumentBD(string name, long ct_ID)
+        {
+            var DocumentID = dbServer.SaveDocumentBD(name, ct_ID);
+            var paramlist = new List<SimpleParam>();
+            var param = new SimpleParam();
+            param.Name = "DocumentID";
+            param.Value = DocumentID.ToString();
+            paramlist.Add(param);
+            return paramlist;
+        }
+
+        public override List<SimpleParam> SaveParagraphBD(ParagraphMap pMap)
         {
 			var ParagraphID = dbServer.SaveParagraph(pMap);
  			var paramlist = new List<SimpleParam>();
@@ -179,8 +190,22 @@ namespace MorphApp
 			var doc = cont.GetDocuments().Where(x => x.DocumentID == doc_id).FirstOrDefault();
 			doc.RemoveParagraph(pg_id);
 		}
-		
-		public override List<SimpleParam> GetLexema(string word)
+
+        public override void DelDocument(long ct_id, long doc_id)
+        {
+            dbServer.DelDocumentDB(doc_id);
+            var cont = containers.Where(x => x.ContainerID == ct_id).FirstOrDefault();
+            cont.RemoveDocument(doc_id);
+        }
+
+        public override void DelContainer(long ct_id)
+        {
+            dbServer.DelContainerDB(ct_id);
+            var cont = containers.Where(x => x.ContainerID == ct_id).FirstOrDefault();
+            containers.Remove(cont);
+        }
+
+        public override List<SimpleParam> GetLexema(string word)
         {
             courier.servType = TMorph.Schema.ServType.svSUBD;
             courier.command = TMorph.Schema.ComType.GetWord;
@@ -242,7 +267,7 @@ namespace MorphApp
 			var outlist = courier.GetSeparatedSentsList();
 			return outlist;
 		}
-		#endregion
+        #endregion
 
-	} 
+    } 
 }

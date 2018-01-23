@@ -94,16 +94,37 @@ namespace DirectDBconnector
 			return id;
 		}
 
-		#endregion
-	
-		#region Собственные методы - для приложения DirectDBA
-		/// <summary>
-		/// Обновление таблицы в БД.
-		/// </summary>
-		/// <param name="dTable">набор данных</param>
-		/// <param name="tblname">enum нужной таблицы</param>
-		/// <returns></returns>
-		public void UpdateDataTable(DataTable dTable, dbTables tblname)
+        public override long SaveDocumentBD(string name, long ct_ID)
+        {
+            var id = dbConnector.InsertDocumentDB(name, ct_ID);
+            return id;
+        }
+
+        public override void DelDocumentDB(long doc_id)
+        {
+            // TODO ???
+           /* var res = dbConnector.DeleteParagraphList(list_ids);
+            if (res < 0)
+            {
+                throw new Exception(String.Format("Ошибка удаления абзаца ID = {0}", this.ParagraphID.ToString()));
+            }*/
+        }
+
+        public override void DelContainerDB(long c_id)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #region Собственные методы - для приложения DirectDBA
+        /// <summary>
+        /// Обновление таблицы в БД.
+        /// </summary>
+        /// <param name="dTable">набор данных</param>
+        /// <param name="tblname">enum нужной таблицы</param>
+        /// <returns></returns>
+        public void UpdateDataTable(DataTable dTable, dbTables tblname)
 		{
 			dbConnector.dirCmd.UpdateDataTable(dTable, tblname);	
 		}
@@ -118,7 +139,7 @@ namespace DirectDBconnector
             rval.dtable = dbConnector.dirCmd.GetDataTable(tblname);
             return rval;
         }
-               
         #endregion
-	}
+
+    }
 }

@@ -21,7 +21,7 @@ namespace MorphApp
 		private long contID;
 		private long docID;
 		private long parID;
-		private TreeNode theNode;
+		private MorphNode theNode;
 
 		public FormParaEdit(CLInnerStoreDB store)
 		{
@@ -29,7 +29,7 @@ namespace MorphApp
 			InitializeComponent();
 		}
 
-		public void SetContext(long contID, long docID, long parID, TreeNode theNode, treeOper tOper)
+		public void SetContext(long contID, long docID, long parID, MorphNode theNode, treeOper tOper)
 		{
 			this.typeOper = tOper;
 			this.contID = contID;

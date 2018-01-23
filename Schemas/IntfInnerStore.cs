@@ -127,8 +127,16 @@ namespace Schemas
 		/// <param name="parentID">ID родительского контейнера</param>
 		/// <returns>List of SimpleParam</returns>
 		public abstract List<SimpleParam> SaveContainerBD(string name, long parentID = -1);
-		
-		/// <summary>
+
+        /// <summary>
+        /// Сохранение документа в БД.
+        /// </summary>
+        /// <param name="name">Имя документа</param>
+        /// <param name="ct_id">ID контейнера</param>
+        /// <returns>List of SimpleParam</returns>
+        public abstract List<SimpleParam> SaveDocumentBD(string name, long ct_ID);
+
+        /// <summary>
         /// Сохранение абзаца в БД.
         /// </summary>
         /// <param name="pMap">ParagraphMap</param>
@@ -148,8 +156,22 @@ namespace Schemas
 		/// <param name="pg_id">ID абзаца</param>
 		/// <returns></returns>
 		public abstract void DelParagraph(long ct_id, long doc_id, long pg_id);
-		
-		/// <summary>
+
+        /// <summary>
+        /// Удаление одного документа из БД.
+        /// </summary>
+        /// <param name="doc_id">ID документа</param>
+        /// <returns></returns>
+        public abstract void DelDocument(long ct_id, long doc_id);
+
+        /// <summary>
+        /// Удаление одного контейнера из БД.
+        /// </summary>
+        /// <param name="c_id">ID контейнера</param>
+        /// <returns></returns>
+        public abstract void DelContainer(long ct_id);
+
+        /// <summary>
         /// Поиск слова в БД.
         /// </summary>
         /// <param name="word">слово</param>

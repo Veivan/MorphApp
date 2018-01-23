@@ -137,13 +137,14 @@ namespace DirectDBconnector
 			}
 		}
 
-		#region Методы работы с контейнерами
-		/// <summary>
-		/// Вставка в mContainers.
-		/// </summary>
-		/// <param name="name">Имя папки</param>
-		/// <returns>ID контейнера</returns>
-		public long InsertContainerDB(string name, long parent_id = -1)
+        #region Методы работы с контейнерами
+        /// <summary>
+        /// Вставка в mContainers.
+        /// </summary>
+        /// <param name="name">Имя контейнера</param>
+		/// <param name="parent_id">ID родительского контейнера</param>
+        /// <returns>ID контейнера</returns>
+        public long InsertContainerDB(string name, long parent_id = -1)
 		{
 			long ct_id = -1;
 			try
@@ -209,21 +210,23 @@ namespace DirectDBconnector
 			}
 			return reslist;
 		}
-	
-		#endregion
 
-		#region Методы работы с документами
-		/// <summary>
-		/// Вставка в mDocuments.
-		/// </summary>
-		/// <returns>ID документа</returns>
-		public long InsertDocumentDB()
+        #endregion
+
+        #region Методы работы с документами
+        /// <summary>
+        /// Вставка в mDocuments.
+        /// </summary>
+        /// <param name="name">Имя документа</param>
+        /// <param name="ct_id">ID контейнера</param>
+        /// <returns>ID документа</returns>
+        public long InsertDocumentDB(string name, long ct_id)
 		{
 			long doc_id = -1;
 			try
 			{
 				m_sqlCmd.CommandText = String.Format("INSERT INTO mDocuments(doc_id, ct_id, name) VALUES(NULL, {0}, '{1}')",
-					8, "doc1");
+                    ct_id, name);
 				m_sqlCmd.ExecuteNonQuery();
 				doc_id = m_dbConn.LastInsertRowId;
 			}

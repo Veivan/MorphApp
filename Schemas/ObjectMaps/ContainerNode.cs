@@ -60,5 +60,11 @@ namespace Schemas
             return result;
         }
 
+        public void RemoveDocument(long doc_id)
+        {
+            var dMap = documents.Where(x => x.DocumentID == doc_id).FirstOrDefault();
+            if (dMap != null)
+                documents.Remove(dMap);
+        }
     }
 }
