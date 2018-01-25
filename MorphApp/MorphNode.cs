@@ -60,8 +60,14 @@ namespace MorphApp
 
                         try
                         {
-                            store.DelContainer(contID);
-                            this.Remove();
+                            if (store.CanRemoveContainer(contID))
+                            {
+                                store.DelContainer(contID);
+                                this.Remove();
+                            }
+                            else
+                                MessageBox.Show("Удалять можно только пустой контейенер!");
+
                         }
                         catch (Exception ex)
                         {

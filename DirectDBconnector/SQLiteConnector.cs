@@ -10,132 +10,132 @@ using Schemas;
 
 namespace DirectDBconnector
 {
-	public enum OpersDB { odNone, odSelect, odInsert, odUpdate, odDelete };
+    public enum OpersDB { odNone, odSelect, odInsert, odUpdate, odDelete };
 
-	public struct WordStruct
-	{
-		public int с_id;
-		public string lemma;
-		public int sp_id;
-	}
+    public struct WordStruct
+    {
+        public int с_id;
+        public string lemma;
+        public int sp_id;
+    }
 
-	/// Singleton
-	public sealed class SQLiteConnector
-	{
-		private static readonly Lazy<SQLiteConnector> instanceHolder =
-			new Lazy<SQLiteConnector>(() => new SQLiteConnector());
+    /// Singleton
+    public sealed class SQLiteConnector
+    {
+        private static readonly Lazy<SQLiteConnector> instanceHolder =
+            new Lazy<SQLiteConnector>(() => new SQLiteConnector());
 
-		private SQLiteConnection m_dbConn;
-		private SQLiteCommand m_sqlCmd = new SQLiteCommand();
+        private SQLiteConnection m_dbConn;
+        private SQLiteCommand m_sqlCmd = new SQLiteCommand();
 
-		public DirectSQL dirCmd;
+        public DirectSQL dirCmd;
 
-		private SQLiteConnector()
-		{
-			String dbFileName = Properties.DirectDBC.Default.dbFileName;
-			if (!File.Exists(dbFileName))
-				SQLiteConnection.CreateFile(dbFileName);
-			try
-			{
-				m_dbConn = new SQLiteConnection("Data Source=" + dbFileName + ";Version=3;");
-				m_dbConn.Open();
-				m_sqlCmd.Connection = m_dbConn;
-				CreateDictTablesDB();
-				CreateOperTablesDB();
+        private SQLiteConnector()
+        {
+            String dbFileName = Properties.DirectDBC.Default.dbFileName;
+            if (!File.Exists(dbFileName))
+                SQLiteConnection.CreateFile(dbFileName);
+            try
+            {
+                m_dbConn = new SQLiteConnection("Data Source=" + dbFileName + ";Version=3;");
+                m_dbConn.Open();
+                m_sqlCmd.Connection = m_dbConn;
+                CreateDictTablesDB();
+                CreateOperTablesDB();
 
-				dirCmd = new DirectSQL(m_dbConn);
-			}
-			catch (SQLiteException ex)
-			{
-				Console.WriteLine("Error: " + ex.Message);
-			}
-		}
+                dirCmd = new DirectSQL(m_dbConn);
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+            }
+        }
 
-		public static SQLiteConnector Instance
-		{
-			get { return instanceHolder.Value; }
-		}
+        public static SQLiteConnector Instance
+        {
+            get { return instanceHolder.Value; }
+        }
 
-		/// <summary>
-		/// Удаление всех данных из БД кроме справочников
-		/// </summary>
-		public void EmptyDB()
-		{
-			try
-			{
-				m_sqlCmd.CommandText =
-					"DROP TABLE IF EXISTS mSyntNodes;\n" +
-					"DROP TABLE IF EXISTS mGrammems;\n" +
-					"DROP TABLE IF EXISTS mPhraseContent;\n" +
-					"DROP TABLE IF EXISTS mPhrases;\n" +
-					"DROP TABLE IF EXISTS mParagraphs;\n" +
-					"DROP TABLE IF EXISTS mDocuments;\n" +
-					"DROP TABLE IF EXISTS mContainers;\n" +
-					"DROP TABLE IF EXISTS mLemms;\n VACUUM;";
-				m_sqlCmd.ExecuteNonQuery();
+        /// <summary>
+        /// Удаление всех данных из БД кроме справочников
+        /// </summary>
+        public void EmptyDB()
+        {
+            try
+            {
+                m_sqlCmd.CommandText =
+                    "DROP TABLE IF EXISTS mSyntNodes;\n" +
+                    "DROP TABLE IF EXISTS mGrammems;\n" +
+                    "DROP TABLE IF EXISTS mPhraseContent;\n" +
+                    "DROP TABLE IF EXISTS mPhrases;\n" +
+                    "DROP TABLE IF EXISTS mParagraphs;\n" +
+                    "DROP TABLE IF EXISTS mDocuments;\n" +
+                    "DROP TABLE IF EXISTS mContainers;\n" +
+                    "DROP TABLE IF EXISTS mLemms;\n VACUUM;";
+                m_sqlCmd.ExecuteNonQuery();
 
-				CreateOperTablesDB();
-			}
-			catch (SQLiteException ex)
-			{
-				Console.WriteLine("EmptyDB Error: " + ex.Message);
-			}
-		}
+                CreateOperTablesDB();
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("EmptyDB Error: " + ex.Message);
+            }
+        }
 
-		/// <summary>
-		/// Создание справочников в БД
-		/// </summary>
-		public void CreateDictTablesDB()
-		{
-			try
-			{
-				m_sqlCmd.CommandText =
-					"CREATE TABLE IF NOT EXISTS mSpParts (\n"
-						+ "	sp_id integer, speechpart text NOT NULL);" +
-					" CREATE TABLE IF NOT EXISTS mSiGram (\n"
-						+ "	sg_id integer, property text NOT NULL);" +
-					"CREATE TABLE IF NOT EXISTS mSiLinks (\n"
-						+ "	ln_id integer, linktype text NOT NULL);";
-				m_sqlCmd.ExecuteNonQuery();
-			}
-			catch (SQLiteException ex)
-			{
-				Console.WriteLine("CreateOperTablesDB Error: " + ex.Message);
-			}
-		}
+        /// <summary>
+        /// Создание справочников в БД
+        /// </summary>
+        public void CreateDictTablesDB()
+        {
+            try
+            {
+                m_sqlCmd.CommandText =
+                    "CREATE TABLE IF NOT EXISTS mSpParts (\n"
+                        + "	sp_id integer, speechpart text NOT NULL);" +
+                    " CREATE TABLE IF NOT EXISTS mSiGram (\n"
+                        + "	sg_id integer, property text NOT NULL);" +
+                    "CREATE TABLE IF NOT EXISTS mSiLinks (\n"
+                        + "	ln_id integer, linktype text NOT NULL);";
+                m_sqlCmd.ExecuteNonQuery();
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("CreateOperTablesDB Error: " + ex.Message);
+            }
+        }
 
-		/// <summary>
-		/// Создание таблиц данных в БД (кроме справочников)
-		/// </summary>
-		public void CreateOperTablesDB()
-		{
-			try
-			{
-				m_sqlCmd.CommandText =
-					"CREATE TABLE IF NOT EXISTS mLemms (\n"
-						+ "	lx_id integer PRIMARY KEY, sp_id integer, lemma text NOT NULL);" +
-					" CREATE TABLE IF NOT EXISTS mContainers (\n"
-						+ "	ct_id integer PRIMARY KEY, created_at DATETIME DEFAULT CURRENT_TIMESTAMP, name text, parent_id integer);" +
-					" CREATE TABLE IF NOT EXISTS mDocuments (doc_id integer PRIMARY KEY, \n"
-						+ "	ct_id integer, created_at DATETIME DEFAULT CURRENT_TIMESTAMP, name text);" +
-					" CREATE TABLE IF NOT EXISTS mParagraphs (pg_id integer PRIMARY KEY, \n"
-						+ "doc_id integer, created_at DATETIME DEFAULT CURRENT_TIMESTAMP);" +
-					"CREATE TABLE IF NOT EXISTS mPhrases (\n"
-						+ "	ph_id integer PRIMARY KEY, pg_id integer, sorder integer, \n"
-						+ " created_at DATETIME DEFAULT CURRENT_TIMESTAMP);" +
-					"CREATE TABLE IF NOT EXISTS mPhraseContent (\n"
-						+ "	с_id integer PRIMARY KEY, ph_id integer, lx_id integer, sorder integer);" +
-					"CREATE TABLE IF NOT EXISTS mGrammems (\n" +
-						" gr_id integer PRIMARY KEY, с_id integer, sg_id integer, intval integer);" +
-					"CREATE TABLE IF NOT EXISTS mSyntNodes (\n" +
+        /// <summary>
+        /// Создание таблиц данных в БД (кроме справочников)
+        /// </summary>
+        public void CreateOperTablesDB()
+        {
+            try
+            {
+                m_sqlCmd.CommandText =
+                    "CREATE TABLE IF NOT EXISTS mLemms (\n"
+                        + "	lx_id integer PRIMARY KEY, sp_id integer, lemma text NOT NULL);" +
+                    " CREATE TABLE IF NOT EXISTS mContainers (\n"
+                        + "	ct_id integer PRIMARY KEY, created_at DATETIME DEFAULT CURRENT_TIMESTAMP, name text, parent_id integer);" +
+                    " CREATE TABLE IF NOT EXISTS mDocuments (doc_id integer PRIMARY KEY, \n"
+                        + "	ct_id integer, created_at DATETIME DEFAULT CURRENT_TIMESTAMP, name text);" +
+                    " CREATE TABLE IF NOT EXISTS mParagraphs (pg_id integer PRIMARY KEY, \n"
+                        + "doc_id integer, created_at DATETIME DEFAULT CURRENT_TIMESTAMP);" +
+                    "CREATE TABLE IF NOT EXISTS mPhrases (\n"
+                        + "	ph_id integer PRIMARY KEY, pg_id integer, sorder integer, \n"
+                        + " created_at DATETIME DEFAULT CURRENT_TIMESTAMP);" +
+                    "CREATE TABLE IF NOT EXISTS mPhraseContent (\n"
+                        + "	с_id integer PRIMARY KEY, ph_id integer, lx_id integer, sorder integer);" +
+                    "CREATE TABLE IF NOT EXISTS mGrammems (\n" +
+                        " gr_id integer PRIMARY KEY, с_id integer, sg_id integer, intval integer);" +
+                    "CREATE TABLE IF NOT EXISTS mSyntNodes (\n" +
                         " sn_id integer PRIMARY KEY, с_id integer, ln_id integer, level integer, pс_id integer);";
-				m_sqlCmd.ExecuteNonQuery();
-			}
-			catch (SQLiteException ex)
-			{
-				Console.WriteLine("CreateOperTablesDB Error: " + ex.Message);
-			}
-		}
+                m_sqlCmd.ExecuteNonQuery();
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("CreateOperTablesDB Error: " + ex.Message);
+            }
+        }
 
         #region Методы работы с контейнерами
         /// <summary>
@@ -145,71 +145,110 @@ namespace DirectDBconnector
 		/// <param name="parent_id">ID родительского контейнера</param>
         /// <returns>ID контейнера</returns>
         public long InsertContainerDB(string name, long parent_id = -1)
-		{
-			long ct_id = -1;
-			try
-			{
-				m_sqlCmd.CommandText = String.Format("INSERT INTO mContainers(ct_id, name, parent_id) VALUES(NULL, '{0}', {1})", name, parent_id);
-				m_sqlCmd.ExecuteNonQuery();
-				ct_id = m_dbConn.LastInsertRowId;
-			}
-			catch (SQLiteException ex)
-			{
-				Console.WriteLine("InsertContainerDB Error: " + ex.Message);
-			}
-			return ct_id;
-		}
+        {
+            long ct_id = -1;
+            try
+            {
+                m_sqlCmd.CommandText = String.Format("INSERT INTO mContainers(ct_id, name, parent_id) VALUES(NULL, '{0}', {1})", name, parent_id);
+                m_sqlCmd.ExecuteNonQuery();
+                ct_id = m_dbConn.LastInsertRowId;
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("InsertContainerDB Error: " + ex.Message);
+            }
+            return ct_id;
+        }
 
-		/// <summary>
-		/// Чтения контейнеров выбранного родителя из БД.
-		/// </summary>
-		/// <param name="parentID">ID родителя</param>
-		/// <returns>DataTable</returns>
-		public DataTable GetChildrenContainers(long parentID)
-		{
-			var stmnt = String.Format("SELECT ct_id, created_at, name, parent_id FROM mContainers WHERE parent_id = {0}", parentID);
-			DataTable dTable = new DataTable();
-			try
-			{
-				SQLiteDataAdapter adapter = new SQLiteDataAdapter(stmnt, m_dbConn);
-				adapter.Fill(dTable);
-			}
-			catch (SQLiteException ex)
-			{
-				//MessageBox.Show("Error: " + ex.Message);
-			}
-			return dTable;
-		}
+        /// <summary>
+        /// Чтения контейнеров выбранного родителя из БД.
+        /// </summary>
+        /// <param name="parentID">ID родителя</param>
+        /// <returns>DataTable</returns>
+        public DataTable GetChildrenContainers(long parentID)
+        {
+            var stmnt = String.Format("SELECT ct_id, created_at, name, parent_id FROM mContainers WHERE parent_id = {0}", parentID);
+            DataTable dTable = new DataTable();
+            try
+            {
+                SQLiteDataAdapter adapter = new SQLiteDataAdapter(stmnt, m_dbConn);
+                adapter.Fill(dTable);
+            }
+            catch (SQLiteException ex)
+            {
+                //MessageBox.Show("Error: " + ex.Message);
+            }
+            return dTable;
+        }
 
-		/// <summary>
-		/// Чтения контейнеров выбранного родителя из БД.
-		/// </summary>
-		/// <param name="parentID">ID родителя</param>
-		/// <returns>Коллекцию ContainerMap</returns>
-		public List<ContainerMap> GetChildrenContainersList(long parentID)
-		{
-			var reslist = new List<ContainerMap>();
-			try
-			{
-				var stmnt = String.Format("SELECT ct_id, created_at, name, parent_id FROM mContainers WHERE parent_id = {0}", parentID);
-				m_sqlCmd.CommandText = stmnt;
-				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
-				while (r.Read())
-				{
-					var dt = DateTime.Now;
-					var created = r["created_at"].ToString();
-					if (!String.IsNullOrEmpty(created))
-						dt = DateTime.Parse(created);
-					reslist.Add(new ContainerMap(r.GetInt64(0), r["name"].ToString(), dt, r.GetInt64(3)));
-				}
-				r.Close();
-			}
-			catch (SQLiteException ex)
-			{
-				//MessageBox.Show("Error: " + ex.Message);
-			}
-			return reslist;
-		}
+        /// <summary>
+        /// Чтения контейнеров выбранного родителя из БД.
+        /// </summary>
+        /// <param name="parentID">ID родителя</param>
+        /// <returns>Коллекцию ContainerMap</returns>
+        public List<ContainerMap> GetChildrenContainersList(long parentID)
+        {
+            var reslist = new List<ContainerMap>();
+            try
+            {
+                var stmnt = String.Format("SELECT ct_id, created_at, name, parent_id FROM mContainers WHERE parent_id = {0}", parentID);
+                m_sqlCmd.CommandText = stmnt;
+                SQLiteDataReader r = m_sqlCmd.ExecuteReader();
+                while (r.Read())
+                {
+                    var dt = DateTime.Now;
+                    var created = r["created_at"].ToString();
+                    if (!String.IsNullOrEmpty(created))
+                        dt = DateTime.Parse(created);
+                    reslist.Add(new ContainerMap(r.GetInt64(0), r["name"].ToString(), dt, r.GetInt64(3)));
+                }
+                r.Close();
+            }
+            catch (SQLiteException ex)
+            {
+                //MessageBox.Show("Error: " + ex.Message);
+            }
+            return reslist;
+        }
+
+        /// <summary>
+        /// Удаление контейнера.
+        /// Контейнеры можно удалять только по одному, проверяя отсутствие дочерних контейнеров.
+        /// Документы внутри контейнера удаляются пачкой внутри транзакции.
+        /// </summary>
+        /// <param name="ct_id">ID удаляемого контейнера</param>
+        /// <returns>int</returns>
+        public int DeleteContainer(long ct_id)
+        {
+            var result = -1;
+            SQLiteTransaction transaction = null;
+            try
+            {
+                transaction = m_dbConn.BeginTransaction();
+                var list_ids = new List<string>();
+                //Формирование списка документов для удаления
+                m_sqlCmd.CommandText = string.Format("SELECT doc_id FROM mDocuments WHERE ct_id = {0}", ct_id);
+                SQLiteDataReader r = m_sqlCmd.ExecuteReader();
+                while (r.Read())
+                {
+                    list_ids.Add(r["doc_id"].ToString());
+                }
+                r.Close();
+                // Удаление документов
+                DeleteDocumentListInner(list_ids);
+                //Удаление контейнера
+                m_sqlCmd.CommandText = string.Format("DELETE FROM mContainers WHERE ct_id = {0}", ct_id);
+                m_sqlCmd.ExecuteNonQuery();
+                result = 0;
+                transaction.Commit();
+            }
+            catch (SQLiteException ex)
+            {
+                transaction.Rollback();
+                //MessageBox.Show("Error: " + ex.Message);
+            }
+            return result;
+        }
 
         #endregion
 
@@ -221,708 +260,775 @@ namespace DirectDBconnector
         /// <param name="ct_id">ID контейнера</param>
         /// <returns>ID документа</returns>
         public long InsertDocumentDB(string name, long ct_id)
-		{
-			long doc_id = -1;
-			try
-			{
-				m_sqlCmd.CommandText = String.Format("INSERT INTO mDocuments(doc_id, ct_id, name) VALUES(NULL, {0}, '{1}')",
+        {
+            long doc_id = -1;
+            try
+            {
+                m_sqlCmd.CommandText = String.Format("INSERT INTO mDocuments(doc_id, ct_id, name) VALUES(NULL, {0}, '{1}')",
                     ct_id, name);
-				m_sqlCmd.ExecuteNonQuery();
-				doc_id = m_dbConn.LastInsertRowId;
-			}
-			catch (SQLiteException ex)
-			{
-				Console.WriteLine("InsertDocumentDB Error: " + ex.Message);
-			}
-			return doc_id;
-		}
+                m_sqlCmd.ExecuteNonQuery();
+                doc_id = m_dbConn.LastInsertRowId;
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("InsertDocumentDB Error: " + ex.Message);
+            }
+            return doc_id;
+        }
 
-		/// <summary>
-		/// Чтения документов из выбранного контейнера.
-		/// </summary>
-		/// <param name="ct_id">ID контейнера</param>
-		/// <returns>DataTable</returns>
-		public DataTable GetDocsInContainer(long ct_id)
-		{
-			var stmnt = String.Format("SELECT doc_id, ct_id, created_at, name, parent_id FROM mDocuments WHERE ct_id = {0}", ct_id);
-			DataTable dTable = new DataTable();
-			try
-			{
-				SQLiteDataAdapter adapter = new SQLiteDataAdapter(stmnt, m_dbConn);
-				adapter.Fill(dTable);
-			}
-			catch (SQLiteException ex)
-			{
-				//MessageBox.Show("Error: " + ex.Message);
-			}
-			return dTable;
-		}
+        /// <summary>
+        /// Чтения документов из выбранного контейнера.
+        /// </summary>
+        /// <param name="ct_id">ID контейнера</param>
+        /// <returns>DataTable</returns>
+        public DataTable GetDocsInContainer(long ct_id)
+        {
+            var stmnt = String.Format("SELECT doc_id, ct_id, created_at, name, parent_id FROM mDocuments WHERE ct_id = {0}", ct_id);
+            DataTable dTable = new DataTable();
+            try
+            {
+                SQLiteDataAdapter adapter = new SQLiteDataAdapter(stmnt, m_dbConn);
+                adapter.Fill(dTable);
+            }
+            catch (SQLiteException ex)
+            {
+                //MessageBox.Show("Error: " + ex.Message);
+            }
+            return dTable;
+        }
 
-		/// <summary>
-		/// Чтения документов из множества контейнеров.
-		/// </summary>
-		/// <param name="list_ids">список ID контейнеров</param>
-		/// <returns>DataTable</returns>
-		public DataTable GetDocsInContainerList(List<string> list_ids)
-		{
-			/*StringBuilder builder = new StringBuilder();
+        /// <summary>
+        /// Чтения документов из множества контейнеров.
+        /// </summary>
+        /// <param name="list_ids">список ID контейнеров</param>
+        /// <returns>DataTable</returns>
+        public DataTable GetDocsInContainerList(List<string> list_ids)
+        {
+            /*StringBuilder builder = new StringBuilder();
 			foreach (var id in list_ids)
 			{
 				builder.Append(id.ToString()).Append(",");
 			}
 			string result = builder.ToString().TrimEnd(',');*/
 
-			DataTable dTable = new DataTable();
-			string result = string.Join(",", list_ids.ToArray());
-			if (String.IsNullOrEmpty(result))
-				return dTable;
+            DataTable dTable = new DataTable();
+            string result = string.Join(",", list_ids.ToArray());
+            if (String.IsNullOrEmpty(result))
+                return dTable;
 
-			var stmnt = String.Format("SELECT doc_id, ct_id, created_at, name FROM mDocuments WHERE ct_id IN ({0})", result);
-			try
-			{
-				SQLiteDataAdapter adapter = new SQLiteDataAdapter(stmnt, m_dbConn);
-				adapter.Fill(dTable);
-			}
-			catch (SQLiteException ex)
-			{
-				//MessageBox.Show("Error: " + ex.Message);
-			}
-			return dTable;
-		}
+            var stmnt = string.Format("SELECT doc_id, ct_id, created_at, name FROM mDocuments WHERE ct_id IN ({0})", result);
+            try
+            {
+                SQLiteDataAdapter adapter = new SQLiteDataAdapter(stmnt, m_dbConn);
+                adapter.Fill(dTable);
+            }
+            catch (SQLiteException ex)
+            {
+                //MessageBox.Show("Error: " + ex.Message);
+            }
+            return dTable;
+        }
 
-		#endregion
+        /// <summary>
+        /// Удаление документов без транзакции.
+        /// Используется при удалении контейнера и списка документов (внутри их транзакций).
+        /// </summary>
+        /// <param name="list_ids">Перечень удаляемых ID</param>
+        /// <returns></returns>
+        private void DeleteDocumentListInner(List<string> list_ids)
+        {
+            if (list_ids.Count == 0)
+                return;
 
-		#region Методы работы с абзацами
-		/// <summary>
-		/// Проверка, существует в БД абзац pg_id или нет.
-		/// </summary>
-		/// <param name="pg_id">ID параграфа</param>
-		/// <returns>boolean</returns>
-		public bool IsParagraphExists(long pg_id)
-		{
-			var IsParaExists = false;
-			if (pg_id != -1)
-			{
-				m_sqlCmd.CommandText = "SELECT * FROM mParagraphs WHERE pg_id = @pg_id";
-				m_sqlCmd.Parameters.Clear();
-				m_sqlCmd.Parameters.Add(new SQLiteParameter("@pg_id", pg_id));
-				var executeScalar = m_sqlCmd.ExecuteScalar();
-				var resp = executeScalar == null ? 0 : 1;
-				IsParaExists = resp > 0;
-			}
-			return IsParaExists;
-		}
+            var list_pg = new List<string>();
+            var list_ph = new List<string>();
+            //Формирование списка абзацев для удаления
+            string strlist = string.Join(",", list_ids.ToArray());
+            m_sqlCmd.CommandText = string.Format("SELECT pg_id FROM mParagraphs WHERE doc_id IN ({0})", strlist);
+            SQLiteDataReader r = m_sqlCmd.ExecuteReader();
+            while (r.Read())
+            {
+                list_pg.Add(r["pg_id"].ToString());
+            }
+            r.Close();
+            //Формирование списка фраз для удаления
+            var strPGlist = string.Join(",", list_pg.ToArray());
+            m_sqlCmd.CommandText = string.Format("SELECT ph_id FROM mPhrases WHERE pg_id IN ({0})", strPGlist);
+            r = m_sqlCmd.ExecuteReader();
+            while (r.Read())
+            {
+                list_ph.Add(r["ph_id"].ToString());
+            }
+            r.Close();
+            //Удаление фраз 
+            DeletePhrasesListInner(list_ph);
+            //Удаление абзацев
+            m_sqlCmd.CommandText = string.Format("DELETE FROM mParagraphs WHERE pg_id IN ({0})", strPGlist);
+            m_sqlCmd.ExecuteNonQuery();
+            //Удаление документов
+            m_sqlCmd.CommandText = string.Format("DELETE FROM mDocuments WHERE doc_id IN ({0})", strlist);
+            m_sqlCmd.ExecuteNonQuery();
+        }
 
-		/// <summary>
-		/// Вставка в mParagraphs.
-		/// </summary>
-		/// <returns>ID параграфа</returns>
-		public long InsertParagraphDB(long doc_id)
-		{
-			long pg_id = -1;
-			try
-			{
-				m_sqlCmd.CommandText = String.Format("INSERT INTO mParagraphs(pg_id, doc_id) VALUES(NULL, {0})", doc_id);
-				m_sqlCmd.ExecuteNonQuery();
-				pg_id = m_dbConn.LastInsertRowId;
-			}
-			catch (SQLiteException ex)
-			{
-				Console.WriteLine("Error: " + ex.Message);
-			}
-			return pg_id;
-		}
+        /// <summary>
+        /// Удаление документов.
+        /// </summary>
+        /// <param name="list_ids">Перечень удаляемых ID</param>
+        /// <returns>int</returns>
+        public int DeleteDocumentList(List<string> list_ids)
+        {
+            if (list_ids.Count == 0)
+                return 0;
 
-		/// <summary>
-		/// Чтения абзацев из множества документов.
-		/// Если list_ids == null, то выбираются все записи.
-		/// </summary>
-		/// <param name="list_ids">список ID документов</param>
-		/// <returns>DataTable</returns>
-		public DataTable ReadParagraphsInDocs(List<string> list_ids)
-		{
-			DataTable dTable = new DataTable();
-			var stmnt = "SELECT P.pg_id, P.doc_id, P.created_at, D.ct_id FROM mParagraphs P LEFT JOIN mDocuments D ON D.doc_id = P.doc_id";
-			if (list_ids != null)
-			{
-				string result = string.Join(",", list_ids.ToArray());
-				if (!String.IsNullOrEmpty(result))
-					stmnt = stmnt + String.Format(" WHERE P.doc_id IN ({0})", result);
-			}
-			try
-			{
-				SQLiteDataAdapter adapter = new SQLiteDataAdapter(stmnt, m_dbConn);
-				adapter.Fill(dTable);
-			}
-			catch (SQLiteException ex)
-			{
-				//MessageBox.Show("Error: " + ex.Message);
-			}
-			return dTable;
-		}
+            var result = -1;
+            SQLiteTransaction transaction = null;
+            try
+            {
+                transaction = m_dbConn.BeginTransaction();
+                DeleteDocumentListInner(list_ids);
+                result = 0;
+                transaction.Commit();
+            }
+            catch (SQLiteException ex)
+            {
+                transaction.Rollback();
+                //MessageBox.Show("Error: " + ex.Message);
+            }
+            return result;
+        }
+        #endregion
 
-		/// <summary>
-		/// Чтения абзацев из множества документов.
-		/// Если list_ids == null, то выбираются все записи.
-		/// </summary>
-		/// <param name="list_ids">список ID документов</param>
-		/// <returns>List of ParagraphMap</returns>
-		public List<ParagraphMap> ReadParagraphsInDocsList(List<string> list_ids)
-		{
-			var reslist = new List<ParagraphMap>();
-			var stmnt = "SELECT P.pg_id, P.doc_id, P.created_at, D.ct_id FROM mParagraphs P JOIN mDocuments D ON D.doc_id = P.doc_id";
-			if (list_ids != null)
-			{
-				string result = string.Join(",", list_ids.ToArray());
-				if (!String.IsNullOrEmpty(result))
-					stmnt = stmnt + String.Format(" WHERE P.doc_id IN ({0})", result);
-			}
-			try
-			{
-				m_sqlCmd.CommandText = stmnt;
-				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
-				while (r.Read())
-				{
-					var dt = DateTime.Now;
-					var created = r["created_at"].ToString();
-					if (!String.IsNullOrEmpty(created))
-						dt = DateTime.Parse(created);
-					reslist.Add(new ParagraphMap(r.GetInt64(0), r.GetInt64(1), dt, r.GetInt64(3)));
-				}
-				r.Close();
-			}
-			catch (SQLiteException ex)
-			{
-				//MessageBox.Show("Error: " + ex.Message);
-			}
-			return reslist;
-		}
-	
-		/// <summary>
-		/// Удаление абзацев.
-		/// </summary>
-		/// <param name="list_ids">Перечень удаляемых ID</param>
-		/// <returns>int</returns>
-		public int DeleteParagraphList(List<string> list_ids)
-		{
-			if (list_ids.Count == 0)
-				return 0;
-			string strlist = string.Join(",", list_ids.ToArray());
+        #region Методы работы с абзацами
+        /// <summary>
+        /// Проверка, существует в БД абзац pg_id или нет.
+        /// </summary>
+        /// <param name="pg_id">ID параграфа</param>
+        /// <returns>boolean</returns>
+        public bool IsParagraphExists(long pg_id)
+        {
+            var IsParaExists = false;
+            if (pg_id != -1)
+            {
+                m_sqlCmd.CommandText = "SELECT * FROM mParagraphs WHERE pg_id = @pg_id";
+                m_sqlCmd.Parameters.Clear();
+                m_sqlCmd.Parameters.Add(new SQLiteParameter("@pg_id", pg_id));
+                var executeScalar = m_sqlCmd.ExecuteScalar();
+                var resp = executeScalar == null ? 0 : 1;
+                IsParaExists = resp > 0;
+            }
+            return IsParaExists;
+        }
 
-			var list_ph = new List<string>();
-			IEnumerator<string> etr = list_ids.GetEnumerator();
+        /// <summary>
+        /// Вставка в mParagraphs.
+        /// </summary>
+        /// <returns>ID параграфа</returns>
+        public long InsertParagraphDB(long doc_id)
+        {
+            long pg_id = -1;
+            try
+            {
+                m_sqlCmd.CommandText = String.Format("INSERT INTO mParagraphs(pg_id, doc_id) VALUES(NULL, {0})", doc_id);
+                m_sqlCmd.ExecuteNonQuery();
+                pg_id = m_dbConn.LastInsertRowId;
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+            }
+            return pg_id;
+        }
 
-			var result = -1;
-			SQLiteTransaction transaction = null;
-			try
-			{
-				transaction = m_dbConn.BeginTransaction();
-				while (etr.MoveNext())
-				{
-					var pg_id = etr.Current;
-					list_ph.Clear();
+        /// <summary>
+        /// Чтения абзацев из множества документов.
+        /// Если list_ids == null, то выбираются все записи.
+        /// </summary>
+        /// <param name="list_ids">список ID документов</param>
+        /// <returns>DataTable</returns>
+        public DataTable ReadParagraphsInDocs(List<string> list_ids)
+        {
+            DataTable dTable = new DataTable();
+            var stmnt = "SELECT P.pg_id, P.doc_id, P.created_at, D.ct_id FROM mParagraphs P LEFT JOIN mDocuments D ON D.doc_id = P.doc_id";
+            if (list_ids != null)
+            {
+                string result = string.Join(",", list_ids.ToArray());
+                if (!String.IsNullOrEmpty(result))
+                    stmnt = stmnt + String.Format(" WHERE P.doc_id IN ({0})", result);
+            }
+            try
+            {
+                SQLiteDataAdapter adapter = new SQLiteDataAdapter(stmnt, m_dbConn);
+                adapter.Fill(dTable);
+            }
+            catch (SQLiteException ex)
+            {
+                //MessageBox.Show("Error: " + ex.Message);
+            }
+            return dTable;
+        }
 
-					m_sqlCmd.CommandText = String.Format("SELECT ph_id FROM mPhrases WHERE pg_id = {0}", pg_id);
-					SQLiteDataReader r = m_sqlCmd.ExecuteReader();
-					while (r.Read())
-					{
-						list_ph.Add(r["ph_id"].ToString());
-					}
-					r.Close();
-					//Удаление фраз абзаца
-					DeletePhrasesListInner(list_ph);
-					// Удаление фраз
-					m_sqlCmd.CommandText = String.Format("DELETE FROM mParagraphs WHERE pg_id = ({0})", pg_id);
-					m_sqlCmd.ExecuteNonQuery();
-				}
-				result = 0;
-				transaction.Commit();
-			}
-			catch (SQLiteException ex)
-			{
-				transaction.Rollback();
-				//MessageBox.Show("Error: " + ex.Message);
-			}
-			return result;
-		}
-		#endregion
+        /// <summary>
+        /// Чтения абзацев из множества документов.
+        /// Если list_ids == null, то выбираются все записи.
+        /// </summary>
+        /// <param name="list_ids">список ID документов</param>
+        /// <returns>List of ParagraphMap</returns>
+        public List<ParagraphMap> ReadParagraphsInDocsList(List<string> list_ids)
+        {
+            var reslist = new List<ParagraphMap>();
+            var stmnt = "SELECT P.pg_id, P.doc_id, P.created_at, D.ct_id FROM mParagraphs P JOIN mDocuments D ON D.doc_id = P.doc_id";
+            if (list_ids != null)
+            {
+                string result = string.Join(",", list_ids.ToArray());
+                if (!String.IsNullOrEmpty(result))
+                    stmnt = stmnt + String.Format(" WHERE P.doc_id IN ({0})", result);
+            }
+            try
+            {
+                m_sqlCmd.CommandText = stmnt;
+                SQLiteDataReader r = m_sqlCmd.ExecuteReader();
+                while (r.Read())
+                {
+                    var dt = DateTime.Now;
+                    var created = r["created_at"].ToString();
+                    if (!String.IsNullOrEmpty(created))
+                        dt = DateTime.Parse(created);
+                    reslist.Add(new ParagraphMap(r.GetInt64(0), r.GetInt64(1), dt, r.GetInt64(3)));
+                }
+                r.Close();
+            }
+            catch (SQLiteException ex)
+            {
+                //MessageBox.Show("Error: " + ex.Message);
+            }
+            return reslist;
+        }
 
-		#region Методы работы с предложениями
-		/// <summary>
-		/// Вставка в mPhrases.
-		/// </summary>
-		/// <returns>ID предложения</returns>
-		public long InsertPhraseDB(long pg_id, int sorder)
-		{
-			long ph_id = -1;
-			try
-			{
-				m_sqlCmd.CommandText =
-					String.Format("INSERT INTO mPhrases(ph_id, pg_id, sorder) VALUES(NULL, {0}, {1})", pg_id, sorder);
-				m_sqlCmd.ExecuteNonQuery();
-				ph_id = m_dbConn.LastInsertRowId;
-			}
-			catch (SQLiteException ex)
-			{
-				Console.WriteLine("Error: " + ex.Message);
-			}
-			return ph_id;
-		}
+        /// <summary>
+        /// Удаление абзацев.
+        /// </summary>
+        /// <param name="list_ids">Перечень удаляемых ID</param>
+        /// <returns>int</returns>
+        public int DeleteParagraphList(List<string> list_ids)
+        {
+            if (list_ids.Count == 0)
+                return 0;
+            string strlist = string.Join(",", list_ids.ToArray());
 
-		/// <summary>
-		/// Чтение записей из mPhrases, относящихся к абзацу pg_id.
-		/// </summary>
-		/// <param name="pg_id">ID параграфа</param>
-		/// <returns>Список SentenceMap</returns>
-		public List<SentenceMap> ReadPhraseDB(long pg_id)
-		{
-			var reslist = new List<SentenceMap>();
-			try
-			{
-				m_sqlCmd.CommandText = "SELECT ph_id, sorder, created_at FROM mPhrases WHERE pg_id = @pg_id ORDER BY sorder";
-				m_sqlCmd.Parameters.Clear();
-				m_sqlCmd.Parameters.Add(new SQLiteParameter("@pg_id", pg_id));
+            var list_ph = new List<string>();
+            IEnumerator<string> etr = list_ids.GetEnumerator();
 
-				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
-				string line = String.Empty;
-				while (r.Read())
-				{
-					var dt = DateTime.Now;
-					var created = r["created_at"].ToString();
-					if (!String.IsNullOrEmpty(created))
-						dt = DateTime.Parse(created);
-					var sent = new SentenceMap(r.GetInt64(0), pg_id, r.GetInt16(1), dt);
-					reslist.Add(sent);
-				}
-				r.Close();
-			}
-			catch (SQLiteException ex)
-			{
-				Console.WriteLine("Error: " + ex.Message);
-				System.Diagnostics.Debug.WriteLine(ex.Message);
-			}
-			return reslist;
-		}
+            var result = -1;
+            SQLiteTransaction transaction = null;
+            try
+            {
+                transaction = m_dbConn.BeginTransaction();
+                while (etr.MoveNext())
+                {
+                    var pg_id = etr.Current;
+                    list_ph.Clear();
 
-		/// <summary>
-		/// Чтения предложений из множества абзацев.
-		/// Если list_ids == null, то выбираются все записи.
-		/// </summary>
-		/// <param name="list_ids">список ID абзацев</param>
-		/// <returns>DataTable</returns>
-		public DataTable ReadPhrasesInParagraphs(List<string> list_ids)
-		{
-			DataTable dTable = new DataTable();
-			var stmnt = "SELECT P.ph_id, P.pg_id, P.sorder, P.created_at FROM mPhrases P ";
-			if (list_ids != null)
-			{
-				string result = string.Join(",", list_ids.ToArray());
-				if (!String.IsNullOrEmpty(result))
-					stmnt = stmnt + String.Format(" WHERE P.pg_id IN ({0})", result);
-			}
-			try
-			{
-				SQLiteDataAdapter adapter = new SQLiteDataAdapter(stmnt, m_dbConn);
-				adapter.Fill(dTable);
-			}
-			catch (SQLiteException ex)
-			{
-				//MessageBox.Show("Error: " + ex.Message);
-			}
-			return dTable;
-		}
+                    m_sqlCmd.CommandText = String.Format("SELECT ph_id FROM mPhrases WHERE pg_id = {0}", pg_id);
+                    SQLiteDataReader r = m_sqlCmd.ExecuteReader();
+                    while (r.Read())
+                    {
+                        list_ph.Add(r["ph_id"].ToString());
+                    }
+                    r.Close();
+                    //Удаление фраз абзаца
+                    DeletePhrasesListInner(list_ph);
+                    // Удаление фраз
+                    m_sqlCmd.CommandText = String.Format("DELETE FROM mParagraphs WHERE pg_id = ({0})", pg_id);
+                    m_sqlCmd.ExecuteNonQuery();
+                }
+                result = 0;
+                transaction.Commit();
+            }
+            catch (SQLiteException ex)
+            {
+                transaction.Rollback();
+                //MessageBox.Show("Error: " + ex.Message);
+            }
+            return result;
+        }
+        #endregion
 
-		/// <summary>
-		/// Чтения абзацев из множества документов.
-		/// Если list_ids == null, то выбираются все записи.
-		/// </summary>
-		/// <param name="list_ids">список ID документов</param>
-		/// <returns>List of ParagraphMap</returns>
-		public List<SentenceMap> ReadPhrasesInParagraphsList(List<string> list_ids)
-		{
-			var reslist = new List<SentenceMap>();
-			var stmnt = "SELECT P.ph_id, P.pg_id, P.sorder, P.created_at FROM mPhrases P ";
-			if (list_ids != null)
-			{
-				string result = string.Join(",", list_ids.ToArray());
-				if (!String.IsNullOrEmpty(result))
-					stmnt = stmnt + String.Format(" WHERE P.pg_id IN ({0})", result);
-			}
-			try
-			{
-				m_sqlCmd.CommandText = stmnt;
-				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
-				while (r.Read())
-				{
-					var dt = DateTime.Now;
-					var created = r["created_at"].ToString();
-					if (!String.IsNullOrEmpty(created))
-						dt = DateTime.Parse(created);
-					reslist.Add(new SentenceMap(r.GetInt64(0), r.GetInt64(1), r.GetInt32(2), dt));
-				}
-				r.Close();
-			}
-			catch (SQLiteException ex)
-			{
-				//MessageBox.Show("Error: " + ex.Message);
-			}
-			return reslist;
-		}
-	
-		/// <summary>
-		/// Удаление абзацев.
-		/// </summary>
-		/// <param name="list_ids">Перечень удаляемых ID</param>
-		/// <returns>int</returns>
-		public int DeletePhrasesListTrans(List<string> list_ids)
-		{
-			if (list_ids.Count == 0)
-				return 0;
-			var result = -1;
-			SQLiteTransaction transaction = null;
-			try
-			{
-				transaction = m_dbConn.BeginTransaction();
-				DeletePhrasesListInner(list_ids);
-				transaction.Commit();
-				result = 0;
-			}
-			catch (SQLiteException ex)
-			{
-				transaction.Rollback();
-				//MessageBox.Show("Error: " + ex.Message);
-			}
-			return result;
-		}
+        #region Методы работы с предложениями
+        /// <summary>
+        /// Вставка в mPhrases.
+        /// </summary>
+        /// <returns>ID предложения</returns>
+        public long InsertPhraseDB(long pg_id, int sorder)
+        {
+            long ph_id = -1;
+            try
+            {
+                m_sqlCmd.CommandText =
+                    String.Format("INSERT INTO mPhrases(ph_id, pg_id, sorder) VALUES(NULL, {0}, {1})", pg_id, sorder);
+                m_sqlCmd.ExecuteNonQuery();
+                ph_id = m_dbConn.LastInsertRowId;
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+            }
+            return ph_id;
+        }
 
-		/// <summary>
-		/// Удаление предложений без транзакции.
-		/// Используется при удалении абзаца (внутри его транзакции).
-		/// </summary>
-		/// <param name="list_ids">Перечень удаляемых ID</param>
-		/// <returns></returns>
-		private void DeletePhrasesListInner(List<string> list_ids)
-		{
-			if (list_ids.Count == 0)
-				return;
-			string strlist = string.Join(",", list_ids.ToArray());
+        /// <summary>
+        /// Чтение записей из mPhrases, относящихся к абзацу pg_id.
+        /// </summary>
+        /// <param name="pg_id">ID параграфа</param>
+        /// <returns>Список SentenceMap</returns>
+        public List<SentenceMap> ReadPhraseDB(long pg_id)
+        {
+            var reslist = new List<SentenceMap>();
+            try
+            {
+                m_sqlCmd.CommandText = "SELECT ph_id, sorder, created_at FROM mPhrases WHERE pg_id = @pg_id ORDER BY sorder";
+                m_sqlCmd.Parameters.Clear();
+                m_sqlCmd.Parameters.Add(new SQLiteParameter("@pg_id", pg_id));
 
-			//Удаление синтаксических связей
-			DeleteSyntNodesOfPhrase(list_ids);
-			//Удаление граммем
-			DeleteGrammemsOfPhrase(list_ids);
-			//Удаление состава фраз
-			DeleteContentOfPhrase(list_ids);
-			// Удаление фраз
-			m_sqlCmd.CommandText = String.Format("DELETE FROM mPhrases WHERE ph_id IN ({0})", strlist);
-			m_sqlCmd.ExecuteNonQuery();
-		}
-		#endregion
+                SQLiteDataReader r = m_sqlCmd.ExecuteReader();
+                string line = String.Empty;
+                while (r.Read())
+                {
+                    var dt = DateTime.Now;
+                    var created = r["created_at"].ToString();
+                    if (!String.IsNullOrEmpty(created))
+                        dt = DateTime.Parse(created);
+                    var sent = new SentenceMap(r.GetInt64(0), pg_id, r.GetInt16(1), dt);
+                    reslist.Add(sent);
+                }
+                r.Close();
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+            return reslist;
+        }
 
-		#region Методы работы с содержимым предложений
-		/// <summary>
-		/// Вставка в mPhraseContent.
-		/// </summary>
-		/// <returns>ID</returns>
-		public long InsertWordDB(long ph_id, long lx_id, int sorder)
-		{
-			long result = -1;
-			try
-			{
-				m_sqlCmd.CommandText = "INSERT INTO mPhraseContent(с_id, ph_id, lx_id, sorder) VALUES(NULL, @ph_id, @lx_id, @sorder)";
-				m_sqlCmd.Parameters.Clear();
-				m_sqlCmd.Parameters.Add(new SQLiteParameter("@ph_id", ph_id));
-				m_sqlCmd.Parameters.Add(new SQLiteParameter("@lx_id", lx_id));
-				m_sqlCmd.Parameters.Add(new SQLiteParameter("@sorder", sorder));
-				m_sqlCmd.ExecuteNonQuery();
-				result = m_dbConn.LastInsertRowId;
-			}
-			catch (SQLiteException ex)
-			{
-				Console.WriteLine("Error: " + ex.Message);
-			}
-			return result;
-		}
+        /// <summary>
+        /// Чтения предложений из множества абзацев.
+        /// Если list_ids == null, то выбираются все записи.
+        /// </summary>
+        /// <param name="list_ids">список ID абзацев</param>
+        /// <returns>DataTable</returns>
+        public DataTable ReadPhrasesInParagraphs(List<string> list_ids)
+        {
+            DataTable dTable = new DataTable();
+            var stmnt = "SELECT P.ph_id, P.pg_id, P.sorder, P.created_at FROM mPhrases P ";
+            if (list_ids != null)
+            {
+                string result = string.Join(",", list_ids.ToArray());
+                if (!String.IsNullOrEmpty(result))
+                    stmnt = stmnt + String.Format(" WHERE P.pg_id IN ({0})", result);
+            }
+            try
+            {
+                SQLiteDataAdapter adapter = new SQLiteDataAdapter(stmnt, m_dbConn);
+                adapter.Fill(dTable);
+            }
+            catch (SQLiteException ex)
+            {
+                //MessageBox.Show("Error: " + ex.Message);
+            }
+            return dTable;
+        }
 
-		/// <summary>
-		/// Чтение записей из mPhraseContent, относящихся к предложению ph_id.
-		/// </summary>
-		/// <param name="ph_id">ID предложения</param>
-		/// <returns>Список данных о слове</returns>
-		public List<WordStruct> ReadPhraseContentDB(long ph_id)
-		{
-			var reslist = new List<WordStruct>();
-			try
-			{
-				m_sqlCmd.CommandText = "SELECT P.с_id, B.lemma, B.sp_id FROM mPhraseContent P JOIN mLemms B ON B.lx_id = P.lx_id " +
-					"WHERE P.ph_id = @ph_id ORDER BY sorder";
-				m_sqlCmd.Parameters.Clear();
-				m_sqlCmd.Parameters.Add(new SQLiteParameter("@ph_id", ph_id));
+        /// <summary>
+        /// Чтения абзацев из множества документов.
+        /// Если list_ids == null, то выбираются все записи.
+        /// </summary>
+        /// <param name="list_ids">список ID документов</param>
+        /// <returns>List of ParagraphMap</returns>
+        public List<SentenceMap> ReadPhrasesInParagraphsList(List<string> list_ids)
+        {
+            var reslist = new List<SentenceMap>();
+            var stmnt = "SELECT P.ph_id, P.pg_id, P.sorder, P.created_at FROM mPhrases P ";
+            if (list_ids != null)
+            {
+                string result = string.Join(",", list_ids.ToArray());
+                if (!String.IsNullOrEmpty(result))
+                    stmnt = stmnt + String.Format(" WHERE P.pg_id IN ({0})", result);
+            }
+            try
+            {
+                m_sqlCmd.CommandText = stmnt;
+                SQLiteDataReader r = m_sqlCmd.ExecuteReader();
+                while (r.Read())
+                {
+                    var dt = DateTime.Now;
+                    var created = r["created_at"].ToString();
+                    if (!String.IsNullOrEmpty(created))
+                        dt = DateTime.Parse(created);
+                    reslist.Add(new SentenceMap(r.GetInt64(0), r.GetInt64(1), r.GetInt32(2), dt));
+                }
+                r.Close();
+            }
+            catch (SQLiteException ex)
+            {
+                //MessageBox.Show("Error: " + ex.Message);
+            }
+            return reslist;
+        }
 
-				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
-				string line = String.Empty;
-				while (r.Read())
-				{
-					var wstruct = new WordStruct();
-					wstruct.с_id = r.GetInt32(0);
-					wstruct.lemma = r.GetString(1);
-					wstruct.sp_id = r.GetInt32(2);
-					reslist.Add(wstruct);
-				}
-				r.Close();
-			}
-			catch (SQLiteException ex)
-			{
-				Console.WriteLine("Error: " + ex.Message);
-				System.Diagnostics.Debug.WriteLine(ex.Message);
-			}
-			return reslist;
-		}
+        /// <summary>
+        /// Удаление абзацев.
+        /// </summary>
+        /// <param name="list_ids">Перечень удаляемых ID</param>
+        /// <returns>int</returns>
+        public int DeletePhrasesListTrans(List<string> list_ids)
+        {
+            if (list_ids.Count == 0)
+                return 0;
+            var result = -1;
+            SQLiteTransaction transaction = null;
+            try
+            {
+                transaction = m_dbConn.BeginTransaction();
+                DeletePhrasesListInner(list_ids);
+                transaction.Commit();
+                result = 0;
+            }
+            catch (SQLiteException ex)
+            {
+                transaction.Rollback();
+                //MessageBox.Show("Error: " + ex.Message);
+            }
+            return result;
+        }
 
-		/// <summary>
-		/// Удаление из mPhraseContent записей, относящихся к предложениям из списка.
-		/// </summary>
-		/// <param name="list_ids">Список ID предложений</param>
-		/// <returns></returns>
-		private void DeleteContentOfPhrase(List<string> list_ids)
-		{
-			string strlist = string.Join(",", list_ids.ToArray());
-			m_sqlCmd.CommandText = String.Format("DELETE FROM mPhraseContent WHERE ph_id IN ({0})", strlist);
-			m_sqlCmd.ExecuteNonQuery();
-		}
+        /// <summary>
+        /// Удаление предложений без транзакции.
+        /// Используется при удалении абзаца (внутри его транзакции).
+        /// </summary>
+        /// <param name="list_ids">Перечень удаляемых ID</param>
+        /// <returns></returns>
+        private void DeletePhrasesListInner(List<string> list_ids)
+        {
+            if (list_ids.Count == 0)
+                return;
+            string strlist = string.Join(",", list_ids.ToArray());
 
-		#endregion
+            //Удаление синтаксических связей
+            DeleteSyntNodesOfPhrase(list_ids);
+            //Удаление граммем
+            DeleteGrammemsOfPhrase(list_ids);
+            //Удаление состава фраз
+            DeleteContentOfPhrase(list_ids);
+            // Удаление фраз
+            m_sqlCmd.CommandText = String.Format("DELETE FROM mPhrases WHERE ph_id IN ({0})", strlist);
+            m_sqlCmd.ExecuteNonQuery();
+        }
+        #endregion
 
-		#region Методы работы с граммемами
-		/// <summary>
-		/// Вставка в mGrammems.
-		/// </summary>
-		/// <returns>ID</returns>
-		public long InsertGrammemDB(long с_id, int sg_id, int intval)
-		{
-			long result = -1;
-			try
-			{
-				m_sqlCmd.CommandText =
-					String.Format("INSERT INTO mGrammems(gr_id, с_id, sg_id, intval) VALUES(NULL, {0}, {1}, {2})",
-					с_id, sg_id, intval);
-				m_sqlCmd.ExecuteNonQuery();
-				result = m_dbConn.LastInsertRowId;
-			}
-			catch (SQLiteException ex)
-			{
-				Console.WriteLine("Error InsertGrammemDB: " + ex.Message);
-			}
-			return result;
-		}
+        #region Методы работы с содержимым предложений
+        /// <summary>
+        /// Вставка в mPhraseContent.
+        /// </summary>
+        /// <returns>ID</returns>
+        public long InsertWordDB(long ph_id, long lx_id, int sorder)
+        {
+            long result = -1;
+            try
+            {
+                m_sqlCmd.CommandText = "INSERT INTO mPhraseContent(с_id, ph_id, lx_id, sorder) VALUES(NULL, @ph_id, @lx_id, @sorder)";
+                m_sqlCmd.Parameters.Clear();
+                m_sqlCmd.Parameters.Add(new SQLiteParameter("@ph_id", ph_id));
+                m_sqlCmd.Parameters.Add(new SQLiteParameter("@lx_id", lx_id));
+                m_sqlCmd.Parameters.Add(new SQLiteParameter("@sorder", sorder));
+                m_sqlCmd.ExecuteNonQuery();
+                result = m_dbConn.LastInsertRowId;
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+            }
+            return result;
+        }
 
-		/// <summary>
-		/// Чтение записей из mGrammems, относящихся к слову с_id.
-		/// </summary>
-		/// <param name="с_id">ID слова</param>
-		/// <returns>Список данных о слове</returns>
-		public List<KeyValuePair<int, int>> ReadGrammemsDB(long с_id)
-		{
-			var reslist = new List<KeyValuePair<int, int>>();
-			try
-			{
-				m_sqlCmd.CommandText = String.Format("SELECT sg_id, intval FROM mGrammems WHERE с_id = {0}", с_id);
+        /// <summary>
+        /// Чтение записей из mPhraseContent, относящихся к предложению ph_id.
+        /// </summary>
+        /// <param name="ph_id">ID предложения</param>
+        /// <returns>Список данных о слове</returns>
+        public List<WordStruct> ReadPhraseContentDB(long ph_id)
+        {
+            var reslist = new List<WordStruct>();
+            try
+            {
+                m_sqlCmd.CommandText = "SELECT P.с_id, B.lemma, B.sp_id FROM mPhraseContent P JOIN mLemms B ON B.lx_id = P.lx_id " +
+                    "WHERE P.ph_id = @ph_id ORDER BY sorder";
+                m_sqlCmd.Parameters.Clear();
+                m_sqlCmd.Parameters.Add(new SQLiteParameter("@ph_id", ph_id));
 
-				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
-				string line = String.Empty;
-				while (r.Read())
-				{
-					var pair = new KeyValuePair<int, int>(r.GetInt32(0), r.GetInt32(1));
-					reslist.Add(pair);
-				}
-				r.Close();
-			}
-			catch (SQLiteException ex)
-			{
-				Console.WriteLine("Error: " + ex.Message);
-				System.Diagnostics.Debug.WriteLine(ex.Message);
-			}
-			return reslist;
-		}
+                SQLiteDataReader r = m_sqlCmd.ExecuteReader();
+                string line = String.Empty;
+                while (r.Read())
+                {
+                    var wstruct = new WordStruct();
+                    wstruct.с_id = r.GetInt32(0);
+                    wstruct.lemma = r.GetString(1);
+                    wstruct.sp_id = r.GetInt32(2);
+                    reslist.Add(wstruct);
+                }
+                r.Close();
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+            return reslist;
+        }
 
-		/// <summary>
-		/// Удаление из mGrammems записей, относящихся к предложениям из списка.
-		/// </summary>
-		/// <param name="list_ids">Список ID предложений</param>
-		/// <returns></returns>
-		private void DeleteGrammemsOfPhrase(List<string> list_ids)
-		{
-			string strlist = string.Join(",", list_ids.ToArray());
-			m_sqlCmd.CommandText = "DELETE FROM mGrammems WHERE с_id IN (SELECT N.с_id FROM mGrammems N JOIN mPhraseContent C ON C.с_id = N.с_id " +
-				String.Format("WHERE C.ph_id IN ({0}) )", strlist);
-			m_sqlCmd.ExecuteNonQuery();
-		}
+        /// <summary>
+        /// Удаление из mPhraseContent записей, относящихся к предложениям из списка.
+        /// </summary>
+        /// <param name="list_ids">Список ID предложений</param>
+        /// <returns></returns>
+        private void DeleteContentOfPhrase(List<string> list_ids)
+        {
+            string strlist = string.Join(",", list_ids.ToArray());
+            m_sqlCmd.CommandText = String.Format("DELETE FROM mPhraseContent WHERE ph_id IN ({0})", strlist);
+            m_sqlCmd.ExecuteNonQuery();
+        }
 
-		#endregion
+        #endregion
 
-		#region Методы работы с синтаксическими узлами
-		/// <summary>
-		/// Вставка в mSyntNodes.
-		/// </summary>
-		/// <returns>ID</returns>
+        #region Методы работы с граммемами
+        /// <summary>
+        /// Вставка в mGrammems.
+        /// </summary>
+        /// <returns>ID</returns>
+        public long InsertGrammemDB(long с_id, int sg_id, int intval)
+        {
+            long result = -1;
+            try
+            {
+                m_sqlCmd.CommandText =
+                    String.Format("INSERT INTO mGrammems(gr_id, с_id, sg_id, intval) VALUES(NULL, {0}, {1}, {2})",
+                    с_id, sg_id, intval);
+                m_sqlCmd.ExecuteNonQuery();
+                result = m_dbConn.LastInsertRowId;
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("Error InsertGrammemDB: " + ex.Message);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Чтение записей из mGrammems, относящихся к слову с_id.
+        /// </summary>
+        /// <param name="с_id">ID слова</param>
+        /// <returns>Список данных о слове</returns>
+        public List<KeyValuePair<int, int>> ReadGrammemsDB(long с_id)
+        {
+            var reslist = new List<KeyValuePair<int, int>>();
+            try
+            {
+                m_sqlCmd.CommandText = String.Format("SELECT sg_id, intval FROM mGrammems WHERE с_id = {0}", с_id);
+
+                SQLiteDataReader r = m_sqlCmd.ExecuteReader();
+                string line = String.Empty;
+                while (r.Read())
+                {
+                    var pair = new KeyValuePair<int, int>(r.GetInt32(0), r.GetInt32(1));
+                    reslist.Add(pair);
+                }
+                r.Close();
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+            return reslist;
+        }
+
+        /// <summary>
+        /// Удаление из mGrammems записей, относящихся к предложениям из списка.
+        /// </summary>
+        /// <param name="list_ids">Список ID предложений</param>
+        /// <returns></returns>
+        private void DeleteGrammemsOfPhrase(List<string> list_ids)
+        {
+            string strlist = string.Join(",", list_ids.ToArray());
+            m_sqlCmd.CommandText = "DELETE FROM mGrammems WHERE с_id IN (SELECT N.с_id FROM mGrammems N JOIN mPhraseContent C ON C.с_id = N.с_id " +
+                String.Format("WHERE C.ph_id IN ({0}) )", strlist);
+            m_sqlCmd.ExecuteNonQuery();
+        }
+
+        #endregion
+
+        #region Методы работы с синтаксическими узлами
+        /// <summary>
+        /// Вставка в mSyntNodes.
+        /// </summary>
+        /// <returns>ID</returns>
         public long InsertSyntNodesDB(long с_id, int ln_id, int level, long pс_id)
         {
-			long result = -1;
-			try
-			{
-				m_sqlCmd.CommandText =
+            long result = -1;
+            try
+            {
+                m_sqlCmd.CommandText =
                     String.Format("INSERT INTO mSyntNodes(sn_id, с_id, ln_id, level, pс_id) VALUES(NULL, {0}, {1}, {2}, {3})",
                     с_id, ln_id, level, pс_id);
-				m_sqlCmd.ExecuteNonQuery();
-				result = m_dbConn.LastInsertRowId;
-			}
-			catch (SQLiteException ex)
-			{
-				Console.WriteLine("Error InsertSyntNodesDB: " + ex.Message);
-			}
-			return result;
-		}
+                m_sqlCmd.ExecuteNonQuery();
+                result = m_dbConn.LastInsertRowId;
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("Error InsertSyntNodesDB: " + ex.Message);
+            }
+            return result;
+        }
 
-		/// <summary>
-		/// Чтение записей из mSyntNodes, относящихся к предложению ph_id.
-		/// </summary>
-		/// <param name="ph_id">ID предложения</param>
-		/// <returns>Список синт. связей предложения</returns>
-		public List<tNode> ReadSyntNodesDB(long ph_id)
-		{
-			var reslist = new List<tNode>();
-			try
-			{
-				m_sqlCmd.CommandText = String.Format("SELECT A.ln_id, A.level, B.sorder, C.sorder FROM mSyntNodes A " +
-					"JOIN mPhraseContent B ON B.с_id = A.с_id " +
-					"LEFT JOIN mPhraseContent C ON C.с_id = A.pс_id " +
-					"WHERE B.ph_id = {0} ORDER BY A.sn_id", ph_id);
-				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
-				string line = String.Empty;
-				int i = 0;
-				while (r.Read())
-				{
-					var node = new tNode();
-					node.ID = i;
-					node.Level = r.GetInt32(1);
-					node.index = r.GetInt32(2);
-					node.linktype = r.GetInt32(0);
-					node.parentind = r[3] as int? ?? -1; ;
-					reslist.Add(node);
-					i++;
-				}
-				r.Close();
-			}
-			catch (SQLiteException ex)
-			{
-				Console.WriteLine("Error: " + ex.Message);
-				System.Diagnostics.Debug.WriteLine(ex.Message);
-			}
-			return reslist;
-		}
+        /// <summary>
+        /// Чтение записей из mSyntNodes, относящихся к предложению ph_id.
+        /// </summary>
+        /// <param name="ph_id">ID предложения</param>
+        /// <returns>Список синт. связей предложения</returns>
+        public List<tNode> ReadSyntNodesDB(long ph_id)
+        {
+            var reslist = new List<tNode>();
+            try
+            {
+                m_sqlCmd.CommandText = String.Format("SELECT A.ln_id, A.level, B.sorder, C.sorder FROM mSyntNodes A " +
+                    "JOIN mPhraseContent B ON B.с_id = A.с_id " +
+                    "LEFT JOIN mPhraseContent C ON C.с_id = A.pс_id " +
+                    "WHERE B.ph_id = {0} ORDER BY A.sn_id", ph_id);
+                SQLiteDataReader r = m_sqlCmd.ExecuteReader();
+                string line = String.Empty;
+                int i = 0;
+                while (r.Read())
+                {
+                    var node = new tNode();
+                    node.ID = i;
+                    node.Level = r.GetInt32(1);
+                    node.index = r.GetInt32(2);
+                    node.linktype = r.GetInt32(0);
+                    node.parentind = r[3] as int? ?? -1; ;
+                    reslist.Add(node);
+                    i++;
+                }
+                r.Close();
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+            return reslist;
+        }
 
-		/// <summary>
-		/// Удаление из mSyntNodes записей, относящихся к предложениям из списка.
-		/// </summary>
-		/// <param name="list_ids">Список ID предложений</param>
-		/// <returns></returns>
-		private void DeleteSyntNodesOfPhrase(List<string> list_ids)
-		{
-			string strlist = string.Join(",", list_ids.ToArray());
-			m_sqlCmd.CommandText = "DELETE FROM mSyntNodes WHERE с_id IN (SELECT N.с_id FROM mSyntNodes N JOIN mPhraseContent C ON C.с_id = N.с_id " +
-				String.Format("WHERE C.ph_id IN ({0}) )", strlist);
-			m_sqlCmd.ExecuteNonQuery();
-		}
+        /// <summary>
+        /// Удаление из mSyntNodes записей, относящихся к предложениям из списка.
+        /// </summary>
+        /// <param name="list_ids">Список ID предложений</param>
+        /// <returns></returns>
+        private void DeleteSyntNodesOfPhrase(List<string> list_ids)
+        {
+            string strlist = string.Join(",", list_ids.ToArray());
+            m_sqlCmd.CommandText = "DELETE FROM mSyntNodes WHERE с_id IN (SELECT N.с_id FROM mSyntNodes N JOIN mPhraseContent C ON C.с_id = N.с_id " +
+                String.Format("WHERE C.ph_id IN ({0}) )", strlist);
+            m_sqlCmd.ExecuteNonQuery();
+        }
 
-		#endregion
+        #endregion
 
-		#region Методы работы с леммами
-		/// <summary>
-		/// Сохранение леммы в БД.
-		/// sqlite некорректно работает с upper, lower и like в utf8. Поэтому в БД надо всё хранить в lower
-		/// </summary>
-		/// <param name="lemma">лемма</param>
-		/// <param name="sp_id">ID части речи</param>
-		/// <returns>ID леммы</returns>
-		public long SaveLex(string lemma, int sp_id)
-		{
-			long result = GetWord(lemma, sp_id);
-			if (result == -1)
-			{
-				try
-				{
-					m_sqlCmd.CommandText = "INSERT INTO mLemms(lx_id, sp_id, lemma) VALUES(NULL, @sp_id, @lemma)";
-					m_sqlCmd.Parameters.Clear();
-					m_sqlCmd.Parameters.Add(new SQLiteParameter("@sp_id", sp_id));
-					m_sqlCmd.Parameters.Add(new SQLiteParameter("@lemma", lemma.ToLower()));
-					m_sqlCmd.ExecuteNonQuery();
-					result = m_dbConn.LastInsertRowId;
-				}
-				catch (SQLiteException ex)
-				{
-					Console.WriteLine("Error: " + ex.Message);
-				}
-			}
-			return result;
-		}
+        #region Методы работы с леммами
+        /// <summary>
+        /// Сохранение леммы в БД.
+        /// sqlite некорректно работает с upper, lower и like в utf8. Поэтому в БД надо всё хранить в lower
+        /// </summary>
+        /// <param name="lemma">лемма</param>
+        /// <param name="sp_id">ID части речи</param>
+        /// <returns>ID леммы</returns>
+        public long SaveLex(string lemma, int sp_id)
+        {
+            long result = GetWord(lemma, sp_id);
+            if (result == -1)
+            {
+                try
+                {
+                    m_sqlCmd.CommandText = "INSERT INTO mLemms(lx_id, sp_id, lemma) VALUES(NULL, @sp_id, @lemma)";
+                    m_sqlCmd.Parameters.Clear();
+                    m_sqlCmd.Parameters.Add(new SQLiteParameter("@sp_id", sp_id));
+                    m_sqlCmd.Parameters.Add(new SQLiteParameter("@lemma", lemma.ToLower()));
+                    m_sqlCmd.ExecuteNonQuery();
+                    result = m_dbConn.LastInsertRowId;
+                }
+                catch (SQLiteException ex)
+                {
+                    Console.WriteLine("Error: " + ex.Message);
+                }
+            }
+            return result;
+        }
 
-		/// <summary>
-		/// Получение ID леммы из БД.
-		/// </summary>
-		/// <param name="lemma">лемма</param>
-		/// <param name="sp_id">ID части речи</param>
-		/// <returns>ID леммы</returns>
-		public long GetWord(string lemma, int sp_id)
-		{
-			long result = -1;
-			try
-			{
-				m_sqlCmd.CommandText = "SELECT lx_id FROM mLemms WHERE lemma = @lemma AND sp_id = @sp_id";
-				m_sqlCmd.Parameters.Clear();
-				m_sqlCmd.Parameters.Add(new SQLiteParameter("@sp_id", sp_id));
-				m_sqlCmd.Parameters.Add(new SQLiteParameter("@lemma", lemma.ToLower()));
-				// Читаем только первую запись
-				var resp = m_sqlCmd.ExecuteScalar();
-				if (resp != null)
-					result = (long)resp;
-			}
-			catch (SQLiteException ex)
-			{
-				Console.WriteLine("Error: " + ex.Message);
-			}
-			return result;
-		}
+        /// <summary>
+        /// Получение ID леммы из БД.
+        /// </summary>
+        /// <param name="lemma">лемма</param>
+        /// <param name="sp_id">ID части речи</param>
+        /// <returns>ID леммы</returns>
+        public long GetWord(string lemma, int sp_id)
+        {
+            long result = -1;
+            try
+            {
+                m_sqlCmd.CommandText = "SELECT lx_id FROM mLemms WHERE lemma = @lemma AND sp_id = @sp_id";
+                m_sqlCmd.Parameters.Clear();
+                m_sqlCmd.Parameters.Add(new SQLiteParameter("@sp_id", sp_id));
+                m_sqlCmd.Parameters.Add(new SQLiteParameter("@lemma", lemma.ToLower()));
+                // Читаем только первую запись
+                var resp = m_sqlCmd.ExecuteScalar();
+                if (resp != null)
+                    result = (long)resp;
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+            }
+            return result;
+        }
 
-		#endregion
+        #endregion
 
-		#region Методы служебные
-		public void DropColumn()
-		{
-			//SQLiteTransaction transaction = null;
-			try
-			{
-				//transaction = m_dbConn.BeginTransaction();
+        #region Методы служебные
+        public void DropColumn()
+        {
+            //SQLiteTransaction transaction = null;
+            try
+            {
+                //transaction = m_dbConn.BeginTransaction();
 
                 var stmt =
-					"BEGIN TRANSACTION;\n" +
-					"CREATE TABLE IF NOT EXISTS mParagraphs_back (pg_id integer PRIMARY KEY, \n" +
-						"doc_id integer, created_at DATETIME DEFAULT CURRENT_TIMESTAMP);\n" +
-					"INSERT INTO mParagraphs_back SELECT pg_id, doc_id, created_at FROM mParagraphs;\n" +
-					"DROP TABLE mParagraphs;\n" +
-					"ALTER TABLE mParagraphs_back RENAME TO mParagraphs;\n" +
-					"COMMIT;\n";
+                    "BEGIN TRANSACTION;\n" +
+                    "CREATE TABLE IF NOT EXISTS mParagraphs_back (pg_id integer PRIMARY KEY, \n" +
+                        "doc_id integer, created_at DATETIME DEFAULT CURRENT_TIMESTAMP);\n" +
+                    "INSERT INTO mParagraphs_back SELECT pg_id, doc_id, created_at FROM mParagraphs;\n" +
+                    "DROP TABLE mParagraphs;\n" +
+                    "ALTER TABLE mParagraphs_back RENAME TO mParagraphs;\n" +
+                    "COMMIT;\n";
                 m_sqlCmd.CommandText = stmt;
                 m_sqlCmd.ExecuteNonQuery();
 
-				//transaction.Commit();
-			}
-			catch (SQLiteException ex)
-			{
-				//transaction.Rollback();
-				Console.WriteLine("DropColumn Error: " + ex.Message);
-			}
+                //transaction.Commit();
+            }
+            catch (SQLiteException ex)
+            {
+                //transaction.Rollback();
+                Console.WriteLine("DropColumn Error: " + ex.Message);
+            }
 
-		}
+        }
 
         public void AddColumn()
         {
@@ -940,219 +1046,219 @@ namespace DirectDBconnector
 
         }
 
-		///
-		/// select all rows in the mPhrases table
-		/// 
-		public void selectAll(string nTable)
-		{
-			try
-			{
-				switch (nTable)
-				{
-					case "mSpParts":
-						m_sqlCmd.CommandText = "SELECT sp_id, speechpart FROM mSpParts";
-						break;
-					case "mSiGram":
-						m_sqlCmd.CommandText = "SELECT sg_id, property FROM mSiGram";
-						break;
-					case "mSiLinks":
-						m_sqlCmd.CommandText = "SELECT ln_id, linktype FROM mSiLinks";
-						break;
-					case "mLemms":
-						m_sqlCmd.CommandText = "SELECT lx_id, sp_id, lemma FROM mLemms";
-						break;
-					case "mContainers":
-						m_sqlCmd.CommandText = "SELECT ct_id, created_at, name, parent_id FROM mContainers";
-						break;
-					case "mDocuments":
-						m_sqlCmd.CommandText = "SELECT doc_id, ct_id, created_at, name FROM mDocuments";
-						break;
-					case "mParagraphs":
-						m_sqlCmd.CommandText = "SELECT pg_id, doc_id, created_at FROM mParagraphs";
-						break;
-					case "mPhrases":
-						m_sqlCmd.CommandText = "SELECT ph_id, pg_id, sorder, created_at FROM mPhrases";
-						break;
-					case "mPhraseContent":
-						m_sqlCmd.CommandText = "SELECT с_id, ph_id, lx_id, sorder FROM mPhraseContent";
-						break;
-					case "mGrammems":
-						m_sqlCmd.CommandText = "SELECT gr_id, с_id, sg_id, intval FROM mGrammems";
-						break;
-					case "mSyntNodes":
+        ///
+        /// select all rows in the mPhrases table
+        /// 
+        public void selectAll(string nTable)
+        {
+            try
+            {
+                switch (nTable)
+                {
+                    case "mSpParts":
+                        m_sqlCmd.CommandText = "SELECT sp_id, speechpart FROM mSpParts";
+                        break;
+                    case "mSiGram":
+                        m_sqlCmd.CommandText = "SELECT sg_id, property FROM mSiGram";
+                        break;
+                    case "mSiLinks":
+                        m_sqlCmd.CommandText = "SELECT ln_id, linktype FROM mSiLinks";
+                        break;
+                    case "mLemms":
+                        m_sqlCmd.CommandText = "SELECT lx_id, sp_id, lemma FROM mLemms";
+                        break;
+                    case "mContainers":
+                        m_sqlCmd.CommandText = "SELECT ct_id, created_at, name, parent_id FROM mContainers";
+                        break;
+                    case "mDocuments":
+                        m_sqlCmd.CommandText = "SELECT doc_id, ct_id, created_at, name FROM mDocuments";
+                        break;
+                    case "mParagraphs":
+                        m_sqlCmd.CommandText = "SELECT pg_id, doc_id, created_at FROM mParagraphs";
+                        break;
+                    case "mPhrases":
+                        m_sqlCmd.CommandText = "SELECT ph_id, pg_id, sorder, created_at FROM mPhrases";
+                        break;
+                    case "mPhraseContent":
+                        m_sqlCmd.CommandText = "SELECT с_id, ph_id, lx_id, sorder FROM mPhraseContent";
+                        break;
+                    case "mGrammems":
+                        m_sqlCmd.CommandText = "SELECT gr_id, с_id, sg_id, intval FROM mGrammems";
+                        break;
+                    case "mSyntNodes":
                         m_sqlCmd.CommandText = "SELECT sn_id, с_id, ln_id, level, pс_id FROM mSyntNodes";
-						break;
-				}
+                        break;
+                }
 
-				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
-				string line = String.Empty;
-				while (r.Read())
-				{
-					switch (nTable)
-					{
-						case "mSpParts":
-							line = r["sp_id"].ToString() + ", " + r["speechpart"];
-							break;
-						case "mSiGram":
-							line = r["sg_id"].ToString() + ", " + r["property"];
-							break;
-						case "mSiLinks":
-							line = r["ln_id"].ToString() + ", " + r["linktype"];
-							break;
-						case "mLemms":
-							line = r["lx_id"].ToString() + ", " + r["sp_id"].ToString() + ", " + r["lemma"];
-							break;
-						case "mContainers":
-							line = r["ct_id"].ToString() + ", " + r["created_at"].ToString() + ", " + r["name"] + ", " + r["parent_id"].ToString();
-							break;
-						case "mDocuments":
-							line = r["doc_id"].ToString() + ", " + r["ct_id"].ToString() + ", " + r["created_at"].ToString() + ", " + r["name"];
-							break;
-						case "mParagraphs":
-							line = r["pg_id"].ToString() + ", " + r["doc_id"].ToString() + ", " + r["created_at"].ToString();
-							break;
-						case "mPhrases":
-							line = r["ph_id"].ToString() + ", " + r["pg_id"].ToString() + ", " + r["sorder"].ToString();
-							break;
-						case "mPhraseContent":
-							line = r["с_id"].ToString() + ", " + r["ph_id"].ToString() + ", " + r["lx_id"].ToString();
-							break;
-						case "mGrammems":
-							line = r["gr_id"].ToString() + ", " + r["с_id"].ToString() + ", " + r["sg_id"].ToString() + ", " + r["intval"].ToString();
-							break;
-						case "mSyntNodes":
+                SQLiteDataReader r = m_sqlCmd.ExecuteReader();
+                string line = String.Empty;
+                while (r.Read())
+                {
+                    switch (nTable)
+                    {
+                        case "mSpParts":
+                            line = r["sp_id"].ToString() + ", " + r["speechpart"];
+                            break;
+                        case "mSiGram":
+                            line = r["sg_id"].ToString() + ", " + r["property"];
+                            break;
+                        case "mSiLinks":
+                            line = r["ln_id"].ToString() + ", " + r["linktype"];
+                            break;
+                        case "mLemms":
+                            line = r["lx_id"].ToString() + ", " + r["sp_id"].ToString() + ", " + r["lemma"];
+                            break;
+                        case "mContainers":
+                            line = r["ct_id"].ToString() + ", " + r["created_at"].ToString() + ", " + r["name"] + ", " + r["parent_id"].ToString();
+                            break;
+                        case "mDocuments":
+                            line = r["doc_id"].ToString() + ", " + r["ct_id"].ToString() + ", " + r["created_at"].ToString() + ", " + r["name"];
+                            break;
+                        case "mParagraphs":
+                            line = r["pg_id"].ToString() + ", " + r["doc_id"].ToString() + ", " + r["created_at"].ToString();
+                            break;
+                        case "mPhrases":
+                            line = r["ph_id"].ToString() + ", " + r["pg_id"].ToString() + ", " + r["sorder"].ToString();
+                            break;
+                        case "mPhraseContent":
+                            line = r["с_id"].ToString() + ", " + r["ph_id"].ToString() + ", " + r["lx_id"].ToString();
+                            break;
+                        case "mGrammems":
+                            line = r["gr_id"].ToString() + ", " + r["с_id"].ToString() + ", " + r["sg_id"].ToString() + ", " + r["intval"].ToString();
+                            break;
+                        case "mSyntNodes":
                             line = r["sn_id"].ToString() + ", " + r["с_id"].ToString() + ", " + r["ln_id"].ToString() + ", " + r["level"].ToString() + ", " + r["pс_id"].ToString();
-							break;
-					}
-					//Console.WriteLine(line);
-					System.Diagnostics.Debug.WriteLine(line);
-				}
-				r.Close();
+                            break;
+                    }
+                    //Console.WriteLine(line);
+                    System.Diagnostics.Debug.WriteLine(line);
+                }
+                r.Close();
 
-			}
-			catch (SQLiteException ex)
-			{
-				Console.WriteLine("Error: " + ex.Message);
-				System.Diagnostics.Debug.WriteLine(ex.Message);
-			}
-		}
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+        }
 
-		#endregion
+        #endregion
 
-		#region Методы работы со справочниками
-		/// <summary>
-		/// Заполнение справочника частей речи.
-		/// </summary>
-		public void InsertSpeechParts()
-		{
-			m_sqlCmd.Parameters.Clear();
-			m_sqlCmd.Parameters.Add(new SQLiteParameter("@speechpart", ""));
+        #region Методы работы со справочниками
+        /// <summary>
+        /// Заполнение справочника частей речи.
+        /// </summary>
+        public void InsertSpeechParts()
+        {
+            m_sqlCmd.Parameters.Clear();
+            m_sqlCmd.Parameters.Add(new SQLiteParameter("@speechpart", ""));
 
-			try
-			{
-				for (var part = GrenPart.NUM_WORD_CLASS; part <= GrenPart.UNKNOWN_ENTRIES_CLASS; part++)
-				{
-					long result = -1;
-					string ename = Enum.GetName(typeof(GrenPart), part);
-					if (ename == null) continue;
-					m_sqlCmd.CommandText = "SELECT sp_id FROM mSpParts WHERE speechpart = @speechpart";
-					m_sqlCmd.Parameters[0].Value = ename;
-					//m_sqlCmd.Parameters. Add(new SQLiteParameter("@speechpart", ename));
-					// Читаем только первую запись
-					var resp = m_sqlCmd.ExecuteScalar();
-					if (resp != null)
-						result = (long)resp;
-					if (result == -1)
-					{
-						m_sqlCmd.CommandText =
-							String.Format("INSERT INTO mSpParts(sp_id, speechpart) VALUES({0}, @speechpart)", (int)part);
-						m_sqlCmd.Parameters[0].Value = ename;
-						m_sqlCmd.ExecuteNonQuery();
-					}
-				}
-			}
-			catch (SQLiteException ex)
-			{
-				Console.WriteLine("Error: " + ex.Message);
-				System.Diagnostics.Debug.WriteLine(ex.Message);
-			}
-		}
+            try
+            {
+                for (var part = GrenPart.NUM_WORD_CLASS; part <= GrenPart.UNKNOWN_ENTRIES_CLASS; part++)
+                {
+                    long result = -1;
+                    string ename = Enum.GetName(typeof(GrenPart), part);
+                    if (ename == null) continue;
+                    m_sqlCmd.CommandText = "SELECT sp_id FROM mSpParts WHERE speechpart = @speechpart";
+                    m_sqlCmd.Parameters[0].Value = ename;
+                    //m_sqlCmd.Parameters. Add(new SQLiteParameter("@speechpart", ename));
+                    // Читаем только первую запись
+                    var resp = m_sqlCmd.ExecuteScalar();
+                    if (resp != null)
+                        result = (long)resp;
+                    if (result == -1)
+                    {
+                        m_sqlCmd.CommandText =
+                            String.Format("INSERT INTO mSpParts(sp_id, speechpart) VALUES({0}, @speechpart)", (int)part);
+                        m_sqlCmd.Parameters[0].Value = ename;
+                        m_sqlCmd.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+        }
 
-		/// <summary>
-		/// Заполнение справочника грамм. характеристик.
-		/// </summary>
-		public void InsertGrenProperties()
-		{
-			m_sqlCmd.Parameters.Clear();
-			m_sqlCmd.Parameters.Add(new SQLiteParameter("@property", ""));
+        /// <summary>
+        /// Заполнение справочника грамм. характеристик.
+        /// </summary>
+        public void InsertGrenProperties()
+        {
+            m_sqlCmd.Parameters.Clear();
+            m_sqlCmd.Parameters.Add(new SQLiteParameter("@property", ""));
 
-			try
-			{
-				for (var part = Schemas.GrenProperty.CharCasing; part <= Schemas.GrenProperty.MODAL_ru; part++)
-				{
-					long result = -1;
-					string ename = Enum.GetName(typeof(Schemas.GrenProperty), part);
-					if (ename == null) continue;
-					m_sqlCmd.CommandText = "SELECT sg_id FROM mSiGram WHERE property = @property";
-					m_sqlCmd.Parameters[0].Value = ename;
-					//m_sqlCmd.Parameters. Add(new SQLiteParameter("@speechpart", ename));
-					// Читаем только первую запись
-					var resp = m_sqlCmd.ExecuteScalar();
-					if (resp != null)
-						result = (long)resp;
-					if (result == -1)
-					{
-						m_sqlCmd.CommandText =
-							String.Format("INSERT INTO mSiGram(sg_id, property) VALUES({0}, @property)", (int)part);
-						m_sqlCmd.Parameters[0].Value = ename;
-						m_sqlCmd.ExecuteNonQuery();
-					}
-				}
-			}
-			catch (SQLiteException ex)
-			{
-				Console.WriteLine("Error: " + ex.Message);
-				System.Diagnostics.Debug.WriteLine(ex.Message);
-			}
-		}
+            try
+            {
+                for (var part = Schemas.GrenProperty.CharCasing; part <= Schemas.GrenProperty.MODAL_ru; part++)
+                {
+                    long result = -1;
+                    string ename = Enum.GetName(typeof(Schemas.GrenProperty), part);
+                    if (ename == null) continue;
+                    m_sqlCmd.CommandText = "SELECT sg_id FROM mSiGram WHERE property = @property";
+                    m_sqlCmd.Parameters[0].Value = ename;
+                    //m_sqlCmd.Parameters. Add(new SQLiteParameter("@speechpart", ename));
+                    // Читаем только первую запись
+                    var resp = m_sqlCmd.ExecuteScalar();
+                    if (resp != null)
+                        result = (long)resp;
+                    if (result == -1)
+                    {
+                        m_sqlCmd.CommandText =
+                            String.Format("INSERT INTO mSiGram(sg_id, property) VALUES({0}, @property)", (int)part);
+                        m_sqlCmd.Parameters[0].Value = ename;
+                        m_sqlCmd.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+        }
 
-		/// <summary>
-		/// Заполнение справочника типов синт. связей.
-		/// </summary>
-		public void InsertGrenLinks()
-		{
-			m_sqlCmd.Parameters.Clear();
-			m_sqlCmd.Parameters.Add(new SQLiteParameter("@linktype", ""));
+        /// <summary>
+        /// Заполнение справочника типов синт. связей.
+        /// </summary>
+        public void InsertGrenLinks()
+        {
+            m_sqlCmd.Parameters.Clear();
+            m_sqlCmd.Parameters.Add(new SQLiteParameter("@linktype", ""));
 
-			try
-			{
-				for (var link = GrenLink.OBJECT_link; link <= Schemas.GrenLink.SECOND_VERB_link; link++)
-				{
-					long result = -1;
-					string ename = Enum.GetName(typeof(GrenLink), link);
-					if (ename == null) continue;
-					m_sqlCmd.CommandText = "SELECT ln_id FROM mSiLinks WHERE linktype = @linktype";
-					m_sqlCmd.Parameters[0].Value = ename;
-					// Читаем только первую запись
-					var resp = m_sqlCmd.ExecuteScalar();
-					if (resp != null)
-						result = (long)resp;
-					if (result == -1)
-					{
-						m_sqlCmd.CommandText =
-							String.Format("INSERT INTO mSiLinks(ln_id, linktype) VALUES({0}, @linktype)", (int)link);
-						m_sqlCmd.Parameters[0].Value = ename;
-						m_sqlCmd.ExecuteNonQuery();
-					}
-				}
-			}
-			catch (SQLiteException ex)
-			{
-				Console.WriteLine("Error: " + ex.Message);
-				System.Diagnostics.Debug.WriteLine(ex.Message);
-			}
-		}
-		#endregion
+            try
+            {
+                for (var link = GrenLink.OBJECT_link; link <= Schemas.GrenLink.SECOND_VERB_link; link++)
+                {
+                    long result = -1;
+                    string ename = Enum.GetName(typeof(GrenLink), link);
+                    if (ename == null) continue;
+                    m_sqlCmd.CommandText = "SELECT ln_id FROM mSiLinks WHERE linktype = @linktype";
+                    m_sqlCmd.Parameters[0].Value = ename;
+                    // Читаем только первую запись
+                    var resp = m_sqlCmd.ExecuteScalar();
+                    if (resp != null)
+                        result = (long)resp;
+                    if (result == -1)
+                    {
+                        m_sqlCmd.CommandText =
+                            String.Format("INSERT INTO mSiLinks(ln_id, linktype) VALUES({0}, @linktype)", (int)link);
+                        m_sqlCmd.Parameters[0].Value = ename;
+                        m_sqlCmd.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+        }
+        #endregion
 
-	}
+    }
 }

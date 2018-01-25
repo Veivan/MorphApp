@@ -102,17 +102,23 @@ namespace DirectDBconnector
 
         public override void DelDocumentDB(long doc_id)
         {
-            // TODO ???
-           /* var res = dbConnector.DeleteParagraphList(list_ids);
+            var list_ids = new List<string>();
+            list_ids.Add(doc_id.ToString());
+
+            var res = dbConnector.DeleteDocumentList(list_ids);
             if (res < 0)
             {
-                throw new Exception(String.Format("Ошибка удаления абзаца ID = {0}", this.ParagraphID.ToString()));
-            }*/
+                throw new Exception(string.Format("Ошибка удаления документа ID = {0}", doc_id));
+            }
         }
 
         public override void DelContainerDB(long c_id)
         {
-            throw new NotImplementedException();
+            var res = dbConnector.DeleteContainer(c_id);
+            if (res < 0)
+            {
+                throw new Exception(string.Format("Ошибка удаления контейнера ID = {0}", c_id));
+            }
         }
 
         #endregion

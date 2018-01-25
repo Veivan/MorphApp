@@ -56,13 +56,13 @@ namespace Schemas
             return dMap.GetParagraph(parID);          
         }
 
-		/// <summary>
+        /// <summary>
         /// Формирование содержимого внутреннего объекта ParagraphMap.
         /// </summary>
         /// <param name="pMap">объект ParagraphMap</param>
         /// <param name="input">текстовое содержание абзаца</param>
         /// <returns></returns>
-		public void UpdateParagraph(ParagraphMap pMap, string input, bool IsHeader) 
+        public void UpdateParagraph(ParagraphMap pMap, string input, bool IsHeader) 
 		{
 			var ihash = input.GetHashCode();
 			int currenthash = pMap.GetHashCode(IsHeader);
@@ -85,6 +85,13 @@ namespace Schemas
 					pMap.UpdateSentStruct(sent.order, sentlistRep[0]);
 			}		
 		}
+
+        public bool CanRemoveContainer(long contID)
+        {
+            var container = GetContainerByID(contID);
+            if (container == null) return false;
+            return (container.Children().Count == 0);
+        }
 
         #endregion
 
