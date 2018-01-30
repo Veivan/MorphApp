@@ -64,11 +64,11 @@ namespace DirectDBconnector
             try
             {
                 m_sqlCmd.CommandText =
-                    "DROP TABLE IF EXISTS mSyntNodes;\n" +
-                    "DROP TABLE IF EXISTS mGrammems;\n" +
-                    "DROP TABLE IF EXISTS mPhraseContent;\n" +
-                    "DROP TABLE IF EXISTS mPhrases;\n" +
-                    "DROP TABLE IF EXISTS mParagraphs;\n" +
+                   // "DROP TABLE IF EXISTS mSyntNodes;\n" +
+                   // "DROP TABLE IF EXISTS mGrammems;\n" +
+                   // "DROP TABLE IF EXISTS mPhraseContent;\n" +
+                   // "DROP TABLE IF EXISTS mPhrases;\n" +
+                   // "DROP TABLE IF EXISTS mParagraphs;\n" +
                     "DROP TABLE IF EXISTS mDocuments;\n" +
                     "DROP TABLE IF EXISTS mContainers;\n" +
                     "DROP TABLE IF EXISTS mLemms;\n VACUUM;";
@@ -112,23 +112,25 @@ namespace DirectDBconnector
             try
             {
                 m_sqlCmd.CommandText =
+                    "CREATE TABLE IF NOT EXISTS mRealWord (\n"
+                        + "	rw_id integer PRIMARY KEY, wform text NOT NULL);\n" +
                     "CREATE TABLE IF NOT EXISTS mLemms (\n"
-                        + "	lx_id integer PRIMARY KEY, sp_id integer, lemma text NOT NULL);" +
+                        + "	lx_id integer PRIMARY KEY, sp_id integer, lemma text NOT NULL);\n" +
                     " CREATE TABLE IF NOT EXISTS mContainers (\n"
-                        + "	ct_id integer PRIMARY KEY, created_at DATETIME DEFAULT CURRENT_TIMESTAMP, name text, parent_id integer);" +
+                        + "	ct_id integer PRIMARY KEY, created_at DATETIME DEFAULT CURRENT_TIMESTAMP, name text, parent_id integer);\n" +
                     " CREATE TABLE IF NOT EXISTS mDocuments (doc_id integer PRIMARY KEY, \n"
-                        + "	ct_id integer, created_at DATETIME DEFAULT CURRENT_TIMESTAMP, name text);" +
+                        + "	ct_id integer, created_at DATETIME DEFAULT CURRENT_TIMESTAMP, name text);\n" +
                     " CREATE TABLE IF NOT EXISTS mParagraphs (pg_id integer PRIMARY KEY, \n"
-                        + "doc_id integer, created_at DATETIME DEFAULT CURRENT_TIMESTAMP);" +
+                        + "doc_id integer, created_at DATETIME DEFAULT CURRENT_TIMESTAMP);\n" +
                     "CREATE TABLE IF NOT EXISTS mPhrases (\n"
                         + "	ph_id integer PRIMARY KEY, pg_id integer, sorder integer, \n"
-                        + " created_at DATETIME DEFAULT CURRENT_TIMESTAMP);" +
+                        + " created_at DATETIME DEFAULT CURRENT_TIMESTAMP);\n" +
                     "CREATE TABLE IF NOT EXISTS mPhraseContent (\n"
-                        + "	с_id integer PRIMARY KEY, ph_id integer, lx_id integer, sorder integer);" +
+                        + "	с_id integer PRIMARY KEY, ph_id integer, lx_id integer, rcind integer, sorder integer, rw_id integer);\n" +
                     "CREATE TABLE IF NOT EXISTS mGrammems (\n" +
-                        " gr_id integer PRIMARY KEY, с_id integer, sg_id integer, intval integer);" +
+                        " gr_id integer PRIMARY KEY, с_id integer, sg_id integer, intval integer);\n" +
                     "CREATE TABLE IF NOT EXISTS mSyntNodes (\n" +
-                        " sn_id integer PRIMARY KEY, с_id integer, ln_id integer, level integer, pс_id integer);";
+                        " sn_id integer PRIMARY KEY, с_id integer, ln_id integer, level integer, pс_id integer);\n";
                 m_sqlCmd.ExecuteNonQuery();
             }
             catch (SQLiteException ex)
@@ -730,16 +732,19 @@ namespace DirectDBconnector
         /// Вставка в mPhraseContent.
         /// </summary>
         /// <returns>ID</returns>
-        public long InsertWordDB(long ph_id, long lx_id, int sorder)
+        public long InsertWordDB(long ph_id, long lx_id, int sorder, int rcind = 0, int rw_id = 0)
         {
             long result = -1;
             try
             {
-                m_sqlCmd.CommandText = "INSERT INTO mPhraseContent(с_id, ph_id, lx_id, sorder) VALUES(NULL, @ph_id, @lx_id, @sorder)";
+                m_sqlCmd.CommandText =
+                    "INSERT INTO mPhraseContent(с_id, ph_id, lx_id, sorder, rcind, rw_id) VALUES(NULL, @ph_id, @lx_id, @sorder, @rcind, @rw_id)";
                 m_sqlCmd.Parameters.Clear();
                 m_sqlCmd.Parameters.Add(new SQLiteParameter("@ph_id", ph_id));
                 m_sqlCmd.Parameters.Add(new SQLiteParameter("@lx_id", lx_id));
                 m_sqlCmd.Parameters.Add(new SQLiteParameter("@sorder", sorder));
+                m_sqlCmd.Parameters.Add(new SQLiteParameter("@rcind", rcind));
+                m_sqlCmd.Parameters.Add(new SQLiteParameter("@rw_id", rw_id));
                 m_sqlCmd.ExecuteNonQuery();
                 result = m_dbConn.LastInsertRowId;
             }

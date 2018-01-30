@@ -71,12 +71,14 @@ table Node
 }
 
 table Lexema {
-	order:int; // Порядок слова в предложении
-	EntryName:string;
+	order:int;			// Порядок слова в предложении
+	EntryName:string;	// Лемма
 	id_entry:int;
 	id_partofspeech:int;
 	grammems:[Grammema];	// Vector of tables.
 	LexemaID : long;		// ID СУБД
+	RealWord:string;	// текстовое значение слова (с сохранением оригинального написания)
+	rcind : int;		// характеристика словарной статьи (нашлось слово или нет)
 }
 
 table Grammema {

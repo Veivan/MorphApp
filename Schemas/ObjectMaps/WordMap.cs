@@ -10,13 +10,15 @@ namespace Schemas
 	public class WordMap
 	{
 		public HasDict xPart = null;
-		public string EntryName = "";
-		public int order; // Порядок слова в предложении
+        public string EntryName = "";
+        public string RealWord = "";
+        public int order; // Порядок слова в предложении
+        public int rcind; // характеристика словарной статьи (нашлось слово или нет)
 
-		/// <summary>
-		/// ID словарной статьи.
-		/// </summary>
-		private int id_entry;
+        /// <summary>
+        /// ID словарной статьи.
+        /// </summary>
+        private int id_entry;
 		public int ID_Entry
 		{
 			get
@@ -103,8 +105,10 @@ namespace Schemas
 				word = new WordMap(lexval.IdEntry, lexval.IdPartofspeech);
 				word.EntryName = lexval.EntryName;
 				word.order = lexval.Order;
-				// Чтение граммем
-				for (int i = 0; i < lexval.GrammemsLength; i++)
+                word.RealWord = lexval.RealWord;
+                word.rcind = lexval.Rcind;
+                // Чтение граммем
+                for (int i = 0; i < lexval.GrammemsLength; i++)
 				{
 					var grammema = lexval.Grammems(i);
 					if (grammema.HasValue)

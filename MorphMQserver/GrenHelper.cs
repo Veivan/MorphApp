@@ -467,14 +467,17 @@ namespace MorphMQserver
 			int Position = GrammarEngine.sol_GetNodePosition(hNode);
 			if (Position > -1)
 			{
-				int id_entry = GrammarEngine.sol_GetNodeIEntry(hEngine, hNode);
+                int id_entry = GrammarEngine.sol_GetNodeIEntry(hEngine, hNode);
 				int id_partofspeech = GrammarEngine.sol_GetEntryClass(hEngine, id_entry);
 				wmap = new WordMap(id_entry, id_partofspeech);
-				wmap.EntryName = GrammarEngine.sol_GetEntryNameFX(hEngine, id_entry);
-				if (wmap.EntryName == "???")
-					wmap.EntryName = "дубль";
-				// Определение типа класса по ID части речи
-				var xType = Gren.sgAPI.GetTypeClassByID((GrenPart)id_partofspeech);
+                wmap.RealWord = GrammarEngine.sol_GetNodeContentsFX(hNode);
+                wmap.EntryName = GrammarEngine.sol_GetEntryNameFX(hEngine, id_entry);
+                if (wmap.EntryName == "???")
+                    wmap.rcind = 1;
+                if (wmap.EntryName == "number_")
+                    wmap.rcind = 2;
+                // Определение типа класса по ID части речи
+                var xType = Gren.sgAPI.GetTypeClassByID((GrenPart)id_partofspeech);
 				if (xType != null)
 				{
 					// Создание класса части речи

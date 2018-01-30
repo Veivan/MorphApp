@@ -238,6 +238,7 @@ namespace Schemas
             {
                 var word = sentence.GetWordByOrder(i);
                 var EntryName = builder.CreateString(word.EntryName);
+                var RealWord = builder.CreateString(word.RealWord);
 
                 // Чтение граммем
                 var pairs = word.GetPairs();
@@ -249,7 +250,8 @@ namespace Schemas
                     j++;
                 }
                 var gramsCol = Lexema.CreateGrammemsVector(builder, grammems);
-                words[i] = Lexema.CreateLexema(builder, i, EntryName, word.ID_Entry, word.ID_PartOfSpeech, gramsCol);
+                words[i] = Lexema.CreateLexema(builder, i, EntryName, word.ID_Entry, word.ID_PartOfSpeech, gramsCol, 
+                    0, RealWord, word.rcind);
             }
             var wordsCol = Sentence.CreateWordsVector(builder, words);
 

@@ -25,6 +25,9 @@ public struct Lexema : IFlatbufferObject
   public Grammema? Grammems(int j) { int o = __p.__offset(12); return o != 0 ? (Grammema?)(new Grammema()).__assign(__p.__indirect(__p.__vector(o) + j * 4), __p.bb) : null; }
   public int GrammemsLength { get { int o = __p.__offset(12); return o != 0 ? __p.__vector_len(o) : 0; } }
   public long LexemaID { get { int o = __p.__offset(14); return o != 0 ? __p.bb.GetLong(o + __p.bb_pos) : (long)0; } }
+  public string RealWord { get { int o = __p.__offset(16); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
+  public ArraySegment<byte>? GetRealWordBytes() { return __p.__vector_as_arraysegment(16); }
+  public int Rcind { get { int o = __p.__offset(18); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
 
   public static Offset<Lexema> CreateLexema(FlatBufferBuilder builder,
       int order = 0,
@@ -32,9 +35,13 @@ public struct Lexema : IFlatbufferObject
       int id_entry = 0,
       int id_partofspeech = 0,
       VectorOffset grammemsOffset = default(VectorOffset),
-      long LexemaID = 0) {
-    builder.StartObject(6);
+      long LexemaID = 0,
+      StringOffset RealWordOffset = default(StringOffset),
+      int rcind = 0) {
+    builder.StartObject(8);
     Lexema.AddLexemaID(builder, LexemaID);
+    Lexema.AddRcind(builder, rcind);
+    Lexema.AddRealWord(builder, RealWordOffset);
     Lexema.AddGrammems(builder, grammemsOffset);
     Lexema.AddIdPartofspeech(builder, id_partofspeech);
     Lexema.AddIdEntry(builder, id_entry);
@@ -43,7 +50,7 @@ public struct Lexema : IFlatbufferObject
     return Lexema.EndLexema(builder);
   }
 
-  public static void StartLexema(FlatBufferBuilder builder) { builder.StartObject(6); }
+  public static void StartLexema(FlatBufferBuilder builder) { builder.StartObject(8); }
   public static void AddOrder(FlatBufferBuilder builder, int order) { builder.AddInt(0, order, 0); }
   public static void AddEntryName(FlatBufferBuilder builder, StringOffset EntryNameOffset) { builder.AddOffset(1, EntryNameOffset.Value, 0); }
   public static void AddIdEntry(FlatBufferBuilder builder, int idEntry) { builder.AddInt(2, idEntry, 0); }
@@ -52,6 +59,8 @@ public struct Lexema : IFlatbufferObject
   public static VectorOffset CreateGrammemsVector(FlatBufferBuilder builder, Offset<Grammema>[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
   public static void StartGrammemsVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
   public static void AddLexemaID(FlatBufferBuilder builder, long LexemaID) { builder.AddLong(5, LexemaID, 0); }
+  public static void AddRealWord(FlatBufferBuilder builder, StringOffset RealWordOffset) { builder.AddOffset(6, RealWordOffset.Value, 0); }
+  public static void AddRcind(FlatBufferBuilder builder, int rcind) { builder.AddInt(7, rcind, 0); }
   public static Offset<Lexema> EndLexema(FlatBufferBuilder builder) {
     int o = builder.EndObject();
     return new Offset<Lexema>(o);
