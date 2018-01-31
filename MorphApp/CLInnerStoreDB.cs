@@ -5,10 +5,11 @@ using System.Data;
 using System.Linq;
 using Schemas;
 using DirectDBconnector;
+using System.Text;
 
 namespace MorphApp
 {
- 
+
     /// <summary>
 	/// Реализация IntfInnerStore.
 	/// Класс описывает внутреннее хранилище данных клиента MorphApp.
@@ -16,6 +17,8 @@ namespace MorphApp
 	/// </summary>
 	public class CLInnerStoreDB : IntfInnerStore
 	{
+        const int PUNCTUATION_class = 21;          // class ПУНКТУАТОР
+
         Courier courier = new Courier();
         
         // Работа с БД напрямую
@@ -81,15 +84,34 @@ namespace MorphApp
 					string phrase = "";
 					if (sentstruct.Capasity > 0)
 					{
-						courier.SendStruct(sentstruct);
+                        /*/ Восстановление предложения обращением к GREN
+                        courier.SendStruct(sentstruct);
 						var sentlistRep = courier.GetSeparatedSentsList();
 						if (sentlistRep != null && sentlistRep.Count > 0)
-							phrase = sentlistRep[0];
-					}
+							phrase = sentlistRep[0]; */
+                        // Восстановление предложения обращением к БД
+                        phrase = RestorePhrase(sentstruct);
+                    }
                     paragraph.RefreshSentProp(phrase, sentstruct, true);
                 }
             }
             return dMap;
+        }
+
+        /// <summary>
+        /// Восстановление предложения по формам слов, хранящимся в структурах WordMap
+        /// </summary>
+        private string RestorePhrase(SentenceMap sentstruct)
+        {
+            var sb = new StringBuilder();
+            for (int i = 0; i < sentstruct.Capasity; i++)
+            {
+                var wmap = sentstruct.GetWordByOrder(i);
+                if (i > 0 && i < sentstruct.Capasity && wmap.ID_PartOfSpeech != PUNCTUATION_class)
+                    sb.Append(" ");
+                sb.Append(wmap.RealWord);
+            }
+            return sb.ToString();
         }
 
         public override void FillContainers(ComplexValue list)
