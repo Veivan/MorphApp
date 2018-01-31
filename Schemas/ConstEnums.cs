@@ -212,7 +212,8 @@ namespace Schemas
         tblPhraseContent,
         tblLemms,
         tblGrammems,
-        tblSyntNodes
+        tblSyntNodes,
+        tblRealWord
     }
 
 	/// <summary>

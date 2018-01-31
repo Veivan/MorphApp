@@ -128,7 +128,8 @@ namespace DirectDBconnector
                 {
                     var word = sent.GetWordByOrder(i);
                     var lx_id = dbConnector.SaveLex(word.EntryName.ToLower(), word.ID_PartOfSpeech);
-                    var c_id = dbConnector.InsertWordDB(ph_id, lx_id, word.order);
+                    var rw_id = dbConnector.SaveRealWord(word.RealWord);
+                    var c_id = dbConnector.InsertWordDB(ph_id, lx_id, word.order, word.rcind, rw_id);
                     word.WordID = c_id;
                     // Сохранение граммем слова в БД
                     var grammems = word.GetPairs();
@@ -176,7 +177,9 @@ namespace DirectDBconnector
 					// В БД не хранится ID словарной статьи GREN. 
 					var word = new WordMap(-1, wstr.sp_id);
 					word.EntryName = wstr.lemma;
-					word.order = i;
+                    word.RealWord = wstr.realWord;
+                    word.rcind = wstr.rcind;
+                    word.order = i;
 					// Чтение граммем слова
 					var grammems = dbConnector.ReadGrammemsDB(wstr.с_id);
 					foreach (var pair in grammems)

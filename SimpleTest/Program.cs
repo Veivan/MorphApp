@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using DirectDBconnector;
+
 namespace SimpleTest
 {
     // Создать перечисление
@@ -23,6 +25,8 @@ namespace SimpleTest
     {
         static void Main()
         {
+            RunTest();
+
             UI user1;
             for (user1 = UI.Name; user1 <= UI.Sex; user1++)
                 Console.WriteLine("Элемент: \"{0}\", значение {1}",user1,(int)user1);
@@ -54,5 +58,15 @@ namespace SimpleTest
 
             Console.ReadLine();
         }
+
+        static void RunTest()
+        {
+            SQLiteConnector dbConnector = SQLiteConnector.Instance;
+            // act
+            dbConnector.EmptyDB();
+            // assert
+            dbConnector.selectAll("mParagraphs");
+        }
+
     }
 }

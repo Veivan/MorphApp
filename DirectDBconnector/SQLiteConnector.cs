@@ -14,9 +14,11 @@ namespace DirectDBconnector
 
     public struct WordStruct
     {
-        public int с_id;
+        public long с_id;
         public string lemma;
         public int sp_id;
+        public int rcind;
+        public string realWord;
     }
 
     /// Singleton
@@ -64,11 +66,11 @@ namespace DirectDBconnector
             try
             {
                 m_sqlCmd.CommandText =
-                   // "DROP TABLE IF EXISTS mSyntNodes;\n" +
-                   // "DROP TABLE IF EXISTS mGrammems;\n" +
-                   // "DROP TABLE IF EXISTS mPhraseContent;\n" +
-                   // "DROP TABLE IF EXISTS mPhrases;\n" +
-                   // "DROP TABLE IF EXISTS mParagraphs;\n" +
+                    "DROP TABLE IF EXISTS mSyntNodes;\n" +
+                    "DROP TABLE IF EXISTS mGrammems;\n" +
+                    "DROP TABLE IF EXISTS mPhraseContent;\n" +
+                    "DROP TABLE IF EXISTS mPhrases;\n" +
+                    "DROP TABLE IF EXISTS mParagraphs;\n" +
                     "DROP TABLE IF EXISTS mDocuments;\n" +
                     "DROP TABLE IF EXISTS mContainers;\n" +
                     "DROP TABLE IF EXISTS mLemms;\n VACUUM;";
@@ -144,7 +146,7 @@ namespace DirectDBconnector
         /// Вставка в mContainers.
         /// </summary>
         /// <param name="name">Имя контейнера</param>
-		/// <param name="parent_id">ID родительского контейнера</param>
+        /// <param name="parent_id">ID родительского контейнера</param>
         /// <returns>ID контейнера</returns>
         public long InsertContainerDB(string name, long parent_id = -1)
         {
@@ -732,7 +734,7 @@ namespace DirectDBconnector
         /// Вставка в mPhraseContent.
         /// </summary>
         /// <returns>ID</returns>
-        public long InsertWordDB(long ph_id, long lx_id, int sorder, int rcind = 0, int rw_id = 0)
+        public long InsertWordDB(long ph_id, long lx_id, int sorder, int rcind, long rw_id)
         {
             long result = -1;
             try
@@ -765,7 +767,9 @@ namespace DirectDBconnector
             var reslist = new List<WordStruct>();
             try
             {
-                m_sqlCmd.CommandText = "SELECT P.с_id, B.lemma, B.sp_id FROM mPhraseContent P JOIN mLemms B ON B.lx_id = P.lx_id " +
+                m_sqlCmd.CommandText = "SELECT P.с_id, B.lemma, B.sp_id, P.rcind, R.wform FROM mPhraseContent P "+
+                    "JOIN mLemms B ON B.lx_id = P.lx_id " +
+                    "JOIN mRealWord R ON R.rw_id = P.rw_id " +
                     "WHERE P.ph_id = @ph_id ORDER BY sorder";
                 m_sqlCmd.Parameters.Clear();
                 m_sqlCmd.Parameters.Add(new SQLiteParameter("@ph_id", ph_id));
@@ -775,9 +779,11 @@ namespace DirectDBconnector
                 while (r.Read())
                 {
                     var wstruct = new WordStruct();
-                    wstruct.с_id = r.GetInt32(0);
+                    wstruct.с_id = r.GetInt64(0);
                     wstruct.lemma = r.GetString(1);
                     wstruct.sp_id = r.GetInt32(2);
+                    wstruct.rcind = r.GetInt32(3);
+                    wstruct.realWord = r.GetString(4);
                     reslist.Add(wstruct);
                 }
                 r.Close();
@@ -1006,6 +1012,55 @@ namespace DirectDBconnector
 
         #endregion
 
+        #region Методы работы с леммами
+        /// <summary>
+        /// Сохранение формы слова в БД.
+        /// </summary>
+        /// <param name="realWord">форма слова</param>
+        /// <returns>ID формы слова</returns>
+        public long SaveRealWord(string realWord)
+        {
+            long result = GetRealWord(realWord);
+            if (result == -1)
+            {
+                try
+                {
+                    m_sqlCmd.CommandText = "INSERT INTO mRealWord(rw_id, wform) VALUES(NULL, @wform)";
+                    m_sqlCmd.Parameters.Clear();
+                    m_sqlCmd.Parameters.Add(new SQLiteParameter("@wform", realWord));
+                    m_sqlCmd.ExecuteNonQuery();
+                    result = m_dbConn.LastInsertRowId;
+                }
+                catch (SQLiteException ex)
+                {
+                    Console.WriteLine("Error: " + ex.Message);
+                }
+            }
+            return result;
+        }
+
+        private long GetRealWord(string realWord)
+        {
+            long result = -1;
+            try
+            {
+                m_sqlCmd.CommandText = "SELECT rw_id FROM mRealWord WHERE wform = @wform";
+                m_sqlCmd.Parameters.Clear();
+                m_sqlCmd.Parameters.Add(new SQLiteParameter("@wform", realWord));
+                // Читаем только первую запись
+                var resp = m_sqlCmd.ExecuteScalar();
+                if (resp != null)
+                    result = (long)resp;
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+            }
+            return result;
+        }
+
+        #endregion
+
         #region Методы служебные
         public void DropColumn()
         {
@@ -1085,7 +1140,7 @@ namespace DirectDBconnector
                         m_sqlCmd.CommandText = "SELECT ph_id, pg_id, sorder, created_at FROM mPhrases";
                         break;
                     case "mPhraseContent":
-                        m_sqlCmd.CommandText = "SELECT с_id, ph_id, lx_id, sorder FROM mPhraseContent";
+                        m_sqlCmd.CommandText = "SELECT с_id, ph_id, lx_id, sorder, rcind, rw_id FROM mPhraseContent";
                         break;
                     case "mGrammems":
                         m_sqlCmd.CommandText = "SELECT gr_id, с_id, sg_id, intval FROM mGrammems";
@@ -1126,7 +1181,7 @@ namespace DirectDBconnector
                             line = r["ph_id"].ToString() + ", " + r["pg_id"].ToString() + ", " + r["sorder"].ToString();
                             break;
                         case "mPhraseContent":
-                            line = r["с_id"].ToString() + ", " + r["ph_id"].ToString() + ", " + r["lx_id"].ToString();
+                            line = r["с_id"].ToString() + ", " + r["ph_id"].ToString() + ", " + r["lx_id"].ToString() + ", " + r["rcind"].ToString() + ", " + r["rw_id"].ToString() + ", " + r["sorder"].ToString();
                             break;
                         case "mGrammems":
                             line = r["gr_id"].ToString() + ", " + r["с_id"].ToString() + ", " + r["sg_id"].ToString() + ", " + r["intval"].ToString();

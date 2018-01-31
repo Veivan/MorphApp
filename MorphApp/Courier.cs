@@ -175,7 +175,7 @@ namespace MorphApp
 						throw new ZException(error);
 				}
 
-				if (requesterDB.PollIn(poll, out msg, out error, TimeSpan.FromMilliseconds(3000)))
+				if (requesterDB.PollIn(poll, out msg, out error, TimeSpan.FromMilliseconds(10000)))
 				{
 					// Process task
 					replay = msg[0];

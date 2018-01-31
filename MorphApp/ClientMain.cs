@@ -265,7 +265,7 @@ namespace MorphApp
 			for (int i = 0; i < sent.Capasity; i++)
 			{
 				var word = sent.GetWordByOrder(i);
-				sb.Append(word.EntryName + "\r\n");
+				sb.Append(word.EntryName + " " + word.RealWord + "\r\n");
 			}
 
 			// Отображение синт связей

@@ -131,10 +131,20 @@ namespace DirectDBA
                 DataPropertyName = "sorder",
                 HeaderText = "sorder"
             });
+            dgvPhraseContent.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "rcind",
+                HeaderText = "rcind"
+            });
+            dgvPhraseContent.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "rw_id",
+                HeaderText = "rw_id"
+            });
             #endregion
 
-			#region Создание колонок для Лемм
-			dgvLemms.Columns.Add(new DataGridViewTextBoxColumn
+            #region Создание колонок для Лемм
+            dgvLemms.Columns.Add(new DataGridViewTextBoxColumn
 			{
 				DataPropertyName = "lx_id",
 				HeaderText = "lx_id"
@@ -201,6 +211,19 @@ namespace DirectDBA
                 HeaderText = "pс_id"
             });
             #endregion
+
+            #region Создание колонок для Форм слов
+            dgvRealWord.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "rw_id",
+                HeaderText = "rw_id"
+            });
+            dgvRealWord.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                DataPropertyName = "wform",
+                HeaderText = "wform"
+            });
+            #endregion
         }
 
         private void btRefreshContainers_Click(object sender, EventArgs e)
@@ -250,7 +273,13 @@ namespace DirectDBA
             var retval = dbServer.ReadDataTable(dbTables.tblSyntNodes);
             bsSyntNodes.DataSource = retval.dtable;
         }
-        
+
+        private void btRefreshRealWord_Click(object sender, EventArgs e)
+        {
+            var retval = dbServer.ReadDataTable(dbTables.tblRealWord);
+            bsRealWord.DataSource = retval.dtable;
+        }
+
         /// <summary>
         /// Чтения Документов напрямую из БД.
         /// </summary>
@@ -283,10 +312,13 @@ namespace DirectDBA
                     dbServer.UpdateDataTable((DataTable)bsLemms.DataSource, dbTables.tblLemms);
                     break;
 				case "btUpdGrammems":
-					dbServer.UpdateDataTable((DataTable)bsLemms.DataSource, dbTables.tblGrammems);
-                    break;				
+					dbServer.UpdateDataTable((DataTable)bsGrammems.DataSource, dbTables.tblGrammems);
+                    break;
                 case "btUpdSyntNodes":
-                    dbServer.UpdateDataTable((DataTable)bsLemms.DataSource, dbTables.tblSyntNodes);
+                    dbServer.UpdateDataTable((DataTable)bsSyntNodes.DataSource, dbTables.tblSyntNodes);
+                    break;
+                case "btUpdRealWord":
+                    dbServer.UpdateDataTable((DataTable)bsRealWord.DataSource, dbTables.tblRealWord);
                     break;
             }
         }
