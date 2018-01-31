@@ -141,11 +141,11 @@ namespace MorphApp
 			ZMessage msg = null;
 
 			using (var requesterMorph = new ZSocket(ZSocketType.REQ))
-			using (var requesterDB = new ZSocket(ZSocketType.REQ))
+			//using (var requesterDB = new ZSocket(ZSocketType.REQ))
 			{
 				// Connect
 				requesterMorph.Connect("tcp://127.0.0.1:5559");
-				requesterDB.Connect("tcp://127.0.0.1:5560");
+				//requesterDB.Connect("tcp://127.0.0.1:5560");
 
 				var poll = ZPollItem.CreateReceiver();
 
@@ -156,12 +156,12 @@ namespace MorphApp
 						requesterMorph.Send(frame);
 						break;
 					case ServType.svSUBD:
-						requesterDB.Send(frame);
+						//requesterDB.Send(frame);
 						break;
 				}
 
 				// Process messages from both sockets
-				if (requesterMorph.PollIn(poll, out msg, out error, TimeSpan.FromMilliseconds(3000)))
+				if (requesterMorph.PollIn(poll, out msg, out error, TimeSpan.FromMilliseconds(5000)))
 				//if (requesterMorph.PollIn(poll, out msg, out error))
 				{
 					// Process task
@@ -175,7 +175,7 @@ namespace MorphApp
 						throw new ZException(error);
 				}
 
-				if (requesterDB.PollIn(poll, out msg, out error, TimeSpan.FromMilliseconds(10000)))
+				/*if (requesterDB.PollIn(poll, out msg, out error, TimeSpan.FromMilliseconds(10000)))
 				{
 					// Process task
 					replay = msg[0];
@@ -186,7 +186,7 @@ namespace MorphApp
 						return replay;    // Interrupted
 					if (error != ZError.EAGAIN)
 						throw new ZException(error);
-				}
+				}*/
 
 				/*/ Receive
 				using (ZFrame reply = requesterMorph.ReceiveFrame())

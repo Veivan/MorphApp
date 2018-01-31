@@ -36,6 +36,7 @@ namespace MorphMQserver
 						// Send
 						var foo = order.GetResultBytes();
                         responder.Send(new ZFrame(foo));
+                        Console.WriteLine("Replay sended");
                     }
                 }
             }
