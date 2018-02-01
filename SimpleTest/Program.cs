@@ -64,8 +64,6 @@ namespace SimpleTest
             SQLiteConnector dbConnector = SQLiteConnector.Instance;
             // act
             dbConnector.EmptyDB();
-            // assert
-            dbConnector.selectAll("mParagraphs");
         }
 
     }

@@ -14,8 +14,9 @@ namespace DirectDBconnector
         const string comSelGrammems = "SELECT gr_id, с_id, sg_id, intval FROM mGrammems";
         const string comSelSyntNodes = "SELECT sn_id, с_id, ln_id, level, pс_id FROM mSyntNodes";
         const string comSelRealWord = "SELECT rw_id, wform FROM mRealWord";
+        const string comSelTermContent = "SELECT tc_id, tm_id, lx_id, sorder FROM mTerminContent";
 
-        public string GetSelectStatement(dbTables tblname)
+        public static string GetSelectStatement(dbTables tblname)
         {
             switch (tblname)
             {
@@ -28,6 +29,7 @@ namespace DirectDBconnector
                 case dbTables.tblGrammems: return comSelGrammems;
                 case dbTables.tblSyntNodes: return comSelSyntNodes;
                 case dbTables.tblRealWord: return comSelRealWord;
+                case dbTables.tblTermContent: return comSelTermContent;
                 default: return "";
             }
         }

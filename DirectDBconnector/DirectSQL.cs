@@ -17,7 +17,6 @@ namespace DirectDBconnector
 	{
 		private SQLiteConnection m_dbConn;
 		private SQLiteCommand m_sqlCmd = new SQLiteCommand();
-		private TableSelector tableSelector = new TableSelector();
 
 		public DirectSQL(SQLiteConnection _m_dbConn)
 		{
@@ -32,7 +31,7 @@ namespace DirectDBconnector
 		/// <returns>DataTable</returns>
 		public DataTable GetDataTable(dbTables tblname)
 		{
-			var stmnt = tableSelector.GetSelectStatement(tblname);
+			var stmnt = TableSelector.GetSelectStatement(tblname);
 			if (String.IsNullOrEmpty(stmnt))
 				return null;
 			DataTable dTable = new DataTable();
@@ -57,7 +56,7 @@ namespace DirectDBconnector
 		public void UpdateDataTable(DataTable dTable, dbTables tblname)
 		{
 			if (dTable == null) return;
-			var stmnt = tableSelector.GetSelectStatement(tblname);
+			var stmnt = TableSelector.GetSelectStatement(tblname);
 			if (String.IsNullOrEmpty(stmnt))
 				return;
 			m_sqlCmd.CommandText = stmnt;

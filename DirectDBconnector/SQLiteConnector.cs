@@ -66,6 +66,8 @@ namespace DirectDBconnector
             try
             {
                 m_sqlCmd.CommandText =
+                    "DROP TABLE IF EXISTS mTerminContent;\n" +
+                    "DROP TABLE IF EXISTS mTermins;\n" +
                     "DROP TABLE IF EXISTS mSyntNodes;\n" +
                     "DROP TABLE IF EXISTS mGrammems;\n" +
                     "DROP TABLE IF EXISTS mPhraseContent;\n" +
@@ -129,11 +131,15 @@ namespace DirectDBconnector
                         + " created_at DATETIME DEFAULT CURRENT_TIMESTAMP);\n" +
                     "CREATE TABLE IF NOT EXISTS mPhraseContent (\n"
                         + "	с_id integer PRIMARY KEY, ph_id integer, lx_id integer, rcind integer, sorder integer, rw_id integer);\n" +
-                    "CREATE TABLE IF NOT EXISTS mGrammems (\n" +
-                        " gr_id integer PRIMARY KEY, с_id integer, sg_id integer, intval integer);\n" +
-                    "CREATE TABLE IF NOT EXISTS mSyntNodes (\n" +
-                        " sn_id integer PRIMARY KEY, с_id integer, ln_id integer, level integer, pс_id integer);\n";
-                m_sqlCmd.ExecuteNonQuery();
+                    "CREATE TABLE IF NOT EXISTS mGrammems (\n" 
+                        + " gr_id integer PRIMARY KEY, с_id integer, sg_id integer, intval integer);\n" +
+                    "CREATE TABLE IF NOT EXISTS mSyntNodes (\n" 
+                        + " sn_id integer PRIMARY KEY, с_id integer, ln_id integer, level integer, pс_id integer);\n" +
+                    "CREATE TABLE IF NOT EXISTS mTermins (\n"
+                        + "	tm_id integer PRIMARY KEY);\n" +
+                    "CREATE TABLE IF NOT EXISTS mTerminContent (\n"
+                        + "	tc_id integer PRIMARY KEY, tm_id integer, lx_id integer, rcind integer, sorder integer);\n" +
+            m_sqlCmd.ExecuteNonQuery();
             }
             catch (SQLiteException ex)
             {
@@ -767,7 +773,7 @@ namespace DirectDBconnector
             var reslist = new List<WordStruct>();
             try
             {
-                m_sqlCmd.CommandText = "SELECT P.с_id, B.lemma, B.sp_id, P.rcind, R.wform FROM mPhraseContent P "+
+                m_sqlCmd.CommandText = "SELECT P.с_id, B.lemma, B.sp_id, P.rcind, R.wform FROM mPhraseContent P " +
                     "JOIN mLemms B ON B.lx_id = P.lx_id " +
                     "JOIN mRealWord R ON R.rw_id = P.rw_id " +
                     "WHERE P.ph_id = @ph_id ORDER BY sorder";
@@ -1109,84 +1115,48 @@ namespace DirectDBconnector
         ///
         /// select all rows in the mPhrases table
         /// 
-        public void selectAll(string nTable)
+        public void selectAll(dbTables tblname)
         {
             try
             {
-                switch (nTable)
-                {
-                    case "mSpParts":
-                        m_sqlCmd.CommandText = "SELECT sp_id, speechpart FROM mSpParts";
-                        break;
-                    case "mSiGram":
-                        m_sqlCmd.CommandText = "SELECT sg_id, property FROM mSiGram";
-                        break;
-                    case "mSiLinks":
-                        m_sqlCmd.CommandText = "SELECT ln_id, linktype FROM mSiLinks";
-                        break;
-                    case "mLemms":
-                        m_sqlCmd.CommandText = "SELECT lx_id, sp_id, lemma FROM mLemms";
-                        break;
-                    case "mContainers":
-                        m_sqlCmd.CommandText = "SELECT ct_id, created_at, name, parent_id FROM mContainers";
-                        break;
-                    case "mDocuments":
-                        m_sqlCmd.CommandText = "SELECT doc_id, ct_id, created_at, name FROM mDocuments";
-                        break;
-                    case "mParagraphs":
-                        m_sqlCmd.CommandText = "SELECT pg_id, doc_id, created_at FROM mParagraphs";
-                        break;
-                    case "mPhrases":
-                        m_sqlCmd.CommandText = "SELECT ph_id, pg_id, sorder, created_at FROM mPhrases";
-                        break;
-                    case "mPhraseContent":
-                        m_sqlCmd.CommandText = "SELECT с_id, ph_id, lx_id, sorder, rcind, rw_id FROM mPhraseContent";
-                        break;
-                    case "mGrammems":
-                        m_sqlCmd.CommandText = "SELECT gr_id, с_id, sg_id, intval FROM mGrammems";
-                        break;
-                    case "mSyntNodes":
-                        m_sqlCmd.CommandText = "SELECT sn_id, с_id, ln_id, level, pс_id FROM mSyntNodes";
-                        break;
-                }
-
+                m_sqlCmd.CommandText = TableSelector.GetSelectStatement(tblname);
                 SQLiteDataReader r = m_sqlCmd.ExecuteReader();
                 string line = String.Empty;
                 while (r.Read())
                 {
-                    switch (nTable)
+                    switch (tblname)
                     {
-                        case "mSpParts":
+                        case dbTables.tblParts:
                             line = r["sp_id"].ToString() + ", " + r["speechpart"];
                             break;
-                        case "mSiGram":
+                        case dbTables.tblSiGram:
                             line = r["sg_id"].ToString() + ", " + r["property"];
                             break;
-                        case "mSiLinks":
+                        case dbTables.tblSiLinks:
                             line = r["ln_id"].ToString() + ", " + r["linktype"];
                             break;
-                        case "mLemms":
+                        case dbTables.tblLemms:
                             line = r["lx_id"].ToString() + ", " + r["sp_id"].ToString() + ", " + r["lemma"];
                             break;
-                        case "mContainers":
+                        case dbTables.tblContainers:
                             line = r["ct_id"].ToString() + ", " + r["created_at"].ToString() + ", " + r["name"] + ", " + r["parent_id"].ToString();
                             break;
-                        case "mDocuments":
+                        case dbTables.tblDocuments:
                             line = r["doc_id"].ToString() + ", " + r["ct_id"].ToString() + ", " + r["created_at"].ToString() + ", " + r["name"];
                             break;
-                        case "mParagraphs":
+                        case dbTables.tblParagraphs:
                             line = r["pg_id"].ToString() + ", " + r["doc_id"].ToString() + ", " + r["created_at"].ToString();
                             break;
-                        case "mPhrases":
+                        case dbTables.tblSents:
                             line = r["ph_id"].ToString() + ", " + r["pg_id"].ToString() + ", " + r["sorder"].ToString();
                             break;
-                        case "mPhraseContent":
+                        case dbTables.tblPhraseContent:
                             line = r["с_id"].ToString() + ", " + r["ph_id"].ToString() + ", " + r["lx_id"].ToString() + ", " + r["rcind"].ToString() + ", " + r["rw_id"].ToString() + ", " + r["sorder"].ToString();
                             break;
-                        case "mGrammems":
+                        case dbTables.tblGrammems:
                             line = r["gr_id"].ToString() + ", " + r["с_id"].ToString() + ", " + r["sg_id"].ToString() + ", " + r["intval"].ToString();
                             break;
-                        case "mSyntNodes":
+                        case dbTables.tblSyntNodes:
                             line = r["sn_id"].ToString() + ", " + r["с_id"].ToString() + ", " + r["ln_id"].ToString() + ", " + r["level"].ToString() + ", " + r["pс_id"].ToString();
                             break;
                     }

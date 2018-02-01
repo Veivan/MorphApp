@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using DirectDBconnector;
+using Schemas;
 
 namespace DirectDBconnectorTests
 {
@@ -39,7 +40,7 @@ namespace DirectDBconnectorTests
 			// arrange
 			SQLiteConnector dbConnector = SQLiteConnector.Instance;
 			// act
-            dbConnector.selectAll("mSyntNodes");
+            dbConnector.selectAll(dbTables.tblSyntNodes);
 			// assert
 			Assert.AreEqual(0, 0);
 		}
@@ -52,7 +53,7 @@ namespace DirectDBconnectorTests
 			// act
 			dbConnector.EmptyDB();
 			// assert
-			dbConnector.selectAll("mParagraphs");
+			dbConnector.selectAll(dbTables.tblParagraphs);
 			Assert.AreEqual(0, 0);
 		}
 
@@ -63,7 +64,7 @@ namespace DirectDBconnectorTests
 			SQLiteConnector dbConnector = SQLiteConnector.Instance;
 			// act
 			dbConnector.InsertSpeechParts();
-			dbConnector.selectAll("mSpParts");
+			dbConnector.selectAll(dbTables.tblParts);
 			// assert
 			Assert.AreEqual(0, 0);
 		}
@@ -75,7 +76,7 @@ namespace DirectDBconnectorTests
 			SQLiteConnector dbConnector = SQLiteConnector.Instance;
 			// act
 			dbConnector.InsertGrenProperties();
-			dbConnector.selectAll("mSiGram");
+			dbConnector.selectAll(dbTables.tblSiGram);
 			// assert
 			Assert.AreEqual(0, 0);
 		}
@@ -87,7 +88,7 @@ namespace DirectDBconnectorTests
 			SQLiteConnector dbConnector = SQLiteConnector.Instance;
 			// act
 			dbConnector.InsertGrenLinks();
-			dbConnector.selectAll("mSiLinks");
+			dbConnector.selectAll(dbTables.tblSiLinks);
 			// assert
 			Assert.AreEqual(0, 0);
 		}
@@ -99,7 +100,7 @@ namespace DirectDBconnectorTests
 			SQLiteConnector dbConnector = SQLiteConnector.Instance;
 			// act
 			dbConnector.InsertDocumentDB("docN", 1);
-			dbConnector.selectAll("mDocuments");
+			dbConnector.selectAll(dbTables.tblDocuments);
 			// assert
 			Assert.AreEqual(0, 0);
 		}
@@ -111,7 +112,7 @@ namespace DirectDBconnectorTests
 			SQLiteConnector dbConnector = SQLiteConnector.Instance;
 			// act
             var id = dbConnector.InsertContainerDB("Хранилище");
-            dbConnector.selectAll("mContainers");
+            dbConnector.selectAll(dbTables.tblContainers);
 			// assert
             Assert.AreNotEqual(-1, id);
 		}
@@ -122,9 +123,9 @@ namespace DirectDBconnectorTests
             // arrange
             SQLiteConnector dbConnector = SQLiteConnector.Instance;
             // act
-            dbConnector.selectAll("mParagraphs");
+            dbConnector.selectAll(dbTables.tblParagraphs);
             dbConnector.DropColumn();
-            dbConnector.selectAll("mParagraphs");
+            dbConnector.selectAll(dbTables.tblParagraphs);
             // assert
             Assert.AreNotEqual(-1, 0);
         }
@@ -136,7 +137,7 @@ namespace DirectDBconnectorTests
             SQLiteConnector dbConnector = SQLiteConnector.Instance;
             // act
             dbConnector.AddColumn();
-            dbConnector.selectAll("mSyntNodes");
+            dbConnector.selectAll(dbTables.tblSyntNodes);
             // assert
             Assert.AreNotEqual(-1, 0);
         }

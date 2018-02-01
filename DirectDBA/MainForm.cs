@@ -15,312 +15,316 @@ namespace DirectDBA
     public partial class MainForm : Form
     {
         SagaDBServer dbServer = new SagaDBServer();
+        string[] stables = { "Контейнеры", "Документы", "Абзацы", "Предложения", "Содержание фраз", "Леммы",
+            "Граммемы", "Синт.связи", "Формы слов", "Термины" };
 
-		public MainForm()
+        private dbTables _aspect; 
+        public dbTables ActiveAspect
+        {
+            get { return _aspect; }
+            set
+            {
+                _aspect = value;
+                dgvCommon.DataSource = GetDS();
+                RefreshColumnSet();
+                RefreshDS();
+                tabControl1.TabPages[0].Text = stables[(int)_aspect];
+            }
+        }
+
+        public MainForm()
         {
             InitializeComponent();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            #region Создание колонок для Контейнеров
-            dgvContainers.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "ct_id",
-                HeaderText = "ct_id"
-            });
-            dgvContainers.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "parent_id",
-                HeaderText = "parent_id"
-            });
-            dgvContainers.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "Created_at",
-                HeaderText = "Создан"
-            });
-            dgvContainers.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "name",
-                HeaderText = "name"
-            });
-            #endregion
-
-            #region Создание колонок для Документов
-            dgvDocuments.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "doc_id",
-                HeaderText = "doc_id"
-            });
-            dgvDocuments.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "ct_id",
-                HeaderText = "ct_id"
-            });
-            dgvDocuments.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "Created_at",
-                HeaderText = "Создан"
-            });
-            dgvDocuments.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "name",
-                HeaderText = "name"
-            });
-            #endregion
-
-            #region Создание колонок для Абзацев
-            dgvParagraphs.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "pg_id",
-                HeaderText = "pg_id"
-            });
-            dgvParagraphs.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "doc_id",
-                HeaderText = "doc_id"
-            });
-            dgvParagraphs.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "Created_at",
-                HeaderText = "Создан"
-            });
-            #endregion
-
-            #region Создание колонок для Предложений
-            dgvSents.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "ph_id",
-                HeaderText = "ph_id"
-            });
-            dgvSents.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "pg_id",
-                HeaderText = "pg_id"
-            });
-            dgvSents.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "sorder",
-                HeaderText = "sorder"
-            });
-            dgvSents.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "Created_at",
-                HeaderText = "Создан"
-            });
-            #endregion
-
-            #region Создание колонок для Содержимого Предложений
-            dgvPhraseContent.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "с_id",
-                HeaderText = "с_id"
-            });
-            dgvPhraseContent.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "ph_id",
-                HeaderText = "ph_id"
-            });
-            dgvPhraseContent.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "lx_id",
-                HeaderText = "lx_id"
-            });
-            dgvPhraseContent.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "sorder",
-                HeaderText = "sorder"
-            });
-            dgvPhraseContent.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "rcind",
-                HeaderText = "rcind"
-            });
-            dgvPhraseContent.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "rw_id",
-                HeaderText = "rw_id"
-            });
-            #endregion
-
-            #region Создание колонок для Лемм
-            dgvLemms.Columns.Add(new DataGridViewTextBoxColumn
-			{
-				DataPropertyName = "lx_id",
-				HeaderText = "lx_id"
-			});
-			dgvLemms.Columns.Add(new DataGridViewTextBoxColumn
-			{
-				DataPropertyName = "sp_id",
-				HeaderText = "sp_id"
-			});
-			dgvLemms.Columns.Add(new DataGridViewTextBoxColumn
-			{
-				DataPropertyName = "lemma",
-				HeaderText = "lemma"
-			});
-			#endregion
-
-			#region Создание колонок для Граммем
-			dgvGrammems.Columns.Add(new DataGridViewTextBoxColumn
-			{
-				DataPropertyName = "gr_id",
-				HeaderText = "gr_id"
-			});
-			dgvGrammems.Columns.Add(new DataGridViewTextBoxColumn
-			{
-				DataPropertyName = "с_id",
-				HeaderText = "с_id"
-			});
-			dgvGrammems.Columns.Add(new DataGridViewTextBoxColumn
-			{
-				DataPropertyName = "sg_id",
-				HeaderText = "sg_id"
-			});
-			dgvGrammems.Columns.Add(new DataGridViewTextBoxColumn
-			{
-				DataPropertyName = "intval",
-				HeaderText = "intval"
-			});
-			#endregion 
-
-            #region Создание колонок для Синт.узлов
-            dgvSyntNodes.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "sn_id",
-                HeaderText = "sn_id"
-            });
-            dgvSyntNodes.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "с_id",
-                HeaderText = "с_id"
-            });
-            dgvSyntNodes.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "ln_id",
-                HeaderText = "ln_id"
-            });
-            dgvSyntNodes.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "level",
-                HeaderText = "level"
-            });
-            dgvSyntNodes.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "pс_id",
-                HeaderText = "pс_id"
-            });
-            #endregion
-
-            #region Создание колонок для Форм слов
-            dgvRealWord.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "rw_id",
-                HeaderText = "rw_id"
-            });
-            dgvRealWord.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                DataPropertyName = "wform",
-                HeaderText = "wform"
-            });
-            #endregion
+            cbTables.Items.AddRange(stables);
+            cbTables.SelectedIndex = 0;
         }
 
-        private void btRefreshContainers_Click(object sender, EventArgs e)
+        private void cbTables_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var retval = dbServer.ReadDataTable(dbTables.tblContainers);
-            bsContainers.DataSource = retval.dtable;
+            ActiveAspect = (dbTables)((sender as ComboBox).SelectedIndex);
         }
 
-        private void btRefreshDocuments_Click(object sender, EventArgs e)
+        private BindingSource GetDS()
         {
-            ReadDocsDirect();
-            //ReadDocsFromList();
+            switch (ActiveAspect)
+            {
+                case dbTables.tblContainers: return bsContainers;
+				case dbTables.tblDocuments: return bsDocuments;
+				case dbTables.tblParagraphs: return bsParagraphs;
+                case dbTables.tblSents: return bsSents;
+                case dbTables.tblPhraseContent: return bsPhraseContent;
+				case dbTables.tblLemms: return bsLemms;
+                case dbTables.tblGrammems: return bsGrammems;
+                case dbTables.tblSyntNodes: return bsSyntNodes;
+                case dbTables.tblRealWord: return bsRealWord;
+                case dbTables.tblTermContent: return bsTerminCont;
+                default: return null;
+            }
         }
 
-        private void btRefreshParagraphs_Click(object sender, EventArgs e)
+        private void RefreshColumnSet()
         {
-            var retval = dbServer.ReadParagraphsInDocsList(tpList.tplDBtable);
-            bsParagraphs.DataSource = retval.dtable;
+            dgvCommon.Columns.Clear();
+            switch (ActiveAspect)
+            {
+                case dbTables.tblContainers:
+                    #region Создание колонок для Контейнеров
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "ct_id",
+                        HeaderText = "ct_id"
+                    });
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "parent_id",
+                        HeaderText = "parent_id"
+                    });
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "Created_at",
+                        HeaderText = "Создан"
+                    });
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "name",
+                        HeaderText = "name"
+                    });
+                    #endregion
+                    break;
+                case dbTables.tblDocuments:
+                    #region Создание колонок для Документов
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "doc_id",
+                        HeaderText = "doc_id"
+                    });
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "ct_id",
+                        HeaderText = "ct_id"
+                    });
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "Created_at",
+                        HeaderText = "Создан"
+                    });
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "name",
+                        HeaderText = "name"
+                    });
+                    #endregion
+                    break;
+                case dbTables.tblParagraphs:
+                    #region Создание колонок для Абзацев
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "pg_id",
+                        HeaderText = "pg_id"
+                    });
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "doc_id",
+                        HeaderText = "doc_id"
+                    });
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "Created_at",
+                        HeaderText = "Создан"
+                    });
+                    #endregion
+                    break;
+                case dbTables.tblSents:
+                    #region Создание колонок для Предложений
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "ph_id",
+                        HeaderText = "ph_id"
+                    });
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "pg_id",
+                        HeaderText = "pg_id"
+                    });
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "sorder",
+                        HeaderText = "sorder"
+                    });
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "Created_at",
+                        HeaderText = "Создан"
+                    });
+                    #endregion
+                    break;
+                case dbTables.tblPhraseContent:
+                    #region Создание колонок для Содержимого Предложений
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "с_id",
+                        HeaderText = "с_id"
+                    });
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "ph_id",
+                        HeaderText = "ph_id"
+                    });
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "lx_id",
+                        HeaderText = "lx_id"
+                    });
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "sorder",
+                        HeaderText = "sorder"
+                    });
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "rcind",
+                        HeaderText = "rcind"
+                    });
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "rw_id",
+                        HeaderText = "rw_id"
+                    });
+                    #endregion
+                    break;
+                case dbTables.tblLemms:
+                    #region Создание колонок для Лемм
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "lx_id",
+                        HeaderText = "lx_id"
+                    });
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "sp_id",
+                        HeaderText = "sp_id"
+                    });
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "lemma",
+                        HeaderText = "lemma"
+                    });
+                    #endregion
+                    break;
+                case dbTables.tblGrammems:
+                    #region Создание колонок для Граммем
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "gr_id",
+                        HeaderText = "gr_id"
+                    });
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "с_id",
+                        HeaderText = "с_id"
+                    });
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "sg_id",
+                        HeaderText = "sg_id"
+                    });
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "intval",
+                        HeaderText = "intval"
+                    });
+                    #endregion
+                    break;
+                case dbTables.tblSyntNodes:
+                    #region Создание колонок для Синт.узлов
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "sn_id",
+                        HeaderText = "sn_id"
+                    });
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "с_id",
+                        HeaderText = "с_id"
+                    });
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "ln_id",
+                        HeaderText = "ln_id"
+                    });
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "level",
+                        HeaderText = "level"
+                    });
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "pс_id",
+                        HeaderText = "pс_id"
+                    });
+                    #endregion
+                    break;
+                case dbTables.tblRealWord:
+                    #region Создание колонок для Форм слов
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "rw_id",
+                        HeaderText = "rw_id"
+                    });
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "wform",
+                        HeaderText = "wform"
+                    });
+                    #endregion
+                    break;
+                case dbTables.tblTermContent:
+                    #region Создание колонок для Терминов
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "tc_id",
+                        HeaderText = "tc_id"
+                    });
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "tm_id",
+                        HeaderText = "tm_id"
+                    });
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "lx_id",
+                        HeaderText = "lx_id"
+                    });
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "sorder",
+                        HeaderText = "sorder"
+                    });
+                    #endregion
+                    break;  
+            }
         }
 
-        private void btRefreshSents_Click(object sender, EventArgs e)
+        private void btRefresh_Click(object sender, EventArgs e)
         {
-            var retval = dbServer.ReadDataTable(dbTables.tblSents);
-            bsSents.DataSource = retval.dtable;
+            RefreshDS();
         }
 
-        private void btRefreshPhraseContent_Click(object sender, EventArgs e)
+        private void RefreshDS()
         {
-            var retval = dbServer.ReadDataTable(dbTables.tblPhraseContent);
-            bsPhraseContent.DataSource = retval.dtable;
-        }
-
-        private void btRefreshLemms_Click(object sender, EventArgs e)
-        {
-            var retval = dbServer.ReadDataTable(dbTables.tblLemms);
-            bsLemms.DataSource = retval.dtable;
-        }
-
-		private void btRefreshGrammems_Click(object sender, EventArgs e)
-		{
-			var retval = dbServer.ReadDataTable(dbTables.tblGrammems);
-			bsGrammems.DataSource = retval.dtable;
-		}
-
-        private void btRefreshSyntNodes_Click(object sender, EventArgs e)
-        {
-            var retval = dbServer.ReadDataTable(dbTables.tblSyntNodes);
-            bsSyntNodes.DataSource = retval.dtable;
-        }
-
-        private void btRefreshRealWord_Click(object sender, EventArgs e)
-        {
-            var retval = dbServer.ReadDataTable(dbTables.tblRealWord);
-            bsRealWord.DataSource = retval.dtable;
-        }
-
-        /// <summary>
-        /// Чтения Документов напрямую из БД.
-        /// </summary>
-        private void ReadDocsDirect()
-        {
-            var retval = dbServer.ReadDataTable(dbTables.tblDocuments);
-            bsDocuments.DataSource = retval.dtable;
+            var retval = dbServer.ReadDataTable(ActiveAspect);
+            BindingSource ds = (BindingSource)dgvCommon.DataSource;
+            ds.DataSource = retval.dtable;
         }
 
         private void navUpdate_Click(object sender, EventArgs e)
         {
-            switch ((sender as ToolStripButton).Name)
-            {
-                case "btUpdDocuments":
-                    dbServer.UpdateDataTable((DataTable)bsDocuments.DataSource, dbTables.tblDocuments);
-                    break;
-                case "btUpdContainers":
-                    dbServer.UpdateDataTable((DataTable)bsContainers.DataSource, dbTables.tblContainers);
-                    break;
-                case "btUpdParagraphs":
-                    dbServer.UpdateDataTable((DataTable)bsParagraphs.DataSource, dbTables.tblParagraphs);
-                    break;
-                case "btUpdSents":
-                    dbServer.UpdateDataTable((DataTable)bsSents.DataSource, dbTables.tblSents);
-                    break;
-                case "btUpdPhContent":
-                    dbServer.UpdateDataTable((DataTable)bsPhraseContent.DataSource, dbTables.tblPhraseContent);
-                    break;
-                case "btUpdLemms":
-                    dbServer.UpdateDataTable((DataTable)bsLemms.DataSource, dbTables.tblLemms);
-                    break;
-				case "btUpdGrammems":
-					dbServer.UpdateDataTable((DataTable)bsGrammems.DataSource, dbTables.tblGrammems);
-                    break;
-                case "btUpdSyntNodes":
-                    dbServer.UpdateDataTable((DataTable)bsSyntNodes.DataSource, dbTables.tblSyntNodes);
-                    break;
-                case "btUpdRealWord":
-                    dbServer.UpdateDataTable((DataTable)bsRealWord.DataSource, dbTables.tblRealWord);
-                    break;
-            }
+            BindingSource ds = (BindingSource)dgvCommon.DataSource;
+            dbServer.UpdateDataTable((DataTable)ds.DataSource, ActiveAspect);
         }
 
         #region Примеры
@@ -373,6 +377,5 @@ namespace DirectDBA
             }
         }
         #endregion
-
     }
 }
