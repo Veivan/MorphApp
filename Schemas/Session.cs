@@ -8,5 +8,6 @@ namespace Schemas
 	public class Session
 	{
 		public static long MainStroreID = 1;
-	}
+        public static string MainStroreName = "Хранилище";
+    }
 }

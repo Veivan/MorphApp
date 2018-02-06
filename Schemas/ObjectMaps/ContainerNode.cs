@@ -39,7 +39,12 @@ namespace Schemas
 			this.documents.Add(dMap);
 		}
 
-		public List<DocumentMap> GetDocuments()
+        public void AddChild(ContainerNode cMap)
+        {
+            this.children.Add(cMap);
+        }
+
+        public List<DocumentMap> GetDocuments()
 		{
             return documents;
 		}

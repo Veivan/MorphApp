@@ -192,33 +192,28 @@ namespace DirectDBconnector
         }
 
         /// <summary>
-        /// Чтения контейнеров выбранного родителя из БД.
+        /// Чтения дочерних контейнеров множества родительских контейнеров.
         /// </summary>
-        /// <param name="parentID">ID родителя</param>
-        /// <returns>Коллекцию ContainerMap</returns>
-        public List<ContainerMap> GetChildrenContainersList(long parentID)
+        /// <param name="list_ids">список ID родительских контейнеров</param>
+        /// <returns>DataTable</returns>
+        public DataTable GetChildrenInContainerList(List<string> list_ids)
         {
-            var reslist = new List<ContainerMap>();
+            DataTable dTable = new DataTable();
+            string result = string.Join(",", list_ids.ToArray());
+            if (String.IsNullOrEmpty(result))
+                return dTable;
+
+            var stmnt = string.Format("SELECT ct_id, created_at, name, parent_id FROM mContainers WHERE parent_id IN ({0})", result);
             try
             {
-                var stmnt = String.Format("SELECT ct_id, created_at, name, parent_id FROM mContainers WHERE parent_id = {0}", parentID);
-                m_sqlCmd.CommandText = stmnt;
-                SQLiteDataReader r = m_sqlCmd.ExecuteReader();
-                while (r.Read())
-                {
-                    var dt = DateTime.Now;
-                    var created = r["created_at"].ToString();
-                    if (!String.IsNullOrEmpty(created))
-                        dt = DateTime.Parse(created);
-                    reslist.Add(new ContainerMap(r.GetInt64(0), r["name"].ToString(), dt, r.GetInt64(3)));
-                }
-                r.Close();
+                SQLiteDataAdapter adapter = new SQLiteDataAdapter(stmnt, m_dbConn);
+                adapter.Fill(dTable);
             }
             catch (SQLiteException ex)
             {
                 //MessageBox.Show("Error: " + ex.Message);
             }
-            return reslist;
+            return dTable;
         }
 
         /// <summary>

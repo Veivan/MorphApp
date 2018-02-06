@@ -17,19 +17,26 @@ namespace Schemas
 		/// <returns>ComplexValue</returns>
 		public abstract ComplexValue GetChildrenContainers(long parentID, tpList resulttype);
 
-		/// <summary>
-		/// Получение документов из выбранного контейнера.
-		/// </summary>
-		/// <param name="ct_id">ID контейнера</param>
-		/// <returns>RetValue</returns>
-		//public abstract RetValue GetDocsInContainer(long ct_id);
+        /// <summary>
+        /// Чтения дочерних контейнеров множества родительских контейнеров.
+        /// </summary>
+        /// <param name="list_ids">список ID родительских контейнеров</param>
+        /// <returns>ComplexValue</returns>
+        public abstract ComplexValue GetChildrenInContainerList(tpList resulttype, List<string> list_ids);
 
-		/// <summary>
-		/// Чтения документов из множества контейнеров.
-		/// </summary>
-		/// <param name="list_ids">список ID контейнеров</param>
-		/// <returns>ComplexValue</returns>
-		public abstract ComplexValue GetDocsInContainerList(List<string> list_ids);
+        /// <summary>
+        /// Получение документов из выбранного контейнера.
+        /// </summary>
+        /// <param name="ct_id">ID контейнера</param>
+        /// <returns>RetValue</returns>
+        //public abstract RetValue GetDocsInContainer(long ct_id);
+
+        /// <summary>
+        /// Чтения документов из множества контейнеров.
+        /// </summary>
+        /// <param name="list_ids">список ID контейнеров</param>
+        /// <returns>ComplexValue</returns>
+        public abstract ComplexValue GetDocsInContainerList(List<string> list_ids);
 
 		/// <summary>
 		/// Получение плоского списка абзацев

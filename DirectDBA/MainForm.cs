@@ -25,7 +25,9 @@ namespace DirectDBA
             set
             {
                 _aspect = value;
-                dgvCommon.DataSource = GetDS();
+                var ds = GetDS();
+                dgvCommon.DataSource = ds;
+                navigator.BindingSource = ds;
                 RefreshColumnSet();
                 RefreshDS();
                 tabControl1.TabPages[0].Text = stables[(int)_aspect];

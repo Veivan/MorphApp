@@ -40,18 +40,31 @@ namespace MorphApp
             MorphNode rootNode;
             treeView1.Nodes.Clear();
 
-            rootNode = new MorphNode("Хранилище");
+            rootNode = new MorphNode(Session.MainStroreName);
             rootNode.NodeType = clNodeType.clnContainer;
-			rootNode.bdID = 1;
+			rootNode.bdID = Session.MainStroreID;
             foreach (var cont in store.containers)
             {
                 var aNode = new MorphNode(cont.Name);
                 aNode.NodeType = clNodeType.clnContainer;
                 aNode.bdID = cont.ContainerID;
+                PopulateTreeChildrenConts(cont, aNode);
                 PopulateTreeDocuments(cont, aNode);
                 rootNode.Nodes.Add(aNode);
             }
             treeView1.Nodes.Add(rootNode);
+        }
+
+        private void PopulateTreeChildrenConts(ContainerNode container, TreeNode nodeToAddTo)
+        {
+            var chldrn = container.Children();
+            foreach (var chld in chldrn)
+            {
+                var aNode = new MorphNode(chld.Name);
+                aNode.NodeType = clNodeType.clnContainer;
+                aNode.bdID = chld.ContainerID;
+                nodeToAddTo.Nodes.Add(aNode);
+            }
         }
 
         private void PopulateTreeDocuments(ContainerNode container, TreeNode nodeToAddTo)
@@ -84,6 +97,13 @@ namespace MorphApp
             var aNode = (MorphNode)e.Node;
             switch (aNode.NodeType)
             {
+                case clNodeType.clnContainer:
+                    {
+                        if (aNode.bdID == Session.MainStroreID) return;
+                        // Обновление детей и документов в дереве
+
+                        break;
+                    }
                 case clNodeType.clnDocument:
                     {
                         // Обновление заголовков абзацев в дереве
@@ -166,7 +186,7 @@ namespace MorphApp
         {
             var aNode = treeView1.SelectedNode as MorphNode;
             if (aNode == null) return;
-            if (aNode.NodeType != clNodeType.clnContainer)
+            if (aNode.NodeType != clNodeType.clnContainer || aNode.bdID == Session.MainStroreID)
                 return;
             string result = Microsoft.VisualBasic.Interaction.InputBox("Введите имя документа:");
             if (String.IsNullOrEmpty(result))

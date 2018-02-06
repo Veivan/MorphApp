@@ -37,7 +37,7 @@
             this.panel3 = new System.Windows.Forms.Panel();
             this.btRefresh = new System.Windows.Forms.Button();
             this.cbTables = new System.Windows.Forms.ComboBox();
-            this.navContainers = new System.Windows.Forms.BindingNavigator(this.components);
+            this.navigator = new System.Windows.Forms.BindingNavigator(this.components);
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
@@ -51,6 +51,10 @@
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.btUpdData = new System.Windows.Forms.ToolStripButton();
+            this.tabTree = new System.Windows.Forms.TabPage();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.dgvViewer = new System.Windows.Forms.DataGridView();
+            this.listBox1 = new System.Windows.Forms.ListBox();
             this.bsDocuments = new System.Windows.Forms.BindingSource(this.components);
             this.bsParagraphs = new System.Windows.Forms.BindingSource(this.components);
             this.bsSents = new System.Windows.Forms.BindingSource(this.components);
@@ -59,10 +63,6 @@
             this.bsGrammems = new System.Windows.Forms.BindingSource(this.components);
             this.bsSyntNodes = new System.Windows.Forms.BindingSource(this.components);
             this.bsRealWord = new System.Windows.Forms.BindingSource(this.components);
-            this.tabTree = new System.Windows.Forms.TabPage();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.dgvViewer = new System.Windows.Forms.DataGridView();
-            this.listBox1 = new System.Windows.Forms.ListBox();
             this.binding1 = new System.Windows.Forms.BindingSource(this.components);
             this.bsTerminCont = new System.Windows.Forms.BindingSource(this.components);
             this.tabControl1.SuspendLayout();
@@ -70,8 +70,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvCommon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsContainers)).BeginInit();
             this.panel3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.navContainers)).BeginInit();
-            this.navContainers.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.navigator)).BeginInit();
+            this.navigator.SuspendLayout();
+            this.tabTree.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvViewer)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsDocuments)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsParagraphs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsSents)).BeginInit();
@@ -80,8 +82,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.bsGrammems)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsSyntNodes)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsRealWord)).BeginInit();
-            this.tabTree.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvViewer)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.binding1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsTerminCont)).BeginInit();
             this.SuspendLayout();
@@ -123,7 +123,7 @@
             // 
             this.panel3.Controls.Add(this.btRefresh);
             this.panel3.Controls.Add(this.cbTables);
-            this.panel3.Controls.Add(this.navContainers);
+            this.panel3.Controls.Add(this.navigator);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel3.Location = new System.Drawing.Point(0, 424);
             this.panel3.Name = "panel3";
@@ -150,13 +150,12 @@
             this.cbTables.TabIndex = 2;
             this.cbTables.SelectedIndexChanged += new System.EventHandler(this.cbTables_SelectedIndexChanged);
             // 
-            // navContainers
+            // navigator
             // 
-            this.navContainers.AddNewItem = this.toolStripButton1;
-            this.navContainers.BindingSource = this.bsContainers;
-            this.navContainers.CountItem = this.toolStripLabel1;
-            this.navContainers.DeleteItem = this.toolStripButton2;
-            this.navContainers.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.navigator.AddNewItem = this.toolStripButton1;
+            this.navigator.CountItem = this.toolStripLabel1;
+            this.navigator.DeleteItem = this.toolStripButton2;
+            this.navigator.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButton3,
             this.toolStripButton4,
             this.toolStripSeparator2,
@@ -170,16 +169,16 @@
             this.toolStripButton2,
             this.toolStripSeparator5,
             this.btUpdData});
-            this.navContainers.Location = new System.Drawing.Point(0, 0);
-            this.navContainers.MoveFirstItem = this.toolStripButton3;
-            this.navContainers.MoveLastItem = this.toolStripButton6;
-            this.navContainers.MoveNextItem = this.toolStripButton5;
-            this.navContainers.MovePreviousItem = this.toolStripButton4;
-            this.navContainers.Name = "navContainers";
-            this.navContainers.PositionItem = this.toolStripTextBox1;
-            this.navContainers.Size = new System.Drawing.Size(817, 25);
-            this.navContainers.TabIndex = 1;
-            this.navContainers.Text = "bindingNavigator1";
+            this.navigator.Location = new System.Drawing.Point(0, 0);
+            this.navigator.MoveFirstItem = this.toolStripButton3;
+            this.navigator.MoveLastItem = this.toolStripButton6;
+            this.navigator.MoveNextItem = this.toolStripButton5;
+            this.navigator.MovePreviousItem = this.toolStripButton4;
+            this.navigator.Name = "navigator";
+            this.navigator.PositionItem = this.toolStripTextBox1;
+            this.navigator.Size = new System.Drawing.Size(817, 25);
+            this.navigator.TabIndex = 1;
+            this.navigator.Text = "bindingNavigator1";
             // 
             // toolStripButton1
             // 
@@ -333,9 +332,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.bsContainers)).EndInit();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.navContainers)).EndInit();
-            this.navContainers.ResumeLayout(false);
-            this.navContainers.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.navigator)).EndInit();
+            this.navigator.ResumeLayout(false);
+            this.navigator.PerformLayout();
+            this.tabTree.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvViewer)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsDocuments)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsParagraphs)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsSents)).EndInit();
@@ -344,8 +345,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.bsGrammems)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsSyntNodes)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsRealWord)).EndInit();
-            this.tabTree.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvViewer)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.binding1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsTerminCont)).EndInit();
             this.ResumeLayout(false);
@@ -364,7 +363,7 @@
         private System.Windows.Forms.TabPage tabPageCommon;
         private System.Windows.Forms.DataGridView dgvCommon;
         private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.BindingNavigator navContainers;
+        private System.Windows.Forms.BindingNavigator navigator;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.BindingSource bsContainers;
         private System.Windows.Forms.ToolStripLabel toolStripLabel1;

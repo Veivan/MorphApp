@@ -102,7 +102,7 @@ namespace Schemas
         public abstract void Refresh();
 
         /// <summary>
-        /// Заполнение внутреннего хранилища.
+        /// Формирование заголовков абзацев.
         /// </summary>
         public abstract DocumentMap RefreshParagraphs(long contID, long docID);
 

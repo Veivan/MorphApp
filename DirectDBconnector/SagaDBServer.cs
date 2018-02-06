@@ -7,54 +7,72 @@ namespace DirectDBconnector
 {
     public class SagaDBServer : IDataDealer
     {
-		SQLiteConnector dbConnector = SQLiteConnector.Instance;
+        SQLiteConnector dbConnector = SQLiteConnector.Instance;
 
         #region Унаследованные методы
 
-		/// <summary>
-		/// Получение плоского списка контейнеров
-		/// в виде DataTable
-		/// </summary>
-		/// <param name="resulttype">тип возвращаемого результата</param>
-		/// <returns>ComplexValue</returns>
-		public override ComplexValue GetChildrenContainers(long parentID, tpList resulttype)
-		{
-			ComplexValue rval = new ComplexValue();
-			if (resulttype == tpList.tplDBtable)
-				rval.dtable = dbConnector.GetChildrenContainers(parentID);
-			else
-				rval.list.AddRange(dbConnector.GetChildrenContainersList(parentID));
-			return rval;
-		}
+        /// <summary>
+        /// Получение плоского списка контейнеров
+        /// в виде DataTable
+        /// </summary>
+        /// <param name="resulttype">тип возвращаемого результата</param>
+        /// <returns>ComplexValue</returns>
+        public override ComplexValue GetChildrenContainers(long parentID, tpList resulttype)
+        {
+            ComplexValue rval = new ComplexValue();
+            rval.dtable = dbConnector.GetChildrenContainers(parentID);
+            if (resulttype == tpList.tblList)
+            {
+                for (int i = 0; i < rval.dtable.Rows.Count; i++)
+                {
+                    var ct_id = rval.dtable.Rows[i].Field<long>("ct_id");
+                    var parent_id = rval.dtable.Rows[i].Field<long>("parent_id");
+                    var name = rval.dtable.Rows[i].Field<string>("name");
+                    var created_at = rval.dtable.Rows[i].Field<DateTime?>("created_at");
+                    if (created_at == null)
+                        created_at = DateTime.Now;
+                    var cMap = new ContainerMap(ct_id, name, created_at, parent_id);
+                    rval.list.Add(new ContainerNode(cMap));
+                }
+            }
+            return rval;
+        }
 
-		/*public override RetValue GetDocsInContainer(long ct_id)
+        public override ComplexValue GetChildrenInContainerList(tpList resulttype, List<string> list_ids)
+        {
+            ComplexValue rval = new ComplexValue();
+            rval.dtable = dbConnector.GetChildrenInContainerList(list_ids);
+            return rval;
+        }
+
+        /*public override RetValue GetDocsInContainer(long ct_id)
 		{
 			RetValue rval = new RetValue();
 			return rval;
 		}
 */
-		public override ComplexValue GetDocsInContainerList(List<string> list_ids)
-		{
-			ComplexValue rval = new ComplexValue();
-			rval.dtable = dbConnector.GetDocsInContainerList(list_ids);
-			return rval;
-		}
+        public override ComplexValue GetDocsInContainerList(List<string> list_ids)
+        {
+            ComplexValue rval = new ComplexValue();
+            rval.dtable = dbConnector.GetDocsInContainerList(list_ids);
+            return rval;
+        }
 
-		/// <summary>
-		/// Получение плоского списка абзацев
-		/// </summary>
-		/// <param name="resulttype">тип возвращаемого результата</param>
-		/// <param name="list_ids">Список ID документов</param>
-		/// <returns>ComplexValue</returns>
-		public override ComplexValue ReadParagraphsInDocsList(tpList resulttype, List<string> list_ids = null)
-		{
-			ComplexValue rval = new ComplexValue();
-			if (resulttype == tpList.tplDBtable)
-				rval.dtable = dbConnector.ReadParagraphsInDocs(list_ids);
-			else
-				rval.list.AddRange(dbConnector.ReadParagraphsInDocsList(list_ids));
-			return rval;
-		}
+        /// <summary>
+        /// Получение плоского списка абзацев
+        /// </summary>
+        /// <param name="resulttype">тип возвращаемого результата</param>
+        /// <param name="list_ids">Список ID документов</param>
+        /// <returns>ComplexValue</returns>
+        public override ComplexValue ReadParagraphsInDocsList(tpList resulttype, List<string> list_ids = null)
+        {
+            ComplexValue rval = new ComplexValue();
+            if (resulttype == tpList.tplDBtable)
+                rval.dtable = dbConnector.ReadParagraphsInDocs(list_ids);
+            else
+                rval.list.AddRange(dbConnector.ReadParagraphsInDocsList(list_ids));
+            return rval;
+        }
 
         public override ComplexValue ReadPhrasesInParagraphsList(tpList resulttype, List<string> list_ids = null)
         {
@@ -66,33 +84,33 @@ namespace DirectDBconnector
             return rval;
         }
 
-		public override long SaveParagraph(ParagraphMap pMap)
+        public override long SaveParagraph(ParagraphMap pMap)
         {
-			var paraOper = new ParagraphOperator(pMap, pMap.ParagraphID == -1 ? OpersDB.odInsert : OpersDB.odUpdate);
+            var paraOper = new ParagraphOperator(pMap, pMap.ParagraphID == -1 ? OpersDB.odInsert : OpersDB.odUpdate);
             paraOper.Execute();
-			return paraOper.ParagraphID;
+            return paraOper.ParagraphID;
         }
 
-		public override List<SentenceMap> ReadParagraphDB(long pg_id)
-		{
-			var pMap = new ParagraphMap(pg_id);
-			var paraOper = new ParagraphOperator(pMap, OpersDB.odSelect);
-			paraOper.Execute();
-			return paraOper.GetSentList();
-		}
+        public override List<SentenceMap> ReadParagraphDB(long pg_id)
+        {
+            var pMap = new ParagraphMap(pg_id);
+            var paraOper = new ParagraphOperator(pMap, OpersDB.odSelect);
+            paraOper.Execute();
+            return paraOper.GetSentList();
+        }
 
-		public override void DelParagraphDB(long pg_id)
-		{
-			var pMap = new ParagraphMap(pg_id);
-			var paraOper = new ParagraphOperator(pMap, OpersDB.odDelete);
-			paraOper.Execute();
-		}
+        public override void DelParagraphDB(long pg_id)
+        {
+            var pMap = new ParagraphMap(pg_id);
+            var paraOper = new ParagraphOperator(pMap, OpersDB.odDelete);
+            paraOper.Execute();
+        }
 
-		public override long SaveContainerBD(string name, long parentID = -1)
-		{
-			var id = dbConnector.InsertContainerDB(name, parentID);
-			return id;
-		}
+        public override long SaveContainerBD(string name, long parentID = -1)
+        {
+            var id = dbConnector.InsertContainerDB(name, parentID);
+            return id;
+        }
 
         public override long SaveDocumentBD(string name, long ct_ID)
         {
@@ -131,9 +149,9 @@ namespace DirectDBconnector
         /// <param name="tblname">enum нужной таблицы</param>
         /// <returns></returns>
         public void UpdateDataTable(DataTable dTable, dbTables tblname)
-		{
-			dbConnector.dirCmd.UpdateDataTable(dTable, tblname);	
-		}
+        {
+            dbConnector.dirCmd.UpdateDataTable(dTable, tblname);
+        }
 
         /// <summary>
         /// Получение содержимого таблицы

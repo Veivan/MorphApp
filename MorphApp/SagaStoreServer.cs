@@ -95,6 +95,11 @@ namespace MorphApp
         {
             throw new NotImplementedException();
         }
+
+        public override ComplexValue GetChildrenInContainerList(tpList resulttype, List<string> list_ids)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }

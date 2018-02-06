@@ -40,6 +40,8 @@ namespace MorphApp
                 var strID = dTable.Rows[i].Field<long>("ct_id");
                 list_ids.Add(strID.ToString());
             }
+            list = dbServer.GetChildrenInContainerList(tpList.tplDBtable, list_ids);
+            this.FillChildren(list);
             list = dbServer.GetDocsInContainerList(list_ids);
             this.FillDocs(list);
             list_ids.Clear();
@@ -126,12 +128,29 @@ namespace MorphApp
 				var created_at = dTable.Rows[i].Field<DateTime?>("created_at");
 
 				var cMap = new ContainerMap(ct_id, name, created_at, parent_id);
-				var cont = new ContainerNode(cMap);
-				containers.Add(cont);
+				containers.Add(new ContainerNode(cMap));
 			}
 		}
 
-		public override void FillDocs(ComplexValue list)
+        public void FillChildren(ComplexValue list)
+        {
+            DataTable dTable = list.dtable;
+            for (int i = 0; i < dTable.Rows.Count; i++)
+            {
+                var ct_id = dTable.Rows[i].Field<long>("ct_id");
+                var parent_id = dTable.Rows[i].Field<long>("parent_id");
+                var name = dTable.Rows[i].Field<string>("name");
+                var created_at = dTable.Rows[i].Field<DateTime?>("created_at");
+
+                var cMap = new ContainerMap(ct_id, name, created_at, parent_id);
+                var cont = new ContainerNode(cMap);
+                var parent = containers.Where(x => x.ContainerID == parent_id).FirstOrDefault();
+                if (parent != null)
+                    parent.AddChild(cont);
+            }
+        }
+
+        public override void FillDocs(ComplexValue list)
 		{
 			DataTable dTable = list.dtable;
 			for (int i = 0; i < dTable.Rows.Count; i++)
@@ -148,7 +167,7 @@ namespace MorphApp
 			}
 		}
 
-		public override void FillDocsParagraphs(ComplexValue list)
+        public override void FillDocsParagraphs(ComplexValue list)
 		{
 			DataTable dTable = list.dtable;
 			for (int i = 0; i < dTable.Rows.Count; i++)
