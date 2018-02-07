@@ -27,28 +27,46 @@ namespace MorphApp
         #region Методы работы с БД
         /// <summary>
         /// Заполнение внутреннего хранилища.
+        /// Узел основного хранилища заполняется данными о дочерних контейнерах,
+        /// чтобы у узла возник крестик.
         /// </summary>
         public override void Refresh()
         {
+            containers.Clear();
+            var MainMap = new ContainerMap(Session.MainStroreID, Session.MainStroreName, DateTime.Now, -1);
+            var maincontainer = new ContainerNode(MainMap);
+            containers.Add(maincontainer);
+
             var list_ids = new List<string>();
             list_ids.Add(Session.MainStroreID.ToString());
-
             var list = dbServer.GetChildrenInContainerList(tpList.tplDBtable, list_ids);
-            this.FillContainers(list);
+            this.FillChildren(maincontainer, list);
+        }
+
+        public override void RefreshContainer(long contID)
+        {
+            var container = GetContainerByID(contID);
+            var list_ids = new List<string>();
+            // Получение документов контейнера
+            list_ids.Add(contID.ToString());
+            var list = dbServer.GetDocsInContainerList(list_ids);
+            this.FillDocs(container, list);
 
             list_ids.Clear();
-            var dTable = list.dtable;
-            for (int i = 0; i < dTable.Rows.Count; i++)
+            // Получение списка ID дочерних контейнеров
+            foreach (var chld in container.Children())
             {
-                var strID = dTable.Rows[i].Field<long>("ct_id");
-                list_ids.Add(strID.ToString());
+                var strID = chld.ContainerID.ToString();
+                list_ids.Add(strID);
             }
+
+            // Обновление дочерних контейнеров данными из БД
             list = dbServer.GetChildrenInContainerList(tpList.tplDBtable, list_ids);
             this.FillChildren(null, list);
             list = dbServer.GetDocsInContainerList(list_ids);
             this.FillDocs(null, list);
             list_ids.Clear();
-            dTable = list.dtable;
+            var dTable = list.dtable;
             for (int i = 0; i < dTable.Rows.Count; i++)
             {
                 var strID = dTable.Rows[i].Field<long>("doc_id");
@@ -56,18 +74,6 @@ namespace MorphApp
             }
             list = dbServer.ReadParagraphsInDocsList(tpList.tplDBtable, list_ids);
             this.FillDocsParagraphs(list);
-        }
-
-        public override void RefreshContainer(long contID)
-        {
-            var container = GetContainerByID(contID);
-            // Чтение данных о дочерних контейнерах и документах абзаца из БД
-            var list_ids = new List<string>();
-            list_ids.Add(contID.ToString());
-            var list = dbServer.GetChildrenInContainerList(tpList.tplDBtable, list_ids);
-            this.FillChildren(container, list);
-            list = dbServer.GetDocsInContainerList(list_ids);
-            this.FillDocs(container, list);
         }
 
         public override DocumentMap RefreshParagraphs(long contID, long docID)
@@ -115,22 +121,6 @@ namespace MorphApp
             }
             return sb.ToString();
         }
-
-        public override void FillContainers(ComplexValue list)
-		{
-			DataTable dTable = list.dtable;
-			containers.Clear();
-			for (int i = 0; i < dTable.Rows.Count; i++)
-			{
-				var ct_id = dTable.Rows[i].Field<long>("ct_id");
-				var parent_id = dTable.Rows[i].Field<long>("parent_id");
-				var name = dTable.Rows[i].Field<string>("name");
-				var created_at = dTable.Rows[i].Field<DateTime?>("created_at");
-
-				var cMap = new ContainerMap(ct_id, name, created_at, parent_id);
-				containers.Add(new ContainerNode(cMap));
-			}
-		}
 
         public override void FillChildren(ContainerNode in_parentCont, ComplexValue list)
         {
@@ -182,7 +172,8 @@ namespace MorphApp
                 var pMap = new ParagraphMap(pg_id, doc_id, created_at, ct_id);
                 var cont = GetContainerByID(ct_id);
                 var doc = cont.GetDocuments().Where(x => x.DocumentID == doc_id).FirstOrDefault();
-				doc.AddParagraph(pMap);
+                if (doc != null)
+				    doc.AddParagraph(pMap);
 			}
 		}
 

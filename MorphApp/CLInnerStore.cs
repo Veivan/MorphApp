@@ -16,18 +16,22 @@ namespace MorphApp
         // Работа с БД через сервер сообщений
         SagaStoreServer dbServer = new SagaStoreServer();
         
-        public override void FillContainers(ComplexValue list)
-		{
-			var dTable = list.list;
-			containers.Clear();
-			foreach (ContainerMap item in dTable)
-			{
-				var cont = new ContainerNode(item);
-				containers.Add(cont);
-			}
-		}
+        public override void FillChildren(ContainerNode parentCont, ComplexValue list)
+        {
+            var dTable = list.list;
+            foreach (ContainerMap item in dTable)
+            {
+                var cont = new ContainerNode(item);
+                parentCont.AddChild(cont);
+            }
+        }
 
-		public override void FillDocsParagraphs(ComplexValue list)
+        public override void FillDocs(ContainerNode cont, ComplexValue list)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void FillDocsParagraphs(ComplexValue list)
 		{
 			throw new NotImplementedException();
 		}
@@ -108,16 +112,6 @@ namespace MorphApp
         }
 
         public override void RefreshContainer(long contID)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void FillChildren(ContainerNode parentCont, ComplexValue list)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void FillDocs(ContainerNode cont, ComplexValue list)
         {
             throw new NotImplementedException();
         }

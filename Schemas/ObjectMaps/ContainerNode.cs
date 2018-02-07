@@ -36,7 +36,9 @@ namespace Schemas
 
 		public void AddDocument(DocumentMap dMap)
 		{
-			this.documents.Add(dMap);
+            var aMap = documents.Where(x => x.DocumentID == dMap.DocumentID).FirstOrDefault();
+            if (aMap == null)
+                this.documents.Add(dMap);
 		}
 
         public void AddChild(ContainerNode cMap)

@@ -107,16 +107,9 @@ namespace Schemas
         public abstract DocumentMap RefreshParagraphs(long contID, long docID);
 
         /// <summary>
-        /// Заполнение детей и документов абзаца данными из БД.
+        /// Заполнение детей и документов самого абзаца и детей на один уровень вниз данными из БД.
         /// </summary>
         public abstract void RefreshContainer(long contID);
-
-        /// <summary>
-        /// Заполнение Хранилища данными о контейнерах.
-        /// </summary>
-        /// <param name="list">Набор данных или список</param>
-        /// <returns></returns>
-        public abstract void FillContainers(ComplexValue list);
 
         /// <summary>
         /// Заполнение дочерних контейнеров.
