@@ -27,16 +27,11 @@ namespace MorphApp
 			}
 		}
 
-		public override void FillDocs(ComplexValue list)
-		{
-			throw new NotImplementedException();
-		}
-
 		public override void FillDocsParagraphs(ComplexValue list)
 		{
 			throw new NotImplementedException();
 		}
-
+        
 
         public override void Refresh()
         {
@@ -108,6 +103,21 @@ namespace MorphApp
         }
 
         public override void DelContainer(long ct_id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void RefreshContainer(long contID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void FillChildren(ContainerNode parentCont, ComplexValue list)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void FillDocs(ContainerNode cont, ComplexValue list)
         {
             throw new NotImplementedException();
         }

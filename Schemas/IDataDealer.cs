@@ -9,27 +9,13 @@ namespace Schemas
 	/// </summary>
 	public abstract class IDataDealer
 	{
-		/// <summary>
-		/// Получение контейнеров выбранного родителя.
-		/// </summary>
-		/// <param name="parentID">ID родителя</param>
-		/// <param name="resulttype">тип возвращаемого результата</param>
-		/// <returns>ComplexValue</returns>
-		public abstract ComplexValue GetChildrenContainers(long parentID, tpList resulttype);
-
         /// <summary>
         /// Чтения дочерних контейнеров множества родительских контейнеров.
         /// </summary>
+		/// <param name="resulttype">тип возвращаемого результата</param>
         /// <param name="list_ids">список ID родительских контейнеров</param>
         /// <returns>ComplexValue</returns>
         public abstract ComplexValue GetChildrenInContainerList(tpList resulttype, List<string> list_ids);
-
-        /// <summary>
-        /// Получение документов из выбранного контейнера.
-        /// </summary>
-        /// <param name="ct_id">ID контейнера</param>
-        /// <returns>RetValue</returns>
-        //public abstract RetValue GetDocsInContainer(long ct_id);
 
         /// <summary>
         /// Чтения документов из множества контейнеров.

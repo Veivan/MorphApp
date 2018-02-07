@@ -107,6 +107,11 @@ namespace Schemas
         public abstract DocumentMap RefreshParagraphs(long contID, long docID);
 
         /// <summary>
+        /// Заполнение детей и документов абзаца данными из БД.
+        /// </summary>
+        public abstract void RefreshContainer(long contID);
+
+        /// <summary>
         /// Заполнение Хранилища данными о контейнерах.
         /// </summary>
         /// <param name="list">Набор данных или список</param>
@@ -114,18 +119,27 @@ namespace Schemas
         public abstract void FillContainers(ComplexValue list);
 
         /// <summary>
-        /// Заполнение Хранилища данными о документах.
+        /// Заполнение дочерних контейнеров.
         /// </summary>
+        /// <param name="parentCont">родительский контейнер</param>
         /// <param name="list">Набор данных или список</param>
         /// <returns></returns>
-        public abstract void FillDocs(ComplexValue list);
+        public abstract void FillChildren(ContainerNode parentCont, ComplexValue list);
+
+        /// <summary>
+        /// Заполнение Хранилища данными о документах.
+        /// </summary>
+        /// <param name="cont">родительский контейнер</param>
+        /// <param name="list">Набор данных или список</param>
+        /// <returns></returns>
+        public abstract void FillDocs(ContainerNode cont, ComplexValue list);
 
         /// <summary>
         /// Заполнение Документа данными о его абзацах.
         /// </summary>
         /// <param name="list">Набор данных или список</param>
         /// <returns></returns>
-        public abstract void FillDocsParagraphs(ComplexValue list);
+        public abstract void FillDocsParagraphs(ComplexValue list); 
 
 		/// <summary>
 		/// Сохранение контейнера в БД.

@@ -30,20 +30,23 @@ namespace MorphApp
         /// </summary>
         public override void Refresh()
         {
-            var list = dbServer.GetChildrenContainers(Session.MainStroreID, tpList.tplDBtable);
+            var list_ids = new List<string>();
+            list_ids.Add(Session.MainStroreID.ToString());
+
+            var list = dbServer.GetChildrenInContainerList(tpList.tplDBtable, list_ids);
             this.FillContainers(list);
 
+            list_ids.Clear();
             var dTable = list.dtable;
-            var list_ids = new List<string>();
             for (int i = 0; i < dTable.Rows.Count; i++)
             {
                 var strID = dTable.Rows[i].Field<long>("ct_id");
                 list_ids.Add(strID.ToString());
             }
             list = dbServer.GetChildrenInContainerList(tpList.tplDBtable, list_ids);
-            this.FillChildren(list);
+            this.FillChildren(null, list);
             list = dbServer.GetDocsInContainerList(list_ids);
-            this.FillDocs(list);
+            this.FillDocs(null, list);
             list_ids.Clear();
             dTable = list.dtable;
             for (int i = 0; i < dTable.Rows.Count; i++)
@@ -53,21 +56,18 @@ namespace MorphApp
             }
             list = dbServer.ReadParagraphsInDocsList(tpList.tplDBtable, list_ids);
             this.FillDocsParagraphs(list);
+        }
 
-
-            /*var list = dbServer.GetChildrenContainers(Session.MainStroreID);
-            store.FillContainers(list);
-
-            var dTable = list.list;
+        public override void RefreshContainer(long contID)
+        {
+            var container = GetContainerByID(contID);
+            // Чтение данных о дочерних контейнерах и документах абзаца из БД
             var list_ids = new List<string>();
-            for (int i = 0; i < dTable.Count; i++)
-            {
-                var strID = (dTable[i] as ContainerMap).ContainerID;
-                list_ids.Add(strID.ToString());
-            }
+            list_ids.Add(contID.ToString());
+            var list = dbServer.GetChildrenInContainerList(tpList.tplDBtable, list_ids);
+            this.FillChildren(container, list);
             list = dbServer.GetDocsInContainerList(list_ids);
-            store.FillDocs(list); 
-            */
+            this.FillDocs(container, list);
         }
 
         public override DocumentMap RefreshParagraphs(long contID, long docID)
@@ -77,7 +77,7 @@ namespace MorphApp
             var parags = dMap.GetParagraphs();
             foreach (var paragraph in parags)
             {
-                // Чтение данных о структурах предложений и заголовка абзаца из БД
+                // Чтение данных о структурах предложений и заголовках абзаца из БД
                 var sentlist = dbServer.ReadParagraphDB(paragraph.ParagraphID);
                 courier.servType = TMorph.Schema.ServType.svMorph;
                 courier.command = TMorph.Schema.ComType.Repar;
@@ -132,7 +132,7 @@ namespace MorphApp
 			}
 		}
 
-        public void FillChildren(ComplexValue list)
+        public override void FillChildren(ContainerNode in_parentCont, ComplexValue list)
         {
             DataTable dTable = list.dtable;
             for (int i = 0; i < dTable.Rows.Count; i++)
@@ -144,13 +144,14 @@ namespace MorphApp
 
                 var cMap = new ContainerMap(ct_id, name, created_at, parent_id);
                 var cont = new ContainerNode(cMap);
-                var parent = containers.Where(x => x.ContainerID == parent_id).FirstOrDefault();
-                if (parent != null)
-                    parent.AddChild(cont);
+                ContainerNode parentCont = in_parentCont;
+                if (in_parentCont == null)
+                    parentCont = GetContainerByID(parent_id);
+                parentCont.AddChild(cont);
             }
         }
 
-        public override void FillDocs(ComplexValue list)
+        public override void FillDocs(ContainerNode in_cont, ComplexValue list)
 		{
 			DataTable dTable = list.dtable;
 			for (int i = 0; i < dTable.Rows.Count; i++)
@@ -161,8 +162,9 @@ namespace MorphApp
 				var created_at = dTable.Rows[i].Field<DateTime?>("created_at");
 
 				var dMap = new DocumentMap(doc_id, ct_id, name, created_at);
-				// TODO надо переделать поиск контейнеров. Этот вариант поднения двух уровней хранилища.
-				var cont = containers.Where(x => x.ContainerID == ct_id).FirstOrDefault();
+                ContainerNode cont = in_cont;
+                if (in_cont == null)
+                    cont = GetContainerByID(ct_id);
 				cont.AddDocument(dMap);
 			}
 		}
@@ -178,8 +180,8 @@ namespace MorphApp
 				var ct_id = dTable.Rows[i].Field<long>("ct_id");
 
                 var pMap = new ParagraphMap(pg_id, doc_id, created_at, ct_id);
-				var cont = containers.Where(x => x.ContainerID == ct_id).FirstOrDefault();
-				var doc = cont.GetDocuments().Where(x => x.DocumentID == doc_id).FirstOrDefault();
+                var cont = GetContainerByID(ct_id);
+                var doc = cont.GetDocuments().Where(x => x.DocumentID == doc_id).FirstOrDefault();
 				doc.AddParagraph(pMap);
 			}
 		}
@@ -227,22 +229,22 @@ namespace MorphApp
 		public override void DelParagraph(long ct_id, long doc_id, long pg_id)
 		{
 			dbServer.DelParagraphDB(pg_id);
-			var cont = containers.Where(x => x.ContainerID == ct_id).FirstOrDefault();
-			var doc = cont.GetDocuments().Where(x => x.DocumentID == doc_id).FirstOrDefault();
+            var cont = GetContainerByID(ct_id);
+            var doc = cont.GetDocuments().Where(x => x.DocumentID == doc_id).FirstOrDefault();
 			doc.RemoveParagraph(pg_id);
 		}
 
         public override void DelDocument(long ct_id, long doc_id)
         {
             dbServer.DelDocumentDB(doc_id);
-            var cont = containers.Where(x => x.ContainerID == ct_id).FirstOrDefault();
+            var cont = GetContainerByID(ct_id);
             cont.RemoveDocument(doc_id);
         }
 
         public override void DelContainer(long ct_id)
         {
             dbServer.DelContainerDB(ct_id);
-            var cont = containers.Where(x => x.ContainerID == ct_id).FirstOrDefault();
+            var cont = GetContainerByID(ct_id);
             containers.Remove(cont);
         }
 

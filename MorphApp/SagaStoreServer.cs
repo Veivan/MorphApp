@@ -8,23 +8,19 @@ namespace MorphApp
 	{
 		Courier courier = new Courier();
 
-		#region Унаследованные методы
+        #region Унаследованные методы
 
-		public override ComplexValue GetChildrenContainers(long parentID, tpList resulttype = tpList.tblList)
-		{
-			courier.servType = TMorph.Schema.ServType.svSUBD;
-			courier.command = TMorph.Schema.ComType.GetChildrenConts;
-			courier.SendID(parentID);
-			var contlist = courier.GetContainerMapsList();
-			var resval = new ComplexValue();
-			resval.list.AddRange(contlist);
-			return resval;
-		}
-
-		/*public override RetValue GetDocsInContainer(long ct_id)
-		{
-			throw new NotImplementedException();
-		}*/
+        public override ComplexValue GetChildrenInContainerList(tpList resulttype, List<string> list_ids)
+        {
+            long parentID = Convert.ToInt64(list_ids[0]);
+            courier.servType = TMorph.Schema.ServType.svSUBD;
+            courier.command = TMorph.Schema.ComType.GetChildrenConts;
+            courier.SendID(parentID);
+            var contlist = courier.GetContainerMapsList();
+            var resval = new ComplexValue();
+            resval.list.AddRange(contlist);
+            return resval;
+        }
 
 		public override ComplexValue GetDocsInContainerList(List<string> list_ids)
 		{
@@ -92,11 +88,6 @@ namespace MorphApp
         }
 
         public override void DelContainerDB(long c_id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override ComplexValue GetChildrenInContainerList(tpList resulttype, List<string> list_ids)
         {
             throw new NotImplementedException();
         }

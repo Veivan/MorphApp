@@ -171,27 +171,6 @@ namespace DirectDBconnector
         }
 
         /// <summary>
-        /// Чтения контейнеров выбранного родителя из БД.
-        /// </summary>
-        /// <param name="parentID">ID родителя</param>
-        /// <returns>DataTable</returns>
-        public DataTable GetChildrenContainers(long parentID)
-        {
-            var stmnt = String.Format("SELECT ct_id, created_at, name, parent_id FROM mContainers WHERE parent_id = {0}", parentID);
-            DataTable dTable = new DataTable();
-            try
-            {
-                SQLiteDataAdapter adapter = new SQLiteDataAdapter(stmnt, m_dbConn);
-                adapter.Fill(dTable);
-            }
-            catch (SQLiteException ex)
-            {
-                //MessageBox.Show("Error: " + ex.Message);
-            }
-            return dTable;
-        }
-
-        /// <summary>
         /// Чтения дочерних контейнеров множества родительских контейнеров.
         /// </summary>
         /// <param name="list_ids">список ID родительских контейнеров</param>

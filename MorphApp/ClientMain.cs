@@ -101,7 +101,7 @@ namespace MorphApp
                     {
                         if (aNode.bdID == Session.MainStroreID) return;
                         // Обновление детей и документов в дереве
-
+                        store.RefreshContainer(aNode.bdID);
                         break;
                     }
                 case clNodeType.clnDocument:

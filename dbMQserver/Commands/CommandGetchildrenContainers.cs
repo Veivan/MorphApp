@@ -22,7 +22,10 @@ namespace dbMQserver.Commands
 		public void Execute()
 		{
 			var dbServer = new SagaDBServer();
-			var retval = dbServer.GetChildrenContainers(ParentID, tpList.tblList);
+
+            var list_ids = new List<string>();
+            list_ids.Add(ParentID.ToString());
+            var retval = dbServer.GetChildrenInContainerList(tpList.tplDBtable, list_ids);
 			foreach (var item in retval.list)
 				this.reslist.Add((ContainerMap)item);
 		}

@@ -41,7 +41,9 @@ namespace Schemas
 
         public void AddChild(ContainerNode cMap)
         {
-            this.children.Add(cMap);
+            var cont = children.Where(x => x.ContainerID == cMap.ContainerID).FirstOrDefault();
+            if (cont == null)
+                this.children.Add(cMap);
         }
 
         public List<DocumentMap> GetDocuments()

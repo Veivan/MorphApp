@@ -11,16 +11,10 @@ namespace DirectDBconnector
 
         #region Унаследованные методы
 
-        /// <summary>
-        /// Получение плоского списка контейнеров
-        /// в виде DataTable
-        /// </summary>
-        /// <param name="resulttype">тип возвращаемого результата</param>
-        /// <returns>ComplexValue</returns>
-        public override ComplexValue GetChildrenContainers(long parentID, tpList resulttype)
+        public override ComplexValue GetChildrenInContainerList(tpList resulttype, List<string> list_ids)
         {
             ComplexValue rval = new ComplexValue();
-            rval.dtable = dbConnector.GetChildrenContainers(parentID);
+            rval.dtable = dbConnector.GetChildrenInContainerList(list_ids);
             if (resulttype == tpList.tblList)
             {
                 for (int i = 0; i < rval.dtable.Rows.Count; i++)
@@ -38,19 +32,6 @@ namespace DirectDBconnector
             return rval;
         }
 
-        public override ComplexValue GetChildrenInContainerList(tpList resulttype, List<string> list_ids)
-        {
-            ComplexValue rval = new ComplexValue();
-            rval.dtable = dbConnector.GetChildrenInContainerList(list_ids);
-            return rval;
-        }
-
-        /*public override RetValue GetDocsInContainer(long ct_id)
-		{
-			RetValue rval = new RetValue();
-			return rval;
-		}
-*/
         public override ComplexValue GetDocsInContainerList(List<string> list_ids)
         {
             ComplexValue rval = new ComplexValue();
