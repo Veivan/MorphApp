@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using DirectDBconnector;
+using Schemas;
 
 namespace SimpleTest
 {
@@ -63,7 +64,9 @@ namespace SimpleTest
         {
             SQLiteConnector dbConnector = SQLiteConnector.Instance;
             // act
-            dbConnector.EmptyDB();
+            //dbConnector.EmptyDB();
+            dbConnector.selectAll(dbTables.tblTermContent);
+
         }
 
     }

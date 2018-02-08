@@ -21,6 +21,16 @@ namespace DirectDBconnector
         public string realWord;
     }
 
+    public struct TermStruct
+    {
+        public long tс_id;
+        public long tm_id;
+        public int order;
+        public int rcind;
+        public long lx_id;
+        public long rw_id;
+    }
+
     /// Singleton
     public sealed class SQLiteConnector
     {
@@ -75,7 +85,7 @@ namespace DirectDBconnector
                     "DROP TABLE IF EXISTS mParagraphs;\n" +
                     "DROP TABLE IF EXISTS mDocuments;\n" +
                     "DROP TABLE IF EXISTS mContainers;\n" +
-                    "DROP TABLE IF EXISTS mLemms;\n VACUUM;";
+                    "DROP TABLE IF EXISTS mLemms;\n VACUUM;"; 
                 m_sqlCmd.ExecuteNonQuery();
 
                 CreateOperTablesDB();
@@ -131,15 +141,15 @@ namespace DirectDBconnector
                         + " created_at DATETIME DEFAULT CURRENT_TIMESTAMP);\n" +
                     "CREATE TABLE IF NOT EXISTS mPhraseContent (\n"
                         + "	с_id integer PRIMARY KEY, ph_id integer, lx_id integer, rcind integer, sorder integer, rw_id integer);\n" +
-                    "CREATE TABLE IF NOT EXISTS mGrammems (\n" 
+                    "CREATE TABLE IF NOT EXISTS mGrammems (\n"
                         + " gr_id integer PRIMARY KEY, с_id integer, sg_id integer, intval integer);\n" +
-                    "CREATE TABLE IF NOT EXISTS mSyntNodes (\n" 
+                    "CREATE TABLE IF NOT EXISTS mSyntNodes (\n"
                         + " sn_id integer PRIMARY KEY, с_id integer, ln_id integer, level integer, pс_id integer);\n" +
                     "CREATE TABLE IF NOT EXISTS mTermins (\n"
                         + "	tm_id integer PRIMARY KEY);\n" +
                     "CREATE TABLE IF NOT EXISTS mTerminContent (\n"
-                        + "	tc_id integer PRIMARY KEY, tm_id integer, lx_id integer, rcind integer, sorder integer);\n" +
-            m_sqlCmd.ExecuteNonQuery();
+                        + "	tc_id integer PRIMARY KEY, tm_id integer, sorder integer, rcind integer, lx_id integer, rw_id integer);\n";
+                m_sqlCmd.ExecuteNonQuery();
             }
             catch (SQLiteException ex)
             {
@@ -992,7 +1002,7 @@ namespace DirectDBconnector
 
         #endregion
 
-        #region Методы работы с леммами
+        #region Методы работы с формами слов
         /// <summary>
         /// Сохранение формы слова в БД.
         /// </summary>
@@ -1038,7 +1048,66 @@ namespace DirectDBconnector
             }
             return result;
         }
+        #endregion
 
+        #region Методы работы с терминами
+        /// <summary>
+        /// Сохранение содержимого термина в БД.
+        /// Реализация сохраняет только однословные термины.
+        /// </summary>
+        /// <param name="termlist">список структур TermStruct</param>
+        /// <returns>ID термина</returns>
+        public long SaveTermin(List<TermStruct> termlist)
+        {
+            var term0 = termlist[0];
+            long tm_id = FindTermin(termlist);
+            if (tm_id == -1)
+            {
+                try
+                {
+                    m_sqlCmd.CommandText = "INSERT INTO mTermins(tm_id) VALUES(NULL)";
+                    m_sqlCmd.ExecuteNonQuery();
+                    tm_id = m_dbConn.LastInsertRowId;
+
+                    m_sqlCmd.CommandText = String.Format("INSERT INTO mTerminContent(tc_id, tm_id, sorder, rcind, lx_id, rw_id) " +
+                        "VALUES(NULL, {0}, {1}, {2}, {3}, {4})", tm_id, term0.order, term0.rcind, term0.lx_id, term0.rw_id);
+                    m_sqlCmd.ExecuteNonQuery();
+                }
+                catch (SQLiteException ex)
+                {
+                    Console.WriteLine("SaveTermin Error: " + ex.Message);
+                }
+            }
+            return tm_id;
+        }
+
+        /// <summary>
+        /// Поиск термина в БД по содержимому.
+        /// Реализация ищет только однословные термины.
+        /// </summary>
+        /// <param name="termlist">список структур TermStruct</param>
+        /// <returns>ID термина</returns>
+        private long FindTermin(List<TermStruct> termlist)
+        {
+            var term0 = termlist[0];
+            long result = -1;
+            try
+            {
+                m_sqlCmd.CommandText = String.Format("SELECT tm_id FROM mTerminContent WHERE " +
+                    "sorder = {0} AND rcind = {1} AND " +
+                    "( (rcind = 0 AND lx_id = {2}) OR (rcind > 0 AND rw_id = {3}) )",
+                    term0.order, term0.rcind, term0.lx_id, term0.rw_id);
+                // Читаем только первую запись
+                var resp = m_sqlCmd.ExecuteScalar();
+                if (resp != null)
+                    result = (long)resp;
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("FindTermin Error: " + ex.Message);
+            }
+            return result;
+        }
         #endregion
 
         #region Методы служебные

@@ -54,6 +54,7 @@
             this.btDBGetWord = new System.Windows.Forms.Button();
             this.btMakeSynAn = new System.Windows.Forms.Button();
             this.btGetMorph = new System.Windows.Forms.Button();
+            this.btMakeDoc = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -243,6 +244,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.btMakeDoc);
             this.panel1.Controls.Add(this.btReadPara);
             this.panel1.Controls.Add(this.btSavePara);
             this.panel1.Controls.Add(this.btRestore);
@@ -337,6 +339,16 @@
             this.btGetMorph.UseVisualStyleBackColor = true;
             this.btGetMorph.Click += new System.EventHandler(this.btGetMorph_Click);
             // 
+            // btMakeDoc
+            // 
+            this.btMakeDoc.Location = new System.Drawing.Point(68, 11);
+            this.btMakeDoc.Name = "btMakeDoc";
+            this.btMakeDoc.Size = new System.Drawing.Size(75, 20);
+            this.btMakeDoc.TabIndex = 22;
+            this.btMakeDoc.Text = "Make Doc";
+            this.btMakeDoc.UseVisualStyleBackColor = true;
+            this.btMakeDoc.Click += new System.EventHandler(this.btMakeDoc_Click);
+            // 
             // ClientMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -392,6 +404,7 @@
 		private System.Windows.Forms.Button btParaDel;
 		private System.Windows.Forms.Button btAddCont;
 		private System.Windows.Forms.Button btAddDoc;
+        private System.Windows.Forms.Button btMakeDoc;
     }
 }
 

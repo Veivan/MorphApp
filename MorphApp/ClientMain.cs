@@ -25,7 +25,8 @@ namespace MorphApp
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            memoInp.Text = "Мама мыла раму";
+            memoInp.Text = "Мама мыла раму."+ "\r\n" +
+                "Вася ест суп.";
             //memoInp.Text = "Абзац 1";
         }
 
@@ -363,5 +364,40 @@ namespace MorphApp
         }
         #endregion
 
+        private void btMakeDoc_Click(object sender, EventArgs e)
+        {
+            var sb = new StringBuilder();
+            // Tockenize
+            var sents = store.MorphGetSeparatedSentsList(memoInp.Text);
+            int i = 0;
+            foreach (var sentstr in sents)
+            {
+                sb.Append(sentstr + "\r\n");
+                // SynAn
+                var sentlistRep = store.MorphMakeSyntan(sentstr);
+                if (sentlistRep == null || sentlistRep.Count == 0)
+                {
+                    sb.Append("SynAn error" + "\r\n");
+                    continue;
+                }
+                this.sent = sentlistRep[0];
+                this.para.AddSentStruct(i, this.sent);
+
+                // Отображение синт связей
+                var ordlist = sent.GetTreeList();
+                foreach (var x in ordlist)
+                {
+                    sb.Append(new String('\t', x.Level) +
+                        String.Format("{0} Level {1} link {2} \r\n",
+                            sent.GetWordByOrder(x.index).EntryName, x.Level, x.linktype));
+                }
+                i++;
+            }
+            var ContID = 2;
+            var DocumentID = store.SaveDocumentBD("tDoc", ContID);
+            this.para.DocumentID = Convert.ToInt64(DocumentID[0].Value);
+            var paramlist = store.SaveParagraphBD(this.para);
+            memoOut.Text = sb.ToString();
+        }
     }
 }

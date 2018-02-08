@@ -51,6 +51,10 @@
       <Project>{be92f137-83a0-4f07-9ec5-2504ef561c7a}</Project>
       <Name>DirectDBconnector</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Schemas\Schemas.csproj">
+      <Project>{bf7809e6-3e9d-49fc-888d-6d0c7187cc5b}</Project>
+      <Name>Schemas</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
