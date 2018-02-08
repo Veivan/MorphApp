@@ -215,6 +215,7 @@ namespace Schemas
         tblSyntNodes,
         tblRealWord,
         tblTermContent,
+        tblUndefContent,
 
         tblParts,
         tblSiGram,

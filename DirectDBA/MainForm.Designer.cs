@@ -33,7 +33,6 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPageCommon = new System.Windows.Forms.TabPage();
             this.dgvCommon = new System.Windows.Forms.DataGridView();
-            this.bsContainers = new System.Windows.Forms.BindingSource(this.components);
             this.panel3 = new System.Windows.Forms.Panel();
             this.btRefresh = new System.Windows.Forms.Button();
             this.cbTables = new System.Windows.Forms.ComboBox();
@@ -55,35 +54,16 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.dgvViewer = new System.Windows.Forms.DataGridView();
             this.listBox1 = new System.Windows.Forms.ListBox();
-            this.bsDocuments = new System.Windows.Forms.BindingSource(this.components);
-            this.bsParagraphs = new System.Windows.Forms.BindingSource(this.components);
-            this.bsSents = new System.Windows.Forms.BindingSource(this.components);
-            this.bsPhraseContent = new System.Windows.Forms.BindingSource(this.components);
-            this.bsLemms = new System.Windows.Forms.BindingSource(this.components);
-            this.bsGrammems = new System.Windows.Forms.BindingSource(this.components);
-            this.bsSyntNodes = new System.Windows.Forms.BindingSource(this.components);
-            this.bsRealWord = new System.Windows.Forms.BindingSource(this.components);
             this.binding1 = new System.Windows.Forms.BindingSource(this.components);
-            this.bsTerminCont = new System.Windows.Forms.BindingSource(this.components);
             this.tabControl1.SuspendLayout();
             this.tabPageCommon.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCommon)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bsContainers)).BeginInit();
             this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.navigator)).BeginInit();
             this.navigator.SuspendLayout();
             this.tabTree.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvViewer)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bsDocuments)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bsParagraphs)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bsSents)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bsPhraseContent)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bsLemms)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bsGrammems)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bsSyntNodes)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bsRealWord)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.binding1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bsTerminCont)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -110,9 +90,7 @@
             // 
             // dgvCommon
             // 
-            this.dgvCommon.AutoGenerateColumns = false;
             this.dgvCommon.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvCommon.DataSource = this.bsContainers;
             this.dgvCommon.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvCommon.Location = new System.Drawing.Point(0, 0);
             this.dgvCommon.Name = "dgvCommon";
@@ -329,7 +307,6 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPageCommon.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvCommon)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bsContainers)).EndInit();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.navigator)).EndInit();
@@ -337,16 +314,7 @@
             this.navigator.PerformLayout();
             this.tabTree.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvViewer)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bsDocuments)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bsParagraphs)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bsSents)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bsPhraseContent)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bsLemms)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bsGrammems)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bsSyntNodes)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bsRealWord)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.binding1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bsTerminCont)).EndInit();
             this.ResumeLayout(false);
 
 		}
@@ -354,7 +322,6 @@
 		#endregion
 
 		private System.Windows.Forms.TabControl tabControl1;
-		private System.Windows.Forms.BindingSource bsDocuments;
 		private System.Windows.Forms.TabPage tabTree;
 		private System.Windows.Forms.ListBox listBox1;
 		private System.Windows.Forms.DataGridView dgvViewer;
@@ -365,7 +332,6 @@
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.BindingNavigator navigator;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
-        private System.Windows.Forms.BindingSource bsContainers;
         private System.Windows.Forms.ToolStripLabel toolStripLabel1;
         private System.Windows.Forms.ToolStripButton toolStripButton2;
         private System.Windows.Forms.ToolStripButton toolStripButton3;
@@ -378,14 +344,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripButton btUpdData;
-		private System.Windows.Forms.BindingSource bsParagraphs;
-        private System.Windows.Forms.BindingSource bsSents;
-        private System.Windows.Forms.BindingSource bsPhraseContent;
-        private System.Windows.Forms.BindingSource bsLemms;
-		private System.Windows.Forms.BindingSource bsGrammems;
-        private System.Windows.Forms.BindingSource bsSyntNodes;
-        private System.Windows.Forms.BindingSource bsRealWord;
-        private System.Windows.Forms.BindingSource bsTerminCont;
         private System.Windows.Forms.ComboBox cbTables;
         private System.Windows.Forms.Button btRefresh;
     }

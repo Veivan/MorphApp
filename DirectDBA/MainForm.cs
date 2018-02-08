@@ -16,7 +16,7 @@ namespace DirectDBA
     {
         SagaDBServer dbServer = new SagaDBServer();
         string[] stables = { "Контейнеры", "Документы", "Абзацы", "Предложения", "Содержание фраз", "Леммы",
-            "Граммемы", "Синт.связи", "Формы слов", "Термины" };
+            "Граммемы", "Синт.связи", "Формы слов", "Термины", "Undefs" };
 
         private dbTables _aspect; 
         public dbTables ActiveAspect
@@ -25,9 +25,6 @@ namespace DirectDBA
             set
             {
                 _aspect = value;
-                var ds = GetDS();
-                dgvCommon.DataSource = ds;
-                navigator.BindingSource = ds;
                 RefreshColumnSet();
                 RefreshDS();
                 tabControl1.TabPages[0].Text = stables[(int)_aspect];
@@ -41,6 +38,8 @@ namespace DirectDBA
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            dgvCommon.DataSource = binding1;
+            navigator.BindingSource = binding1;
             cbTables.Items.AddRange(stables);
             cbTables.SelectedIndex = 0;
         }
@@ -48,24 +47,6 @@ namespace DirectDBA
         private void cbTables_SelectedIndexChanged(object sender, EventArgs e)
         {
             ActiveAspect = (dbTables)((sender as ComboBox).SelectedIndex);
-        }
-
-        private BindingSource GetDS()
-        {
-            switch (ActiveAspect)
-            {
-                case dbTables.tblContainers: return bsContainers;
-				case dbTables.tblDocuments: return bsDocuments;
-				case dbTables.tblParagraphs: return bsParagraphs;
-                case dbTables.tblSents: return bsSents;
-                case dbTables.tblPhraseContent: return bsPhraseContent;
-				case dbTables.tblLemms: return bsLemms;
-                case dbTables.tblGrammems: return bsGrammems;
-                case dbTables.tblSyntNodes: return bsSyntNodes;
-                case dbTables.tblRealWord: return bsRealWord;
-                case dbTables.tblTermContent: return bsTerminCont;
-                default: return null;
-            }
         }
 
         private void RefreshColumnSet()
@@ -317,7 +298,26 @@ namespace DirectDBA
                         HeaderText = "rw_id"
                     });
                     #endregion
-                    break;  
+                    break;
+                case dbTables.tblUndefContent:
+                    #region Создание колонок для Undefs
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "uv_id",
+                        HeaderText = "uv_id"
+                    });
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "mu_id",
+                        HeaderText = "mu_id"
+                    });
+                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "rw_id",
+                        HeaderText = "rw_id"
+                    });
+                    #endregion
+                    break;
             }
         }
 
@@ -353,7 +353,7 @@ namespace DirectDBA
                 docs.Add(new DocumentMap(rec.DocumentID, rec.ContainerID, rec.Name, rec.Created_at));
             }
 
-            bsDocuments.DataSource = docs;
+            //bsDocuments.DataSource = docs;
             /*binding1.DataSource = docs;
             dgvViewer.DataSource = binding1;
             dgvViewer.AutoGenerateColumns = true; */

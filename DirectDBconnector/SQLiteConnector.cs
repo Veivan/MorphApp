@@ -27,8 +27,7 @@ namespace DirectDBconnector
         public long tm_id;
         public int order;
         public int rcind;
-        public long lx_id;
-        public long rw_id;
+        public long lem_id;
     }
 
     /// Singleton
@@ -76,6 +75,8 @@ namespace DirectDBconnector
             try
             {
                 m_sqlCmd.CommandText =
+                    "DROP TABLE IF EXISTS mUndefContent;\n" +
+                    "DROP TABLE IF EXISTS mUndefs;\n" +
                     "DROP TABLE IF EXISTS mTerminContent;\n" +
                     "DROP TABLE IF EXISTS mTermins;\n" +
                     "DROP TABLE IF EXISTS mSyntNodes;\n" +
@@ -85,7 +86,7 @@ namespace DirectDBconnector
                     "DROP TABLE IF EXISTS mParagraphs;\n" +
                     "DROP TABLE IF EXISTS mDocuments;\n" +
                     "DROP TABLE IF EXISTS mContainers;\n" +
-                    "DROP TABLE IF EXISTS mLemms;\n VACUUM;"; 
+                    "DROP TABLE IF EXISTS mLemms;\n VACUUM;" ;
                 m_sqlCmd.ExecuteNonQuery();
 
                 CreateOperTablesDB();
@@ -148,7 +149,11 @@ namespace DirectDBconnector
                     "CREATE TABLE IF NOT EXISTS mTermins (\n"
                         + "	tm_id integer PRIMARY KEY);\n" +
                     "CREATE TABLE IF NOT EXISTS mTerminContent (\n"
-                        + "	tc_id integer PRIMARY KEY, tm_id integer, sorder integer, rcind integer, lx_id integer, rw_id integer);\n";
+                        + "	tc_id integer PRIMARY KEY, tm_id integer, sorder integer, rcind integer, lem_id integer);\n" +
+                    "CREATE TABLE IF NOT EXISTS mUndefs (\n"
+                        + "	mu_id integer PRIMARY KEY, alalemma text NOT NULL);\n" +
+                    "CREATE TABLE IF NOT EXISTS mUndefContent (\n"
+                        + "	uv_id integer PRIMARY KEY, mu_id integer, rw_id integer);\n";
                 m_sqlCmd.ExecuteNonQuery();
             }
             catch (SQLiteException ex)
@@ -1069,8 +1074,8 @@ namespace DirectDBconnector
                     m_sqlCmd.ExecuteNonQuery();
                     tm_id = m_dbConn.LastInsertRowId;
 
-                    m_sqlCmd.CommandText = String.Format("INSERT INTO mTerminContent(tc_id, tm_id, sorder, rcind, lx_id, rw_id) " +
-                        "VALUES(NULL, {0}, {1}, {2}, {3}, {4})", tm_id, term0.order, term0.rcind, term0.lx_id, term0.rw_id);
+                    m_sqlCmd.CommandText = String.Format("INSERT INTO mTerminContent(tc_id, tm_id, sorder, rcind, lem_id) " +
+                        "VALUES(NULL, {0}, {1}, {2}, {3})", tm_id, term0.order, term0.rcind, term0.lem_id);
                     m_sqlCmd.ExecuteNonQuery();
                 }
                 catch (SQLiteException ex)
@@ -1094,9 +1099,8 @@ namespace DirectDBconnector
             try
             {
                 m_sqlCmd.CommandText = String.Format("SELECT tm_id FROM mTerminContent WHERE " +
-                    "sorder = {0} AND rcind = {1} AND " +
-                    "( (rcind = 0 AND lx_id = {2}) OR (rcind > 0 AND rw_id = {3}) )",
-                    term0.order, term0.rcind, term0.lx_id, term0.rw_id);
+                    "sorder = {0} AND rcind = {1} AND lx_id = {2}",
+                    term0.order, term0.rcind, term0.lem_id);
                 // Читаем только первую запись
                 var resp = m_sqlCmd.ExecuteScalar();
                 if (resp != null)
@@ -1105,6 +1109,57 @@ namespace DirectDBconnector
             catch (SQLiteException ex)
             {
                 Console.WriteLine("FindTermin Error: " + ex.Message);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Сохранение "неопрелённого" слова в БД.
+        /// </summary>
+        /// <param name="termlist">список структур TermStruct</param>
+        /// <returns>ID термина</returns>
+        public long SaveUndefWord(string rword, long rw_id)
+        {
+            long mu_id = FindUndef(rw_id);
+            if (mu_id == -1)
+            {
+                try
+                {
+                    m_sqlCmd.CommandText = String.Format("INSERT INTO mUndefs(mu_id, alalemma) VALUES(NULL, '{0}')", rword.ToLower());
+                    m_sqlCmd.ExecuteNonQuery();
+                    mu_id = m_dbConn.LastInsertRowId;
+
+                    m_sqlCmd.CommandText = String.Format("INSERT INTO mUndefContent(uv_id, mu_id, rw_id) " +
+                        "VALUES(NULL, {0}, {1})", mu_id, rw_id);
+                    m_sqlCmd.ExecuteNonQuery();
+                }
+                catch (SQLiteException ex)
+                {
+                    Console.WriteLine("SaveUndefWord Error: " + ex.Message);
+                }
+            }
+            return mu_id;
+        }
+
+        /// <summary>
+        /// Поиск "неопрелённого" слова в БД по содержимому.
+        /// </summary>
+        /// <param name="rw_id">ID слова в mRealWord</param>
+        /// <returns>ID "неопрелённого" слова</returns>
+        private long FindUndef(long rw_id)
+        {
+            long result = -1;
+            try
+            {
+                m_sqlCmd.CommandText = String.Format("SELECT mu_id FROM mUndefContent WHERE rw_id = {0}", rw_id);
+                // Читаем только первую запись
+                var resp = m_sqlCmd.ExecuteScalar();
+                if (resp != null)
+                    result = (long)resp;
+            }
+            catch (SQLiteException ex)
+            {
+                Console.WriteLine("FindUndef Error: " + ex.Message);
             }
             return result;
         }

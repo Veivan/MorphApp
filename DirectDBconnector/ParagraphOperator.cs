@@ -131,13 +131,17 @@ namespace DirectDBconnector
                     var rw_id = dbConnector.SaveRealWord(word.RealWord);
                     var c_id = dbConnector.InsertWordDB(ph_id, lx_id, word.order, word.rcind, rw_id);
                     word.WordID = c_id;
+                    //Сохранение "неопределённого" слова
+                    long mu_id = 0;
+                    if (word.rcind > 0)
+                        mu_id = dbConnector.SaveUndefWord(word.RealWord, rw_id);
+
                     //Сохранение термина
                     var termlist = new List<TermStruct>();
                     var term = new TermStruct();
                     term.order = word.order;
                     term.rcind = word.rcind;
-                    term.lx_id = lx_id;
-                    term.rw_id = rw_id;
+                    term.lem_id = word.rcind == 0 ? lx_id : mu_id;
                     termlist.Add(term);
                     dbConnector.SaveTermin(termlist);
                     // Сохранение граммем слова в БД

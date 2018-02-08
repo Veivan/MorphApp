@@ -65,7 +65,7 @@ namespace SimpleTest
             SQLiteConnector dbConnector = SQLiteConnector.Instance;
             // act
             //dbConnector.EmptyDB();
-            dbConnector.selectAll(dbTables.tblTermContent);
+            //dbConnector.selectAll(dbTables.tblTermContent);
 
         }
 
