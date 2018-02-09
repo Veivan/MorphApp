@@ -1099,7 +1099,7 @@ namespace DirectDBconnector
             try
             {
                 m_sqlCmd.CommandText = String.Format("SELECT tm_id FROM mTerminContent WHERE " +
-                    "sorder = {0} AND rcind = {1} AND lx_id = {2}",
+                    "sorder = {0} AND rcind = {1} AND lem_id = {2}",
                     term0.order, term0.rcind, term0.lem_id);
                 // Читаем только первую запись
                 var resp = m_sqlCmd.ExecuteScalar();

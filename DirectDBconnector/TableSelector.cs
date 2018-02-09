@@ -14,7 +14,7 @@ namespace DirectDBconnector
         const string comSelGrammems = "SELECT gr_id, с_id, sg_id, intval FROM mGrammems";
         const string comSelSyntNodes = "SELECT sn_id, с_id, ln_id, level, pс_id FROM mSyntNodes";
         const string comSelRealWord = "SELECT rw_id, wform FROM mRealWord";
-        const string comSelTermContent = "SELECT tc_id, tm_id, sorder, rcind, lx_id, rw_id FROM mTerminContent";
+        const string comSelTermContent = "SELECT tc_id, tm_id, sorder, rcind, lem_id FROM mTerminContent";
         const string comSelUndefContent = "SELECT uv_id, mu_id, rw_id FROM mUndefContent";
 
         public static string GetSelectStatement(dbTables tblname)

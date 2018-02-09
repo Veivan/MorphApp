@@ -139,7 +139,7 @@ namespace DirectDBconnector
                     //Сохранение термина
                     var termlist = new List<TermStruct>();
                     var term = new TermStruct();
-                    term.order = word.order;
+                    term.order = 0;
                     term.rcind = word.rcind;
                     term.lem_id = word.rcind == 0 ? lx_id : mu_id;
                     termlist.Add(term);

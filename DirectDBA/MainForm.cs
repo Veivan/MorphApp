@@ -289,13 +289,8 @@ namespace DirectDBA
                     });
                     dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
                     {
-                        DataPropertyName = "lx_id",
-                        HeaderText = "lx_id"
-                    });
-                    dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
-                    {
-                        DataPropertyName = "rw_id",
-                        HeaderText = "rw_id"
+                        DataPropertyName = "lem_id",
+                        HeaderText = "lem_id"
                     });
                     #endregion
                     break;
