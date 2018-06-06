@@ -53,7 +53,9 @@ namespace MorphApp
 		private void FormParaEdit_Load(object sender, EventArgs e)
 		{
 			memoHeader.Text = paraMap.GetHeader();
-			memoBody.Text = paraMap.GetBody();
+			//memoBody.Text = paraMap.GetBody();
+			rtbBody.Text = paraMap.GetBody();
+			//rtbBody.Rtf = memoBody.Text;
 		}
 
 		private void btParaSave_Click(object sender, EventArgs e)
@@ -61,7 +63,9 @@ namespace MorphApp
 			try
 			{
 				store.UpdateParagraph(this.paraMap, memoHeader.Text, true);
-				store.UpdateParagraph(this.paraMap, memoBody.Text, false);
+				//memoBody.Text = rtbBody.Text;
+
+				store.UpdateParagraph(this.paraMap, rtbBody.Text, false);
 				var paramlist = store.SaveParagraphBD(this.paraMap);
 
 				if (this.typeOper == treeOper.toEdit)
@@ -97,5 +101,6 @@ namespace MorphApp
 
 			this.Close();
 		}
+
 	}
 }
