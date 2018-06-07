@@ -37,12 +37,10 @@
 			this.panel2 = new System.Windows.Forms.Panel();
 			this.textBox3 = new System.Windows.Forms.TextBox();
 			this.memoBody = new System.Windows.Forms.TextBox();
-			this.panel1 = new System.Windows.Forms.Panel();
-			this.rtbBody = new System.Windows.Forms.RichTextBox();
+			this.rtbBody = new RicherTextBox.RicherTextBox();
 			this.panel4.SuspendLayout();
 			this.panel5.SuspendLayout();
 			this.panel2.SuspendLayout();
-			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// panel4
@@ -107,7 +105,7 @@
 			// 
 			// panel2
 			// 
-			this.panel2.Controls.Add(this.panel1);
+			this.panel2.Controls.Add(this.rtbBody);
 			this.panel2.Controls.Add(this.textBox3);
 			this.panel2.Controls.Add(this.memoBody);
 			this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -135,23 +133,52 @@
 			this.memoBody.Size = new System.Drawing.Size(521, 125);
 			this.memoBody.TabIndex = 25;
 			// 
-			// panel1
-			// 
-			this.panel1.Controls.Add(this.rtbBody);
-			this.panel1.Location = new System.Drawing.Point(3, 55);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(488, 210);
-			this.panel1.TabIndex = 30;
-			// 
 			// rtbBody
 			// 
-			this.rtbBody.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.rtbBody.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.rtbBody.Location = new System.Drawing.Point(0, 28);
+			this.rtbBody.AlignCenterVisible = true;
+			this.rtbBody.AlignLeftVisible = true;
+			this.rtbBody.AlignRightVisible = true;
+			this.rtbBody.BoldVisible = true;
+			this.rtbBody.BulletsVisible = false;
+			this.rtbBody.ChooseFontVisible = true;
+			this.rtbBody.FindReplaceVisible = true;
+			this.rtbBody.FontColorVisible = true;
+			this.rtbBody.FontFamilyVisible = true;
+			this.rtbBody.FontSizeVisible = true;
+			this.rtbBody.GroupAlignmentVisible = true;
+			this.rtbBody.GroupBoldUnderlineItalicVisible = true;
+			this.rtbBody.GroupFontColorVisible = true;
+			this.rtbBody.GroupFontNameAndSizeVisible = true;
+			this.rtbBody.GroupIndentationAndBulletsVisible = false;
+			this.rtbBody.GroupInsertVisible = false;
+			this.rtbBody.GroupSaveAndLoadVisible = true;
+			this.rtbBody.GroupZoomVisible = false;
+			this.rtbBody.INDENT = 10;
+			this.rtbBody.IndentVisible = true;
+			this.rtbBody.InsertPictureVisible = false;
+			this.rtbBody.ItalicVisible = true;
+			this.rtbBody.LoadVisible = true;
+			this.rtbBody.Location = new System.Drawing.Point(0, 44);
 			this.rtbBody.Name = "rtbBody";
-			this.rtbBody.Size = new System.Drawing.Size(488, 182);
-			this.rtbBody.TabIndex = 29;
-			this.rtbBody.Text = "";
+			this.rtbBody.OutdentVisible = true;
+			this.rtbBody.Rtf = "{\\rtf1\\ansi\\deff0{\\fonttbl{\\f0\\fnil\\fcharset204 Microsoft Sans Serif;}}\r\n\\viewkin" +
+    "d4\\uc1\\pard\\lang1049\\f0\\fs18 richerTextBox1\\par\r\n}\r\n";
+			this.rtbBody.SaveVisible = true;
+			this.rtbBody.SeparatorAlignVisible = true;
+			this.rtbBody.SeparatorBoldUnderlineItalicVisible = true;
+			this.rtbBody.SeparatorFontColorVisible = true;
+			this.rtbBody.SeparatorFontVisible = true;
+			this.rtbBody.SeparatorIndentAndBulletsVisible = false;
+			this.rtbBody.SeparatorInsertVisible = false;
+			this.rtbBody.SeparatorSaveLoadVisible = true;
+			this.rtbBody.Size = new System.Drawing.Size(518, 181);
+			this.rtbBody.TabIndex = 31;
+			this.rtbBody.ToolStripVisible = true;
+			this.rtbBody.UnderlineVisible = true;
+			this.rtbBody.WordWrapVisible = true;
+			this.rtbBody.ZoomFactorTextVisible = false;
+			this.rtbBody.ZoomInVisible = false;
+			this.rtbBody.ZoomOutVisible = false;
 			// 
 			// FormParaEdit
 			// 
@@ -171,7 +198,6 @@
 			this.panel5.ResumeLayout(false);
 			this.panel2.ResumeLayout(false);
 			this.panel2.PerformLayout();
-			this.panel1.ResumeLayout(false);
 			this.ResumeLayout(false);
 
         }
@@ -187,7 +213,6 @@
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.TextBox memoBody;
         private System.Windows.Forms.Button btClose;
-		private System.Windows.Forms.Panel panel1;
-		private System.Windows.Forms.RichTextBox rtbBody;
+		private RicherTextBox.RicherTextBox rtbBody;
 	}
 }
