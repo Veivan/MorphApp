@@ -217,10 +217,17 @@ namespace Schemas
         tblTermContent,
         tblUndefContent,
 
-        tblParts,
-        tblSiGram,
-        tblSiLinks
-    }
+		mBlockTypes,
+		mAttrTypes,
+		mAttributes,
+		mBlocks,
+		mFactHeap,
+		mDicts,
+
+		tblParts,
+		tblSiGram,
+		tblSiLinks
+	}
 
 	/// <summary>
 	/// Тип возвращаемого значения методов чтения из БД.

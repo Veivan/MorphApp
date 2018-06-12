@@ -17,7 +17,14 @@ namespace DirectDBconnector
         const string comSelTermContent = "SELECT tc_id, tm_id, sorder, rcind, lem_id FROM mTerminContent";
         const string comSelUndefContent = "SELECT uv_id, mu_id, rw_id FROM mUndefContent";
 
-        public static string GetSelectStatement(dbTables tblname)
+		const string comSelmBlockTypes = "SELECT bt_id, name FROM mBlockTypes";
+		const string comSelmAttrTypes = "SELECT mt_id, name, size FROM mAttrTypes";
+		const string comSelmAttributes = "SELECT ma_id, name, mt_id, bt_id, sorder, mandatory FROM mAttributes";
+		const string comSelmBlocks = "SELECT b_id, bt_id, created_at, parent, treeorder, fh_id, predecessor, successor FROM mBlocks";
+		const string comSelmFactHeap = "SELECT fh_id, blockdata FROM mFactHeap";
+		const string comSelmDicts = "SELECT md_id, name, b_id FROM mDicts";
+
+		public static string GetSelectStatement(dbTables tblname)
         {
             switch (tblname)
             {
@@ -32,7 +39,14 @@ namespace DirectDBconnector
                 case dbTables.tblRealWord: return comSelRealWord;
                 case dbTables.tblTermContent: return comSelTermContent;
                 case dbTables.tblUndefContent: return comSelUndefContent;
-                default: return "";
+
+				case dbTables.mBlockTypes: return comSelmBlockTypes;
+				case dbTables.mAttrTypes: return comSelmAttrTypes;
+				case dbTables.mAttributes: return comSelmAttributes;
+				case dbTables.mBlocks: return comSelmBlocks;
+				case dbTables.mFactHeap: return comSelmFactHeap;
+				case dbTables.mDicts: return comSelmDicts;		
+				default: return "";
             }
         }
     }
