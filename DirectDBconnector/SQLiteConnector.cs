@@ -153,8 +153,24 @@ namespace DirectDBconnector
                     "CREATE TABLE IF NOT EXISTS mUndefs (\n"
                         + "	mu_id integer PRIMARY KEY, alalemma text NOT NULL);\n" +
                     "CREATE TABLE IF NOT EXISTS mUndefContent (\n"
-                        + "	uv_id integer PRIMARY KEY, mu_id integer, rw_id integer);\n";
-                m_sqlCmd.ExecuteNonQuery();
+                        + "	uv_id integer PRIMARY KEY, mu_id integer, rw_id integer);\n"+
+
+					"CREATE TABLE IF NOT EXISTS mBlockTypes (\n"
+						+ "	bt_id integer PRIMARY KEY, name text);\n" +
+					"CREATE TABLE IF NOT EXISTS mAttrTypes (\n"
+						+ "	mt_id integer PRIMARY KEY, name text, size integer);\n" +
+					"CREATE TABLE IF NOT EXISTS mAttributes (\n"
+						+ "	ma_id integer PRIMARY KEY, name text, mt_id integer, bt_id integer, sorder integer, mandatory integer);\n" +
+					"CREATE TABLE IF NOT EXISTS mBlocks (\n"
+						+ "	b_id integer PRIMARY KEY, bt_id integer, created_at DATETIME DEFAULT CURRENT_TIMESTAMP, \n" 
+						+ " parent integer, treeorder integer, fh_id integer, predecessor integer, successor integer);\n" +
+					"CREATE TABLE IF NOT EXISTS mFactHeap (\n"
+						+ "	fh_id integer PRIMARY KEY, blockdata blob);\n" +
+					"CREATE TABLE IF NOT EXISTS mDicts (\n"
+						+ "	md_id integer PRIMARY KEY, name text, b_id integer);\n";
+
+
+				m_sqlCmd.ExecuteNonQuery();
             }
             catch (SQLiteException ex)
             {
@@ -1386,7 +1402,10 @@ namespace DirectDBconnector
                 System.Diagnostics.Debug.WriteLine(ex.Message);
             }
         }
-        #endregion
+		#endregion
 
-    }
+		#region Методы работы с блоками
+
+		#endregion
+	}
 }

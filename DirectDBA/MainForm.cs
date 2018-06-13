@@ -16,7 +16,8 @@ namespace DirectDBA
     {
         SagaDBServer dbServer = new SagaDBServer();
         string[] stables = { "Контейнеры", "Документы", "Абзацы", "Предложения", "Содержание фраз", "Леммы",
-            "Граммемы", "Синт.связи", "Формы слов", "Термины", "Undefs" };
+            "Граммемы", "Синт.связи", "Формы слов", "Термины", "Undefs",
+			"Типы блоков", "Типы атрибутов", "Атрибуты", "Блоки", "Факты", "Справочники"};
 
         private dbTables _aspect; 
         public dbTables ActiveAspect
@@ -313,8 +314,154 @@ namespace DirectDBA
                     });
                     #endregion
                     break;
-            }
-        }
+
+				case dbTables.mBlockTypes:
+					#region Создание колонок для Типов блоков
+					dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+					{
+						DataPropertyName = "bt_id",
+						HeaderText = "bt_id"
+					});
+					dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+					{
+						DataPropertyName = "name",
+						HeaderText = "name"
+					});
+					#endregion
+					break;
+				case dbTables.mAttrTypes:
+					#region Создание колонок для Типов атрибутов
+					dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+					{
+						DataPropertyName = "mt_id",
+						HeaderText = "bt_id"
+					});
+					dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+					{
+						DataPropertyName = "name",
+						HeaderText = "name"
+					});
+					dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+					{
+						DataPropertyName = "size",
+						HeaderText = "size"
+					});
+					#endregion
+					break;
+				case dbTables.mAttributes:
+					#region Создание колонок для Атрибутов
+					dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+					{
+						DataPropertyName = "ma_id",
+						HeaderText = "ma_id"
+					});
+					dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+					{
+						DataPropertyName = "name",
+						HeaderText = "name"
+					});
+					dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+					{
+						DataPropertyName = "mt_id",
+						HeaderText = "mt_id"
+					});
+					dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+					{
+						DataPropertyName = "bt_id",					
+						HeaderText = "bt_id"
+					});
+					dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+					{
+						DataPropertyName = "sorder",
+						HeaderText = "sorder"
+					});
+					dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+					{
+						DataPropertyName = "mandatory",
+						HeaderText = "mandatory"
+					});
+					#endregion
+					break;
+				case dbTables.mBlocks:
+					#region Создание колонок для Блоков 
+					dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+					{
+						DataPropertyName = "b_id",
+						HeaderText = "b_id"
+					});
+					dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+					{
+						DataPropertyName = "bt_id",
+						HeaderText = "bt_id"
+					});
+					dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+					{
+						DataPropertyName = "created_at",
+						HeaderText = "created_at"
+					});
+					dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+					{
+						DataPropertyName = "parent",
+						HeaderText = "parent"
+					});
+					dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+					{
+						DataPropertyName = "treeorder",
+						HeaderText = "treeorder"
+					});
+					dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+					{
+						DataPropertyName = "fh_id",
+						HeaderText = "fh_id"
+					});
+					dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+					{
+						DataPropertyName = "predecessor",
+						HeaderText = "predecessor"
+					});
+					dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+					{
+						DataPropertyName = "successor",
+						HeaderText = "successor"
+					});
+					#endregion
+					break;
+				case dbTables.mFactHeap:
+					#region Создание колонок для Фактических данных
+					dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+					{
+						DataPropertyName = "fh_id",
+						HeaderText = "fh_id"
+					});
+					dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+					{
+						DataPropertyName = "blockdata",
+						HeaderText = "blockdata"
+					});
+					#endregion
+					break;
+				case dbTables.mDicts:
+					#region Создание колонок для Справочников
+					dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+					{
+						DataPropertyName = "md_id",
+						HeaderText = "md_id"
+					});
+					dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+					{
+						DataPropertyName = "name",
+						HeaderText = "name"
+					});
+					dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+					{
+						DataPropertyName = "b_id",
+						HeaderText = "b_id"
+					});
+					#endregion
+					break;
+
+			}
+		}
 
         private void btRefresh_Click(object sender, EventArgs e)
         {
