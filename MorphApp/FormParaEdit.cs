@@ -54,6 +54,12 @@ namespace MorphApp
 		{
 			memoHeader.Text = paraMap.GetHeader();
 			//memoBody.Text = paraMap.GetBody();
+
+			rtbBody.FindReplaceVisible = false;
+			rtbBody.HideToolstripItemsByGroup(RicherTextBox.RicherTextBoxToolStripGroups.SaveAndLoad, false);
+			rtbBody.ToggleBold();
+			rtbBody.SetFontSize(11.0f);
+
 			rtbBody.Text = paraMap.GetBody();
 			//rtbBody.Rtf = memoBody.Text;
 		}
