@@ -1,3 +1,5 @@
+/.vs/MorphApp/v14/.suo
+*.suo
 /MorphApp/bin
 /MorphApp/obj
 /HWClient/bin
@@ -27,3 +29,9 @@
 /DirectDBconnector/obj
 /MorphApp.suo
 /TestResults
+/RicherTextBox/.vs/RicherTextBoxDemo/v14/*.suo
+/RicherTextBox/RicherTextBox/bin
+/RicherTextBox/RicherTextBox/obj
+/RicherTextBox/RicherTextBoxDemo/bin
+/RicherTextBox/RicherTextBoxDemo/obj
+/RicherTextBox/RicherTextBoxDemo.exe

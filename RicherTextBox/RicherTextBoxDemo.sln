@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RicherTextBoxDemo", "RicherTextBoxDemo\RicherTextBoxDemo.csproj", "{6CEBD70F-4E48-4390-97E9-D700224E5262}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RicherTextBox", "RicherTextBox\RicherTextBox.csproj", "{8F3074D8-E771-4C5E-A11E-0C0FBAE34AE3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6CEBD70F-4E48-4390-97E9-D700224E5262}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CEBD70F-4E48-4390-97E9-D700224E5262}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CEBD70F-4E48-4390-97E9-D700224E5262}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CEBD70F-4E48-4390-97E9-D700224E5262}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F3074D8-E771-4C5E-A11E-0C0FBAE34AE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F3074D8-E771-4C5E-A11E-0C0FBAE34AE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F3074D8-E771-4C5E-A11E-0C0FBAE34AE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F3074D8-E771-4C5E-A11E-0C0FBAE34AE3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
