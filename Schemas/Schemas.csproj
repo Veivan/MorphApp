@@ -60,6 +60,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BlockPlatform\BlockType.cs" />
+    <Compile Include="IBlockDealer.cs" />
     <Compile Include="IDataDealer.cs" />
     <Compile Include="IntfInnerStore.cs" />
     <Compile Include="ObjectMaps\ContainerNode.cs" />
