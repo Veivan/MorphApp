@@ -8,36 +8,35 @@ using BlockAddress = System.Int64;
 namespace Schemas.BlockPlatform
 {
 	/// <summary>
-	/// Класс представляет тип блока.
+	/// Класс представляет тип атрибута блока.
 	/// </summary>
-	class BlockType
+	class AttrType
 	{
-		private BlockAddress _bt_id = -1;
+		private BlockAddress _mt_id = -1;
 		private string _name = "";
 		
 		/// <summary>
 		/// Идентификатор БД.
 		/// </summary>
-		public BlockAddress BlockTypeID { get { return _bt_id; } }
+		public BlockAddress AttrTypeID { get { return _mt_id; } }
 
 		/// <summary>
 		/// Наименование типа
 		/// </summary>
-		public string Name { get { return _name; } set { _name = value; } }
-
-		// List of Attribute
+		public string Name { get { return _name; }  }
 
 		/// <summary>
 		/// Конструктор
 		/// </summary>
-		public BlockType(BlockAddress bt_id, string name)
+		public AttrType(BlockAddress mt_id, string name)
 		{
-			_bt_id = bt_id;
+			_mt_id = mt_id;
 			_name = name;
-		/*	if (created_at == null)
-				_created_at = DateTime.Now;
-			else
-				_created_at = (DateTime)created_at;*/
-		} 
+			/*	if (created_at == null)
+					_created_at = DateTime.Now;
+				else
+					_created_at = (DateTime)created_at;
+			} */
+		}
 	}
 }

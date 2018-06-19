@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using BlockAddress = System.Int64;
+
 namespace Schemas
 {
 	/// <summary>
@@ -18,21 +20,21 @@ namespace Schemas
 		/// </summary>
 		/// <param name="name">Наименование нового типа блоков</param>
 		/// <returns>адрес добавленного объекта </returns>
-		public abstract int CreateBlockType(string name);
+		public abstract BlockAddress CreateBlockType(string name);
 
 		/// <summary>
 		/// Получение адреса типа блока по наименованию.
 		/// </summary>
 		/// <param name="name">Наименование нового типа блоков</param>
 		/// <returns>адрес объекта </returns>
-		public abstract int GetBlockTypeByName(string name);
+		public abstract BlockAddress GetBlockTypeByName(string name);
 
 		/// <summary>
 		/// Получение наименования типа блока по адресу.
 		/// </summary>
 		/// <param name="addr">адрес типа блоков</param>
 		/// <returns>наименования объекта </returns>
-		public abstract string GetBlockTypeByAddr(int addr);
+		public abstract string GetBlockTypeByAddr(BlockAddress addr);
 		#endregion
 
 		#region Функции для работы с атрибутами типов блоков
@@ -48,11 +50,11 @@ namespace Schemas
 		///		новому атрибуту присвоить последний максимальный номер +1</param>
 		/// <param name="mandatory">Обязательный к заполнению(true), иначе false(default)</param>
 		/// <returns>адрес добавленного объекта</returns>
-		public abstract int CreateAttribute(string name, int AttrType, int BlockType, int sorder, bool mandatory = false);
+		public abstract BlockAddress CreateAttribute(string name, BlockAddress AttrType, BlockAddress BlockType, int sorder, bool mandatory = false);
 
 		#endregion
 
-		#region Функции для работы со Блоками
+		#region Функции для работы с Блоками
 
 		/// <summary>
 		/// Создание нового блока.
@@ -63,7 +65,7 @@ namespace Schemas
 		///		Можно задать явно.Можно задать = 0, тогда функция должна определить последний максимальный номер атрибута и
 		///		присвоить новому атрибуту последний максимальный номер +1</param>
 		/// <returns>адрес добавленного объекта</returns>
-		public abstract int CreateBlock(int BlockType, int parent, int treeorder);
+		public abstract BlockAddress CreateBlock(BlockAddress BlockType, BlockAddress parent, int treeorder);
 
 		/// <summary>
 		/// Присвоение блоку адреса родительского блока в дереве.
@@ -105,7 +107,7 @@ namespace Schemas
 		/// <param name="name">Наименование атрибута</param>
 		/// <param name="BlockType">адрес типа блока (объект справочника "Типы блоков")</param>
 		/// <returns>адрес добавленного объекта</returns>
-		public abstract int CreateDictionary(string name, int BlockType);
+		public abstract BlockAddress CreateDictionary(string name, BlockAddress BlockType);
 
 		#endregion
 
