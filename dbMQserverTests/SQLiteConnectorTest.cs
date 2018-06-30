@@ -141,5 +141,14 @@ namespace DirectDBconnectorTests
             // assert
             Assert.AreNotEqual(-1, 0);
         }
-    }
+
+		[TestMethod]
+		public void Test_dbCreateBlockType()
+		{
+			SQLiteConnector dbConnector = SQLiteConnector.Instance;
+			var id = dbConnector.dbCreateBlockType("Test1");
+			Assert.AreNotEqual(0, id);
+		}
+
+	}
 }

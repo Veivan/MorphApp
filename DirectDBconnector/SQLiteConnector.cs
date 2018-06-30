@@ -1289,7 +1289,7 @@ namespace DirectDBconnector
 
         #endregion
 
-        #region Методы работы со справочниками
+        #region Методы работы с справочниками GREN
         /// <summary>
         /// Заполнение справочника частей речи.
         /// </summary>
@@ -1404,7 +1404,22 @@ namespace DirectDBconnector
         }
 		#endregion
 
-		#region Методы работы с блоками
+		#region Методы работы с Типами блоков
+		public long dbCreateBlockType(string name)
+		{
+			long bt_id = -1;
+			try
+			{
+				m_sqlCmd.CommandText = String.Format("INSERT INTO mBlockTypes(bt_id, name) VALUES(NULL, '{0}')", name);
+				m_sqlCmd.ExecuteNonQuery();
+				bt_id = m_dbConn.LastInsertRowId;
+			}
+			catch (SQLiteException ex)
+			{
+				Console.WriteLine("dbCreateBlockType Error: " + ex.Message);
+			}
+			return bt_id;
+		}
 
 		#endregion
 	}
