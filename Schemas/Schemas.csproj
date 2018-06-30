@@ -60,6 +60,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Blob.cs" />
+    <Compile Include="BlockPlatform\Attribute.cs" />
+    <Compile Include="BlockPlatform\AttrType.cs" />
     <Compile Include="BlockPlatform\BlockType.cs" />
     <Compile Include="IBlockDealer.cs" />
     <Compile Include="IDataDealer.cs" />
