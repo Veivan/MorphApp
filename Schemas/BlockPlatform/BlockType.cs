@@ -14,7 +14,7 @@ namespace Schemas.BlockPlatform
 	{
 		private BlockAddress _bt_id = -1;
 		private string _name = "";
-		
+
 		/// <summary>
 		/// Идентификатор БД.
 		/// </summary>
@@ -24,7 +24,7 @@ namespace Schemas.BlockPlatform
 		/// Наименование типа
 		/// </summary>
 		public string Name { get { return _name; } set { _name = value; } }
-		
+
 		/// <summary>
 		/// Конструктор
 		/// </summary>
@@ -32,10 +32,11 @@ namespace Schemas.BlockPlatform
 		{
 			_bt_id = bt_id;
 			_name = name;
-		/*	if (created_at == null)
-				_created_at = DateTime.Now;
-			else
-				_created_at = (DateTime)created_at;
-		} */
+			/*	if (created_at == null)
+					_created_at = DateTime.Now;
+				else
+					_created_at = (DateTime)created_at;
+			} */
+		}
 	}
 }
