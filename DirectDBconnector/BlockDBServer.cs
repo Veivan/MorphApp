@@ -23,9 +23,10 @@ namespace DirectDBconnector
 			return result;
 		}
 
-		public override long GetBlockTypeByName(string name)
+		public override BlockAddress GetBlockTypeByName(string name)
 		{
-			throw new NotImplementedException();
+			BlockAddress result = dbConnector.dbGetBlockTypeByName(name);
+			return result;
 		}
 
 		public override string GetBlockTypeByAddr(long addr)

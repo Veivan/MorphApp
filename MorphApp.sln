@@ -1,6 +1,8 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MorphApp", "MorphApp\MorphApp.csproj", "{1CCB2909-8F08-4484-BB87-1C216097D85E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LexiconFX", "..\RussianGrammaticalDictionary64\demo\ai\solarix\Grammar_Engine\LexiconFX\LexiconFX.csproj", "{AEC798F0-8CDD-4B21-BCF5-56E04F0F7C3D}"
@@ -27,8 +29,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sgBroker", "sgBroker\sgBrok
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleTest", "SimpleTest\SimpleTest.csproj", "{3FEBD270-AE10-4C76-B621-C75D45298312}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SagaTests", "dbMQserverTests\SagaTests.csproj", "{0DB238B5-0B97-4894-B517-CEBF9DFA865E}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A948AFC7-F1E4-464E-9E9E-190064C0ECA9}"
 	ProjectSection(SolutionItems) = preProject
 		Local.testsettings = Local.testsettings
@@ -40,10 +40,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DirectDBA", "DirectDBA\Dire
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DirectDBconnector", "DirectDBconnector\DirectDBconnector.csproj", "{BE92F137-83A0-4F07-9EC5-2504EF561C7A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SagaTest", "SagaTest\SagaTest.csproj", "{0DFB020B-8AEA-4AC5-995E-5CCB41E1937D}"
+EndProject
 Global
-	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = MorphApp.vsmdi
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -186,19 +185,6 @@ Global
 		{3FEBD270-AE10-4C76-B621-C75D45298312}.Release|x64.ActiveCfg = Release|x86
 		{3FEBD270-AE10-4C76-B621-C75D45298312}.Release|x86.ActiveCfg = Release|x86
 		{3FEBD270-AE10-4C76-B621-C75D45298312}.Release|x86.Build.0 = Release|x86
-		{0DB238B5-0B97-4894-B517-CEBF9DFA865E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0DB238B5-0B97-4894-B517-CEBF9DFA865E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0DB238B5-0B97-4894-B517-CEBF9DFA865E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{0DB238B5-0B97-4894-B517-CEBF9DFA865E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{0DB238B5-0B97-4894-B517-CEBF9DFA865E}.Debug|x64.ActiveCfg = Debug|x64
-		{0DB238B5-0B97-4894-B517-CEBF9DFA865E}.Debug|x64.Build.0 = Debug|x64
-		{0DB238B5-0B97-4894-B517-CEBF9DFA865E}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{0DB238B5-0B97-4894-B517-CEBF9DFA865E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0DB238B5-0B97-4894-B517-CEBF9DFA865E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0DB238B5-0B97-4894-B517-CEBF9DFA865E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{0DB238B5-0B97-4894-B517-CEBF9DFA865E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{0DB238B5-0B97-4894-B517-CEBF9DFA865E}.Release|x64.ActiveCfg = Release|Any CPU
-		{0DB238B5-0B97-4894-B517-CEBF9DFA865E}.Release|x86.ActiveCfg = Release|Any CPU
 		{DB2A6054-8417-4C9B-B667-BAF09D28F23E}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{DB2A6054-8417-4C9B-B667-BAF09D28F23E}.Debug|Mixed Platforms.ActiveCfg = Debug|x64
 		{DB2A6054-8417-4C9B-B667-BAF09D28F23E}.Debug|Mixed Platforms.Build.0 = Debug|x64
@@ -225,8 +211,27 @@ Global
 		{BE92F137-83A0-4F07-9EC5-2504EF561C7A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{BE92F137-83A0-4F07-9EC5-2504EF561C7A}.Release|x64.ActiveCfg = Release|Any CPU
 		{BE92F137-83A0-4F07-9EC5-2504EF561C7A}.Release|x86.ActiveCfg = Release|Any CPU
+		{0DFB020B-8AEA-4AC5-995E-5CCB41E1937D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DFB020B-8AEA-4AC5-995E-5CCB41E1937D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DFB020B-8AEA-4AC5-995E-5CCB41E1937D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{0DFB020B-8AEA-4AC5-995E-5CCB41E1937D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{0DFB020B-8AEA-4AC5-995E-5CCB41E1937D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0DFB020B-8AEA-4AC5-995E-5CCB41E1937D}.Debug|x64.Build.0 = Debug|Any CPU
+		{0DFB020B-8AEA-4AC5-995E-5CCB41E1937D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0DFB020B-8AEA-4AC5-995E-5CCB41E1937D}.Debug|x86.Build.0 = Debug|Any CPU
+		{0DFB020B-8AEA-4AC5-995E-5CCB41E1937D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DFB020B-8AEA-4AC5-995E-5CCB41E1937D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DFB020B-8AEA-4AC5-995E-5CCB41E1937D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{0DFB020B-8AEA-4AC5-995E-5CCB41E1937D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{0DFB020B-8AEA-4AC5-995E-5CCB41E1937D}.Release|x64.ActiveCfg = Release|Any CPU
+		{0DFB020B-8AEA-4AC5-995E-5CCB41E1937D}.Release|x64.Build.0 = Release|Any CPU
+		{0DFB020B-8AEA-4AC5-995E-5CCB41E1937D}.Release|x86.ActiveCfg = Release|Any CPU
+		{0DFB020B-8AEA-4AC5-995E-5CCB41E1937D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = MorphApp.vsmdi
 	EndGlobalSection
 EndGlobal

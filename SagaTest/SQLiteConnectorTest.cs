@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 using DirectDBconnector;
 using Schemas;
 
-namespace DirectDBconnectorTests
+namespace SagaTest
 {
 	[TestClass]
 	public class SQLiteConnectorTest
@@ -33,14 +29,14 @@ namespace DirectDBconnectorTests
 			// assert
 			Assert.AreNotEqual(-1, res);
 		}
-		
+
 		[TestMethod]
 		public void ShowSelectAll()
 		{
 			// arrange
 			SQLiteConnector dbConnector = SQLiteConnector.Instance;
 			// act
-            dbConnector.selectAll(dbTables.tblSyntNodes);
+			dbConnector.selectAll(dbTables.tblSyntNodes);
 			// assert
 			Assert.AreEqual(0, 0);
 		}
@@ -106,41 +102,41 @@ namespace DirectDBconnectorTests
 		}
 
 		[TestMethod]
-        public void TestInsertContainerDB()
+		public void TestInsertContainerDB()
 		{
 			// arrange
 			SQLiteConnector dbConnector = SQLiteConnector.Instance;
 			// act
-            var id = dbConnector.InsertContainerDB("Хранилище");
-            dbConnector.selectAll(dbTables.tblContainers);
+			var id = dbConnector.InsertContainerDB("Хранилище");
+			dbConnector.selectAll(dbTables.tblContainers);
 			// assert
-            Assert.AreNotEqual(-1, id);
+			Assert.AreNotEqual(-1, id);
 		}
 
-        [TestMethod]
-        public void TestDropColumnDB()
-        {
-            // arrange
-            SQLiteConnector dbConnector = SQLiteConnector.Instance;
-            // act
-            dbConnector.selectAll(dbTables.tblParagraphs);
-            dbConnector.DropColumn();
-            dbConnector.selectAll(dbTables.tblParagraphs);
-            // assert
-            Assert.AreNotEqual(-1, 0);
-        }
+		[TestMethod]
+		public void TestDropColumnDB()
+		{
+			// arrange
+			SQLiteConnector dbConnector = SQLiteConnector.Instance;
+			// act
+			dbConnector.selectAll(dbTables.tblParagraphs);
+			dbConnector.DropColumn();
+			dbConnector.selectAll(dbTables.tblParagraphs);
+			// assert
+			Assert.AreNotEqual(-1, 0);
+		}
 
-        [TestMethod]
-        public void TestAddColumnDB()
-        {
-            // arrange
-            SQLiteConnector dbConnector = SQLiteConnector.Instance;
-            // act
-            dbConnector.AddColumn();
-            dbConnector.selectAll(dbTables.tblSyntNodes);
-            // assert
-            Assert.AreNotEqual(-1, 0);
-        }
+		[TestMethod]
+		public void TestAddColumnDB()
+		{
+			// arrange
+			SQLiteConnector dbConnector = SQLiteConnector.Instance;
+			// act
+			dbConnector.AddColumn();
+			dbConnector.selectAll(dbTables.tblSyntNodes);
+			// assert
+			Assert.AreNotEqual(-1, 0);
+		}
 
 		[TestMethod]
 		public void Test_dbCreateBlockType()
@@ -150,5 +146,12 @@ namespace DirectDBconnectorTests
 			Assert.AreNotEqual(0, id);
 		}
 
+		[TestMethod]
+		public void Test_dbGetBlockTypeByName()
+		{
+			SQLiteConnector dbConnector = SQLiteConnector.Instance;
+			var id = dbConnector.dbGetBlockTypeByName("документ");
+			Assert.AreNotEqual(0, id);
+		}
 	}
 }

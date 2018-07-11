@@ -1407,18 +1407,37 @@ namespace DirectDBconnector
 		#region Методы работы с Типами блоков
 		public long dbCreateBlockType(string name)
 		{
-			long bt_id = -1;
+			long result = -1;
 			try
 			{
 				m_sqlCmd.CommandText = String.Format("INSERT INTO mBlockTypes(bt_id, name) VALUES(NULL, '{0}')", name);
 				m_sqlCmd.ExecuteNonQuery();
-				bt_id = m_dbConn.LastInsertRowId;
+				result = m_dbConn.LastInsertRowId;
 			}
 			catch (SQLiteException ex)
 			{
 				Console.WriteLine("dbCreateBlockType Error: " + ex.Message);
 			}
-			return bt_id;
+			return result;
+		}
+
+		public long dbGetBlockTypeByName(string name)
+		{
+			long result = -1;
+			try
+			{
+				m_sqlCmd.CommandText = String.Format("SELECT bt_id FROM mBlockTypes WHERE LOWER(name) = @name", name);
+				m_sqlCmd.Parameters.Clear();
+				m_sqlCmd.Parameters.Add(new SQLiteParameter("@name", name.ToLower()));
+				var executeScalar = m_sqlCmd.ExecuteScalar();
+				if (executeScalar != null)
+					result = (long)executeScalar;
+			}
+			catch (SQLiteException ex)
+			{
+				Console.WriteLine("dbGetBlockTypeByName Error: " + ex.Message);
+			}
+			return result;
 		}
 
 		#endregion
