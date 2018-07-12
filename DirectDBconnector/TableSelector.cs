@@ -18,7 +18,7 @@ namespace DirectDBconnector
         const string comSelUndefContent = "SELECT uv_id, mu_id, rw_id FROM mUndefContent";
 
 		const string comSelmBlockTypes = "SELECT bt_id, name FROM mBlockTypes";
-		const string comSelmAttrTypes = "SELECT mt_id, name, size FROM mAttrTypes";
+		const string comSelmAttrTypes = "SELECT mt_id, name FROM mAttrTypes";
 		const string comSelmAttributes = "SELECT ma_id, name, mt_id, bt_id, sorder, mandatory FROM mAttributes";
 		const string comSelmBlocks = "SELECT b_id, bt_id, created_at, parent, treeorder, fh_id, predecessor, successor FROM mBlocks";
 		const string comSelmFactHeap = "SELECT fh_id, blockdata FROM mFactHeap";

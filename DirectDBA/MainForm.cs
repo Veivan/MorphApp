@@ -334,17 +334,12 @@ namespace DirectDBA
 					dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
 					{
 						DataPropertyName = "mt_id",
-						HeaderText = "bt_id"
+						HeaderText = "mt_id"
 					});
 					dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
 					{
 						DataPropertyName = "name",
 						HeaderText = "name"
-					});
-					dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
-					{
-						DataPropertyName = "size",
-						HeaderText = "size"
 					});
 					#endregion
 					break;

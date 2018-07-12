@@ -29,14 +29,15 @@ namespace DirectDBconnector
 			return result;
 		}
 
-		public override string GetBlockTypeByAddr(long addr)
+		public override string GetBlockTypeByAddr(BlockAddress addr)
 		{
-			throw new NotImplementedException();
+			string result = dbConnector.dbGetBlockTypeByAddr(addr);
+			return result;
 		}
 		#endregion
 
 		#region Функции для работы с атрибутами типов блоков
-		public override long CreateAttribute(string name, long AttrType, long BlockType, int sorder, bool mandatory = false)
+		public override BlockAddress CreateAttribute(string name, long AttrType, long BlockType, int sorder, bool mandatory = false)
 		{
 			throw new NotImplementedException();
 		}

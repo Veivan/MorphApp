@@ -142,15 +142,33 @@ namespace SagaTest
 		public void Test_dbCreateBlockType()
 		{
 			SQLiteConnector dbConnector = SQLiteConnector.Instance;
-			var id = dbConnector.dbCreateBlockType("Test1");
-			Assert.AreNotEqual(0, id);
+			var res = dbConnector.dbCreateBlockType("Test1");
+			Assert.AreNotEqual(0, res);
 		}
 
 		[TestMethod]
 		public void Test_dbGetBlockTypeByName()
 		{
 			SQLiteConnector dbConnector = SQLiteConnector.Instance;
-			var id = dbConnector.dbGetBlockTypeByName("документ");
+			var res = dbConnector.dbGetBlockTypeByName("документ");
+			Assert.AreNotEqual(0, res);
+		}
+
+		[TestMethod]
+		public void Test_dbGetBlockTypeByAddr()
+		{
+
+			SQLiteConnector dbConnector = SQLiteConnector.Instance;
+			var res = dbConnector.dbGetBlockTypeByAddr(1);
+			Assert.AreNotEqual("", res);
+		}
+
+		[TestMethod]
+		public void Test_dbCreateAttribute()
+		{
+
+			SQLiteConnector dbConnector = SQLiteConnector.Instance;
+			var id = dbConnector.dbCreateAttribute("attr1", 1, 1, 0);
 			Assert.AreNotEqual(0, id);
 		}
 	}
