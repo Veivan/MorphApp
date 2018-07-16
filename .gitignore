@@ -37,3 +37,12 @@
 /RicherTextBox/RicherTextBoxDemo.exe
 /SagaTest/bin
 /SagaTest/obj
+/SagaUnitTest/bin/Debug
+/SagaUnitTest/bin/x64/Debug
+/SagaUnitTest/obj/Debug
+/SagaUnitTest/obj/x64/Debug
+/nUnitSaga/bin/Debug
+/nUnitSaga/bin/x64/Debug
+/nUnitSaga/obj/Debug
+/nUnitSaga/obj/x64/Debug
+/packages/NUnit.3.10.1
