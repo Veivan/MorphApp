@@ -46,3 +46,5 @@
 /nUnitSaga/obj/Debug
 /nUnitSaga/obj/x64/Debug
 /packages/NUnit.3.10.1
+/packages/NUnit3TestAdapter.3.10.0/build/net35
+/packages/NUnit3TestAdapter.3.10.0/build/netcoreapp1.0
