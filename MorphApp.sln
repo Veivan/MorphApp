@@ -46,12 +46,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SagaTest", "SagaTest\SagaTe
 		{BF7809E6-3E9D-49FC-888D-6D0C7187CC5B} = {BF7809E6-3E9D-49FC-888D-6D0C7187CC5B}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nUnitSaga", "nUnitSaga\nUnitSaga.csproj", "{A76F2C95-57FB-461F-9D16-B5B99E40388A}"
-	ProjectSection(ProjectDependencies) = postProject
-		{BE92F137-83A0-4F07-9EC5-2504EF561C7A} = {BE92F137-83A0-4F07-9EC5-2504EF561C7A}
-		{BF7809E6-3E9D-49FC-888D-6D0C7187CC5B} = {BF7809E6-3E9D-49FC-888D-6D0C7187CC5B}
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -237,22 +231,6 @@ Global
 		{0DFB020B-8AEA-4AC5-995E-5CCB41E1937D}.Release|x64.Build.0 = Release|Any CPU
 		{0DFB020B-8AEA-4AC5-995E-5CCB41E1937D}.Release|x86.ActiveCfg = Release|Any CPU
 		{0DFB020B-8AEA-4AC5-995E-5CCB41E1937D}.Release|x86.Build.0 = Release|Any CPU
-		{A76F2C95-57FB-461F-9D16-B5B99E40388A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A76F2C95-57FB-461F-9D16-B5B99E40388A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A76F2C95-57FB-461F-9D16-B5B99E40388A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{A76F2C95-57FB-461F-9D16-B5B99E40388A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{A76F2C95-57FB-461F-9D16-B5B99E40388A}.Debug|x64.ActiveCfg = Debug|x64
-		{A76F2C95-57FB-461F-9D16-B5B99E40388A}.Debug|x64.Build.0 = Debug|x64
-		{A76F2C95-57FB-461F-9D16-B5B99E40388A}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{A76F2C95-57FB-461F-9D16-B5B99E40388A}.Debug|x86.Build.0 = Debug|Any CPU
-		{A76F2C95-57FB-461F-9D16-B5B99E40388A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A76F2C95-57FB-461F-9D16-B5B99E40388A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A76F2C95-57FB-461F-9D16-B5B99E40388A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{A76F2C95-57FB-461F-9D16-B5B99E40388A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{A76F2C95-57FB-461F-9D16-B5B99E40388A}.Release|x64.ActiveCfg = Release|Any CPU
-		{A76F2C95-57FB-461F-9D16-B5B99E40388A}.Release|x64.Build.0 = Release|Any CPU
-		{A76F2C95-57FB-461F-9D16-B5B99E40388A}.Release|x86.ActiveCfg = Release|Any CPU
-		{A76F2C95-57FB-461F-9D16-B5B99E40388A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

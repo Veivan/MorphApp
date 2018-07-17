@@ -142,7 +142,7 @@ namespace SagaTest
 		public void Test_dbCreateBlockType()
 		{
 			SQLiteConnector dbConnector = SQLiteConnector.Instance;
-			var res = dbConnector.dbCreateBlockType("Test1");
+			var res = dbConnector.dbCreateBlockType("документ");
 			Assert.AreNotEqual(0, res);
 		}
 
