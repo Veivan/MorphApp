@@ -171,5 +171,23 @@ namespace SagaTest
 			var id = dbConnector.dbCreateAttribute("attr1", 1, 1, 0);
 			Assert.AreNotEqual(0, id);
 		}
+
+		[TestMethod]
+		public void Test_dbCreateBlock()
+		{
+
+			SQLiteConnector dbConnector = SQLiteConnector.Instance;
+			var id = dbConnector.dbCreateBlock(1, -1, 1);
+			Assert.AreNotEqual(0, id);
+		}
+
+		[TestMethod]
+		public void Test_dbGetOrder()
+		{
+
+			SQLiteConnector dbConnector = SQLiteConnector.Instance;
+			var id = dbConnector.dbGetOrder(1);
+			Assert.AreNotEqual(-1, id);
+		}
 	}
 }

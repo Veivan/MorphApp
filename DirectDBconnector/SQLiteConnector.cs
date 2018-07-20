@@ -1479,5 +1479,45 @@ namespace DirectDBconnector
 		}
 		#endregion
 
+		#region Функции для работы с Блоками
+		public long dbCreateBlock(long BlockType, long parent, int treeorder)
+		{
+			long result = -1;
+			try
+			{
+				m_sqlCmd.CommandText = string.Format("INSERT INTO mBlocks(b_id, bt_id, parent, treeorder) VALUES(NULL, '{0}', {1}, {2})",
+					BlockType, parent, treeorder);
+				m_sqlCmd.ExecuteNonQuery();
+				result = m_dbConn.LastInsertRowId;
+			}
+			catch (SQLiteException ex)
+			{
+				Console.WriteLine("dbCreateBlock Error: " + ex.Message);
+			}
+			return result;
+		}
+
+		public int dbGetOrder(long addr)
+		{
+			int result = -1;
+			try
+			{
+				m_sqlCmd.CommandText = String.Format("SELECT treeorder FROM mBlocks WHERE b_id = @b_id", addr);
+				m_sqlCmd.Parameters.Clear();
+				m_sqlCmd.Parameters.Add(new SQLiteParameter("@b_id", addr));
+				var executeScalar = m_sqlCmd.ExecuteScalar();
+				if (executeScalar != null)
+					result = Convert.ToInt32(executeScalar);
+			}
+			catch (SQLiteException ex)
+			{
+				Console.WriteLine("dbGetOrder Error: " + ex.Message);
+			}
+			return result;
+		}
+
+
+		#endregion
+
 	}
 }

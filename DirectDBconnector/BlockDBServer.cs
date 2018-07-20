@@ -46,7 +46,8 @@ namespace DirectDBconnector
 		#region Функции для работы с Блоками
 		public override long CreateBlock(long BlockType, long parent, int treeorder)
 		{
-			throw new NotImplementedException();
+			BlockAddress result = dbConnector.dbCreateBlock(BlockType, parent, treeorder);
+			return result;
 		}
 
 		public override Blob GetFactData(long addr)
@@ -56,7 +57,8 @@ namespace DirectDBconnector
 
 		public override int GetOrder(long addr)
 		{
-			throw new NotImplementedException();
+			int result = dbConnector.dbGetOrder(addr);
+			return result;
 		}
 
 		public override long GetParent(long addr)
