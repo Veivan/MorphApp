@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-//using System.Linq;
-//using System.Text;
 
 using System.Data;
 using System.IO;
@@ -1516,7 +1514,75 @@ namespace DirectDBconnector
 			return result;
 		}
 
+		/// <summary>
+		/// Присвоение фактического значения блоку.
+		/// </summary>
+		/// <param name="addr">ID - адрес блока</param>
+		/// <returns>int</returns>
+		public long dbSetFactData(long addr, byte[] blob, bool makeVersion)
+		{
+			long result = -1;
+			long fh_id = -1;
+			//if (makeVersion) // надо делать новый блок и новые фактические данные
+			try
+			{
+				// Ищем адрес фактических данных
+				m_sqlCmd.CommandText = "SELECT fh_id FROM mBlocks WHERE b_id = @b_id";
+				m_sqlCmd.Parameters.Clear();
+				m_sqlCmd.Parameters.Add(new SQLiteParameter("@b_id", addr));
+				// Читаем только первую запись
+				var resp = m_sqlCmd.ExecuteScalar();
+				if (resp != null)
+				{
+					fh_id = (long)resp;
+					m_sqlCmd.CommandText = "UPDATE mFactHeap SET blockdata = @blob WHERE fh_id = @fh_id";
+					m_sqlCmd.Parameters.Clear();
+					m_sqlCmd.Parameters.Add(new SQLiteParameter("@blob", blob));
+					m_sqlCmd.Parameters.Add(new SQLiteParameter("@fh_id", fh_id));
+					m_sqlCmd.ExecuteNonQuery();
+				}
+				else
+				{
+					m_sqlCmd.CommandText = "INSERT INTO mFactHeap(fh_id, blockdata) VALUES(NULL, @blob)";
+					m_sqlCmd.Parameters.Clear();
+					m_sqlCmd.Parameters.Add(new SQLiteParameter("@blob", blob));
+					m_sqlCmd.ExecuteNonQuery();
+					fh_id = m_dbConn.LastInsertRowId;
 
+					// обновить адрес факт.данных в блоке
+					m_sqlCmd.CommandText = "UPDATE mBlocks SET fh_id = @fh_id WHERE b_id = @b_id";
+					m_sqlCmd.Parameters.Clear();
+					m_sqlCmd.Parameters.Add(new SQLiteParameter("@b_id", addr));
+					m_sqlCmd.Parameters.Add(new SQLiteParameter("@fh_id", fh_id));
+					m_sqlCmd.ExecuteNonQuery();
+				}
+			}
+			catch (SQLiteException ex)
+			{
+				Console.WriteLine("dbSetFactData Error: " + ex.Message);
+			}
+			return result;
+		}
+		#endregion
+
+		#region Функции для работы с Фактическими значениями
+		public long dbInsertFactData(byte[] blob)
+		{
+			long result = -1;
+			try
+			{
+				m_sqlCmd.CommandText = "INSERT INTO mFactHeap(fh_id, blockdata) VALUES(NULL, @blob)";
+				m_sqlCmd.Parameters.Clear();
+				m_sqlCmd.Parameters.Add(new SQLiteParameter("@blob", blob));
+				m_sqlCmd.ExecuteNonQuery();
+				result = m_dbConn.LastInsertRowId;
+			}
+			catch (SQLiteException ex)
+			{
+				Console.WriteLine("dbInsertFactData Error: " + ex.Message);
+			}
+			return result;
+		}
 		#endregion
 
 	}

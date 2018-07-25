@@ -69,6 +69,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BlobConvertor.cs" />
     <Compile Include="BlockDBServer.cs" />
     <Compile Include="Properties\DirectDBC.Designer.cs">
       <AutoGen>True</AutoGen>

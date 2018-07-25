@@ -262,4 +262,9 @@ namespace Schemas
         public string Value;
     }
 
+	/// <summary>
+	/// Типы атрибутов блоков.
+	/// </summary>
+	public enum enAttrTypes {mntxt=1, mnint=2, mnreal=3, mnbool=4, mnblob=5, mnlink=6, mnarr=7};
+
 }

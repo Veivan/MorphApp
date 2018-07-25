@@ -2,9 +2,11 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using DirectDBconnector;
 using Schemas;
+using System.Collections.Generic;
+using Schemas.BlockPlatform;
 
-namespace SagaTest
-{
+namespace DirectDBconnector.Tests
+{ 
 	[TestClass]
 	public class SQLiteConnectorTest
 	{
@@ -42,7 +44,7 @@ namespace SagaTest
 		[TestMethod]
 		public void TestInsertSpeechParts()
 		{
-			dbConnector.InsertSpeechParts();
+			//dbConnector.InsertSpeechParts();
 			dbConnector.selectAll(dbTables.tblParts);
 			Assert.AreEqual(0, 0);
 		}
@@ -136,6 +138,22 @@ namespace SagaTest
 		public void Test_dbGetOrder()
 		{
 			var id = dbConnector.dbGetOrder(1);
+			Assert.AreNotEqual(-1, id);
+		}
+
+		[TestMethod]
+		public void Test_dbInsertFactData()
+		{
+			byte[] x = new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+			var id = dbConnector.dbInsertFactData(x);
+			Assert.AreNotEqual(-1, id);
+		}
+
+		[TestMethod()]
+		public void dbSetFactDataTest()
+		{
+			byte[] x = new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+			var id = dbConnector.dbSetFactData(2, x, false);
 			Assert.AreNotEqual(-1, id);
 		}
 		#endregion

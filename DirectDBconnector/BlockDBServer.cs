@@ -58,7 +58,7 @@ namespace DirectDBconnector
 
 		public override int GetOrder(long addr)
 		{
-			int result = dbConnector.dbGetOrder(addr);
+			var result = dbConnector.dbGetOrder(addr);
 			return result;
 		}
 
@@ -67,9 +67,10 @@ namespace DirectDBconnector
 			throw new NotImplementedException();
 		}
 
-		public override long SetFactData(long addr, Blob data, bool MakeVersion = false)
+		public override long SetFactData(long addr, Blob blob, bool MakeVersion = false)
 		{
-			throw new NotImplementedException();
+			var result = dbConnector.dbSetFactData(addr, blob.Data, MakeVersion);
+			return result;
 		}
 
 		public override void SetOrder(long addr, int order)

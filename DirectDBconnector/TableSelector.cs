@@ -5,6 +5,8 @@ namespace DirectDBconnector
 {
     class TableSelector
     {
+		const string comSelParts = "SELECT sp_id, speechpart FROM mSpParts";
+
 		const string comSelContainers = "SELECT ct_id, created_at, name, parent_id FROM mContainers";
 		const string comSelDocuments = "SELECT doc_id, ct_id, created_at, name FROM mDocuments";
         const string comSelParagraphs = "SELECT pg_id, doc_id, created_at FROM mParagraphs";
@@ -28,7 +30,9 @@ namespace DirectDBconnector
         {
             switch (tblname)
             {
-                case dbTables.tblContainers: return comSelContainers;
+				case dbTables.tblParts: return comSelParts;
+
+				case dbTables.tblContainers: return comSelContainers;
 				case dbTables.tblDocuments: return comSelDocuments;
 				case dbTables.tblParagraphs: return comSelParagraphs;
                 case dbTables.tblSents: return comSelSents;
