@@ -39,7 +39,8 @@ namespace DirectDBconnector
 		#region Функции для работы с атрибутами типов блоков
 		public override BlockAddress CreateAttribute(string name, long AttrType, long BlockType, int sorder, bool mandatory = false)
 		{
-			throw new NotImplementedException();
+			BlockAddress result = dbConnector.dbCreateAttribute(name, AttrType, BlockType, sorder, mandatory);
+			return result;
 		}
 		#endregion
 
