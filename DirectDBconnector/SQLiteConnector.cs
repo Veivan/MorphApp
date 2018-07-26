@@ -1532,7 +1532,8 @@ namespace DirectDBconnector
 				m_sqlCmd.Parameters.Add(new SQLiteParameter("@b_id", addr));
 				// Читаем только первую запись
 				var resp = m_sqlCmd.ExecuteScalar();
-				if (resp != null)
+				if (resp == null) return result; // Record not found
+				if (resp != DBNull.Value)
 				{
 					fh_id = (long)resp;
 					m_sqlCmd.CommandText = "UPDATE mFactHeap SET blockdata = @blob WHERE fh_id = @fh_id";
@@ -1556,6 +1557,7 @@ namespace DirectDBconnector
 					m_sqlCmd.Parameters.Add(new SQLiteParameter("@fh_id", fh_id));
 					m_sqlCmd.ExecuteNonQuery();
 				}
+				result = addr;
 			}
 			catch (SQLiteException ex)
 			{

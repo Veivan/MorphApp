@@ -254,17 +254,26 @@ namespace Schemas
 	public enum treeOper { toAdd, toEdit, toDelete };
 	
 	/// <summary>
-    /// Структура используется в обмене сообщениями с серверами.
-    /// </summary>
-    public struct SimpleParam
-    {
-        public string Name;
-        public string Value;
-    }
-
-	/// <summary>
 	/// Типы атрибутов блоков.
 	/// </summary>
 	public enum enAttrTypes {mntxt=1, mnint=2, mnreal=3, mnbool=4, mnblob=5, mnlink=6, mnarr=7};
+
+	/// <summary>
+	/// Структура используется в обмене сообщениями с серверами.
+	/// </summary>
+	public struct SimpleParam
+	{
+		public string Name;
+		public string Value;
+	}
+
+	/// <summary>
+	/// Структура используется для работы с фактическими данными атрибутов блока.
+	/// </summary>
+	public struct AttrFactData
+	{
+		public enAttrTypes Type;
+		public object Value;
+	}
 
 }

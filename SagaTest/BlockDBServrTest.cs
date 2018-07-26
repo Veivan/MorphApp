@@ -58,14 +58,12 @@ namespace SagaTest
 		[TestMethod]
 		public void Test_SetFactData()
 		{
-			byte[] x = new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-			var list = new List<enAttrTypes>();
-			list.Add(enAttrTypes.mnint);
-			var converter = new BlobConvertor(list);
-			var attrtype = new AttrType(2, "целое число");
-			var dict = new Dictionary<AttrType, object>();
-			dict.Add(attrtype, x);
-			Blob blob = converter.BlobSetData(dict);
+			var attr1 = new AttrFactData();
+			attr1.Type = enAttrTypes.mnint;
+			attr1.Value = 10;
+			var list = new List<AttrFactData>();
+			list.Add(attr1);
+			Blob blob = new Blob(list);
 
 			var id = DBserver.SetFactData(1, blob);
 			Assert.AreNotEqual(-1, id);
