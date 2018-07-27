@@ -27,47 +27,47 @@ namespace Schemas
 		MEASURE_UNIT = 28,               // class ЕДИНИЦА_ИЗМЕРЕНИЯ
 		COMPOUND_ADJ_PREFIX = 29,        // class ПРЕФИКС_СОСТАВ_ПРИЛ
 		COMPOUND_NOUN_PREFIX = 30,       // class ПРЕФИКС_СОСТАВ_СУЩ
-		/*		VERB_en = 31,                    // class ENG_VERB
-		BEVERB_en = 32,                  // class ENG_BEVERB
-		AUXVERB_en = 33,                 // class ENG_AUXVERB
-		NOUN_en = 34,                    // class ENG_NOUN
-		PRONOUN_en = 35,                 // class ENG_PRONOUN
-		ARTICLE_en = 36,                 // class ENG_ARTICLE
-		PREP_en = 37,                    // class ENG_PREP
-		POSTPOS_en = 38,                 // class ENG_POSTPOS
-		CONJ_en = 39,                    // class ENG_CONJ
-		ADV_en = 40,                     // class ENG_ADVERB
-		ADJ_en = 41,                     // class ENG_ADJECTIVE
-		PARTICLE_en = 42,                // class ENG_PARTICLE
-		NUMERAL_en = 43,                 // class ENG_NUMERAL
-		INTERJECTION_en = 44,            // class ENG_INTERJECTION
-		POSSESSION_PARTICLE_en = 45,     // class ENG_POSSESSION
-		COMPOUND_PRENOUN_en = 46,        // class ENG_COMPOUND_PRENOUN
-		COMPOUND_PREADJ_en = 47,         // class ENG_COMPOUND_PREADJ
-		COMPOUND_PREVERB_en = 48,        // class ENG_COMPOUND_PREVERB
-		COMPOUND_PREADV_en = 49,         // class ENG_COMPOUND_PREADV
-		NUMERAL_fr = 50,                 // class FR_NUMERAL
-		ARTICLE_fr = 51,                 // class FR_ARTICLE
-		PREP_fr = 52,                    // class FR_PREP
-		ADV_fr = 53,                     // class FR_ADVERB
-		CONJ_fr = 54,                    // class FR_CONJ
-		NOUN_fr = 55,                    // class FR_NOUN
-		ADJ_fr = 56,                     // class FR_ADJ
-		PRONOUN_fr = 57,                 // class FR_PRONOUN
-		VERB_fr = 58,                    // class FR_VERB
-		PARTICLE_fr = 59,                // class FR_PARTICLE
-		PRONOUN2_fr = 60,                // class FR_PRONOUN2
-		NOUN_es = 61,                    // class ES_NOUN
-		ROOT_es = 62,                    // class ES_ROOT
-		JAP_NOUN = 63,                   // class JAP_NOUN
-		JAP_NUMBER = 64,                 // class JAP_NUMBER
-		JAP_ADJECTIVE = 65,              // class JAP_ADJECTIVE
-		JAP_ADVERB = 66,                 // class JAP_ADVERB
-		JAP_CONJ = 67,                   // class JAP_CONJ
-		JAP_VERB = 68,                   // class JAP_VERB
-		JAP_PRONOUN = 69,                // class JAP_PRONOUN
-		JAP_VERB_POSTFIX2 = 72,          // class JAP_VERB_POSTFIX2
-		JAP_PARTICLE = 74,               // class JAP_PARTICLE */
+										 /*		VERB_en = 31,                    // class ENG_VERB
+										 BEVERB_en = 32,                  // class ENG_BEVERB
+										 AUXVERB_en = 33,                 // class ENG_AUXVERB
+										 NOUN_en = 34,                    // class ENG_NOUN
+										 PRONOUN_en = 35,                 // class ENG_PRONOUN
+										 ARTICLE_en = 36,                 // class ENG_ARTICLE
+										 PREP_en = 37,                    // class ENG_PREP
+										 POSTPOS_en = 38,                 // class ENG_POSTPOS
+										 CONJ_en = 39,                    // class ENG_CONJ
+										 ADV_en = 40,                     // class ENG_ADVERB
+										 ADJ_en = 41,                     // class ENG_ADJECTIVE
+										 PARTICLE_en = 42,                // class ENG_PARTICLE
+										 NUMERAL_en = 43,                 // class ENG_NUMERAL
+										 INTERJECTION_en = 44,            // class ENG_INTERJECTION
+										 POSSESSION_PARTICLE_en = 45,     // class ENG_POSSESSION
+										 COMPOUND_PRENOUN_en = 46,        // class ENG_COMPOUND_PRENOUN
+										 COMPOUND_PREADJ_en = 47,         // class ENG_COMPOUND_PREADJ
+										 COMPOUND_PREVERB_en = 48,        // class ENG_COMPOUND_PREVERB
+										 COMPOUND_PREADV_en = 49,         // class ENG_COMPOUND_PREADV
+										 NUMERAL_fr = 50,                 // class FR_NUMERAL
+										 ARTICLE_fr = 51,                 // class FR_ARTICLE
+										 PREP_fr = 52,                    // class FR_PREP
+										 ADV_fr = 53,                     // class FR_ADVERB
+										 CONJ_fr = 54,                    // class FR_CONJ
+										 NOUN_fr = 55,                    // class FR_NOUN
+										 ADJ_fr = 56,                     // class FR_ADJ
+										 PRONOUN_fr = 57,                 // class FR_PRONOUN
+										 VERB_fr = 58,                    // class FR_VERB
+										 PARTICLE_fr = 59,                // class FR_PARTICLE
+										 PRONOUN2_fr = 60,                // class FR_PRONOUN2
+										 NOUN_es = 61,                    // class ES_NOUN
+										 ROOT_es = 62,                    // class ES_ROOT
+										 JAP_NOUN = 63,                   // class JAP_NOUN
+										 JAP_NUMBER = 64,                 // class JAP_NUMBER
+										 JAP_ADJECTIVE = 65,              // class JAP_ADJECTIVE
+										 JAP_ADVERB = 66,                 // class JAP_ADVERB
+										 JAP_CONJ = 67,                   // class JAP_CONJ
+										 JAP_VERB = 68,                   // class JAP_VERB
+										 JAP_PRONOUN = 69,                // class JAP_PRONOUN
+										 JAP_VERB_POSTFIX2 = 72,          // class JAP_VERB_POSTFIX2
+										 JAP_PARTICLE = 74,               // class JAP_PARTICLE */
 		UNKNOWN_ENTRIES_CLASS = 85       // class UnknownEntries
 	}
 
@@ -203,19 +203,19 @@ namespace Schemas
 		SECOND_VERB_link = 114
 	}
 
-    public enum dbTables
-    {
-        tblContainers,
-        tblDocuments,
-        tblParagraphs,
-        tblSents,
-        tblPhraseContent,
-        tblLemms,
-        tblGrammems,
-        tblSyntNodes,
-        tblRealWord,
-        tblTermContent,
-        tblUndefContent,
+	public enum dbTables
+	{
+		tblContainers,
+		tblDocuments,
+		tblParagraphs,
+		tblSents,
+		tblPhraseContent,
+		tblLemms,
+		tblGrammems,
+		tblSyntNodes,
+		tblRealWord,
+		tblTermContent,
+		tblUndefContent,
 
 		mBlockTypes,
 		mAttrTypes,
@@ -232,14 +232,14 @@ namespace Schemas
 	/// <summary>
 	/// Тип возвращаемого значения методов чтения из БД.
 	/// </summary>
-	public enum tpList {tplDBtable,	tblList};
+	public enum tpList { tplDBtable, tblList };
 
 	/// <summary>
 	/// enstAll - выбор всех предложений абзаца.
 	/// enstNotActualHead - выбор неактуальных предложений заголовка абзаца.
 	/// enstNotActualBody - выбор неактуальных предложений содержимого абзаца.
 	/// enstHeader - выбор заголовка абзаца.
-    /// enstBody - выбор предложений содержимого абзаца.
+	/// enstBody - выбор предложений содержимого абзаца.
 	/// </summary>
 	public enum SentTypes { enstAll, enstNotActualHead, enstNotActualBody, enstHeader, enstBody };
 
@@ -252,16 +252,55 @@ namespace Schemas
 	/// Тип операции в клиентском дереве.
 	/// </summary>
 	public enum treeOper { toAdd, toEdit, toDelete };
-	
+
 	/// <summary>
 	/// Типы атрибутов блоков.
 	/// </summary>
-	public enum enAttrTypes {mntxt=1, mnint=2, mnreal=3, mnbool=4, mnblob=5, mnlink=6, mnarr=7};
+	public enum enAttrTypes
+	{
+		/// <summary>
+		/// текст
+		/// </summary>
+		mntxt = 1,
+		/// <summary>
+		/// целое число
+		/// </summary>
+		mnint = 2,
+		/// <summary>
+		/// десятичное число
+		/// </summary>
+		mnreal = 3,
+		/// <summary>
+		/// битовый флаг
+		/// </summary>
+		mnbool = 4,
+		/// <summary>
+		/// двоичное поле(для картинок и файлов)
+		/// </summary>
+		mnblob = 5,
+		/// <summary>
+		/// ссылка на объект
+		/// </summary>
+		mnlink = 6,
+		/// <summary>
+		/// множество ссылок на объекты
+		/// </summary>
+		mnarr = 7,
+		/// <summary>
+		/// форматированный текст(rtf)
+		/// </summary>
+		mnrtf = 8
+	};
 
 	/// <summary>
-	/// Структура используется в обмене сообщениями с серверами.
+	/// Типы картинок, хранящихся в атрибутах блоков.
 	/// </summary>
-	public struct SimpleParam
+	public enum TBLOBPICS {BMP = 0, JPG = 1, PNG = 2, PDF = 3};
+
+/// <summary>
+/// Структура используется в обмене сообщениями с серверами.
+/// </summary>
+public struct SimpleParam
 	{
 		public string Name;
 		public string Value;
@@ -274,6 +313,12 @@ namespace Schemas
 	{
 		public enAttrTypes Type;
 		public object Value;
+		public AttrFactData(enAttrTypes _type, object _value)
+		{
+			this = new AttrFactData();
+			this.Type = _type;
+			this.Value = _value;
+		}
 	}
 
 }
