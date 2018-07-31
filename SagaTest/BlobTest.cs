@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Schemas;
+using System.Drawing;
 
 namespace SagaTest
 {
@@ -87,8 +88,8 @@ namespace SagaTest
 		[TestMethod]
 		public void Test_MakeBlob_String()
 		{
-			const string testval = "value1";
-			//const string testval = "хорошо";
+			//const string testval = "value1";
+			const string testval = "хорошо";
 			var testtype = enAttrTypes.mntxt;
 			var attr1 = new AttrFactData(testtype, testval);
 			var list = new List<AttrFactData>();
@@ -133,6 +134,33 @@ namespace SagaTest
 			var strval = string.Join(",", val);
 			Console.WriteLine(strval);
 			Assert.AreEqual(testval, strval);
+		}
+
+		/// <summary>
+		/// Запись в Blob типа Picture
+		/// </summary>
+		[TestMethod]
+		public void Test_MakeBlob_Picture()
+		{
+			var testtype = enAttrTypes.mnblob;
+			var fname = "Breakers.jpg";
+
+			var img = Image.FromFile(@"c:/temp/" + fname);
+			var attr1 = new AttrFactData(testtype, img);
+			var list = new List<AttrFactData>();
+			list.Add(attr1);
+			Blob blobpar = new Blob(list);
+
+			var bdata = blobpar.Data;
+
+			var tplist = new List<enAttrTypes>();
+			tplist.Add(testtype);
+			Blob blobchld = new Blob(tplist, bdata);
+
+			var val = (Image)blobchld.ValueList[0].Value;
+			val.Save(@"c:/temp/new_" + fname);
+
+			Assert.AreEqual(img, val);
 		}
 
 		/// <summary>
