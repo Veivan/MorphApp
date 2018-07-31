@@ -82,6 +82,7 @@ namespace Schemas
 						AddData(arrbt);
 						break;
 					case enAttrTypes.mnblob:
+						throw new NotImplementedException();
 						break;
 					case enAttrTypes.mnarr:
 						var lst = (List<int>)rec.Value;
@@ -104,6 +105,7 @@ namespace Schemas
 		{
 			if (_bytedata == null || _bytedata.Length == 0) return;
 
+			const int intlen = 4; // количество байт для хранения числа
 			byte[] arrbt;
 			AttrFactData attrfactdata;
 			int shift = 0;
@@ -116,7 +118,7 @@ namespace Schemas
 				{
 					case enAttrTypes.mntxt:
 					case enAttrTypes.mnrtf:
-						shift = 4;
+						shift = intlen;
 						// Определяем длину текста
 						arrbt = new byte[shift];
 						for (int i = 0; i < shift; i++)
@@ -133,7 +135,7 @@ namespace Schemas
 						break;
 					case enAttrTypes.mnlink:
 					case enAttrTypes.mnint:
-						shift = 4;
+						shift = intlen;
 						arrbt = new byte[shift];
 						for (int i = 0; i < shift; i++)
 							arrbt[i] = _bytedata[offset + i];
@@ -141,7 +143,7 @@ namespace Schemas
 						value = BitConverter.ToInt32(arrbt, 0);
 						break;
 					case enAttrTypes.mnreal:
-						shift = 4;
+						shift = intlen;
 						arrbt = new byte[shift];
 						for (int i = 0; i < shift; i++)
 							arrbt[i] = _bytedata[offset + i];
@@ -157,32 +159,28 @@ namespace Schemas
 						value = BitConverter.ToBoolean(arrbt, 0);
 						break;
 					case enAttrTypes.mnblob:
+						throw new NotImplementedException();
 						break;
 					case enAttrTypes.mnarr:
-						shift = 4;
+						//shift = intlen;
 						// Определяем длину списка ссылок
-						arrbt = new byte[shift];
-						for (int i = 0; i < shift; i++)
-							arrbt[i] = _bytedata[offset + i];
+						arrbt = new byte[intlen];
+						for (int i = 0; i < intlen; i++)
+							arrbt[i] = _bytedata[offset++];
 						if (BitConverter.IsLittleEndian) Array.Reverse(arrbt);
-						offset += shift;
-						shift = BitConverter.ToInt32(arrbt, 0);
+						//offset += shift;
+						var listlen = BitConverter.ToInt32(arrbt, 0);
 						// Чтение списка
 						var lst = new List<int>();
-						arrbt = new byte[shift];
-						for (int i = 0; i < shift; i++)
-							arrbt[i] = _bytedata[offset + i];
-						if (BitConverter.IsLittleEndian) Array.Reverse(arrbt);
-						value = Encoding.UTF8.GetString(arrbt);
-
-						/*var lst = (List<int>)rec.Value;
-						arrbt = BitConverter.GetBytes(lst.Count);
-						AddData(arrbt);
-						foreach (var addr in lst)
+						arrbt = new byte[intlen];
+						for (int i = 0; i < listlen; i++)
 						{
-							arrbt = BitConverter.GetBytes(addr);
-							AddData(arrbt);
-						}*/
+							for (int j = 0; j < intlen; j++)
+								arrbt[j] = _bytedata[offset++];
+							if (BitConverter.IsLittleEndian) Array.Reverse(arrbt);
+							lst.Add(BitConverter.ToInt32(arrbt, 0));
+						}
+						value = lst;
 						break;
 				}
 				attrfactdata = new AttrFactData(type, value);

@@ -107,6 +107,35 @@ namespace SagaTest
 		}
 
 		/// <summary>
+		/// Запись в Blob типа LinksArray
+		/// </summary>
+		[TestMethod]
+		public void Test_MakeBlob_Array()
+		{
+			const string testval = "10,11";
+			var testtype = enAttrTypes.mnarr;
+			var lst = new List<int>();
+			lst.Add(10);
+			lst.Add(11);
+
+			var attr1 = new AttrFactData(testtype, lst);
+			var list = new List<AttrFactData>();
+			list.Add(attr1);
+			Blob blobpar = new Blob(list);
+
+			var bdata = blobpar.Data;
+
+			var tplist = new List<enAttrTypes>();
+			tplist.Add(testtype);
+			Blob blobchld = new Blob(tplist, bdata);
+
+			var val = (List<int>)blobchld.ValueList[0].Value;
+			var strval = string.Join(",", val);
+			Console.WriteLine(strval);
+			Assert.AreEqual(testval, strval);
+		}
+
+		/// <summary>
 		/// Запись в Blob нескольких типов
 		/// </summary>
 		[TestMethod]
