@@ -10,7 +10,7 @@ namespace SagaTest
 	[TestClass]
 	public class BlockDBServrTest
 	{
-		
+
 		public BlockDBServer DBserver = new BlockDBServer();
 
 		[TestMethod]
@@ -68,6 +68,25 @@ namespace SagaTest
 			var id = DBserver.SetFactData(1, blob);
 			Assert.AreNotEqual(-1, id);
 		}
+
+		[TestMethod]
+		public void Test_CreateDictionary()
+		{
+
+			string name = "TestDict2";
+			long blockType = 1; // документ
+			var id = DBserver.CreateDictionary(name, blockType);
+			Assert.AreNotEqual(-1, id);
+		}
+
+		[TestMethod()]
+		public void Test_GetDictionaryByName()
+		{
+			string name = "TestDict2";
+			var id = DBserver.GetDictionaryByName(name);
+			Assert.AreNotEqual(-1, id);
+		}
+
 
 	}
 }

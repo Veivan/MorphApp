@@ -150,12 +150,22 @@ namespace DirectDBconnector.Tests
 		}
 
 		[TestMethod()]
-		public void dbSetFactDataTest()
+		public void Test_dbSetFactData()
 		{
 			byte[] x = new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 			var id = dbConnector.dbSetFactData(2, x, false);
 			Assert.AreNotEqual(-1, id);
 		}
+
+		[TestMethod()]
+		public void Test_dbCreateDictionary()
+		{
+			string name = "TestDict";
+			long blockType = 1; // документ
+			var id = dbConnector.dbCreateDictionary(name, blockType);
+			Assert.AreNotEqual(-1, id);
+		}
+
 		#endregion
 	}
 }

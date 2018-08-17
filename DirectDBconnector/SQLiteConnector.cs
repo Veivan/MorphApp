@@ -1518,14 +1518,16 @@ namespace DirectDBconnector
 		/// Присвоение фактического значения блоку.
 		/// </summary>
 		/// <param name="addr">ID - адрес блока</param>
-		/// <returns>int</returns>
+		/// <returns>long</returns>
 		public long dbSetFactData(long addr, byte[] blob, bool makeVersion)
 		{
 			long result = -1;
 			long fh_id = -1;
+			SQLiteTransaction transaction = null;
 			//if (makeVersion) // надо делать новый блок и новые фактические данные
 			try
 			{
+				transaction = m_dbConn.BeginTransaction();
 				// Ищем адрес фактических данных
 				m_sqlCmd.CommandText = "SELECT fh_id FROM mBlocks WHERE b_id = @b_id";
 				m_sqlCmd.Parameters.Clear();
@@ -1558,9 +1560,12 @@ namespace DirectDBconnector
 					m_sqlCmd.ExecuteNonQuery();
 				}
 				result = addr;
+				transaction.Commit();
 			}
 			catch (SQLiteException ex)
 			{
+				result = -1;
+				transaction.Rollback();
 				Console.WriteLine("dbSetFactData Error: " + ex.Message);
 			}
 			return result;
@@ -1586,6 +1591,103 @@ namespace DirectDBconnector
 			return result;
 		}
 		#endregion
+
+		#region Функции для работы со Справочниками
+		/// <summary>
+		/// Создание справочника.
+		/// </summary>
+		/// <param name="name">Наименование справочника</param>
+		/// <param name="blockType">ID - адрес типа блока - элемента справочника</param>
+		/// <returns>long</returns>
+		public long dbCreateDictionary(string name, long blockType)
+		{
+			long result = -1;
+			SQLiteTransaction transaction = null;
+			try
+			{
+				transaction = m_dbConn.BeginTransaction();
+				var typeOfDict = dbGetTypeOfDictionary();
+				m_sqlCmd.CommandText = string.Format("INSERT INTO mBlocks(b_id, bt_id, parent, treeorder) VALUES(NULL, '{0}', {1}, {2})",
+					typeOfDict, -1, 0);
+				m_sqlCmd.ExecuteNonQuery();
+				var addr = m_dbConn.LastInsertRowId;
+
+				// Записать в атрибут ResolvedType (0-й по порядку тип элемента справочника)
+
+				/*var testtype = enAttrTypes.mnint;
+				var attr1 = new AttrFactData(testtype, blockType);
+				var list = new List<AttrFactData>();
+				list.Add(attr1);
+				Blob blobpar = new Blob(list);
+				var bdata = blobpar.Data; */
+
+				var bdata = BitConverter.GetBytes(blockType);
+				if (BitConverter.IsLittleEndian)
+					Array.Reverse(bdata);
+
+				m_sqlCmd.CommandText = "INSERT INTO mFactHeap(fh_id, blockdata) VALUES(NULL, @blob)";
+				m_sqlCmd.Parameters.Clear();
+				m_sqlCmd.Parameters.Add(new SQLiteParameter("@blob", bdata));
+				m_sqlCmd.ExecuteNonQuery();
+				var fh_id = m_dbConn.LastInsertRowId;
+
+				// обновить адрес факт.данных в блоке
+				m_sqlCmd.CommandText = "UPDATE mBlocks SET fh_id = @fh_id WHERE b_id = @b_id";
+				m_sqlCmd.Parameters.Clear();
+				m_sqlCmd.Parameters.Add(new SQLiteParameter("@b_id", addr));
+				m_sqlCmd.Parameters.Add(new SQLiteParameter("@fh_id", fh_id));
+				m_sqlCmd.ExecuteNonQuery();
+
+				m_sqlCmd.CommandText = string.Format("INSERT INTO mDicts(md_id, name, b_id) VALUES(NULL, '{0}', {1})",
+					name, addr);
+				m_sqlCmd.ExecuteNonQuery();
+				result = m_dbConn.LastInsertRowId;
+				transaction.Commit();
+			}
+			catch (SQLiteException ex)
+			{
+				result = -1;
+				transaction.Rollback();
+				Console.WriteLine("dbCreateDictionary Error: " + ex.Message);
+			}
+			return result;
+		}
+
+		/// <summary>
+		/// Получение типа блока - "Справочник".
+		/// </summary>
+		/// <remarks>
+		/// Имееется встроенный тип блока - "Справочник" с атрибутом типа "множество ссылок на объекты".
+		/// В дальнейшем можно сделать механизм его идентифкации по-другому (например SELECT bt_id from mBlockTypes WHERE мнемокод = ...).
+		/// </remarks>
+		/// <returns>long</returns>
+		private long dbGetTypeOfDictionary()
+		{
+			long result = 3;
+			return result;
+		}
+
+		public long dbGetDictionary(string name)
+		{
+			long result = -1;
+			try
+			{
+				m_sqlCmd.CommandText = String.Format("SELECT md_id FROM mDicts WHERE LOWER(name) = @name", name);
+				m_sqlCmd.Parameters.Clear();
+				m_sqlCmd.Parameters.Add(new SQLiteParameter("@name", name.ToLower()));
+				var executeScalar = m_sqlCmd.ExecuteScalar();
+				if (executeScalar != null)
+					result = (long)executeScalar;
+			}
+			catch (SQLiteException ex)
+			{
+				Console.WriteLine("dbGetDictionary Error: " + ex.Message);
+			}
+			return result;
+		}
+
+		#endregion
+
 
 	}
 }
