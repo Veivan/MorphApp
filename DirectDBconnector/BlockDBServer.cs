@@ -85,7 +85,7 @@ namespace DirectDBconnector
 		#endregion
 
 		#region Функции для работы со Справочниками
-		public override long CreateDictionary(string name, long BlockType)
+		public override long CreateDictionary(string name, int BlockType)
 		{
 			var result = dbConnector.dbCreateDictionary(name, BlockType);
 			return result;
@@ -99,12 +99,14 @@ namespace DirectDBconnector
 
 		public override string GetDictName(long addr)
 		{
-			throw new NotImplementedException();
+			var result = dbConnector.dbGetDictName(addr);
+			return result;
 		}
 
-		public override string GetDictType(long addr)
+		public override long GetDictType(long addr)
 		{
-			throw new NotImplementedException();
+			var result = dbConnector.dbGetDictType(addr);
+			return result;
 		}
 
 		public override long[] GetDictContent(long addr)

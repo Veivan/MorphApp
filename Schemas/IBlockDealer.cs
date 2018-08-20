@@ -123,7 +123,7 @@ namespace Schemas
 		/// <param name="name">Наименование Справочника</param>
 		/// <param name="BlockType">адрес типа блока (объект справочника "Типы блоков")</param>
 		/// <returns>адрес добавленного объекта</returns>
-		public abstract BlockAddress CreateDictionary(string name, BlockAddress BlockType);
+		public abstract BlockAddress CreateDictionary(string name, int BlockType);
 
 		/// <summary>
 		/// Получение адреса Справочника по наименованию.
@@ -144,7 +144,7 @@ namespace Schemas
 		/// </summary>
 		/// <param name="addr">адрес Справочника</param>
 		/// <returns>адрес типа блока</returns>
-		public abstract string GetDictType(BlockAddress addr);
+		public abstract long GetDictType(BlockAddress addr);
 
 		/// <summary>
 		/// Получение адресов блоков, содержащихся в справочнике.

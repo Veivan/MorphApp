@@ -68,6 +68,23 @@ namespace TMorph.Common
 			return rgbValues;
 		}
 
+		/// <summary>
+		/// Получение первого INT из хранящихся в byte[]
+		/// </summary>
+		/// <param name="byteArray">byte array containing JPEG or PNG file image or similar</param>
+		/// <returns>Bitmap object if it works, else exception is thrown</returns>
+		public static int GetFirstIntFromBytes(byte[] byteArray)
+		{
+			const int intlen = 4; // количество байт для хранения числа
+			int offset = 0; // Текущая позиция чтения в _bytedata
+			var arrbt = new byte[intlen];
+			for (int i = 0; i < intlen; i++)
+				arrbt[i] = byteArray[offset++];
+			if (BitConverter.IsLittleEndian) Array.Reverse(arrbt);
+			var result = BitConverter.ToInt32(arrbt, 0);
+			return result;
+		}
+
 		/*// <summary>
 		 /// Функция получает "правильный" массив foo из builder.DataBuffer.Data.
 		 /// Воссоздание ByteBuffer из ороигинального builder.DataBuffer.Data Root объект создаётся неправильно,

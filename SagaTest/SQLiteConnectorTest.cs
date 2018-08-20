@@ -161,7 +161,7 @@ namespace DirectDBconnector.Tests
 		public void Test_dbCreateDictionary()
 		{
 			string name = "TestDict";
-			long blockType = 1; // документ
+			int blockType = 1; // документ
 			var id = dbConnector.dbCreateDictionary(name, blockType);
 			Assert.AreNotEqual(-1, id);
 		}

@@ -1599,7 +1599,7 @@ namespace DirectDBconnector
 		/// <param name="name">Наименование справочника</param>
 		/// <param name="blockType">ID - адрес типа блока - элемента справочника</param>
 		/// <returns>long</returns>
-		public long dbCreateDictionary(string name, long blockType)
+		public long dbCreateDictionary(string name, int blockType)
 		{
 			long result = -1;
 			SQLiteTransaction transaction = null;
@@ -1672,9 +1672,9 @@ namespace DirectDBconnector
 			long result = -1;
 			try
 			{
-				m_sqlCmd.CommandText = String.Format("SELECT md_id FROM mDicts WHERE LOWER(name) = @name", name);
+				m_sqlCmd.CommandText = "SELECT md_id FROM mDicts WHERE LOWER(name) = LOWER(@name)";
 				m_sqlCmd.Parameters.Clear();
-				m_sqlCmd.Parameters.Add(new SQLiteParameter("@name", name.ToLower()));
+				m_sqlCmd.Parameters.Add(new SQLiteParameter("@name", name));
 				var executeScalar = m_sqlCmd.ExecuteScalar();
 				if (executeScalar != null)
 					result = (long)executeScalar;
@@ -1685,6 +1685,46 @@ namespace DirectDBconnector
 			}
 			return result;
 		}
+
+		public string dbGetDictName(long addr)
+		{
+			string result = "";
+			try
+			{
+				m_sqlCmd.CommandText = String.Format("SELECT name FROM mDicts WHERE md_id = {0}", addr);
+				var executeScalar = m_sqlCmd.ExecuteScalar();
+				if (executeScalar != null)
+					result = (string)executeScalar;
+			}
+			catch (SQLiteException ex)
+			{
+				Console.WriteLine("dbGetDictName Error: " + ex.Message);
+			}
+			return result;
+		}
+
+		public long dbGetDictType(long addr)
+		{
+			long result = -1;
+			byte[] arbt;
+			try
+			{
+				m_sqlCmd.CommandText = String.Format("SELECT blockdata FROM mFactHeap F JOIN mBlocks B ON B.fh_id = F.fh_id " +
+					"JOIN mDicts D ON D.b_id = B.b_id WHERE D.md_id = {0}", addr);
+				var executeScalar = m_sqlCmd.ExecuteScalar();
+				if (executeScalar != null)
+				{
+					arbt = (byte[])executeScalar;
+					result = TMorph.Common.Utils.GetFirstIntFromBytes(arbt);
+				}
+			}
+			catch (SQLiteException ex)
+			{
+				Console.WriteLine("dbGetDictType Error: " + ex.Message);
+			}
+			return result;
+		}
+
 
 		#endregion
 

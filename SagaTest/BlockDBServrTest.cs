@@ -72,9 +72,8 @@ namespace SagaTest
 		[TestMethod]
 		public void Test_CreateDictionary()
 		{
-
-			string name = "TestDict2";
-			long blockType = 1; // документ
+			string name = "TestDict3";
+			int blockType = 1; // документ
 			var id = DBserver.CreateDictionary(name, blockType);
 			Assert.AreNotEqual(-1, id);
 		}
@@ -87,6 +86,21 @@ namespace SagaTest
 			Assert.AreNotEqual(-1, id);
 		}
 
-
+		[TestMethod()]
+		public void Test_GetDictName()
+		{
+			var id = 2;
+			var name = DBserver.GetDictName(id);
+			Assert.AreNotEqual("", name);
+		}
+		
+		[TestMethod()]
+		public void Test_GetDictType()
+		{
+			var id = 4;
+			var BlockType = DBserver.GetDictType(id);
+			Console.WriteLine("DictType = " + BlockType);
+			Assert.AreNotEqual(-1, BlockType);
+		}
 	}
 }

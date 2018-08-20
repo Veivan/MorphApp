@@ -4,6 +4,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Schemas;
 using System.Drawing;
 
+using TMorph.Common;
+
 namespace SagaTest
 {
 
@@ -176,6 +178,7 @@ namespace SagaTest
 
 			var bdata = blobpar.Data;
 
+			// Чтение блоба через создание нового блоба из массива байт
 			var tplist = new List<enAttrTypes>();
 			tplist.Add(enAttrTypes.mnbool);
 			tplist.Add(enAttrTypes.mnint);
@@ -184,6 +187,36 @@ namespace SagaTest
 			var eq = true;
 			eq = (bool)blobchld.ValueList[0].Value == true;
 			eq = (int)blobchld.ValueList[1].Value == 11;
+
+			Assert.AreEqual(eq, true);
+		}
+
+		/// <summary>
+		/// Запись в Blob нескольких INT для тестирования чтения первого из них - типа элементов справочника (dbGetDictType)
+		/// </summary>
+		[TestMethod]
+		public void Test_MakeBlob_SomeInt()
+		{
+			bool eq = false;
+			var list = new List<AttrFactData>();
+			list.Add(new AttrFactData(enAttrTypes.mnint, 1)); // тип элементов справочника
+			list.Add(new AttrFactData(enAttrTypes.mnint, 3));
+			Blob blobpar = new Blob(list);
+
+			var bdata = blobpar.Data;
+
+			var btype = Utils.GetFirstIntFromBytes(bdata);
+			eq = btype == 1;
+
+			/*/
+			Чтение блоба через создание нового блоба из массива байт
+			var tplist = new List<enAttrTypes>();
+			tplist.Add(enAttrTypes.mnint);
+			tplist.Add(enAttrTypes.mnint);
+			Blob blobchld = new Blob(tplist, bdata);
+
+			eq = (int)blobchld.ValueList[0].Value == 1;
+			eq = (int)blobchld.ValueList[1].Value == 3; */
 
 			Assert.AreEqual(eq, true);
 		}
