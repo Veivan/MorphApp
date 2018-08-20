@@ -1221,7 +1221,24 @@ namespace DirectDBconnector
 			{
 				Console.WriteLine("DropColumn Error: " + ex.Message);
 			}
+		}
 
+		public void PerformOperator()
+		{
+			try
+			{
+				m_sqlCmd.CommandText = string.Format("UPDATE mBlocks SET created_at = @date WHERE b_id = {0}", 8);
+				m_sqlCmd.Parameters.Clear();
+				var dt = String.Format("{0:yyyy-MM-dd HH:mm:ss}", DateTime.Now);
+				//m_sqlCmd.Parameters.Add(new SQLiteParameter("@date", "2018-08-20 18:02:25"));
+				m_sqlCmd.Parameters.Add(new SQLiteParameter("@date", dt));
+				m_sqlCmd.ExecuteNonQuery();
+			}
+			catch (SQLiteException ex)
+			{
+				Console.WriteLine("PerformOperator Error: " + ex.Message);
+				throw ex;
+			}
 		}
 
 		///
@@ -1270,6 +1287,10 @@ namespace DirectDBconnector
 							break;
 						case dbTables.tblSyntNodes:
 							line = r["sn_id"].ToString() + ", " + r["с_id"].ToString() + ", " + r["ln_id"].ToString() + ", " + r["level"].ToString() + ", " + r["pс_id"].ToString();
+							break;
+						case dbTables.mBlocks:
+							line = r["b_id"].ToString() + ", " + r["bt_id"].ToString() + ", " + r["created_at"].ToString() + ", " + r["parent"].ToString() + ", " + r["treeorder"].ToString()
+								+ ", " + r["fh_id"].ToString() + ", " + r["predecessor"].ToString() + ", " + r["successor"].ToString();
 							break;
 					}
 					//Console.WriteLine(line);
@@ -1703,10 +1724,14 @@ namespace DirectDBconnector
 			return result;
 		}
 
-		public long dbGetDictType(long addr)
+		/// <summary>
+		/// Получение блоба, содержащего адреса элементов Справочника.
+		/// </summary>
+		/// <param name="addr">адрес Справочника</param>
+		/// <returns>byte[]</returns>
+		public byte[] dbGetDictBlob(long addr)
 		{
-			long result = -1;
-			byte[] arbt;
+			byte[] result = null;
 			try
 			{
 				m_sqlCmd.CommandText = String.Format("SELECT blockdata FROM mFactHeap F JOIN mBlocks B ON B.fh_id = F.fh_id " +
@@ -1714,17 +1739,75 @@ namespace DirectDBconnector
 				var executeScalar = m_sqlCmd.ExecuteScalar();
 				if (executeScalar != null)
 				{
-					arbt = (byte[])executeScalar;
-					result = TMorph.Common.Utils.GetFirstIntFromBytes(arbt);
+					result = (byte[])executeScalar;
 				}
 			}
 			catch (SQLiteException ex)
 			{
-				Console.WriteLine("dbGetDictType Error: " + ex.Message);
+				Console.WriteLine("dbGetDictBlob Error: " + ex.Message);
 			}
 			return result;
 		}
 
+		/// <summary>
+		/// Изменение элементов в Справочнике.
+		/// </summary>
+		/// <param name="addr">адрес Справочника</param>
+		/// <param name="subaddr">blob- новый массив адресов элементов в Справочнике</param>
+		/// <remarks>
+		/// При изменении (добавлении/удалении) элементов в Справочник будет создан новый блок-последователь существующего.
+		/// Адрес нового блока заменит адрес блока в Справочнике.
+		/// </remarks>
+		/// <returns></returns>
+		public void dbDictPerfomElements(long addr, byte[] subaddr)
+		{
+			SQLiteTransaction transaction = null;
+			try
+			{
+				transaction = m_dbConn.BeginTransaction();
+				// Создание новых фактических данных блока
+				m_sqlCmd.CommandText = "INSERT INTO mFactHeap(fh_id, blockdata) VALUES(NULL, @blob)";
+				m_sqlCmd.Parameters.Clear();
+				m_sqlCmd.Parameters.Add(new SQLiteParameter("@blob", subaddr));
+				m_sqlCmd.ExecuteNonQuery();
+				var fh_id = m_dbConn.LastInsertRowId;
+
+				// Получение адреса блока-справочника
+				long b_id = -1;
+				m_sqlCmd.CommandText = String.Format("SELECT b_id FROM mDicts WHERE md_id = {0}", addr);
+				var executeScalar = m_sqlCmd.ExecuteScalar();
+				if (executeScalar != null)
+					b_id = (long)executeScalar;
+
+				// Создать новый блок
+				m_sqlCmd.CommandText = string.Format(
+					"INSERT INTO mBlocks SELECT b_id = NULL, bt_id, created_at, parent, treeorder, fh_id, " +
+						"predecessor, successor = NULL FROM mBlocks WHERE b_id = {0}", b_id);
+				m_sqlCmd.ExecuteNonQuery();
+				var newaddr = m_dbConn.LastInsertRowId;
+				// Обновить данные нового блока
+				m_sqlCmd.CommandText = string.Format("UPDATE mBlocks SET created_at = @date, fh_id = {0}, predecessor = {1} " +
+					"WHERE b_id = {2}", fh_id, b_id, newaddr);
+				m_sqlCmd.Parameters.Clear();
+				var dt = String.Format("{0:yyyy-MM-dd HH:mm:ss}", DateTime.Now);
+				m_sqlCmd.Parameters.Add(new SQLiteParameter("@date", dt));
+				m_sqlCmd.ExecuteNonQuery();
+				// Обновить данные блока-родителя
+				m_sqlCmd.CommandText = string.Format("UPDATE mBlocks SET successor = {0} WHERE b_id = {1}",
+					newaddr, b_id);
+				m_sqlCmd.ExecuteNonQuery();
+				// Обновить адрес блока в справочнике
+				m_sqlCmd.CommandText = string.Format("UPDATE mDicts SET b_id = {0} WHERE md_id = {1}", newaddr, addr);
+				m_sqlCmd.ExecuteNonQuery();
+				transaction.Commit();
+			}
+			catch (SQLiteException ex)
+			{
+				transaction.Rollback();
+				Console.WriteLine("dbDictPerfomElements Error: " + ex.Message);
+				throw ex;
+			}
+		}
 
 		#endregion
 

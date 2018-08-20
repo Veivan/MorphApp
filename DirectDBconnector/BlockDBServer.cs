@@ -105,12 +105,23 @@ namespace DirectDBconnector
 
 		public override long GetDictType(long addr)
 		{
-			var result = dbConnector.dbGetDictType(addr);
+			byte[] arbt = dbConnector.dbGetDictBlob(addr);
+			var dDictBlob = new DictBlob(arbt);
+			var result = dDictBlob.GetDictResolvedTypeFromBytes();
 			return result;
 		}
 
 		public override long[] GetDictContent(long addr)
 		{
+			byte[] arbt = dbConnector.dbGetDictBlob(addr);
+			var dDictBlob = new DictBlob(arbt);
+			var result = dDictBlob.GetDictContentFromBytes();
+			return result;
+		}
+
+		public override void DictAddBlock(long addr, long subaddr)
+		{
+		//	dbConnector.dbDictAddBlock(addr, subaddr);
 			throw new NotImplementedException();
 		}
 

@@ -27,14 +27,20 @@ namespace DirectDBconnector.Tests
 		}
 
 		[TestMethod]
-		public void ShowSelectAll()
+		public void Sys_ShowSelectAll()
 		{
-			dbConnector.selectAll(dbTables.tblSyntNodes);
+			dbConnector.selectAll(dbTables.mBlocks);
 			Assert.AreEqual(0, 0);
 		}
 
 		[TestMethod]
-		public void TestEmptyDB()
+		public void Sys_PerformOperator()
+		{
+			dbConnector.PerformOperator();
+		}
+
+		[TestMethod]
+		public void Sys_TestEmptyDB()
 		{
 			dbConnector.EmptyDB();
 			dbConnector.selectAll(dbTables.tblParagraphs);
@@ -166,6 +172,22 @@ namespace DirectDBconnector.Tests
 			Assert.AreNotEqual(-1, id);
 		}
 
+		[TestMethod()]
+		public void Test_dbDictPerfomElements()
+		{
+			byte[] x = new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+			var id = 4;
+			var result = "";
+			try
+			{
+				dbConnector.dbDictPerfomElements(id, x);
+			}
+			catch (Exception ex)
+			{
+				result = ex.Message;
+			}
+			Assert.AreEqual("", result);
+		}
 		#endregion
 	}
 }

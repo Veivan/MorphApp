@@ -102,5 +102,37 @@ namespace SagaTest
 			Console.WriteLine("DictType = " + BlockType);
 			Assert.AreNotEqual(-1, BlockType);
 		}
+
+		[TestMethod()]
+		public void Test_GetDictContent()
+		{
+			var id = 4;
+			var result = "";
+			var arr = DBserver.GetDictContent(id);
+			if (arr == null)
+				result = "empty";
+			else
+				result = string.Join(",", arr);
+			Console.WriteLine("Elements : " + result);
+			Assert.AreNotEqual("", result);
+		}
+		
+		[TestMethod()]
+		public void Test_DictAddBlock()
+		{
+			var id = 4;
+			var idelem = 5;
+			var result = true;
+			try
+			{
+				DBserver.DictAddBlock(id, idelem);
+			}
+			catch (Exception)
+			{
+				result = false;
+			}
+			Assert.AreNotEqual(false, result);
+		}
+
 	}
 }

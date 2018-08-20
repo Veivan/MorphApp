@@ -4,8 +4,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Schemas;
 using System.Drawing;
 
-using TMorph.Common;
-
 namespace SagaTest
 {
 
@@ -117,7 +115,7 @@ namespace SagaTest
 		{
 			const string testval = "10,11";
 			var testtype = enAttrTypes.mnarr;
-			var lst = new List<int>();
+			var lst = new List<long>();
 			lst.Add(10);
 			lst.Add(11);
 
@@ -132,7 +130,7 @@ namespace SagaTest
 			tplist.Add(testtype);
 			Blob blobchld = new Blob(tplist, bdata);
 
-			var val = (List<int>)blobchld.ValueList[0].Value;
+			var val = (List<long>)blobchld.ValueList[0].Value;
 			var strval = string.Join(",", val);
 			Console.WriteLine(strval);
 			Assert.AreEqual(testval, strval);
@@ -205,7 +203,8 @@ namespace SagaTest
 
 			var bdata = blobpar.Data;
 
-			var btype = Utils.GetFirstIntFromBytes(bdata);
+			var dDictBlob = new DictBlob(bdata);
+			var btype = dDictBlob.GetDictResolvedTypeFromBytes();
 			eq = btype == 1;
 
 			/*/

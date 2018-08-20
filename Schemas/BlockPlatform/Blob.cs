@@ -17,13 +17,14 @@ namespace Schemas
 	public class Blob
 	{
 		//private List<enAttrTypes> _attrTypes; // список типов атрибутов
-		private byte[] _bytedata; // данные атрибутов в двоичном виде
-		private List<AttrFactData> _factdata; // хранилище фактических данных атрибутов
+		protected byte[] _bytedata; // данные атрибутов в двоичном виде
+		protected List<AttrFactData> _factdata; // хранилище фактических данных атрибутов
 
 		/// <summary>
 		/// Конструктор - создание Blob из двоичных данных (После чтения из БД)
 		/// </summary>
-		/// <param name="attrTypes">Список типов атрибутов блоков </param>
+		/// <param name="attrTypes">Список типов атрибутов блоков</param>
+		/// <param name="data">массив байт</param>
 		public Blob(List<enAttrTypes> attrTypes, byte[] data)
 		{
 			//_attrTypes = new List<enAttrTypes>(attrTypes);
@@ -38,7 +39,7 @@ namespace Schemas
 		/// <summary>
 		/// Конструктор - создание Blob из фактических данных (Перед записью в БД)
 		/// </summary>
-		/// <param name="attrTypes">Список типов атрибутов блоков </param>
+		/// <param name="attrs">Список фактических данных</param>
 		public Blob(List<AttrFactData> attrs)
 		{
 			_factdata = new List<AttrFactData>(attrs);
@@ -92,7 +93,7 @@ namespace Schemas
 						AddData(arrbt);
 						break;
 					case enAttrTypes.mnarr:
-						var lst = (List<int>)rec.Value;
+						var lst = (List<long>)rec.Value;
 						arrbt = BitConverter.GetBytes(lst.Count);
 						AddData(arrbt);
 						foreach (var addr in lst)
@@ -110,10 +111,11 @@ namespace Schemas
 		/// </summary>
 		private void ParseBlob(List<enAttrTypes> _attrTypes)
 		{
-			if (_bytedata == null || _bytedata.Length == 0) return;
+			if (_bytedata == null || _bytedata.Length == 0 || _attrTypes == null) return;
 
-			const int intlen = 4; // количество байт для хранения числа
+			const int intlen = 4; // количество байт для хранения Int
 			const int boolen = 1; // количество байт для хранения bool
+			const int lnglen = 8; // количество байт для хранения адреса
 			byte[] arrbt;
 			AttrFactData attrfactdata;
 			int offset = 0; // Текущая позиция чтения в _bytedata
@@ -190,14 +192,14 @@ namespace Schemas
 						if (BitConverter.IsLittleEndian) Array.Reverse(arrbt);
 						var listlen = BitConverter.ToInt32(arrbt, 0);
 						// Чтение списка
-						var lst = new List<int>();
-						arrbt = new byte[intlen];
+						var lst = new List<long>();
+						arrbt = new byte[lnglen];
 						for (int i = 0; i < listlen; i++)
 						{
-							for (int j = 0; j < intlen; j++)
+							for (int j = 0; j < lnglen; j++)
 								arrbt[j] = _bytedata[offset++];
 							if (BitConverter.IsLittleEndian) Array.Reverse(arrbt);
-							lst.Add(BitConverter.ToInt32(arrbt, 0));
+							lst.Add(BitConverter.ToInt64(arrbt, 0));
 						}
 						value = lst;
 						break;

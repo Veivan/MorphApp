@@ -283,7 +283,7 @@ namespace Schemas
 		/// </summary>
 		mnlink = 6,
 		/// <summary>
-		/// множество ссылок на объекты
+		/// множество ссылок на объекты (массив Long)
 		/// </summary>
 		mnarr = 7,
 		/// <summary>
