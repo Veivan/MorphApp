@@ -13,6 +13,7 @@ namespace SagaTest
 	[TestClass]
 	public class BlobTest
 	{
+		#region Тестирование создания блоба
 		/// <summary>
 		/// Запись в Blob типа Int
 		/// </summary>
@@ -188,7 +189,9 @@ namespace SagaTest
 
 			Assert.AreEqual(eq, true);
 		}
+		#endregion
 
+		#region Тестирование блоба-справочника
 		/// <summary>
 		/// Запись в Blob нескольких INT для тестирования чтения первого из них - типа элементов справочника (dbGetDictType)
 		/// </summary>
@@ -206,19 +209,86 @@ namespace SagaTest
 			var dDictBlob = new DictBlob(bdata);
 			var btype = dDictBlob.GetDictResolvedTypeFromBytes();
 			eq = btype == 1;
-
-			/*/
-			Чтение блоба через создание нового блоба из массива байт
-			var tplist = new List<enAttrTypes>();
-			tplist.Add(enAttrTypes.mnint);
-			tplist.Add(enAttrTypes.mnint);
-			Blob blobchld = new Blob(tplist, bdata);
-
-			eq = (int)blobchld.ValueList[0].Value == 1;
-			eq = (int)blobchld.ValueList[1].Value == 3; */
-
 			Assert.AreEqual(eq, true);
 		}
+
+		/// <summary>
+		/// Создание пустого справочника и присвоение элементов
+		/// </summary>
+		[TestMethod]
+		public void Test_MakeEmptyBlob()
+		{
+			var dDictBlob = new DictBlob(null);
+			dDictBlob.AddElements(new long[] { 5, 2 });
+			var result = "";
+			var arr = dDictBlob.GetDictContentFromBytes();
+			if (arr == null)
+				result = "empty";
+			else
+				result = string.Join(",", arr);
+			Console.WriteLine("Elements : " + result);
+			Assert.AreNotEqual("", result);
+		}
+
+		/// <summary>
+		/// Присвоение типа string
+		/// </summary>
+		[TestMethod]
+		public void Test_SetAttr_Array()
+		{
+			var testval = new List<long>() { 3 };
+			var newval = new List<long>() { 3, 4 };
+
+			var list = new List<AttrFactData>();
+			list.Add(new AttrFactData(enAttrTypes.mnint, 1)); // тип элементов справочника
+			list.Add(new AttrFactData(enAttrTypes.mnarr, testval));
+			Blob blobpar = new Blob(list);
+
+			blobpar.SetAttrValue(1, newval);
+
+			var bdata = blobpar.Data;
+
+			var tplist = new List<enAttrTypes>();
+			tplist.Add(enAttrTypes.mnint);
+			tplist.Add(enAttrTypes.mnarr);
+			Blob blobchld = new Blob(tplist, bdata);
+
+			var val = ((List<long>)blobchld.ValueList[1].Value).ToArray(); ;
+			Console.WriteLine(val);
+			Assert.AreEqual(newval.Count, val.Length);
+		}
+		#endregion
+
+		#region Тестирование присвоения значения атрибуту
+		/// <summary>
+		/// Присвоение типа string
+		/// </summary>
+		[TestMethod]
+		public void Test_SetAttr_String()
+		{
+			//const string testval = "value1";
+			const string testval = "хорошо";
+			const string newval = "хорошохохо";
+			var testtype = enAttrTypes.mntxt;
+			var attr1 = new AttrFactData(testtype, testval);
+			var list = new List<AttrFactData>();
+			list.Add(attr1);
+			Blob blobpar = new Blob(list);
+
+			blobpar.SetAttrValue(0, newval);
+
+			var bdata = blobpar.Data;
+
+			var tplist = new List<enAttrTypes>();
+			tplist.Add(testtype);
+			Blob blobchld = new Blob(tplist, bdata);
+
+			var val = (string)blobchld.ValueList[0].Value;
+			Console.WriteLine(val);
+			Assert.AreEqual(newval, val);
+		}
+
+		#endregion
 
 	}
 }

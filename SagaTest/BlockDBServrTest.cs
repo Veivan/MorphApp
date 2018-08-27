@@ -93,7 +93,7 @@ namespace SagaTest
 			var name = DBserver.GetDictName(id);
 			Assert.AreNotEqual("", name);
 		}
-		
+
 		[TestMethod()]
 		public void Test_GetDictType()
 		{
@@ -116,22 +116,49 @@ namespace SagaTest
 			Console.WriteLine("Elements : " + result);
 			Assert.AreNotEqual("", result);
 		}
-		
+
 		[TestMethod()]
 		public void Test_DictAddBlocks()
 		{
 			var id = 4;
-			var idelem = new long[] { 2, 3 } ;
-			var result = true;
-			try
-			{
-				DBserver.DictAddBlocks(id, idelem);
-			}
-			catch (Exception)
-			{
-				result = false;
-			}
-			Assert.AreNotEqual(false, result);
+			var idelem = new long[] { 2, 3 };
+			var result = "";
+			var arr = DBserver.GetDictContent(id);
+			if (arr == null)
+				result = "empty";
+			else
+				result = string.Join(",", arr);
+			Console.WriteLine("Before : " + result);
+			DBserver.DictAddBlocks(id, idelem);
+			arr = DBserver.GetDictContent(id);
+			if (arr == null)
+				result = "empty";
+			else
+				result = string.Join(",", arr);
+			Console.WriteLine("After : " + result);
+			Assert.AreNotEqual("", result);
+		}
+
+		[TestMethod()]
+		public void Test_DictRemoveBlocks()
+		{
+			var id = 4;
+			var idelem = new long[] { 2};
+			var result = "";
+			var arr = DBserver.GetDictContent(id);
+			if (arr == null)
+				result = "empty";
+			else
+				result = string.Join(",", arr);
+			Console.WriteLine("Before : " + result);
+			DBserver.DictRemoveBlocks(id, idelem);
+			arr = DBserver.GetDictContent(id);
+			if (arr == null)
+				result = "empty";
+			else
+				result = string.Join(",", arr);
+			Console.WriteLine("After : " + result);
+			Assert.AreNotEqual("", result);
 		}
 
 	}

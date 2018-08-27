@@ -1737,7 +1737,7 @@ namespace DirectDBconnector
 				m_sqlCmd.CommandText = String.Format("SELECT blockdata FROM mFactHeap F JOIN mBlocks B ON B.fh_id = F.fh_id " +
 					"JOIN mDicts D ON D.b_id = B.b_id WHERE D.md_id = {0}", addr);
 				var executeScalar = m_sqlCmd.ExecuteScalar();
-				if (executeScalar != null)
+				if (executeScalar != null && executeScalar != DBNull.Value) 
 				{
 					result = (byte[])executeScalar;
 				}

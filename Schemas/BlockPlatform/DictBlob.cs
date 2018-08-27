@@ -11,6 +11,10 @@ namespace Schemas
 	/// </summary>
 	public class DictBlob : Blob
 	{
+		// Порядковые номера атрибутов в справочнике
+		const int nordResolvedType = 0;
+		const int nordArr = 1;
+
 		/// <summary>
 		/// Конструктор - создание Blob-справочника из двоичных данных (После чтения из БД)
 		/// </summary>
@@ -21,7 +25,13 @@ namespace Schemas
 			attrTypes.Add(enAttrTypes.mnint);	// атрибут "ResolvedType"
 			attrTypes.Add(enAttrTypes.mnarr);	// перечень элементов
 			_factdata = new List<AttrFactData>();
-			ParseBlob(attrTypes);
+			if (data == null)
+			{
+				_factdata.Add(new AttrFactData(enAttrTypes.mnint, 0));
+				_factdata.Add(new AttrFactData(enAttrTypes.mnarr, null));
+			}
+			else
+				ParseBlob(attrTypes);
 		}
 
 		/// <summary>
@@ -31,7 +41,7 @@ namespace Schemas
 		/// <remarks>Используется в чтении данных справочников </remarks>
 		public int GetDictResolvedTypeFromBytes()
 		{
-			return (int)this._factdata[0].Value;
+			return (int)ValueList[nordResolvedType].Value;
 		}
 
 		/// <summary>
@@ -41,17 +51,41 @@ namespace Schemas
 		/// <remarks>Используется в чтении данных справочников </remarks>
 		public long[] GetDictContentFromBytes()
 		{
-			return ((List<long>)this._factdata[1].Value).ToArray();
+			var attrval = GetAttrValue(nordArr);
+			if (attrval == null)
+				return null;
+
+			return ((List<long>)attrval).ToArray();
 		}
 
 		/// <summary>
-		/// Создание нового блоба из существующего
-		/// путём добавления массива адресов элементов
+		/// Добавление массива адресов элементов в справочник
 		/// </summary>
-		/// <param name="subaddr">массив адресов добавляемых элементов</param>
+		/// <param name="subaddr">массив адресов элементов</param>
 		public void AddElements(long[] subaddr)
 		{
-			throw new NotImplementedException();
+			if (subaddr == null || subaddr.Count() == 0)
+				return;
+			var oldval = GetDictContentFromBytes();
+			var list = new List<long>();
+			if (oldval != null)
+				list.AddRange(oldval);
+			list.AddRange(subaddr);
+			var noDupes = list.Distinct().ToList();
+			this.SetAttrValue(nordArr, noDupes);
+		}
+
+		/// <summary>
+		/// Удаление массива адресов элементов из справочника
+		/// </summary>
+		/// <param name="subaddr">массив адресов элементов</param>
+		public void RemoveElements(long[] subaddr)
+		{
+			var oldval = GetDictContentFromBytes();
+			var list = new List<long>();
+			list.AddRange(oldval);
+			list.RemoveAll(o => subaddr.ToList().Contains(o));
+			this.SetAttrValue(nordArr, list);
 		}
 	}
 }

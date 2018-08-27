@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 
 namespace Schemas
 {
@@ -23,10 +24,13 @@ namespace Schemas
 		// Сделан доступным для вызова только из наследников
 		protected Blob(byte[] data)
 		{
-			this._bytedata = new byte[data.Length];
-			int idx = 0;
-			for (int i = 0; i < _bytedata.Length; i++)
-				_bytedata[idx++] = data[i]; 
+			if (data != null)
+			{
+				this._bytedata = new byte[data.Length];
+				int idx = 0;
+				for (int i = 0; i < _bytedata.Length; i++)
+					_bytedata[idx++] = data[i];
+			}
 		}
 
 		/// <summary>
@@ -53,6 +57,33 @@ namespace Schemas
 		public byte[] Data { get { return _bytedata; } }
 
 		public List<AttrFactData> ValueList { get { return _factdata; } }
+		
+		/// <summary>
+		/// Присвоение нового значения атрибуту
+		/// </summary>
+		/// <param name="order">Порядок следования атрибута в списке атрибутов</param>
+		/// <param name="value">Новое значение атрибута</param>
+		public object GetAttrValue(int order)
+		{
+			if (order >= this._factdata.Count)
+				return null;
+//				throw new Exception(string.Format("Нет атрибута с номером {0} !", order));
+			return _factdata[order].Value;
+		}
+
+		/// <summary>
+		/// Присвоение нового значения атрибуту
+		/// </summary>
+		/// <param name="order">Порядок следования атрибута в списке атрибутов</param>
+		/// <param name="value">Новое значение атрибута</param>
+		public void SetAttrValue(int order, object value)
+		{
+			if (order >= this._factdata.Count)
+				throw new Exception(string.Format("Нет атрибута с номером {0} !", order));
+			_factdata[order] = new AttrFactData(_factdata[order].Type, value);
+			_bytedata = null;
+			MakeBlob();
+		}
 
 		/// <summary>
 		/// Создание массива байт из фактических значений атрибутов
@@ -60,8 +91,9 @@ namespace Schemas
 		private void MakeBlob()
 		{
 			byte[] arrbt;
-			foreach (var rec in _factdata)
+			foreach (var rec in _factdata.Where(o => o.Value != null))
 			{
+
 				switch (rec.Type)
 				{
 					case enAttrTypes.mntxt:

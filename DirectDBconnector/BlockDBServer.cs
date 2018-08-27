@@ -124,13 +124,15 @@ namespace DirectDBconnector
 			byte[] arbt = dbConnector.dbGetDictBlob(addr);
 			var dDictBlob = new DictBlob(arbt);
 			dDictBlob.AddElements(subaddr);
-			//	dbConnector.dbDictAddBlock(addr, subaddr);
-			throw new NotImplementedException();
+			dbConnector.dbDictPerfomElements(addr, dDictBlob.Data);
 		}
 
 		public override void DictRemoveBlocks(long addr, long[] subaddr)
 		{
-			throw new NotImplementedException();
+			byte[] arbt = dbConnector.dbGetDictBlob(addr);
+			var dDictBlob = new DictBlob(arbt);
+			dDictBlob.RemoveElements(subaddr);
+			dbConnector.dbDictPerfomElements(addr, dDictBlob.Data);
 		}
 
 		#endregion
