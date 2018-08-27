@@ -118,14 +118,14 @@ namespace SagaTest
 		}
 		
 		[TestMethod()]
-		public void Test_DictAddBlock()
+		public void Test_DictAddBlocks()
 		{
 			var id = 4;
-			var idelem = 5;
+			var idelem = new long[] { 2, 3 } ;
 			var result = true;
 			try
 			{
-				DBserver.DictAddBlock(id, idelem);
+				DBserver.DictAddBlocks(id, idelem);
 			}
 			catch (Exception)
 			{

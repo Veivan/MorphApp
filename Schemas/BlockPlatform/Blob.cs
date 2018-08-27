@@ -20,18 +20,22 @@ namespace Schemas
 		protected byte[] _bytedata; // данные атрибутов в двоичном виде
 		protected List<AttrFactData> _factdata; // хранилище фактических данных атрибутов
 
+		// Сделан доступным для вызова только из наследников
+		protected Blob(byte[] data)
+		{
+			this._bytedata = new byte[data.Length];
+			int idx = 0;
+			for (int i = 0; i < _bytedata.Length; i++)
+				_bytedata[idx++] = data[i]; 
+		}
+
 		/// <summary>
 		/// Конструктор - создание Blob из двоичных данных (После чтения из БД)
 		/// </summary>
 		/// <param name="attrTypes">Список типов атрибутов блоков</param>
 		/// <param name="data">массив байт</param>
-		public Blob(List<enAttrTypes> attrTypes, byte[] data)
+		public Blob(List<enAttrTypes> attrTypes, byte[] data) : this (data)
 		{
-			//_attrTypes = new List<enAttrTypes>(attrTypes);
-			_bytedata = new byte[data.Length];
-			int idx = 0;
-			for (int i = 0; i < _bytedata.Length; i++)
-				_bytedata[idx++] = data[i];
 			_factdata = new List<AttrFactData>();
 			ParseBlob(attrTypes);
 		}
@@ -109,7 +113,7 @@ namespace Schemas
 		/// <summary>
 		/// Разбор Блоба из БД на значения атрибутов и заполнение Словаря
 		/// </summary>
-		private void ParseBlob(List<enAttrTypes> _attrTypes)
+		protected void ParseBlob(List<enAttrTypes> _attrTypes)
 		{
 			if (_bytedata == null || _bytedata.Length == 0 || _attrTypes == null) return;
 

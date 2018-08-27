@@ -154,20 +154,20 @@ namespace Schemas
 		public abstract BlockAddress[] GetDictContent(BlockAddress addr);
 
 		/// <summary>
-		/// Добавление элемента(блока) в справочник.
+		/// Добавление элементов(блоков) в справочник.
 		/// </summary>
 		/// <param name="addr">адрес Справочника</param>
-		/// <param name="subaddr">адрес добавляемого блока</param>
+		/// <param name="subaddr">массив адресов добавляемых блоков</param>
 		/// <returns></returns>
-		public abstract void DictAddBlock(BlockAddress addr, BlockAddress subaddr);
+		public abstract void DictAddBlocks(BlockAddress addr, BlockAddress[] subaddr);
 
 		/// <summary>
-		/// Удаление элемента(блока) из справочника.
+		/// Удаление элементов(блоков) из справочника.
 		/// </summary>
 		/// <param name="addr">адрес Справочника</param>
-		/// <param name="subaddr">адрес удаляемого блока</param>
+		/// <param name="subaddr">массив адресов удаляемого блоков</param>
 		/// <returns></returns>
-		public abstract void DictRemoveBlock(BlockAddress addr, BlockAddress subaddr);
+		public abstract void DictRemoveBlocks(BlockAddress addr, BlockAddress[] subaddr);
 
 		#endregion
 

@@ -1753,13 +1753,13 @@ namespace DirectDBconnector
 		/// Изменение элементов в Справочнике.
 		/// </summary>
 		/// <param name="addr">адрес Справочника</param>
-		/// <param name="subaddr">blob- новый массив адресов элементов в Справочнике</param>
+		/// <param name="blob">новые фактические данные справочника - адреса элементов в виде массива байт</param>
 		/// <remarks>
 		/// При изменении (добавлении/удалении) элементов в Справочник будет создан новый блок-последователь существующего.
 		/// Адрес нового блока заменит адрес блока в Справочнике.
 		/// </remarks>
 		/// <returns></returns>
-		public void dbDictPerfomElements(long addr, byte[] subaddr)
+		public void dbDictPerfomElements(long addr, byte[] blob)
 		{
 			SQLiteTransaction transaction = null;
 			try
@@ -1768,7 +1768,7 @@ namespace DirectDBconnector
 				// Создание новых фактических данных блока
 				m_sqlCmd.CommandText = "INSERT INTO mFactHeap(fh_id, blockdata) VALUES(NULL, @blob)";
 				m_sqlCmd.Parameters.Clear();
-				m_sqlCmd.Parameters.Add(new SQLiteParameter("@blob", subaddr));
+				m_sqlCmd.Parameters.Add(new SQLiteParameter("@blob", blob));
 				m_sqlCmd.ExecuteNonQuery();
 				var fh_id = m_dbConn.LastInsertRowId;
 
@@ -1779,7 +1779,7 @@ namespace DirectDBconnector
 				if (executeScalar != null)
 					b_id = (long)executeScalar;
 
-				// Создать новый блок
+				// Создать новый блок на основе существующего
 				m_sqlCmd.CommandText = string.Format(
 					"INSERT INTO mBlocks SELECT b_id = NULL, bt_id, created_at, parent, treeorder, fh_id, " +
 						"predecessor, successor = NULL FROM mBlocks WHERE b_id = {0}", b_id);

@@ -198,7 +198,7 @@ namespace SagaTest
 			bool eq = false;
 			var list = new List<AttrFactData>();
 			list.Add(new AttrFactData(enAttrTypes.mnint, 1)); // тип элементов справочника
-			list.Add(new AttrFactData(enAttrTypes.mnint, 3));
+			list.Add(new AttrFactData(enAttrTypes.mnarr, new List<long>() { 3 }));
 			Blob blobpar = new Blob(list);
 
 			var bdata = blobpar.Data;

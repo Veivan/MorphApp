@@ -119,13 +119,16 @@ namespace DirectDBconnector
 			return result;
 		}
 
-		public override void DictAddBlock(long addr, long subaddr)
+		public override void DictAddBlocks(long addr, long[] subaddr)
 		{
-		//	dbConnector.dbDictAddBlock(addr, subaddr);
+			byte[] arbt = dbConnector.dbGetDictBlob(addr);
+			var dDictBlob = new DictBlob(arbt);
+			dDictBlob.AddElements(subaddr);
+			//	dbConnector.dbDictAddBlock(addr, subaddr);
 			throw new NotImplementedException();
 		}
 
-		public override void DictRemoveBlock(long addr, long subaddr)
+		public override void DictRemoveBlocks(long addr, long[] subaddr)
 		{
 			throw new NotImplementedException();
 		}
