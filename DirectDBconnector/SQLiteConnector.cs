@@ -1496,6 +1496,32 @@ namespace DirectDBconnector
 			}
 			return result;
 		}
+
+		/// <summary>
+		/// Получение списка типов атрибутов блока.
+		/// </summary>
+		/// <param name="addr">адрес блока</param>
+		/// <returns>список типов атрибутов</returns>
+		public List<int> dbGetAttrTypesList(long addr)
+		{
+			var reslist = new List<int>();
+			try
+			{
+				m_sqlCmd.CommandText = string.Format("SELECT mt_id FROM mAttributes A JOIN mBlocks B ON B.bt_id = A.bt_id WHERE B.b_id = {0} ORDER BY A.sorder", addr);
+				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
+				while (r.Read())
+				{
+					reslist.Add(r.GetInt32(0));
+				}
+				r.Close();
+			}
+			catch (SQLiteException ex)
+			{
+				Console.WriteLine("dbGetAttrTypesList Error: " + ex.Message);
+			}
+			return reslist;
+		}
+
 		#endregion
 
 		#region Функции для работы с Блоками
@@ -1521,9 +1547,7 @@ namespace DirectDBconnector
 			int result = -1;
 			try
 			{
-				m_sqlCmd.CommandText = String.Format("SELECT treeorder FROM mBlocks WHERE b_id = @b_id", addr);
-				m_sqlCmd.Parameters.Clear();
-				m_sqlCmd.Parameters.Add(new SQLiteParameter("@b_id", addr));
+				m_sqlCmd.CommandText = String.Format("SELECT treeorder FROM mBlocks WHERE b_id = {0}", addr);
 				var executeScalar = m_sqlCmd.ExecuteScalar();
 				if (executeScalar != null)
 					result = Convert.ToInt32(executeScalar);
@@ -1591,6 +1615,30 @@ namespace DirectDBconnector
 			}
 			return result;
 		}
+
+		/// <summary>
+		/// Получение фактических данных блока.
+		/// </summary>
+		/// <param name="addr">адрес блока</param>
+		/// <returns>фактические данные</returns>
+		public byte[] dbGetFactData(long addr)
+		{
+			byte[] result = null;
+			m_sqlCmd.CommandText = string.Format("SELECT blockdata FROM mFactHeap F JOIN mBlocks B ON B.fh_id = B.fh_id WHERE B.b_id = {0}", addr);
+			try
+			{
+				var executeScalar = m_sqlCmd.ExecuteScalar();
+				if (executeScalar != null)
+					result = (byte[])executeScalar;
+			}
+			catch (SQLiteException ex)
+			{
+				Console.WriteLine("dbGetFactData Error: " + ex.Message);
+			}
+			return result;
+		}
+
+
 		#endregion
 
 		#region Функции для работы с Фактическими значениями

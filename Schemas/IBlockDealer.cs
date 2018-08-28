@@ -113,6 +113,23 @@ namespace Schemas
 		/// <returns>фактические данные</returns>
 		public abstract Blob GetFactData(BlockAddress addr);
 
+		/// <summary>
+		/// Присвоение значения атрибуту блока по номеру атрибута.
+		/// </summary>
+		/// <param name="addr">адрес блока</param>
+		/// <param name="ord">порядковый номер атрибута</param>
+		/// <param name="value">новое значение атрибута</param>
+		/// <returns>значение атрибута блока</returns>
+		public abstract void AttrSetValue(BlockAddress addr, int ord, object value);
+
+		/// <summary>
+		/// Получение значения атрибута блока по номеру атрибута.
+		/// </summary>
+		/// <param name="addr">адрес блока</param>
+		/// <param name="ord">порядковый номер атрибута</param>
+		/// <returns>значение атрибута блока</returns>
+		public abstract T AttrGetValue<T>(BlockAddress addr, int ord);
+
 		#endregion
 
 		#region Функции для работы со Справочниками

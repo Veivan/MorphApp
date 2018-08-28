@@ -188,6 +188,18 @@ namespace DirectDBconnector.Tests
 			}
 			Assert.AreEqual("", result);
 		}
+
+		[TestMethod()]
+		public void Test_dbGetAttrTypesList()
+		{
+			var addr = 1; 
+			var reslist = dbConnector.dbGetAttrTypesList(addr);
+			var result = string.Join(",", reslist);
+			Console.WriteLine("Attrtypes : " + result);
+
+			Assert.AreNotEqual(null, addr);
+		}
+
 		#endregion
 	}
 }

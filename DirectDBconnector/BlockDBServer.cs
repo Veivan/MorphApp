@@ -51,7 +51,17 @@ namespace DirectDBconnector
 			return result;
 		}
 
-		public override Blob GetFactData(long addr)
+		public override void SetParent(long addr, long parent)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override long GetParent(long addr)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override void SetOrder(long addr, int order)
 		{
 			throw new NotImplementedException();
 		}
@@ -62,26 +72,33 @@ namespace DirectDBconnector
 			return result;
 		}
 
-		public override long GetParent(long addr)
-		{
-			throw new NotImplementedException();
-		}
-
 		public override long SetFactData(long addr, Blob blob, bool MakeVersion = false)
 		{
 			var result = dbConnector.dbSetFactData(addr, blob.Data, MakeVersion);
 			return result;
 		}
 
-		public override void SetOrder(long addr, int order)
+		public override Blob GetFactData(long addr)
+		{
+			var bytes = dbConnector.dbGetFactData(addr);
+			var idtplist = dbConnector.dbGetAttrTypesList(addr);
+			var tplist = new List<enAttrTypes>();
+			foreach(var idtp in idtplist)
+				tplist.Add((enAttrTypes)idtp);
+			Blob blob = new Blob(tplist, bytes);
+			return blob;
+		}
+
+		public override void AttrSetValue(long addr, int ord, object value)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void SetParent(long addr, long parent)
+		public override T AttrGetValue<T>(long addr, int ord)
 		{
 			throw new NotImplementedException();
 		}
+
 		#endregion
 
 		#region Функции для работы со Справочниками

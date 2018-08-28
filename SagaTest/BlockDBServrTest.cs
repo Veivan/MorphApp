@@ -13,6 +13,7 @@ namespace SagaTest
 
 		public BlockDBServer DBserver = new BlockDBServer();
 
+		#region Функции для работы с Типами блоков
 		[TestMethod]
 		public void Test_CreateBlockType()
 		{
@@ -33,14 +34,18 @@ namespace SagaTest
 			var res = DBserver.GetBlockTypeByAddr(2);
 			Assert.AreNotEqual("", res);
 		}
+		#endregion
 
+		#region Функции для работы с атрибутами типов блоков
 		[TestMethod]
 		public void Test_CreateAttribute()
 		{
 			var id = DBserver.CreateAttribute("attr2", 1, 2, 0);
 			Assert.AreNotEqual(0, id);
 		}
+		#endregion
 
+		#region Функции для работы с Блоками
 		[TestMethod]
 		public void Test_CreateBlock()
 		{
@@ -69,6 +74,20 @@ namespace SagaTest
 			Assert.AreNotEqual(-1, id);
 		}
 
+		[TestMethod]
+		public void Test_GetFactData()
+		{
+			var addr = 1;
+			var blobdb = DBserver.GetFactData(addr);
+			var val = blobdb.ValueList[0].Value;
+			Console.WriteLine("Attr0 : " + val.ToString());
+
+			Assert.AreNotEqual(-1, val);
+		}
+
+		#endregion
+
+		#region Функции для работы со Справочниками
 		[TestMethod]
 		public void Test_CreateDictionary()
 		{
@@ -160,6 +179,7 @@ namespace SagaTest
 			Console.WriteLine("After : " + result);
 			Assert.AreNotEqual("", result);
 		}
+		#endregion
 
 	}
 }
