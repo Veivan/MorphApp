@@ -63,15 +63,25 @@ namespace SagaTest
 		[TestMethod]
 		public void Test_SetFactData()
 		{
+			var addr = 1;
+			var newval = 12;
+
+			var oldval = 0;// DBserver.AttrGetValue<int>(addr, 0);
+
 			var attr1 = new AttrFactData();
 			attr1.Type = enAttrTypes.mnint;
-			attr1.Value = 10;
+			attr1.Value = newval;
 			var list = new List<AttrFactData>();
 			list.Add(attr1);
 			Blob blob = new Blob(list);
 
-			var id = DBserver.SetFactData(1, blob);
-			Assert.AreNotEqual(-1, id);
+			var id = DBserver.SetFactData(addr, blob);
+
+			var blobdb = DBserver.GetFactData(addr);
+			var dbval = blobdb.ValueList[0].Value;
+			Console.WriteLine("Before : " + oldval.ToString() + " After : " + dbval.ToString());
+
+			Assert.AreNotEqual(oldval, dbval);
 		}
 
 		[TestMethod]
@@ -85,6 +95,30 @@ namespace SagaTest
 			Assert.AreNotEqual(-1, val);
 		}
 
+		[TestMethod]
+		public void Test_AttrGetValue()
+		{
+			var addr = 1;
+			var val = DBserver.AttrGetValue<int>(addr, 0);
+			Console.WriteLine("Attr0 : " + val.ToString());
+
+			Assert.AreNotEqual(-1, val);
+		}
+
+		[TestMethod]
+		public void Test_AttrSetValue()
+		{
+			var addr = 1;
+			var ord = 0;
+			var newval = 8;
+			//var val = 7;
+			var val = DBserver.AttrGetValue<int>(addr, ord);
+			Console.WriteLine("Before : " + val.ToString());
+			DBserver.AttrSetValue(addr, ord, newval);
+			val = DBserver.AttrGetValue<int>(addr, ord);
+			Console.WriteLine("After : " + val.ToString());
+			Assert.AreEqual(newval, val);
+		}
 		#endregion
 
 		#region Функции для работы со Справочниками

@@ -1574,9 +1574,7 @@ namespace DirectDBconnector
 			{
 				transaction = m_dbConn.BeginTransaction();
 				// Ищем адрес фактических данных
-				m_sqlCmd.CommandText = "SELECT fh_id FROM mBlocks WHERE b_id = @b_id";
-				m_sqlCmd.Parameters.Clear();
-				m_sqlCmd.Parameters.Add(new SQLiteParameter("@b_id", addr));
+				m_sqlCmd.CommandText = string.Format("SELECT fh_id FROM mBlocks WHERE b_id = {0}", addr);
 				// Читаем только первую запись
 				var resp = m_sqlCmd.ExecuteScalar();
 				if (resp == null) return result; // Record not found
@@ -1587,7 +1585,7 @@ namespace DirectDBconnector
 					m_sqlCmd.Parameters.Clear();
 					m_sqlCmd.Parameters.Add(new SQLiteParameter("@blob", blob));
 					m_sqlCmd.Parameters.Add(new SQLiteParameter("@fh_id", fh_id));
-					m_sqlCmd.ExecuteNonQuery();
+					int rows = m_sqlCmd.ExecuteNonQuery();
 				}
 				else
 				{
@@ -1598,10 +1596,7 @@ namespace DirectDBconnector
 					fh_id = m_dbConn.LastInsertRowId;
 
 					// обновить адрес факт.данных в блоке
-					m_sqlCmd.CommandText = "UPDATE mBlocks SET fh_id = @fh_id WHERE b_id = @b_id";
-					m_sqlCmd.Parameters.Clear();
-					m_sqlCmd.Parameters.Add(new SQLiteParameter("@b_id", addr));
-					m_sqlCmd.Parameters.Add(new SQLiteParameter("@fh_id", fh_id));
+					m_sqlCmd.CommandText = string.Format("UPDATE mBlocks SET fh_id = {0} WHERE b_id = {1}", addr, fh_id);
 					m_sqlCmd.ExecuteNonQuery();
 				}
 				result = addr;
@@ -1624,11 +1619,11 @@ namespace DirectDBconnector
 		public byte[] dbGetFactData(long addr)
 		{
 			byte[] result = null;
-			m_sqlCmd.CommandText = string.Format("SELECT blockdata FROM mFactHeap F JOIN mBlocks B ON B.fh_id = B.fh_id WHERE B.b_id = {0}", addr);
+			m_sqlCmd.CommandText = string.Format("SELECT blockdata FROM mFactHeap F INNER JOIN mBlocks B ON B.fh_id = F.fh_id WHERE B.b_id = {0}", addr);
 			try
 			{
 				var executeScalar = m_sqlCmd.ExecuteScalar();
-				if (executeScalar != null)
+				if (executeScalar != null && executeScalar != DBNull.Value)
 					result = (byte[])executeScalar;
 			}
 			catch (SQLiteException ex)

@@ -91,12 +91,26 @@ namespace DirectDBconnector
 
 		public override void AttrSetValue(long addr, int ord, object value)
 		{
-			throw new NotImplementedException();
+			byte[] bytes = dbConnector.dbGetFactData(addr);
+			var idtplist = dbConnector.dbGetAttrTypesList(addr);
+			var tplist = new List<enAttrTypes>();
+			foreach (var idtp in idtplist)
+				tplist.Add((enAttrTypes)idtp);
+			Blob blob = new Blob(tplist, bytes);
+			blob.SetAttrValue(ord, value);
+			dbConnector.dbSetFactData(addr, blob.Data, false);
 		}
 
 		public override T AttrGetValue<T>(long addr, int ord)
 		{
-			throw new NotImplementedException();
+			byte[] bytes = dbConnector.dbGetFactData(addr);
+			var idtplist = dbConnector.dbGetAttrTypesList(addr);
+			var tplist = new List<enAttrTypes>();
+			foreach (var idtp in idtplist)
+				tplist.Add((enAttrTypes)idtp);
+			Blob blob = new Blob(tplist, bytes);
+			var result = (T)blob.GetAttrValue(ord);
+			return result;
 		}
 
 		#endregion

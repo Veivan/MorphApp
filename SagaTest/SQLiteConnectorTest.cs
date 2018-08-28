@@ -158,8 +158,12 @@ namespace DirectDBconnector.Tests
 		[TestMethod()]
 		public void Test_dbSetFactData()
 		{
-			byte[] x = new byte[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-			var id = dbConnector.dbSetFactData(2, x, false);
+			var addr = 1;
+			var number = 13;
+			byte[] x = BitConverter.GetBytes(number);
+			if (BitConverter.IsLittleEndian)
+				Array.Reverse(x);
+			var id = dbConnector.dbSetFactData(addr, x, false);
 			Assert.AreNotEqual(-1, id);
 		}
 
