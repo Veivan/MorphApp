@@ -66,7 +66,7 @@ namespace SagaTest
 			var addr = 1;
 			var newval = 12;
 
-			var oldval = 0;// DBserver.AttrGetValue<int>(addr, 0);
+			var oldval = DBserver.AttrGetValue<int>(addr, 0);
 
 			var attr1 = new AttrFactData();
 			attr1.Type = enAttrTypes.mnint;
@@ -90,8 +90,8 @@ namespace SagaTest
 			var addr = 1;
 			var blobdb = DBserver.GetFactData(addr);
 			var val = blobdb.ValueList[0].Value;
-			Console.WriteLine("Attr0 : " + val.ToString());
-
+			var res = val == null ? "null" : val.ToString();
+			Console.WriteLine("Attr0 : " + res);
 			Assert.AreNotEqual(-1, val);
 		}
 
@@ -111,7 +111,6 @@ namespace SagaTest
 			var addr = 1;
 			var ord = 0;
 			var newval = 8;
-			//var val = 7;
 			var val = DBserver.AttrGetValue<int>(addr, ord);
 			Console.WriteLine("Before : " + val.ToString());
 			DBserver.AttrSetValue(addr, ord, newval);

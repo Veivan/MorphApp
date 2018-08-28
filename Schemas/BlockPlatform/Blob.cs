@@ -41,7 +41,16 @@ namespace Schemas
 		public Blob(List<enAttrTypes> attrTypes, byte[] data) : this (data)
 		{
 			_factdata = new List<AttrFactData>();
-			ParseBlob(attrTypes);
+			if (data == null)
+			{
+				foreach (var type in attrTypes)
+				{
+					var attrfactdata = new AttrFactData(type, null);
+					_factdata.Add(attrfactdata);
+				}
+			}
+			else
+				ParseBlob(attrTypes);
 		}
 
 		/// <summary>
@@ -67,7 +76,6 @@ namespace Schemas
 		{
 			if (order >= this._factdata.Count)
 				return null;
-//				throw new Exception(string.Format("Нет атрибута с номером {0} !", order));
 			return _factdata[order].Value;
 		}
 
