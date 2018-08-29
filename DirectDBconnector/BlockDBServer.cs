@@ -42,6 +42,13 @@ namespace DirectDBconnector
 			BlockAddress result = dbConnector.dbCreateAttribute(name, AttrType, BlockType, sorder, mandatory);
 			return result;
 		}
+
+		public override List<string> GetFildsNames(long BlockType)
+		{
+			var result = dbConnector.dbGetFildsNames(BlockType);
+			return result;
+		}
+
 		#endregion
 
 		#region Функции для работы с Блоками

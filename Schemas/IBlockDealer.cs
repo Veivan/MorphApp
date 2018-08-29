@@ -52,6 +52,13 @@ namespace Schemas
 		/// <returns>адрес добавленного объекта</returns>
 		public abstract BlockAddress CreateAttribute(string name, BlockAddress AttrType, BlockAddress BlockType, int sorder, bool mandatory = false);
 
+		/// <summary>
+		/// Создание нового атрибута типа блоков.
+		/// </summary>
+		/// <param name="BlockType">адрес типа блока (объект справочника "Типы блоков")</param>
+		/// <returns>список имён атрибутов</returns>
+		public abstract List<string> GetFildsNames(BlockAddress BlockType);
+		
 		#endregion
 
 		#region Функции для работы с Блоками

@@ -1522,6 +1522,26 @@ namespace DirectDBconnector
 			return reslist;
 		}
 
+		public List<string> dbGetFildsNames(long blockType)
+		{
+			var reslist = new List<string>();
+			try
+			{
+				m_sqlCmd.CommandText = string.Format("SELECT name FROM mAttributes WHERE bt_id = {0} ORDER BY sorder", blockType);
+				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
+				while (r.Read())
+				{
+					reslist.Add(r.GetString(0));
+				}
+				r.Close();
+			}
+			catch (SQLiteException ex)
+			{
+				Console.WriteLine("dbGetFildsNames Error: " + ex.Message);
+			}
+			return reslist;
+		}
+
 		#endregion
 
 		#region Функции для работы с Блоками

@@ -43,6 +43,17 @@ namespace SagaTest
 			var id = DBserver.CreateAttribute("attr2", 1, 2, 0);
 			Assert.AreNotEqual(0, id);
 		}
+
+		[TestMethod]
+		public void Test_GetFildsNames()
+		{
+			var typeid = 1;
+			var reslist = DBserver.GetFildsNames(typeid);
+			var res = reslist == null ? "null" : string.Join("," , reslist);
+			Console.WriteLine("Attrs : " + res);
+			Assert.AreNotEqual(null, reslist);
+		}
+		
 		#endregion
 
 		#region Функции для работы с Блоками
