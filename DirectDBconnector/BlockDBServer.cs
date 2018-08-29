@@ -109,8 +109,11 @@ namespace DirectDBconnector
 			foreach (var idtp in idtplist)
 				tplist.Add((enAttrTypes)idtp);
 			Blob blob = new Blob(tplist, bytes);
-			var result = (T)blob.GetAttrValue(ord);
-			return result;
+			var attrval = blob.GetAttrValue(ord);
+			if (attrval == null)
+				return default(T);
+			else
+				return (T)attrval;
 		}
 
 		#endregion

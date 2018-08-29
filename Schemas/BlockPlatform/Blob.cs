@@ -75,7 +75,7 @@ namespace Schemas
 		public object GetAttrValue(int order)
 		{
 			if (order >= this._factdata.Count)
-				return null;
+				throw new Exception(string.Format("Отсутствует атрибут с номером {0}!", order));
 			return _factdata[order].Value;
 		}
 

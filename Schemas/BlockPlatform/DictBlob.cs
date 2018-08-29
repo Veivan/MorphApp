@@ -54,7 +54,6 @@ namespace Schemas
 			var attrval = GetAttrValue(nordArr);
 			if (attrval == null)
 				return null;
-
 			return ((List<long>)attrval).ToArray();
 		}
 
@@ -82,6 +81,8 @@ namespace Schemas
 		public void RemoveElements(long[] subaddr)
 		{
 			var oldval = GetDictContentFromBytes();
+			if (oldval == null)
+				return;
 			var list = new List<long>();
 			list.AddRange(oldval);
 			list.RemoveAll(o => subaddr.ToList().Contains(o));
