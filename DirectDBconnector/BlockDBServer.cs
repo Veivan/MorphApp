@@ -123,6 +123,31 @@ namespace DirectDBconnector
 				return (T)attrval;
 		}
 
+		public override void AttrSetValue(long addr, string attrname, object value)
+		{
+			byte[] bytes = dbConnector.dbGetFactData(addr);
+			var attrs = dbConnector.dbGetAttrsCollection(addr);
+			var tplist = attrs.GetAttrTypesList();
+			var ord = attrs.GetOrdByName(attrname);
+			Blob blob = new Blob(tplist, bytes);
+			blob.SetAttrValue(ord, value);
+			dbConnector.dbSetFactData(addr, blob.Data, false);
+		}
+
+		public override T AttrGetValue<T>(long addr, string attrname)
+		{
+			byte[] bytes = dbConnector.dbGetFactData(addr);
+			var attrs = dbConnector.dbGetAttrsCollection(addr);
+			var tplist = attrs.GetAttrTypesList();
+			var ord = attrs.GetOrdByName(attrname);
+			Blob blob = new Blob(tplist, bytes);
+			var attrval = blob.GetAttrValue(0);
+			if (attrval == null)
+				return default(T);
+			else
+				return (T)attrval;
+		}
+
 		#endregion
 
 		#region Функции для работы со Справочниками

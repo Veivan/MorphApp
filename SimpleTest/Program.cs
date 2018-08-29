@@ -21,12 +21,35 @@ namespace SimpleTest
 			this.sentence = p_2;
 		}
 	}
+	public class AttrsCollection
+	{
+		private List<int> attrs = new List<int> {1, 2};
 
-    class Program
+
+		public List<int> Attrs
+		{
+			get
+			{
+				return attrs;
+			}
+		}
+
+		public void Print()
+		{
+			Console.WriteLine("List: {0}", string.Join(",", attrs));
+			Console.ReadKey();
+		}
+	}
+
+	class Program
     {
         static void Main()
         {
-            RunTest();
+			TestList();
+
+			return;
+
+			RunTest();
 
             UI user1;
             for (user1 = UI.Name; user1 <= UI.Sex; user1++)
@@ -69,5 +92,18 @@ namespace SimpleTest
 
         }
 
-    }
+		static void TestList()
+		{
+			var x = new AttrsCollection();
+			x.Print();
+			var attrs = x.Attrs;
+
+			attrs[1] = 3; // присваивается
+			x.Print();
+
+			attrs = new List<int> { 7, 8 }; // не присваивается
+			x.Print();
+		}
+
+	}
 }

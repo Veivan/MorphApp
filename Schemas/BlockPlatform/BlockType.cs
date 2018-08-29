@@ -10,7 +10,7 @@ namespace Schemas.BlockPlatform
 	/// <summary>
 	/// Класс представляет тип блока.
 	/// </summary>
-	class BlockType
+	public class BlockType
 	{
 		private BlockAddress _bt_id = -1;
 		private string _name = "";

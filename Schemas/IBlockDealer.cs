@@ -137,6 +137,23 @@ namespace Schemas
 		/// <returns>значение атрибута блока</returns>
 		public abstract T AttrGetValue<T>(BlockAddress addr, int ord);
 
+		/// <summary>
+		/// Присвоение значения атрибуту блока по имени атрибута.
+		/// </summary>
+		/// <param name="addr">адрес блока</param>
+		/// <param name="attrname">имя атрибута</param>
+		/// <param name="value">новое значение атрибута</param>
+		/// <returns>значение атрибута блока</returns>
+		public abstract void AttrSetValue(BlockAddress addr, string attrname, object value);
+
+		/// <summary>
+		/// Получение значения атрибута блока по имени атрибута.
+		/// </summary>
+		/// <param name="addr">адрес блока</param>
+		/// <param name="attrname">имя атрибута</param>
+		/// <returns>значение атрибута блока</returns>
+		public abstract T AttrGetValue<T>(BlockAddress addr, string attrname);
+
 		#endregion
 
 		#region Функции для работы со Справочниками

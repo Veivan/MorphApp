@@ -5,6 +5,9 @@ using System.Data;
 using System.IO;
 using System.Data.SQLite;
 using Schemas;
+using Schemas.BlockPlatform;
+
+using Attribute = Schemas.BlockPlatform.Attribute;
 
 namespace DirectDBconnector
 {
@@ -1542,6 +1545,30 @@ namespace DirectDBconnector
 			return reslist;
 		}
 
+		public AttrsCollection dbGetAttrsCollection(long blockType)
+		{
+			var attrs = new AttrsCollection();
+			try
+			{
+				m_sqlCmd.CommandText = 
+					string.Format("SELECT A.ma_id, A.name, A.mt_id, A.bt_id, A.sorder, B.name FROM mAttributes A "+
+					" JOIN mBlockTypes B ON B.bt_id = A.bt_id WHERE A.bt_id = {0} ORDER BY A.sorder", blockType);
+				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
+				while (r.Read())
+				{
+					var bt = new BlockType(r.GetInt64(3), r.GetString(5));
+					var attr = new Attribute(r.GetInt64(0), r.GetString(1), r.GetInt32(2), bt);
+					attr.Order = r.GetInt32(4);
+					attrs.AddElement(attr);
+				}
+				r.Close();
+			}
+			catch (SQLiteException ex)
+			{
+				Console.WriteLine("dbGetAttrsCollection Error: " + ex.Message);
+			}
+			return attrs;
+		}
 		#endregion
 
 		#region Функции для работы с Блоками

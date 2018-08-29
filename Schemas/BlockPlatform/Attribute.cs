@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 using BlockAddress = System.Int64;
 
@@ -10,11 +7,11 @@ namespace Schemas.BlockPlatform
 	/// <summary>
 	/// Класс представляет атрибут блока.
 	/// </summary>
-	class Attribute
+	public class Attribute
 	{
 		private BlockAddress _ma_id;
 		private string _name = "";
-		private AttrType _mt;
+		private enAttrTypes _mt;
 		private BlockType _bt;
 		private bool _mandatory = false;
 		private int sorder = 0;
@@ -32,7 +29,7 @@ namespace Schemas.BlockPlatform
 		/// <summary>
 		/// Тип атрибута.
 		/// </summary>
-		public AttrType AttrType { get { return _mt; } }
+		public enAttrTypes AttrType { get { return _mt; } }
 
 		/// <summary>
 		/// Тип блока.
@@ -52,11 +49,11 @@ namespace Schemas.BlockPlatform
 		/// <summary>
 		/// Конструктор
 		/// </summary>
-		public Attribute(BlockAddress ma_id, string name, AttrType mt, BlockType bt)
+		public Attribute(BlockAddress ma_id, string name, int mt, BlockType bt)
 		{
 			_ma_id = ma_id;
 			_name = name;
-			_mt = mt;
+			_mt = (enAttrTypes)mt;
 			_bt = bt;
 			/*	if (created_at == null)
 					_created_at = DateTime.Now;

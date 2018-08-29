@@ -107,10 +107,20 @@ namespace SagaTest
 		}
 
 		[TestMethod]
-		public void Test_AttrGetValue()
+		public void Test_AttrGetValueByOrd()
+		{
+			var addr = 6;
+			var val = DBserver.AttrGetValue<long>(addr, 0);
+			Console.WriteLine("Attr0 : " + val.ToString());
+
+			Assert.AreNotEqual(-1, val);
+		}
+
+		[TestMethod]
+		public void Test_AttrGetValueByName()
 		{
 			var addr = 1;
-			var val = DBserver.AttrGetValue<int>(addr, 0);
+			var val = DBserver.AttrGetValue<int>(addr, "ResolvedType");
 			Console.WriteLine("Attr0 : " + val.ToString());
 
 			Assert.AreNotEqual(-1, val);
