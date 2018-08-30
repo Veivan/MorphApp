@@ -22,13 +22,13 @@ namespace Schemas
 		public DictBlob(byte[] data) : base(data)
 		{
 			var attrTypes = new List<enAttrTypes>();
-			attrTypes.Add(enAttrTypes.mnint);	// атрибут "ResolvedType"
+			attrTypes.Add(enAttrTypes.mnlong);	// атрибут "ResolvedType"
 			attrTypes.Add(enAttrTypes.mnarr);	// перечень элементов
 			_factdata = new List<AttrFactData>();
 			if (data == null)
 			{
-				_factdata.Add(new AttrFactData(enAttrTypes.mnint, 0));
-				_factdata.Add(new AttrFactData(enAttrTypes.mnarr, null));
+				_factdata.Add(new AttrFactData(enAttrTypes.mnlong, 0L));
+				_factdata.Add(new AttrFactData(enAttrTypes.mnarr, 0));
 			}
 			else
 				ParseBlob(attrTypes);

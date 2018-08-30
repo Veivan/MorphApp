@@ -265,7 +265,7 @@ namespace Schemas
 		/// <summary>
 		/// целое число
 		/// </summary>
-		mnint = 2,
+		mnlong = 2,
 		/// <summary>
 		/// десятичное число
 		/// </summary>

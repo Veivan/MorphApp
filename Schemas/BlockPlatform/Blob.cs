@@ -113,8 +113,8 @@ namespace Schemas
 						AddData(arrbt);
 						break;
 					case enAttrTypes.mnlink:
-					case enAttrTypes.mnint:
-						var number = (int)rec.Value;
+					case enAttrTypes.mnlong:
+						var number = (long)rec.Value;
 						arrbt = BitConverter.GetBytes(number);
 						AddData(arrbt);
 						break;
@@ -171,13 +171,11 @@ namespace Schemas
 				{
 					case enAttrTypes.mntxt:
 					case enAttrTypes.mnrtf:
-						//shift = intlen;
 						// Определяем длину текста
 						arrbt = new byte[intlen];
 						for (int i = 0; i < intlen; i++)
 							arrbt[i] = _bytedata[offset++];
 						if (BitConverter.IsLittleEndian) Array.Reverse(arrbt);
-						//offset += shift;
 						var txtlen = BitConverter.ToInt32(arrbt, 0);
 						// Чтение текста
 						arrbt = new byte[txtlen];
@@ -187,16 +185,16 @@ namespace Schemas
 						value = Encoding.UTF8.GetString(arrbt);
 						break;
 					case enAttrTypes.mnlink:
-					case enAttrTypes.mnint:
-						arrbt = new byte[intlen];
-						for (int i = 0; i < intlen; i++)
+					case enAttrTypes.mnlong:
+						arrbt = new byte[lnglen];
+						for (int i = 0; i < lnglen; i++)
 							arrbt[i] = _bytedata[offset++];
 						if (BitConverter.IsLittleEndian) Array.Reverse(arrbt);
-						value = BitConverter.ToInt32(arrbt, 0);
+						value = BitConverter.ToInt64(arrbt, 0);
 						break;
 					case enAttrTypes.mnreal:
-						arrbt = new byte[intlen];
-						for (int i = 0; i < intlen; i++)
+						arrbt = new byte[lnglen];
+						for (int i = 0; i < lnglen; i++)
 							arrbt[i] = _bytedata[offset++];
 						if (BitConverter.IsLittleEndian) Array.Reverse(arrbt);
 						value = BitConverter.ToSingle(arrbt, 0);

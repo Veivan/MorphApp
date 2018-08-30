@@ -18,10 +18,10 @@ namespace SagaTest
 		/// Запись в Blob типа Int
 		/// </summary>
 		[TestMethod]
-		public void Test_MakeBlob_Int()
+		public void Test_MakeBlob_Long()
 		{
-			const int testval = 10;
-			var testtype = enAttrTypes.mnint;
+			const long testval = 10;
+			var testtype = enAttrTypes.mnlong;
 			var attr1 = new AttrFactData(testtype, testval);
 			var list = new List<AttrFactData>();
 			list.Add(attr1);
@@ -33,7 +33,7 @@ namespace SagaTest
 			tplist.Add(testtype);
 			Blob blobchld = new Blob(tplist, bdata);
 
-			var val = (int)blobchld.ValueList[0].Value;
+			var val = (long)blobchld.ValueList[0].Value;
 			Assert.AreEqual(testval, val);
 		}
 
@@ -172,7 +172,7 @@ namespace SagaTest
 		{
 			var list = new List<AttrFactData>();
 			list.Add(new AttrFactData(enAttrTypes.mnbool, true));
-			list.Add(new AttrFactData(enAttrTypes.mnint, 11));
+			list.Add(new AttrFactData(enAttrTypes.mnlong, 11));
 			Blob blobpar = new Blob(list);
 
 			var bdata = blobpar.Data;
@@ -180,7 +180,7 @@ namespace SagaTest
 			// Чтение блоба через создание нового блоба из массива байт
 			var tplist = new List<enAttrTypes>();
 			tplist.Add(enAttrTypes.mnbool);
-			tplist.Add(enAttrTypes.mnint);
+			tplist.Add(enAttrTypes.mnlong);
 			Blob blobchld = new Blob(tplist, bdata);
 
 			var eq = true;
@@ -200,7 +200,7 @@ namespace SagaTest
 		{
 			bool eq = false;
 			var list = new List<AttrFactData>();
-			list.Add(new AttrFactData(enAttrTypes.mnint, 1)); // тип элементов справочника
+			list.Add(new AttrFactData(enAttrTypes.mnlong, 1)); // тип элементов справочника
 			list.Add(new AttrFactData(enAttrTypes.mnarr, new List<long>() { 3 }));
 			Blob blobpar = new Blob(list);
 
@@ -240,7 +240,7 @@ namespace SagaTest
 			var newval = new List<long>() { 3, 4 };
 
 			var list = new List<AttrFactData>();
-			list.Add(new AttrFactData(enAttrTypes.mnint, 1)); // тип элементов справочника
+			list.Add(new AttrFactData(enAttrTypes.mnlong, 1)); // тип элементов справочника
 			list.Add(new AttrFactData(enAttrTypes.mnarr, testval));
 			Blob blobpar = new Blob(list);
 
@@ -249,7 +249,7 @@ namespace SagaTest
 			var bdata = blobpar.Data;
 
 			var tplist = new List<enAttrTypes>();
-			tplist.Add(enAttrTypes.mnint);
+			tplist.Add(enAttrTypes.mnlong);
 			tplist.Add(enAttrTypes.mnarr);
 			Blob blobchld = new Blob(tplist, bdata);
 
