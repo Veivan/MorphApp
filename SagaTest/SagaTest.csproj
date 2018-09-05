@@ -73,15 +73,24 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
+          <Private>False</Private>
+        </Reference>
       </ItemGroup>
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="AsmServerTest.cs" />
     <Compile Include="BlobTest.cs" />
     <Compile Include="BlockDBServrTest.cs" />
     <Compile Include="SQLiteConnectorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LogicProcessor\LogicProcessor.csproj">
+      <Project>{3460f92c-201b-4b14-a604-9f8ecfc3dfbd}</Project>
+      <Name>LogicProcessor</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
