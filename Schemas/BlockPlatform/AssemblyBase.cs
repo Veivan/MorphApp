@@ -13,13 +13,13 @@ namespace Schemas.BlockPlatform
 	/// </summary>
 	public class AssemblyBase
 	{
-		/// <summary>
-		/// Стартовый блок сборки.
-		/// </summary>
 		private BlockAddress _rootBlock_id;
 		private BlockType _blockType;
 		private AttrsCollection _SysAttrs;
 		private AttrsCollection _UserAttrs;
+		private AssemblyBase templAsm;
+		private AssemblyBase ParentAsm;
+		private List<AssemblyBase> children = new List<AssemblyBase>();
 
 		/// <summary>
 		/// Тип сборки.
@@ -55,6 +55,9 @@ namespace Schemas.BlockPlatform
 			}
 		}
 
+		/// <summary>
+		/// Стартовый блок сборки.
+		/// </summary>
 		public long RootBlock_id
 		{
 			get
@@ -68,9 +71,103 @@ namespace Schemas.BlockPlatform
 			}
 		}
 
+		/// <summary>
+		/// Сборка - образец/шаблон, на основе которой была сделана текущая сборка.
+		/// </summary>
+		public AssemblyBase Following
+		{
+			get
+			{
+				return templAsm;
+			}
+
+			set
+			{
+				templAsm = value;
+			}
+		}
+
+		public List<AssemblyBase> Children
+		{
+			get
+			{
+				var ret = new List<AssemblyBase>(children);
+				return ret;
+			}
+		}
+		public List<AssemblyBase> AllChildren
+		{
+			get
+			{
+				var ret = GetAllNodes(children);
+				return ret.ToList();
+			}
+		}
+
+		public AssemblyBase ParentAssembly
+		{
+			get
+			{
+				return ParentAsm;
+			}
+
+			set
+			{
+				ParentAsm = value;
+			}
+		}
+
+		/// <summary>
+		/// Получение плоского списка из дерева рекурсивно.
+		/// </summary>
+		private IEnumerable<AssemblyBase> GetAllNodes(IEnumerable<AssemblyBase> data)
+		{
+			var result = new List<AssemblyBase>();
+
+			if (data != null)
+			{
+				foreach (var item in data)
+				{
+					result.Add(item);
+					result.AddRange(GetAllNodes(item.children));
+				}
+			}
+			return result;
+		}
+
 		public AssemblyBase(BlockType blockType)
 		{
 			this._blockType = blockType;
+		}
+
+		public AssemblyBase(BlockType type, long id)
+		{
+			this._blockType = type;
+			this._rootBlock_id = id;
+		}
+
+		public AssemblyBase(AssemblyBase templAsm, long id, FOLLOWMODE mode)
+		{
+			this._rootBlock_id = id;
+			if (mode == FOLLOWMODE.Follow)
+				this.templAsm = templAsm;
+			CopyChildrenRequrs(this, templAsm.Children);
+		}
+
+		/// <summary>
+		/// Рекурсивное копирование дочерних сборок из источника в целевую сборку.
+		/// </summary>
+		/// <param name="asm">целевая сборка</param>
+		/// <param name="src_children">перечень дочерних сборок сборки-источника</param>
+		private void CopyChildrenRequrs(AssemblyBase asm, List<AssemblyBase> src_children)
+		{
+			foreach (var src_child in src_children)
+			{
+				var newchild = new AssemblyBase(src_child.BlockType);
+				newchild.ParentAsm = asm;
+				asm.children.Add(newchild);
+				CopyChildrenRequrs(newchild, src_child.children);
+			}
 		}
 	}
 }

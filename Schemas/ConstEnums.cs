@@ -297,10 +297,15 @@ namespace Schemas
 	/// </summary>
 	public enum TBLOBPICS {BMP = 0, JPG = 1, PNG = 2, PDF = 3};
 
-/// <summary>
-/// Структура используется в обмене сообщениями с серверами.
-/// </summary>
-public struct SimpleParam
+	/// <summary>
+	/// Типы картинок, хранящихся в атрибутах блоков.
+	/// </summary>
+	public enum FOLLOWMODE { Forget, Follow };
+
+	/// <summary>
+	/// Структура используется в обмене сообщениями с серверами.
+	/// </summary>
+	public struct SimpleParam
 	{
 		public string Name;
 		public string Value;
