@@ -98,7 +98,7 @@ namespace SagaTest
 		[TestMethod]
 		public void Test_GetFactData()
 		{
-			var addr = 1;
+			var addr = 2;
 			var blobdb = DBserver.GetFactData(addr);
 			var val = blobdb.ValueList[0].Value;
 			var res = val == null ? "null" : val.ToString();
@@ -109,34 +109,47 @@ namespace SagaTest
 		[TestMethod]
 		public void Test_AttrGetValueByOrd()
 		{
-			var addr = 8;
+			var addr = 2;
 			var val = DBserver.AttrGetValue<long>(addr, 0);
 			Console.WriteLine("Attr0 : " + val.ToString());
-
 			Assert.AreNotEqual(-1, val);
 		}
 
 		[TestMethod]
 		public void Test_AttrGetValueByName()
 		{
-			var addr = 1;
-			var val = DBserver.AttrGetValue<int>(addr, "ResolvedType");
-			Console.WriteLine("Attr0 : " + val.ToString());
-
+			var addr = 2;
+			var attrname = "attr2";
+			var val = DBserver.AttrGetValue<int>(addr, attrname);
+			Console.WriteLine(attrname + ": " + val.ToString());
 			Assert.AreNotEqual(-1, val);
 		}
 
 		[TestMethod]
-		public void Test_AttrSetValue()
+		public void Test_AttrSetValueByOrd()
 		{
-			var addr = 8;
+			var addr = 2;
 			var ord = 0;
-			var newval = 9L;
-			var val = DBserver.AttrGetValue<long>(addr, ord);
-			Console.WriteLine("Before : " + val.ToString());
+			var newval = "qq";
+			var val = DBserver.AttrGetValue<string>(addr, ord);
+			Console.WriteLine("Before : " + (val == null? "null" : val.ToString()));
 			DBserver.AttrSetValue(addr, ord, newval);
-			val = DBserver.AttrGetValue<long>(addr, ord);
-			Console.WriteLine("After : " + val.ToString());
+			val = DBserver.AttrGetValue<string>(addr, ord);
+			Console.WriteLine("After : " + (val == null ? "null" : val.ToString()));
+			Assert.AreEqual(newval, val);
+		}
+
+		[TestMethod]
+		public void Test_AttrSetValueByName()
+		{
+			var addr = 2;
+			var attrname = "attr2";
+			var newval = "qqw";
+			var val = DBserver.AttrGetValue<string>(addr, attrname);
+			Console.WriteLine("Before : " + (val == null ? "null" : val.ToString()));
+			DBserver.AttrSetValue(addr, attrname, newval);
+			val = DBserver.AttrGetValue<string>(addr, attrname);
+			Console.WriteLine("After : " + (val == null ? "null" : val.ToString()));
 			Assert.AreEqual(newval, val);
 		}
 		#endregion

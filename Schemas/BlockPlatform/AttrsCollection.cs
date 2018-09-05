@@ -46,8 +46,8 @@ namespace Schemas.BlockPlatform
 
 		public void AddElement(Attribute attr)
 		{
-			if (!Attrs.Contains(attr))
-				Attrs.Add(attr);
+			if (!attrs.Contains(attr))
+				attrs.Add(attr);
 		}
 
 		public int GetOrdByName(string attrname)

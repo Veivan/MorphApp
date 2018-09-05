@@ -1643,7 +1643,7 @@ namespace DirectDBconnector
 					fh_id = m_dbConn.LastInsertRowId;
 
 					// обновить адрес факт.данных в блоке
-					m_sqlCmd.CommandText = string.Format("UPDATE mBlocks SET fh_id = {0} WHERE b_id = {1}", addr, fh_id);
+					m_sqlCmd.CommandText = string.Format("UPDATE mBlocks SET fh_id = {0} WHERE b_id = {1}", fh_id, addr);
 					m_sqlCmd.ExecuteNonQuery();
 				}
 				result = addr;
