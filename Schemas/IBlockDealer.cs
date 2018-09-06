@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 using BlockAddress = System.Int64;
+using Schemas.BlockPlatform;
 
 namespace Schemas
 {
@@ -73,6 +74,13 @@ namespace Schemas
 		///		присвоить новому атрибуту последний максимальный номер +1</param>
 		/// <returns>адрес добавленного объекта</returns>
 		public abstract BlockAddress CreateBlock(BlockAddress BlockType, BlockAddress parent, int treeorder);
+
+		/// <summary>
+		/// Получение Блока по адресу.
+		/// </summary>
+		/// <param name="addr">адрес Блока</param>
+		/// <returns>Блок</returns>
+		public abstract BlockBase GetBlock(BlockAddress addr);
 
 		/// <summary>
 		/// Присвоение блоку адреса родительского блока в дереве.

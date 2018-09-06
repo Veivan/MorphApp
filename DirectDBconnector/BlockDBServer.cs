@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 using Schemas;
+using Schemas.BlockPlatform;
 using BlockAddress = System.Int64;
 
 namespace DirectDBconnector
@@ -61,6 +62,12 @@ namespace DirectDBconnector
 		public override void SetParent(long addr, long parent)
 		{
 			throw new NotImplementedException();
+		}
+
+		public override BlockBase GetBlock(long addr)
+		{
+			BlockBase result = dbConnector.dbGetBlock(addr);
+			return result;
 		}
 
 		public override long GetParent(long addr)

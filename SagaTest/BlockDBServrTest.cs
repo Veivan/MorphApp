@@ -65,6 +65,13 @@ namespace SagaTest
 		}
 
 		[TestMethod]
+		public void Test_GetBlock()
+		{
+			var blk = DBserver.GetBlock(9);
+			Assert.AreNotEqual(0, blk.BlockID);
+		}
+
+		[TestMethod]
 		public void Test_GetOrder()
 		{
 			var id = DBserver.GetOrder(1);

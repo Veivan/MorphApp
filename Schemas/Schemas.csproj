@@ -73,6 +73,7 @@
     <Compile Include="BlockPlatform\Blob.cs" />
     <Compile Include="BlockPlatform\Attribute.cs" />
     <Compile Include="BlockPlatform\AttrType.cs" />
+    <Compile Include="BlockPlatform\BlockBase.cs" />
     <Compile Include="BlockPlatform\BlockType.cs" />
     <Compile Include="BlockPlatform\DictBlob.cs" />
     <Compile Include="IAsmDealear.cs" />

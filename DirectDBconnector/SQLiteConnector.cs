@@ -1589,6 +1589,30 @@ namespace DirectDBconnector
 			return result;
 		}
 
+		public BlockBase dbGetBlock(long addr)
+		{
+			BlockBase result = null;
+			try
+			{
+				m_sqlCmd.CommandText = string.Format("SELECT b_id, B.bt_id, T.Name, parent, treeorder, fh_id, predecessor, successor FROM mBlocks B " +
+					"JOIN mBlockTypes T ON T.bt_id = B.bt_id WHERE b_id = {0}", addr);
+				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
+				while (r.Read())
+				{
+					var fh_id = r[5] as long? ?? 0;
+					var predecessor = r[6] as long? ?? 0;
+					var successor = r[7] as long? ?? 0;
+					result = new BlockBase(addr, r.GetInt64(1), r.GetString(2), r.GetInt64(3), r.GetInt64(4), fh_id, predecessor, successor);
+				}
+				r.Close();
+			}
+			catch (SQLiteException ex)
+			{
+				Console.WriteLine("dbGetBlock Error: " + ex.Message);
+			}
+			return result;
+		}
+
 		public int dbGetOrder(long addr)
 		{
 			int result = -1;

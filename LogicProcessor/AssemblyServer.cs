@@ -16,16 +16,23 @@ namespace LogicProcessor
 
 		public override AssemblyBase CreateAssembly(BlockType type)
 		{
-			var id = DBserver.CreateBlock(type.BlockTypeID, -1, 1);
+			var id = DBserver.CreateBlock(type.BlockTypeID, -1, 0);
 			var asm = new AssemblyBase(type, id);
 			return asm;
 		}
 
 		public override AssemblyBase CreateAssembly(AssemblyBase templAsm, FOLLOWMODE mode = FOLLOWMODE.Forget)
 		{
-			var id = DBserver.CreateBlock(templAsm.BlockType.BlockTypeID, -1, 1);
+			var id = DBserver.CreateBlock(templAsm.BlockType.BlockTypeID, -1, 0);
 			var asm = new AssemblyBase(templAsm, id, mode);
 			CreateChildrenRequrs(asm.Children);
+			return asm;
+		}
+
+		public override AssemblyBase GetAssembly(long Addr, FOLLOWMODE mode = FOLLOWMODE.Forget)
+		{
+			var block = DBserver.GetBlock(Addr);
+			var asm = new AssemblyBase(block);
 			return asm;
 		}
 
@@ -35,14 +42,11 @@ namespace LogicProcessor
 		/// <param name="src_children">перечень дочерних сборок</param>
 		private void CreateChildrenRequrs(List<AssemblyBase> src_children)
 		{
-			int i = 0;
 			foreach (var child in src_children)
 			{
-				long parentID = child.ParentAssembly == null ? -1 : child.ParentAssembly.RootBlock_id;
-				var chid = DBserver.CreateBlock(child.BlockType.BlockTypeID, parentID, i);
+				var chid = DBserver.CreateBlock(child.BlockType.BlockTypeID, child.ParentAssemblyID, (int)child.Treeorder);
 				child.RootBlock_id = chid;
 				CreateChildrenRequrs(child.Children);
-				i++;
 			}
 		}
 

@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using AsmAddress = System.Int64;
+
 namespace Schemas
 {
 	/// <summary>
@@ -30,6 +32,13 @@ namespace Schemas
 		/// <returns>сборка</returns>
 		public abstract AssemblyBase CreateAssembly(AssemblyBase templAsm, FOLLOWMODE mode = FOLLOWMODE.Forget);
 
+		/// <summary>
+		/// Получение сборки по адресу из хранилища.
+		/// </summary>
+		/// <param name="templAsm">сборка - образец или шаблон</param>
+		/// <param name="mode">признак, определяющий, учитывать ссылку на образцовую сборку или нет</param>
+		/// <returns>сборка</returns>
+		public abstract AssemblyBase GetAssembly(AsmAddress Addr, FOLLOWMODE mode = FOLLOWMODE.Forget);
 
 	}
 }

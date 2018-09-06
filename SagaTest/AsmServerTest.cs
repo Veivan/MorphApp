@@ -21,5 +21,16 @@ namespace SagaTest
 			var asm = AsmServer.CreateAssembly(type);
 			Assert.AreNotEqual(null, asm);
 		}
+		
+		[TestMethod]
+		public void Test_CreateAssemblyFromTemplate()
+		{
+			var typeName = "документ";
+			var tid = DBserver.GetBlockTypeByName(typeName);
+			var type = new BlockType(tid, typeName);
+			var asm = AsmServer.CreateAssembly(type);
+			Assert.AreNotEqual(null, asm);
+		}
+
 	}
 }
