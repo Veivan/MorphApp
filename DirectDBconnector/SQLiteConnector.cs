@@ -1467,9 +1467,7 @@ namespace DirectDBconnector
 			string result = "";
 			try
 			{
-				m_sqlCmd.CommandText = String.Format("SELECT name FROM mBlockTypes WHERE bt_id = @addr", addr);
-				m_sqlCmd.Parameters.Clear();
-				m_sqlCmd.Parameters.Add(new SQLiteParameter("@addr", addr));
+				m_sqlCmd.CommandText = String.Format("SELECT name FROM mBlockTypes WHERE bt_id = {0}", addr);
 				var executeScalar = m_sqlCmd.ExecuteScalar();
 				if (executeScalar != null)
 					result = (string)executeScalar;
@@ -1480,6 +1478,26 @@ namespace DirectDBconnector
 			}
 			return result;
 		}
+		public List<BlockType> dbGetAllBlockTypes()
+		{
+			var reslist = new List<BlockType>();
+			try
+			{
+				m_sqlCmd.CommandText = "SELECT bt_id, name FROM mBlockTypes ORDER BY bt_id";
+				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
+				while (r.Read())
+				{
+					reslist.Add(new BlockType(r.GetInt32(0), r.GetString(1)));
+				}
+				r.Close();
+			}
+			catch (SQLiteException ex)
+			{
+				Console.WriteLine("dbGetAllBlockTypes Error: " + ex.Message);
+			}
+			return reslist;
+		}
+
 		#endregion
 
 		#region Функции для работы с атрибутами типов блоков

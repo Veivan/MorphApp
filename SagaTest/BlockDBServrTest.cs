@@ -34,6 +34,15 @@ namespace SagaTest
 			var res = DBserver.GetBlockTypeByAddr(2);
 			Assert.AreNotEqual("", res);
 		}
+
+		[TestMethod]
+		public void Test_GetAllBlockTypes()
+		{
+			var res = DBserver.GetAllBlockTypes();
+			Assert.AreNotEqual(null, res);
+		}
+
+		
 		#endregion
 
 		#region Функции для работы с атрибутами типов блоков

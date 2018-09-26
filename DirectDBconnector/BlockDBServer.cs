@@ -35,6 +35,10 @@ namespace DirectDBconnector
 			string result = dbConnector.dbGetBlockTypeByAddr(addr);
 			return result;
 		}
+		public override List<BlockType> GetAllBlockTypes()
+		{
+			return dbConnector.dbGetAllBlockTypes();
+		}
 		#endregion
 
 		#region Функции для работы с атрибутами типов блоков

@@ -36,6 +36,13 @@ namespace Schemas
 		/// <param name="addr">адрес типа блоков</param>
 		/// <returns>наименования объекта </returns>
 		public abstract string GetBlockTypeByAddr(BlockAddress addr);
+
+		/// <summary>
+		/// Получение всех типов блоков.
+		/// </summary>
+		/// <returns>список всех типов блоков</returns>
+		public abstract List<BlockType> GetAllBlockTypes();
+
 		#endregion
 
 		#region Функции для работы с атрибутами типов блоков
