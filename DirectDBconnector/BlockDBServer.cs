@@ -54,6 +54,12 @@ namespace DirectDBconnector
 			return result;
 		}
 
+		public override AttrsCollection GetAttrsCollection(long BlockType)
+		{
+			return dbConnector.dbGetAttrsCollection(BlockType);
+		}
+
+
 		#endregion
 
 		#region Функции для работы с Блоками

@@ -47,16 +47,13 @@ namespace AsmApp
 		{
 			if (btId <= 0)
 				return null;
-			/**/	var collect = new AttrsCollection();
-				collect.AddElement(new Schemas.BlockPlatform.Attribute(1, "qq" + btId, 1, new BlockType(btId, "qqb")));
-				return collect.Attrs; 
-			//return lowStore.GetAllBlockTypes();
 
-		/*	return new List<Schemas.BlockPlatform.Attribute>()
-			{
-				new Schemas.BlockPlatform.Attribute(1, "qq" + btId, 1, new BlockType(btId, "qqb"))
-			};*/
-
+			var collect = lowStore.GetAttrsCollection(btId);
+			/*
+			var collect = new AttrsCollection();
+			collect.AddElement(new Schemas.BlockPlatform.Attribute(1, "qq" + btId, 1, new BlockType(btId, "qqb")));
+			*/
+			return collect.Attrs;
 		}
 
 		private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
