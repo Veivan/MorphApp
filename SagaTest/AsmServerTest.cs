@@ -15,9 +15,8 @@ namespace SagaTest
 		[TestMethod]
 		public void Test_CreateAssembly()
 		{
-			var typeName = "документ";
-			var tid = DBserver.GetBlockTypeByName(typeName);
-			var type = new BlockType(tid, typeName);
+			var nameKey = "Document";
+			var type = DBserver.GetBlockTypeByNameKey(nameKey);
 			var asm = AsmServer.CreateAssembly(type);
 			Assert.AreNotEqual(null, asm);
 		}
@@ -25,9 +24,8 @@ namespace SagaTest
 		[TestMethod]
 		public void Test_CreateAssemblyFromTemplate()
 		{
-			var typeName = "документ";
-			var tid = DBserver.GetBlockTypeByName(typeName);
-			var type = new BlockType(tid, typeName);
+			var nameKey = "Document";
+			var type = DBserver.GetBlockTypeByNameKey(nameKey);
 			var asm = AsmServer.CreateAssembly(type);
 			Assert.AreNotEqual(null, asm);
 		}

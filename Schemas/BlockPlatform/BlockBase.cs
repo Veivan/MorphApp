@@ -55,10 +55,10 @@ namespace Schemas.BlockPlatform
 		/// <summary>
 		/// Конструктор
 		/// </summary>
-		public BlockBase(BlockAddress b_id, BlockAddress bt, string btname, BlockAddress parent, long order, BlockAddress fh_id, BlockAddress predecessor, BlockAddress successor)
+		public BlockBase(BlockAddress b_id, BlockAddress bt, string btnamekey, string btnameUI, BlockAddress parent, long order, BlockAddress fh_id, BlockAddress predecessor, BlockAddress successor)
 		{
 			_b_id = b_id;
-			_bt = new BlockType(bt, btname);
+			_bt = new BlockType(bt, btnamekey, btnameUI);
 			_parent = parent;
 			_treeorder = order;
 			_fh_id = fh_id;

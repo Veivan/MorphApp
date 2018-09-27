@@ -17,15 +17,15 @@ namespace SagaTest
 		[TestMethod]
 		public void Test_CreateBlockType()
 		{
-			var res = DBserver.CreateBlockType("треб");
-			Assert.AreNotEqual(0, res);
+			var res = DBserver.CreateBlockType("Cabbige", "Капуста");
+			Assert.AreNotEqual(null, res);
 		}
 
 		[TestMethod]
-		public void Test_GetBlockTypeByName()
+		public void Test_GetBlockTypeByNameKey()
 		{
-			var res = DBserver.GetBlockTypeByName("треб");
-			Assert.AreNotEqual(0, res);
+			var res = DBserver.GetBlockTypeByNameKey("Document");
+			Assert.AreNotEqual(null, res);
 		}
 
 		[TestMethod]

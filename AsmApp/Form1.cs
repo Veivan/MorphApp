@@ -38,8 +38,8 @@ namespace AsmApp
 			return lowStore.GetAllBlockTypes();
 			/*return new List<BlockType>()
 			{
-				new BlockType(1, "t1"),
-				new BlockType(2, "t2")
+				new BlockType(1, "t1", ""),
+				new BlockType(2, "t2", "")
 			};*/
 		}
 
@@ -51,7 +51,7 @@ namespace AsmApp
 			var collect = lowStore.GetAttrsCollection(btId);
 			/*
 			var collect = new AttrsCollection();
-			collect.AddElement(new Schemas.BlockPlatform.Attribute(1, "qq" + btId, 1, new BlockType(btId, "qqb")));
+			collect.AddElement(new Schemas.BlockPlatform.Attribute(1, "qq" + btId, 1, new BlockType(btId, "qqb", "")));
 			*/
 			return collect.Attrs;
 		}
@@ -65,7 +65,7 @@ namespace AsmApp
 		{
 			var btId = ((BlockType)listBoxBlockTypes.SelectedItem).BlockTypeID;
 			listBoxAttrs.DataSource = GetBlockAttrs(btId);
-			listBoxAttrs.DisplayMember = "Name";
+			listBoxAttrs.DisplayMember = "NameUI";
 		}
 
 	}

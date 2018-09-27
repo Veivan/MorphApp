@@ -29,7 +29,7 @@ namespace DirectDBconnector.Tests
 		[TestMethod]
 		public void Sys_ShowSelectAll()
 		{
-			dbConnector.selectAll(dbTables.mAttributes);
+			dbConnector.selectAll(dbTables.mBlockTypes);
 			Assert.AreEqual(0, 0);
 		}
 
@@ -92,22 +92,22 @@ namespace DirectDBconnector.Tests
 		[TestMethod]
 		public void Test_dbCreateBlockType()
 		{
-			var res = dbConnector.dbCreateBlockType("документ");
-			Assert.AreNotEqual(0, res);
+			var res = dbConnector.dbCreateBlockType("Cabbige", "Капуста");
+			Assert.AreNotEqual(null, res);
 		}
 
 		[TestMethod]
 		public void Test_dbGetBlockTypeByName()
 		{
-			var res = dbConnector.dbGetBlockTypeByName("документ");
-			Assert.AreNotEqual(0, res);
+			var res = dbConnector.dbGetBlockTypeByNameKey("Document");
+			Assert.AreNotEqual(null, res);
 		}
 
 		[TestMethod]
 		public void Test_dbGetBlockTypeByAddr()
 		{
 			var res = dbConnector.dbGetBlockTypeByAddr(1);
-			Assert.AreNotEqual("", res);
+			Assert.AreNotEqual(null, res);
 		}
 
 		[TestMethod]

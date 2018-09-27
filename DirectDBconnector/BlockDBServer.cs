@@ -18,21 +18,21 @@ namespace DirectDBconnector
 		SQLiteConnector dbConnector = SQLiteConnector.Instance;
 
 		#region Функции для работы с Типами блоков
-		public override BlockAddress CreateBlockType(string name)
+		public override BlockType CreateBlockType(string nameKey, string nameUI)
 		{
-			BlockAddress result = dbConnector.dbCreateBlockType(name);
+			BlockType result = dbConnector.dbCreateBlockType(nameKey, nameUI);
 			return result;
 		}
 
-		public override BlockAddress GetBlockTypeByName(string name)
+		public override BlockType GetBlockTypeByNameKey(string nameKey)
 		{
-			BlockAddress result = dbConnector.dbGetBlockTypeByName(name);
+			BlockType result = dbConnector.dbGetBlockTypeByNameKey(nameKey);
 			return result;
 		}
 
-		public override string GetBlockTypeByAddr(BlockAddress addr)
+		public override BlockType GetBlockTypeByAddr(BlockAddress addr)
 		{
-			string result = dbConnector.dbGetBlockTypeByAddr(addr);
+			BlockType result = dbConnector.dbGetBlockTypeByAddr(addr);
 			return result;
 		}
 		public override List<BlockType> GetAllBlockTypes()

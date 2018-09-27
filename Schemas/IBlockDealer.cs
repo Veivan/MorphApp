@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 using BlockAddress = System.Int64;
 using Schemas.BlockPlatform;
@@ -19,23 +17,24 @@ namespace Schemas
 		/// <summary>
 		/// Создание нового типа блоков.
 		/// </summary>
-		/// <param name="name">Наименование нового типа блоков</param>
-		/// <returns>адрес добавленного объекта </returns>
-		public abstract BlockAddress CreateBlockType(string name);
+		/// <param name="nameKey">Ключ</param>
+		/// <param name="nameUI">Видимое наименование</param>
+		/// <returns>объект типа BlockType </returns>
+		public abstract BlockType CreateBlockType(string nameKey, string nameUI);
 
 		/// <summary>
-		/// Получение адреса типа блока по наименованию.
+		/// Получение типа блока по ключу.
 		/// </summary>
-		/// <param name="name">Наименование нового типа блоков</param>
-		/// <returns>адрес объекта </returns>
-		public abstract BlockAddress GetBlockTypeByName(string name);
+		/// <param name="nameKey">Ключ типа блоков</param>
+		/// <returns>объект типа BlockType</returns>
+		public abstract BlockType GetBlockTypeByNameKey(string nameKey);
 
 		/// <summary>
-		/// Получение наименования типа блока по адресу.
+		/// Получение типа блока по адресу.
 		/// </summary>
 		/// <param name="addr">адрес типа блоков</param>
-		/// <returns>наименования объекта </returns>
-		public abstract string GetBlockTypeByAddr(BlockAddress addr);
+		/// <returns>объект типа BlockType</returns>
+		public abstract BlockType GetBlockTypeByAddr(BlockAddress addr);
 
 		/// <summary>
 		/// Получение всех типов блоков.

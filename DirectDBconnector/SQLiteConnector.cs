@@ -157,7 +157,7 @@ namespace DirectDBconnector
 						+ "	uv_id integer PRIMARY KEY, mu_id integer, rw_id integer);\n" +
 
 					"CREATE TABLE IF NOT EXISTS mBlockTypes (\n"
-						+ "	bt_id integer PRIMARY KEY, name text);\n" +
+						+ "	bt_id integer PRIMARY KEY, namekey text, nameui text);\n" +
 					"CREATE TABLE IF NOT EXISTS mAttrTypes (\n"
 						+ "	mt_id integer PRIMARY KEY, name text, size integer);\n" +
 					"CREATE TABLE IF NOT EXISTS mAttributes (\n"
@@ -1231,10 +1231,10 @@ namespace DirectDBconnector
 			{
 				var stmt =
 					"BEGIN TRANSACTION;\n" +
-					"ALTER TABLE mAttributes RENAME TO _mAttributes_old;\n" +
-					"CREATE TABLE mAttributes (ma_id integer PRIMARY KEY, namekey text, nameui text, mt_id integer, bt_id integer, sorder integer, mandatory integer);\n" +
-					"INSERT INTO mAttributes(ma_id, namekey, nameui, mt_id, bt_id, sorder, mandatory) SELECT ma_id, name, nameui, mt_id, bt_id, sorder, mandatory FROM _mAttributes_old;\n" +
-					"DROP TABLE _mAttributes_old;\n" +
+					"ALTER TABLE mBlockTypes RENAME TO _mBlockTypes_old;\n" +
+					"CREATE TABLE mBlockTypes (bt_id integer PRIMARY KEY, namekey text, nameui text);\n" +
+					"INSERT INTO mBlockTypes(bt_id, namekey, nameui) SELECT bt_id, name, name FROM _mBlockTypes_old;\n" +
+					"DROP TABLE _mBlockTypes_old;\n" +
 					"COMMIT;\n";
 				m_sqlCmd.CommandText = stmt;
 				m_sqlCmd.ExecuteNonQuery();
@@ -1310,13 +1310,17 @@ namespace DirectDBconnector
 						case dbTables.tblSyntNodes:
 							line = r["sn_id"].ToString() + ", " + r["с_id"].ToString() + ", " + r["ln_id"].ToString() + ", " + r["level"].ToString() + ", " + r["pс_id"].ToString();
 							break;
-						case dbTables.mBlocks:
-							line = r["b_id"].ToString() + ", " + r["bt_id"].ToString() + ", " + r["created_at"].ToString() + ", " + r["parent"].ToString() + ", " + r["treeorder"].ToString()
-								+ ", " + r["fh_id"].ToString() + ", " + r["predecessor"].ToString() + ", " + r["successor"].ToString();
+						case dbTables.mBlockTypes:
+							//line = r["bt_id"].ToString() + ", " + r["name"] ;
+							line = r["bt_id"].ToString() + ", " + r["namekey"] + ", " + r["nameui"];
 							break;
 						case dbTables.mAttributes:
 							line = r["ma_id"].ToString() + ", " + r["namekey"] + ", " + r["nameui"] + ", " + r["mt_id"].ToString() + ", " + r["bt_id"].ToString()
 								+ ", " + r["sorder"].ToString() + ", " + r["mandatory"].ToString();
+							break;
+						case dbTables.mBlocks:
+							line = r["b_id"].ToString() + ", " + r["bt_id"].ToString() + ", " + r["created_at"].ToString() + ", " + r["parent"].ToString() + ", " + r["treeorder"].ToString()
+								+ ", " + r["fh_id"].ToString() + ", " + r["predecessor"].ToString() + ", " + r["successor"].ToString();
 							break;
 					}
 					//Console.WriteLine(line);
@@ -1450,14 +1454,14 @@ namespace DirectDBconnector
 		#endregion
 
 		#region Методы работы с Типами блоков
-		public long dbCreateBlockType(string name)
+		public BlockType dbCreateBlockType(string nameKey, string nameUI)
 		{
-			long result = -1;
+			BlockType result = null;
 			try
 			{
-				m_sqlCmd.CommandText = String.Format("INSERT INTO mBlockTypes(bt_id, name) VALUES(NULL, '{0}')", name);
+				m_sqlCmd.CommandText = String.Format("INSERT INTO mBlockTypes(bt_id, namekey, nameui) VALUES(NULL, '{0}', '{1}')", nameKey, nameUI);
 				m_sqlCmd.ExecuteNonQuery();
-				result = m_dbConn.LastInsertRowId;
+				result = new BlockType(m_dbConn.LastInsertRowId, nameKey, nameUI);
 			}
 			catch (SQLiteException ex)
 			{
@@ -1466,34 +1470,42 @@ namespace DirectDBconnector
 			return result;
 		}
 
-		public long dbGetBlockTypeByName(string name)
+		public BlockType dbGetBlockTypeByNameKey(string nameKey)
 		{
-			long result = -1;
+			BlockType result = null;
 			try
 			{
-				m_sqlCmd.CommandText = String.Format("SELECT bt_id FROM mBlockTypes WHERE LOWER(name) = @name", name);
+				m_sqlCmd.CommandText = String.Format("SELECT bt_id, namekey, nameui FROM mBlockTypes WHERE LOWER(namekey) = @nameKey", nameKey);
 				m_sqlCmd.Parameters.Clear();
-				m_sqlCmd.Parameters.Add(new SQLiteParameter("@name", name.ToLower()));
-				var executeScalar = m_sqlCmd.ExecuteScalar();
-				if (executeScalar != null)
-					result = (long)executeScalar;
+				m_sqlCmd.Parameters.Add(new SQLiteParameter("@nameKey", nameKey.ToLower()));
+				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
+				// Читаем только первую запись
+				if (r.Read())
+				{
+					result = new BlockType(r.GetInt32(0), r.GetString(1), r.GetString(2));
+				}
+				r.Close();
 			}
 			catch (SQLiteException ex)
 			{
-				Console.WriteLine("dbGetBlockTypeByName Error: " + ex.Message);
+				Console.WriteLine("dbGetBlockTypeByNameKey Error: " + ex.Message);
 			}
 			return result;
 		}
 
-		public string dbGetBlockTypeByAddr(long addr)
+		public BlockType dbGetBlockTypeByAddr(long addr)
 		{
-			string result = "";
+			BlockType result = null;
 			try
 			{
-				m_sqlCmd.CommandText = String.Format("SELECT name FROM mBlockTypes WHERE bt_id = {0}", addr);
-				var executeScalar = m_sqlCmd.ExecuteScalar();
-				if (executeScalar != null)
-					result = (string)executeScalar;
+				m_sqlCmd.CommandText = String.Format("SELECT bt_id, namekey, nameui FROM mBlockTypes WHERE bt_id = {0}", addr);
+				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
+				// Читаем только первую запись
+				if (r.Read())
+				{
+					result = new BlockType(r.GetInt32(0), r.GetString(1), r.GetString(2));
+				}
+				r.Close();
 			}
 			catch (SQLiteException ex)
 			{
@@ -1507,11 +1519,11 @@ namespace DirectDBconnector
 			var reslist = new List<BlockType>();
 			try
 			{
-				m_sqlCmd.CommandText = "SELECT bt_id, name FROM mBlockTypes ORDER BY bt_id";
+				m_sqlCmd.CommandText = "SELECT bt_id, namekey, nameui FROM mBlockTypes ORDER BY bt_id";
 				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
 				while (r.Read())
 				{
-					reslist.Add(new BlockType(r.GetInt32(0), r.GetString(1)));
+					reslist.Add(new BlockType(r.GetInt32(0), r.GetString(1), r.GetString(2)));
 				}
 				r.Close();
 			}
@@ -1598,12 +1610,12 @@ namespace DirectDBconnector
 			try
 			{
 				m_sqlCmd.CommandText = 
-					string.Format("SELECT A.ma_id, A.namekey, A.nameui, A.mt_id, A.bt_id, A.sorder, B.name FROM mAttributes A " +
+					string.Format("SELECT A.ma_id, A.namekey, A.nameui, A.mt_id, A.bt_id, A.sorder, B.namekey, B.nameui FROM mAttributes A " +
 					" JOIN mBlockTypes B ON B.bt_id = A.bt_id WHERE A.bt_id = {0} ORDER BY A.sorder", blockType);
 				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
 				while (r.Read())
 				{
-					var bt = new BlockType(r.GetInt64(4), r.GetString(6));
+					var bt = new BlockType(r.GetInt64(4), r.GetString(6), r.GetString(7));
 					var attr = new Attribute(r.GetInt64(0), r.GetString(1), r.GetString(2), r.GetInt32(3), bt);
 					attr.Order = r.GetInt32(5);
 					attrs.AddElement(attr);
@@ -1641,7 +1653,7 @@ namespace DirectDBconnector
 			BlockBase result = null;
 			try
 			{
-				m_sqlCmd.CommandText = string.Format("SELECT b_id, B.bt_id, T.Name, parent, treeorder, fh_id, predecessor, successor FROM mBlocks B " +
+				m_sqlCmd.CommandText = string.Format("SELECT b_id, B.bt_id, T.namekey, parent, treeorder, fh_id, predecessor, successor, T.nameui FROM mBlocks B " +
 					"JOIN mBlockTypes T ON T.bt_id = B.bt_id WHERE b_id = {0}", addr);
 				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
 				while (r.Read())
@@ -1649,7 +1661,7 @@ namespace DirectDBconnector
 					var fh_id = r[5] as long? ?? 0;
 					var predecessor = r[6] as long? ?? 0;
 					var successor = r[7] as long? ?? 0;
-					result = new BlockBase(addr, r.GetInt64(1), r.GetString(2), r.GetInt64(3), r.GetInt64(4), fh_id, predecessor, successor);
+					result = new BlockBase(addr, r.GetInt64(1), r.GetString(2), r.GetString(8), r.GetInt64(3), r.GetInt64(4), fh_id, predecessor, successor);
 				}
 				r.Close();
 			}
