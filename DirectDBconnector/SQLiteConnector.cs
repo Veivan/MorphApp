@@ -161,7 +161,7 @@ namespace DirectDBconnector
 					"CREATE TABLE IF NOT EXISTS mAttrTypes (\n"
 						+ "	mt_id integer PRIMARY KEY, name text, size integer);\n" +
 					"CREATE TABLE IF NOT EXISTS mAttributes (\n"
-						+ "	ma_id integer PRIMARY KEY, name text, mt_id integer, bt_id integer, sorder integer, mandatory integer);\n" +
+						+ "	ma_id integer PRIMARY KEY, namekey text, nameui text, mt_id integer, bt_id integer, sorder integer, mandatory integer);\n" +
 					"CREATE TABLE IF NOT EXISTS mBlocks (\n"
 						+ "	b_id integer PRIMARY KEY, bt_id integer, created_at DATETIME DEFAULT CURRENT_TIMESTAMP, \n"
 						+ " parent integer, treeorder integer, fh_id integer, predecessor integer, successor integer);\n" +
@@ -1208,7 +1208,6 @@ namespace DirectDBconnector
 				//transaction.Rollback();
 				Console.WriteLine("DropColumn Error: " + ex.Message);
 			}
-
 		}
 
 		public void AddColumn()
@@ -1216,13 +1215,33 @@ namespace DirectDBconnector
 			try
 			{
 				var stmt =
-					"ALTER TABLE mSyntNodes ADD COLUMN pс_id integer;";
+					"ALTER TABLE mAttributes ADD COLUMN nameui text;";
 				m_sqlCmd.CommandText = stmt;
 				m_sqlCmd.ExecuteNonQuery();
 			}
 			catch (SQLiteException ex)
 			{
-				Console.WriteLine("DropColumn Error: " + ex.Message);
+				Console.WriteLine("AddColumn Error: " + ex.Message);
+			}
+		}
+
+		public void RenameColumn()
+		{
+			try
+			{
+				var stmt =
+					"BEGIN TRANSACTION;\n" +
+					"ALTER TABLE mAttributes RENAME TO _mAttributes_old;\n" +
+					"CREATE TABLE mAttributes (ma_id integer PRIMARY KEY, namekey text, nameui text, mt_id integer, bt_id integer, sorder integer, mandatory integer);\n" +
+					"INSERT INTO mAttributes(ma_id, namekey, nameui, mt_id, bt_id, sorder, mandatory) SELECT ma_id, name, nameui, mt_id, bt_id, sorder, mandatory FROM _mAttributes_old;\n" +
+					"DROP TABLE _mAttributes_old;\n" +
+					"COMMIT;\n";
+				m_sqlCmd.CommandText = stmt;
+				m_sqlCmd.ExecuteNonQuery();
+			}
+			catch (SQLiteException ex)
+			{
+				Console.WriteLine("RenameColumn Error: " + ex.Message);
 			}
 		}
 
@@ -1294,6 +1313,10 @@ namespace DirectDBconnector
 						case dbTables.mBlocks:
 							line = r["b_id"].ToString() + ", " + r["bt_id"].ToString() + ", " + r["created_at"].ToString() + ", " + r["parent"].ToString() + ", " + r["treeorder"].ToString()
 								+ ", " + r["fh_id"].ToString() + ", " + r["predecessor"].ToString() + ", " + r["successor"].ToString();
+							break;
+						case dbTables.mAttributes:
+							line = r["ma_id"].ToString() + ", " + r["namekey"] + ", " + r["nameui"] + ", " + r["mt_id"].ToString() + ", " + r["bt_id"].ToString()
+								+ ", " + r["sorder"].ToString() + ", " + r["mandatory"].ToString();
 							break;
 					}
 					//Console.WriteLine(line);

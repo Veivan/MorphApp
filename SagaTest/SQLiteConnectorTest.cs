@@ -29,7 +29,7 @@ namespace DirectDBconnector.Tests
 		[TestMethod]
 		public void Sys_ShowSelectAll()
 		{
-			dbConnector.selectAll(dbTables.mBlocks);
+			dbConnector.selectAll(dbTables.mAttributes);
 			Assert.AreEqual(0, 0);
 		}
 
@@ -87,22 +87,6 @@ namespace DirectDBconnector.Tests
 			Assert.AreNotEqual(-1, id);
 		}
 
-		[TestMethod]
-		public void TestDropColumnDB()
-		{
-			dbConnector.selectAll(dbTables.tblParagraphs);
-			dbConnector.DropColumn();
-			dbConnector.selectAll(dbTables.tblParagraphs);
-			Assert.AreNotEqual(-1, 0);
-		}
-
-		[TestMethod]
-		public void TestAddColumnDB()
-		{
-			dbConnector.AddColumn();
-			dbConnector.selectAll(dbTables.tblSyntNodes);
-			Assert.AreNotEqual(-1, 0);
-		}
 
 		#region Тестирование функций для BlockDBServer
 		[TestMethod]

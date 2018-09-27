@@ -14,7 +14,8 @@ namespace DirectDBA
 {
     public partial class MainForm : Form
     {
-        SagaDBServer dbServer = new SagaDBServer();
+		SQLiteConnector dbConnector = SQLiteConnector.Instance;
+		SagaDBServer dbServer = new SagaDBServer();
         string[] stables = { "Контейнеры", "Документы", "Абзацы", "Предложения", "Содержание фраз", "Леммы",
             "Граммемы", "Синт.связи", "Формы слов", "Термины", "Undefs",
 			"Типы блоков", "Типы атрибутов", "Атрибуты", "Блоки", "Факты", "Справочники"};
@@ -352,8 +353,13 @@ namespace DirectDBA
 					});
 					dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
 					{
-						DataPropertyName = "name",
-						HeaderText = "name"
+						DataPropertyName = "namekey",
+						HeaderText = "namekey"
+					});
+					dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+					{
+						DataPropertyName = "nameui",
+						HeaderText = "nameui"
 					});
 					dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
 					{
@@ -525,6 +531,21 @@ namespace DirectDBA
                 this.Level = p_2;
             }
         }
-        #endregion
-    }
+		#endregion
+
+		private void AddColumn_Click(object sender, EventArgs e)
+		{
+			dbConnector.AddColumn();
+		}
+
+		private void DropColumn_Click(object sender, EventArgs e)
+		{
+			dbConnector.DropColumn();
+		}
+
+		private void RenameColumn_Click(object sender, EventArgs e)
+		{
+			dbConnector.RenameColumn();
+		}
+	}
 }
