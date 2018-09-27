@@ -29,7 +29,7 @@ namespace AsmApp
 		protected override void OnLoad(EventArgs e)
 		{
 			base.OnLoad(e);
-			listBoxBlockTypes.DisplayMember = "Name";
+			listBoxBlockTypes.DisplayMember = "NameUI";
 			listBoxBlockTypes.DataSource = GetBlockTypes();
 		}
 
@@ -68,5 +68,27 @@ namespace AsmApp
 			listBoxAttrs.DisplayMember = "NameUI";
 		}
 
+		private void RenameToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			MessageBox.Show("qq");
+			if (listBoxBlockTypes.SelectedIndex < 0) return;
+			var SelectedItem = (BlockType)listBoxBlockTypes.SelectedItem;
+
+			/*  
+
+			   var tmpValue = listBoxRooms.Items[listBoxRooms.SelectedIndex].ToString();
+			   RoomDisplayForm newRoomDisplayForm = new RoomDisplayForm();
+			   newRoomDisplayForm.value = tmpValue;
+			   newRoomDisplayForm.ShowDialog();
+
+			   //TODO: inside "newRoomDisplayForm" set the value to the textbox
+			   // ie.: myValueTextBox.Text = this.value;
+
+			   if(newRoomDisplayForm.DialogResult == DialogResult.OK)
+			   {
+				  // replace the selected item with the new value
+				  listBoxRooms.Items[listBoxRooms.SelectedIndex] = newRoomDisplayForm.value;
+			   }*/
+		}
 	}
 }

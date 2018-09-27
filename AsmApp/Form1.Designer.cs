@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			this.tabPage3 = new System.Windows.Forms.TabPage();
 			this.splitContainer2 = new System.Windows.Forms.SplitContainer();
 			this.listBoxAttrs = new System.Windows.Forms.ListBox();
@@ -36,6 +37,8 @@
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.refreshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.contextMenuBlockTypes = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.RenameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabPage3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
 			this.splitContainer2.Panel1.SuspendLayout();
@@ -43,6 +46,7 @@
 			this.panel2.SuspendLayout();
 			this.tabControl1.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
+			this.contextMenuBlockTypes.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tabPage3
@@ -93,6 +97,7 @@
 			// 
 			// listBoxBlockTypes
 			// 
+			this.listBoxBlockTypes.ContextMenuStrip = this.contextMenuBlockTypes;
 			this.listBoxBlockTypes.Dock = System.Windows.Forms.DockStyle.Top;
 			this.listBoxBlockTypes.FormattingEnabled = true;
 			this.listBoxBlockTypes.Location = new System.Drawing.Point(0, 0);
@@ -128,6 +133,20 @@
 			this.refreshToolStripMenuItem.Text = "Refresh";
 			this.refreshToolStripMenuItem.Click += new System.EventHandler(this.refreshToolStripMenuItem_Click);
 			// 
+			// contextMenuBlockTypes
+			// 
+			this.contextMenuBlockTypes.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.RenameToolStripMenuItem});
+			this.contextMenuBlockTypes.Name = "contextMenuBlockTypes";
+			this.contextMenuBlockTypes.Size = new System.Drawing.Size(162, 48);
+			// 
+			// RenameToolStripMenuItem
+			// 
+			this.RenameToolStripMenuItem.Name = "RenameToolStripMenuItem";
+			this.RenameToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+			this.RenameToolStripMenuItem.Text = "Переименовать";
+			this.RenameToolStripMenuItem.Click += new System.EventHandler(this.RenameToolStripMenuItem_Click);
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -145,6 +164,7 @@
 			this.tabControl1.ResumeLayout(false);
 			this.menuStrip1.ResumeLayout(false);
 			this.menuStrip1.PerformLayout();
+			this.contextMenuBlockTypes.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -160,6 +180,8 @@
 		private System.Windows.Forms.MenuStrip menuStrip1;
 		private System.Windows.Forms.ToolStripMenuItem refreshToolStripMenuItem;
 		private System.Windows.Forms.ListBox listBoxAttrs;
+		private System.Windows.Forms.ContextMenuStrip contextMenuBlockTypes;
+		private System.Windows.Forms.ToolStripMenuItem RenameToolStripMenuItem;
 	}
 }
 
