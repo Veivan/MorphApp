@@ -1501,6 +1501,7 @@ namespace DirectDBconnector
 			}
 			return result;
 		}
+
 		public List<BlockType> dbGetAllBlockTypes()
 		{
 			var reslist = new List<BlockType>();
@@ -1524,13 +1525,13 @@ namespace DirectDBconnector
 		#endregion
 
 		#region Функции для работы с атрибутами типов блоков
-		public long dbCreateAttribute(string name, long AttrType, long BlockType, int sorder, bool mandatory = false)
+		public long dbCreateAttribute(string nameKey, string nameUI, long AttrType, long BlockType, int sorder, bool mandatory = false)
 		{
 			long result = -1;
 			try
 			{
-				m_sqlCmd.CommandText = string.Format("INSERT INTO mAttributes(ma_id, name, mt_id, bt_id, sorder, mandatory) VALUES(NULL, '{0}', {1}, {2}, {3}, {4})",
-					name, AttrType, BlockType, sorder, mandatory == false ? 0 : 1);
+				m_sqlCmd.CommandText = string.Format("INSERT INTO mAttributes(ma_id, namekey, nameUI, mt_id, bt_id, sorder, mandatory) VALUES(NULL, '{0}', {1}, {2}, {3}, {4})",
+					nameKey, nameUI, AttrType, BlockType, sorder, mandatory == false ? 0 : 1);
 				m_sqlCmd.ExecuteNonQuery();
 				result = m_dbConn.LastInsertRowId;
 			}
@@ -1566,12 +1567,17 @@ namespace DirectDBconnector
 			return reslist;
 		}
 
-		public List<string> dbGetFildsNames(long blockType)
+		/// <summary>
+		/// Получение списка ключей атрибутов типа блока.
+		/// </summary>
+		/// <param name="addr">адрес типа блока</param>
+		/// <returns>список ключей атрибутов типа блока</returns>
+		public List<string> dbGetFildsNameKey(long blockType)
 		{
 			var reslist = new List<string>();
 			try
 			{
-				m_sqlCmd.CommandText = string.Format("SELECT name FROM mAttributes WHERE bt_id = {0} ORDER BY sorder", blockType);
+				m_sqlCmd.CommandText = string.Format("SELECT namekey FROM mAttributes WHERE bt_id = {0} ORDER BY sorder", blockType);
 				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
 				while (r.Read())
 				{
@@ -1581,7 +1587,7 @@ namespace DirectDBconnector
 			}
 			catch (SQLiteException ex)
 			{
-				Console.WriteLine("dbGetFildsNames Error: " + ex.Message);
+				Console.WriteLine("dbGetFildsNameKey Error: " + ex.Message);
 			}
 			return reslist;
 		}
@@ -1592,14 +1598,14 @@ namespace DirectDBconnector
 			try
 			{
 				m_sqlCmd.CommandText = 
-					string.Format("SELECT A.ma_id, A.name, A.mt_id, A.bt_id, A.sorder, B.name FROM mAttributes A "+
+					string.Format("SELECT A.ma_id, A.namekey, A.nameui, A.mt_id, A.bt_id, A.sorder, B.name FROM mAttributes A " +
 					" JOIN mBlockTypes B ON B.bt_id = A.bt_id WHERE A.bt_id = {0} ORDER BY A.sorder", blockType);
 				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
 				while (r.Read())
 				{
-					var bt = new BlockType(r.GetInt64(3), r.GetString(5));
-					var attr = new Attribute(r.GetInt64(0), r.GetString(1), r.GetInt32(2), bt);
-					attr.Order = r.GetInt32(4);
+					var bt = new BlockType(r.GetInt64(4), r.GetString(6));
+					var attr = new Attribute(r.GetInt64(0), r.GetString(1), r.GetString(2), r.GetInt32(3), bt);
+					attr.Order = r.GetInt32(5);
 					attrs.AddElement(attr);
 				}
 				r.Close();

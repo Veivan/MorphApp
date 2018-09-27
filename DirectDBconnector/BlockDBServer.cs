@@ -42,15 +42,15 @@ namespace DirectDBconnector
 		#endregion
 
 		#region Функции для работы с атрибутами типов блоков
-		public override BlockAddress CreateAttribute(string name, long AttrType, long BlockType, int sorder, bool mandatory = false)
+		public override BlockAddress CreateAttribute(string nameKey, string nameUI, long AttrType, long BlockType, int sorder, bool mandatory = false)
 		{
-			BlockAddress result = dbConnector.dbCreateAttribute(name, AttrType, BlockType, sorder, mandatory);
+			BlockAddress result = dbConnector.dbCreateAttribute(nameKey, nameUI, AttrType, BlockType, sorder, mandatory);
 			return result;
 		}
 
-		public override List<string> GetFildsNames(long BlockType)
+		public override List<string> GetFildsNameKey(long BlockType)
 		{
-			var result = dbConnector.dbGetFildsNames(BlockType);
+			var result = dbConnector.dbGetFildsNameKey(BlockType);
 			return result;
 		}
 
@@ -140,25 +140,25 @@ namespace DirectDBconnector
 				return (T)attrval;
 		}
 
-		public override void AttrSetValue(long addr, string attrname, object value)
+		public override void AttrSetValue(long addr, string attrnamekey, object value)
 		{
 			byte[] bytes = dbConnector.dbGetFactData(addr);
 			var attrs = dbConnector.dbGetAttrsCollection(addr);
 			var tplist = attrs.GetAttrTypesList();
-			var ord = attrs.GetOrdByName(attrname);
+			var ord = attrs.GetOrdByNameKey(attrnamekey);
 			Blob blob = new Blob(tplist, bytes);
 			blob.SetAttrValue(ord, value);
 			dbConnector.dbSetFactData(addr, blob.Data, false);
 		}
 
-		public override T AttrGetValue<T>(long addr, string attrname)
+		public override T AttrGetValue<T>(long addr, string attrnamekey)
 		{
 			byte[] bytes = dbConnector.dbGetFactData(addr);
 			var attrs = dbConnector.dbGetAttrsCollection(addr);
 			var tplist = attrs.GetAttrTypesList();
-			var ord = attrs.GetOrdByName(attrname);
+			var ord = attrs.GetOrdByNameKey(attrnamekey);
 			Blob blob = new Blob(tplist, bytes);
-			var attrval = blob.GetAttrValue(0);
+			var attrval = blob.GetAttrValue(ord);
 			if (attrval == null)
 				return default(T);
 			else

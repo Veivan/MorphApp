@@ -49,7 +49,7 @@ namespace SagaTest
 		[TestMethod]
 		public void Test_CreateAttribute()
 		{
-			var id = DBserver.CreateAttribute("attr2", 1, 2, 0);
+			var id = DBserver.CreateAttribute("attr2", "Атрибут 2", 1, 2, 0);
 			Assert.AreNotEqual(0, id);
 		}
 
@@ -57,7 +57,7 @@ namespace SagaTest
 		public void Test_GetFildsNames()
 		{
 			var typeid = 1;
-			var reslist = DBserver.GetFildsNames(typeid);
+			var reslist = DBserver.GetFildsNameKey(typeid);
 			var res = reslist == null ? "null" : string.Join("," , reslist);
 			Console.WriteLine("Attrs : " + res);
 			Assert.AreNotEqual(null, reslist);
@@ -126,18 +126,18 @@ namespace SagaTest
 		public void Test_AttrGetValueByOrd()
 		{
 			var addr = 2;
-			var val = DBserver.AttrGetValue<long>(addr, 0);
+			var val = DBserver.AttrGetValue<string>(addr, 0);
 			Console.WriteLine("Attr0 : " + val.ToString());
 			Assert.AreNotEqual(-1, val);
 		}
 
 		[TestMethod]
-		public void Test_AttrGetValueByName()
+		public void Test_AttrGetValueByNameKey()
 		{
 			var addr = 2;
-			var attrname = "attr2";
-			var val = DBserver.AttrGetValue<int>(addr, attrname);
-			Console.WriteLine(attrname + ": " + val.ToString());
+			var attrnamekey = "attr2";
+			var val = DBserver.AttrGetValue<string>(addr, attrnamekey);
+			Console.WriteLine(attrnamekey + ": " + val.ToString());
 			Assert.AreNotEqual(-1, val);
 		}
 
@@ -156,15 +156,15 @@ namespace SagaTest
 		}
 
 		[TestMethod]
-		public void Test_AttrSetValueByName()
+		public void Test_AttrSetValueByNameKey()
 		{
 			var addr = 2;
-			var attrname = "attr2";
+			var attrnamekey = "attr2";
 			var newval = "qqw";
-			var val = DBserver.AttrGetValue<string>(addr, attrname);
+			var val = DBserver.AttrGetValue<string>(addr, attrnamekey);
 			Console.WriteLine("Before : " + (val == null ? "null" : val.ToString()));
-			DBserver.AttrSetValue(addr, attrname, newval);
-			val = DBserver.AttrGetValue<string>(addr, attrname);
+			DBserver.AttrSetValue(addr, attrnamekey, newval);
+			val = DBserver.AttrGetValue<string>(addr, attrnamekey);
 			Console.WriteLine("After : " + (val == null ? "null" : val.ToString()));
 			Assert.AreEqual(newval, val);
 		}

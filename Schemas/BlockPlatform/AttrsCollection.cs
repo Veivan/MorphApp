@@ -34,13 +34,13 @@ namespace Schemas.BlockPlatform
 		}
 
 		/// <summary>
-		/// Получение атрибута по имени.
+		/// Получение атрибута по ключу.
 		/// </summary>
-		public Attribute this[string name]
+		public Attribute this[string nameKey]
 		{
 			get
 			{
-				return attrs.Where(o => o.Name == name).FirstOrDefault();
+				return attrs.Where(o => o.NameKey == nameKey).FirstOrDefault();
 			}
 		}
 
@@ -50,11 +50,11 @@ namespace Schemas.BlockPlatform
 				attrs.Add(attr);
 		}
 
-		public int GetOrdByName(string attrname)
+		public int GetOrdByNameKey(string attrnamekey)
 		{
-			var attr = attrs.Where(o => o.Name == attrname).FirstOrDefault();
+			var attr = attrs.Where(o => o.NameKey == attrnamekey).FirstOrDefault();
 			if (attr == null)
-				throw new Exception(string.Format("У объекта нет атрибута '{0}'!", attrname));
+				throw new Exception(string.Format("У объекта нет атрибута '{0}'!", attrnamekey));
 			var ord = attr.Order;
 			return ord;
 		}

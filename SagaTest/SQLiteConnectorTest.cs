@@ -113,7 +113,7 @@ namespace DirectDBconnector.Tests
 		[TestMethod]
 		public void Test_dbCreateAttribute()
 		{
-			var id = dbConnector.dbCreateAttribute("attr1", 1, 1, 0);
+			var id = dbConnector.dbCreateAttribute("attr1", "Атрибут 1", 1, 1, 0);
 			Assert.AreNotEqual(0, id);
 		}
 

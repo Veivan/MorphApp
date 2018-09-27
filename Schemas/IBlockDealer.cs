@@ -50,7 +50,8 @@ namespace Schemas
 		/// <summary>
 		/// Создание нового атрибута типа блоков.
 		/// </summary>
-		/// <param name="name">Наименование атрибута</param>
+		/// <param name="nameKey">Ключ атрибута</param>
+		/// <param name="nameUI">Видимое наименование атрибута</param>
 		/// <param name="AttrType">адрес типа атрибута (объект справочника "Типы атрибутов")</param>
 		/// <param name="BlockType">адрес типа блока (объект справочника "Типы блоков")</param>
 		/// <param name="sorder">Порядок следования в типе блока.Можно задать явно.Можно задать = 0, 
@@ -58,14 +59,14 @@ namespace Schemas
 		///		новому атрибуту присвоить последний максимальный номер +1</param>
 		/// <param name="mandatory">Обязательный к заполнению(true), иначе false(default)</param>
 		/// <returns>адрес добавленного объекта</returns>
-		public abstract BlockAddress CreateAttribute(string name, BlockAddress AttrType, BlockAddress BlockType, int sorder, bool mandatory = false);
+		public abstract BlockAddress CreateAttribute(string nameKey, string nameUI, BlockAddress AttrType, BlockAddress BlockType, int sorder, bool mandatory = false);
 
 		/// <summary>
-		/// Получение списка имён атрибутов типа блока.
+		/// Получение списка ключей атрибутов типа блока.
 		/// </summary>
 		/// <param name="BlockType">адрес типа блока (объект справочника "Типы блоков")</param>
-		/// <returns>список имён атрибутов</returns>
-		public abstract List<string> GetFildsNames(BlockAddress BlockType);
+		/// <returns>список ключей атрибутов</returns>
+		public abstract List<string> GetFildsNameKey(BlockAddress BlockType);
 
 		/// <summary>
 		/// Получение коллекции атрибутов типа блока.

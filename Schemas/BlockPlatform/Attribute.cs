@@ -10,7 +10,8 @@ namespace Schemas.BlockPlatform
 	public class Attribute
 	{
 		private BlockAddress _ma_id;
-		private string _name = "";
+		private string _nameKey = "";
+		private string _nameUI = "";
 		private enAttrTypes _mt;
 		private BlockType _bt;
 		private bool _mandatory = false;
@@ -22,9 +23,14 @@ namespace Schemas.BlockPlatform
 		public BlockAddress AttrID { get { return _ma_id; } }
 
 		/// <summary>
+		/// Ключ атрибута
+		/// </summary>
+		public string NameKey { get { return _nameKey; } }
+
+		/// <summary>
 		/// Наименование атрибута
 		/// </summary>
-		public string Name { get { return _name; } }
+		public string NameUI { get { return _nameUI; } }
 
 		/// <summary>
 		/// Тип атрибута.
@@ -49,10 +55,11 @@ namespace Schemas.BlockPlatform
 		/// <summary>
 		/// Конструктор
 		/// </summary>
-		public Attribute(BlockAddress ma_id, string name, int mt, BlockType bt)
+		public Attribute(BlockAddress ma_id, string nameKey, string nameUI, int mt, BlockType bt)
 		{
 			_ma_id = ma_id;
-			_name = name;
+			_nameKey = nameKey;
+			_nameUI = nameUI;
 			_mt = (enAttrTypes)mt;
 			_bt = bt;
 			/*	if (created_at == null)
