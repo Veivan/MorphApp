@@ -1192,11 +1192,12 @@ namespace DirectDBconnector
 
 				var stmt =
 					"BEGIN TRANSACTION;\n" +
-					"CREATE TABLE IF NOT EXISTS mParagraphs_back (pg_id integer PRIMARY KEY, \n" +
-						"doc_id integer, created_at DATETIME DEFAULT CURRENT_TIMESTAMP);\n" +
-					"INSERT INTO mParagraphs_back SELECT pg_id, doc_id, created_at FROM mParagraphs;\n" +
-					"DROP TABLE mParagraphs;\n" +
-					"ALTER TABLE mParagraphs_back RENAME TO mParagraphs;\n" +
+					"CREATE TABLE IF NOT EXISTS mAttributes_back (ma_id integer PRIMARY KEY, \n" +
+						"namekey text, nameui text, mt_id integer, bt_id integer, sorder integer, mandatory integer);\n" +
+					"INSERT INTO mAttributes_back(ma_id, namekey, nameui, mt_id, bt_id, sorder, mandatory) \n" +
+					"SELECT ma_id, namekey, nameui, mt_id, bt_id, sorder, mandatory FROM mAttributes;\n" +
+					"DROP TABLE mAttributes;\n" +
+					"ALTER TABLE mAttributes_back RENAME TO mAttributes;\n" +
 					"COMMIT;\n";
 				m_sqlCmd.CommandText = stmt;
 				m_sqlCmd.ExecuteNonQuery();
@@ -1215,7 +1216,9 @@ namespace DirectDBconnector
 			try
 			{
 				var stmt =
-					"ALTER TABLE mAttributes ADD COLUMN nameui text;";
+					"ALTER TABLE mAttributes ADD COLUMN namekey text;\n"
+					+ "ALTER TABLE mAttributes ADD COLUMN nameui text;\n"
+					+ "UPDATE mAttributes SET namekey = name;";
 				m_sqlCmd.CommandText = stmt;
 				m_sqlCmd.ExecuteNonQuery();
 			}
