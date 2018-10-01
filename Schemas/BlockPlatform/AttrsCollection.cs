@@ -9,14 +9,14 @@ namespace Schemas.BlockPlatform
 	/// </summary>
 	public class AttrsCollection
 	{
-		private List<Attribute> attrs = new List<Attribute>();
+		private List<BlockAttribute> attrs = new List<BlockAttribute>();
 
 	
-		public List<Attribute> Attrs
+		public List<BlockAttribute> Attrs
 			{
 				get
 				{
-					var ret = new List<Attribute>(attrs);
+					var ret = new List<BlockAttribute>(attrs);
 					return ret;
 				}
 
@@ -25,7 +25,7 @@ namespace Schemas.BlockPlatform
 		/// <summary>
 		/// Получение атрибута по индексу.
 		/// </summary>
-		public Attribute this[int index]
+		public BlockAttribute this[int index]
 		{
 			get
 			{
@@ -36,7 +36,7 @@ namespace Schemas.BlockPlatform
 		/// <summary>
 		/// Получение атрибута по ключу.
 		/// </summary>
-		public Attribute this[string nameKey]
+		public BlockAttribute this[string nameKey]
 		{
 			get
 			{
@@ -44,7 +44,7 @@ namespace Schemas.BlockPlatform
 			}
 		}
 
-		public void AddElement(Attribute attr)
+		public void AddElement(BlockAttribute attr)
 		{
 			if (!attrs.Contains(attr))
 				attrs.Add(attr);

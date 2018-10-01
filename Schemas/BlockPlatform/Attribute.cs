@@ -7,40 +7,40 @@ namespace Schemas.BlockPlatform
 	/// <summary>
 	/// Класс представляет атрибут блока.
 	/// </summary>
-	public class Attribute
+	public class BlockAttribute
 	{
-		private BlockAddress _ma_id;
-		private string _nameKey = "";
-		private string _nameUI = "";
-		private enAttrTypes _mt;
-		private BlockType _bt;
-		private bool _mandatory = false;
+		private BlockAddress ma_id;
+		private string nameKey = "";
+		private string nameUI = "";
+		private enAttrTypes mt;
+		private BlockType bt;
+		private bool mandatory = false;
 		private int sorder = 0;
 
 		/// <summary>
 		/// Идентификатор БД.
 		/// </summary>
-		public BlockAddress AttrID { get { return _ma_id; } }
+		public BlockAddress AttrID { get { return ma_id; } }
 
 		/// <summary>
 		/// Ключ атрибута
 		/// </summary>
-		public string NameKey { get { return _nameKey; } }
+		public string NameKey { get { return nameKey; } set { nameKey = value; } }
 
 		/// <summary>
 		/// Наименование атрибута
 		/// </summary>
-		public string NameUI { get { return _nameUI; } }
+		public string NameUI { get { return nameUI; } set { nameUI = value; } }
 
 		/// <summary>
 		/// Тип атрибута.
 		/// </summary>
-		public enAttrTypes AttrType { get { return _mt; } }
+		public enAttrTypes AttrType { get { return mt; } set { mt = value; } }
 
 		/// <summary>
 		/// Тип блока.
 		/// </summary>
-		public BlockType BlockType { get { return _bt; } }
+		public BlockType BlockType { get { return bt; } set { bt = value; } }
 
 		/// <summary>
 		/// Порядок следования в типе блока.
@@ -50,18 +50,18 @@ namespace Schemas.BlockPlatform
 		/// <summary>
 		/// Обязательный к заполнению.
 		/// </summary>
-		public bool Mandatory { get { return _mandatory; } set { _mandatory = value; } }
+		public bool Mandatory { get { return mandatory; } set { mandatory = value; } }
 
 		/// <summary>
 		/// Конструктор
 		/// </summary>
-		public Attribute(BlockAddress ma_id, string nameKey, string nameUI, int mt, BlockType bt)
+		public BlockAttribute(BlockAddress _ma_id, string _nameKey, string _nameUI, int _mt, BlockType _bt)
 		{
-			_ma_id = ma_id;
-			_nameKey = nameKey;
-			_nameUI = nameUI;
-			_mt = (enAttrTypes)mt;
-			_bt = bt;
+			ma_id = _ma_id;
+			nameKey = _nameKey;
+			nameUI = _nameUI;
+			mt = (enAttrTypes)_mt;
+			bt = _bt;
 			/*	if (created_at == null)
 					_created_at = DateTime.Now;
 				else

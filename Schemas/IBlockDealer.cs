@@ -53,6 +53,12 @@ namespace Schemas
 		#region Функции для работы с атрибутами типов блоков
 
 		/// <summary>
+		/// Получение списка типов атрибутов.
+		/// </summary>
+		/// <returns>список типов атрибутов</returns>
+		public abstract List<AttrType> GetAllAttrTypes();
+
+		/// <summary>
 		/// Создание нового атрибута типа блоков.
 		/// </summary>
 		/// <param name="nameKey">Ключ атрибута</param>
@@ -79,6 +85,12 @@ namespace Schemas
 		/// <param name="BlockType">адрес типа блока (объект справочника "Типы блоков")</param>
 		/// <returns>коллекция имён атрибутов</returns>
 		public abstract AttrsCollection GetAttrsCollection(BlockAddress BlockType);
+
+		/// <summary>
+		/// Обновление параметров атрибута в хранилище.
+		/// </summary>
+		/// <param name="attr">объект типа BlockAttribute</param>
+		public abstract void AttributeUpdate(BlockAttribute attr);
 
 		#endregion
 

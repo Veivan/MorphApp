@@ -49,6 +49,13 @@ namespace DirectDBconnector
 		#endregion
 
 		#region Функции для работы с атрибутами типов блоков
+
+		public override List<AttrType> GetAllAttrTypes()
+		{
+			List<AttrType> result = dbConnector.GetAllAttrTypes(); ;
+			return result;
+		}
+
 		public override BlockAddress CreateAttribute(string nameKey, string nameUI, long AttrType, long BlockType, int sorder, bool mandatory = false)
 		{
 			BlockAddress result = dbConnector.dbCreateAttribute(nameKey, nameUI, AttrType, BlockType, sorder, mandatory);
@@ -66,6 +73,10 @@ namespace DirectDBconnector
 			return dbConnector.dbGetAttrsCollection(BlockType);
 		}
 
+		public override void AttributeUpdate(BlockAttribute attr)
+		{
+			dbConnector.AttributeUpdate(attr);
+		}
 
 		#endregion
 

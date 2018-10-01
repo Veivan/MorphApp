@@ -56,6 +56,7 @@ namespace SagaTest
 		#endregion
 
 		#region Функции для работы с атрибутами типов блоков
+
 		[TestMethod]
 		public void Test_CreateAttribute()
 		{
@@ -72,7 +73,7 @@ namespace SagaTest
 			Console.WriteLine("Attrs : " + res);
 			Assert.AreNotEqual(null, reslist);
 		}
-		
+
 		#endregion
 
 		#region Функции для работы с Блоками

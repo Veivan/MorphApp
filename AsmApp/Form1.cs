@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using Schemas.BlockPlatform;
 using DirectDBconnector;
 using TMorph.Common;
+using AsmApp.Dialogs;
 
 namespace AsmApp
 {
@@ -44,7 +45,7 @@ namespace AsmApp
 			};*/
 		}
 
-		private IEnumerable<Schemas.BlockPlatform.Attribute> GetBlockAttrs(long btId = 0)
+		private IEnumerable<BlockAttribute> GetBlockAttrs(long btId = 0)
 		{
 			if (btId <= 0)
 				return null;
@@ -52,7 +53,7 @@ namespace AsmApp
 			var collect = lowStore.GetAttrsCollection(btId);
 			/*
 			var collect = new AttrsCollection();
-			collect.AddElement(new Schemas.BlockPlatform.Attribute(1, "qq" + btId, 1, new BlockType(btId, "qqb", "")));
+			collect.AddElement(new BlockAttribute(1, "qq" + btId, 1, new BlockType(btId, "qqb", "")));
 			*/
 			return collect.Attrs;
 		}
@@ -71,7 +72,6 @@ namespace AsmApp
 
 		private void RenameToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			//MessageBox.Show("qq");
 			if (listBoxBlockTypes.SelectedIndex < 0) return;
 
 			var newVal = Utils.InputBox("Переименование типа блока", "Введите новое наименование типа блока", "");
@@ -85,5 +85,33 @@ namespace AsmApp
 			listBoxBlockTypes.DataSource = GetBlockTypes();
 			listBoxBlockTypes.SelectedIndex = position;
 		}
+
+		private void toolStripMenuAttrsAdd_Click(object sender, EventArgs e)
+		{
+			var SelectedBlockType = (BlockType)listBoxBlockTypes.SelectedItem;
+			var attrEditDialog = new AttrEdit();
+			attrEditDialog.InitData(SelectedBlockType, null);
+			attrEditDialog.ShowDialog();
+			if (attrEditDialog.DialogResult == DialogResult.OK)
+			{
+				//MessageBox.Show("Ok");
+				listBoxAttrs.DataSource = GetBlockAttrs(SelectedBlockType.BlockTypeID);
+			}
+		}
+		private void toolStripMenuAttrsEdit_Click(object sender, EventArgs e)
+		{
+			var SelectedItem = (BlockAttribute)listBoxAttrs.SelectedItem;
+			if (SelectedItem == null) return;
+
+			var SelectedBlockType = (BlockType)listBoxBlockTypes.SelectedItem;
+			var attrEditDialog = new AttrEdit();
+			attrEditDialog.InitData(SelectedBlockType, SelectedItem);
+			attrEditDialog.ShowDialog();
+			if (attrEditDialog.DialogResult == DialogResult.OK)
+			{
+				listBoxAttrs.DataSource = GetBlockAttrs(SelectedBlockType.BlockTypeID);
+			}
+		}
+
 	}
 }

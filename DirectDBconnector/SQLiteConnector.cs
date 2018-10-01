@@ -7,8 +7,6 @@ using System.Data.SQLite;
 using Schemas;
 using Schemas.BlockPlatform;
 
-using Attribute = Schemas.BlockPlatform.Attribute;
-
 namespace DirectDBconnector
 {
 	public enum OpersDB { odNone, odSelect, odInsert, odUpdate, odDelete };
@@ -1558,12 +1556,35 @@ namespace DirectDBconnector
 		#endregion
 
 		#region Функции для работы с атрибутами типов блоков
+
+		public List<AttrType> GetAllAttrTypes()
+		{
+			var attrtypes = new List<AttrType>();
+			try
+			{
+				m_sqlCmd.CommandText = "SELECT mt_id, name FROM mAttrTypes ORDER BY mt_id;";
+				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
+				while (r.Read())
+				{
+					var attrtype = new AttrType(r.GetInt64(0), r.GetString(1));
+					attrtypes.Add(attrtype);
+				}
+				r.Close();
+			}
+			catch (SQLiteException ex)
+			{
+				Console.WriteLine("GetAllAttrTypes Error: " + ex.Message);
+			}
+			return attrtypes;
+		}
+
 		public long dbCreateAttribute(string nameKey, string nameUI, long AttrType, long BlockType, int sorder, bool mandatory = false)
 		{
 			long result = -1;
 			try
 			{
-				m_sqlCmd.CommandText = string.Format("INSERT INTO mAttributes(ma_id, namekey, nameUI, mt_id, bt_id, sorder, mandatory) VALUES(NULL, '{0}', {1}, {2}, {3}, {4})",
+				m_sqlCmd.CommandText = string.Format(
+					"INSERT INTO mAttributes(ma_id, namekey, nameUI, mt_id, bt_id, sorder, mandatory) VALUES(NULL, '{0}', '{1}', {2}, {3}, {4}, {5})",
 					nameKey, nameUI, AttrType, BlockType, sorder, mandatory == false ? 0 : 1);
 				m_sqlCmd.ExecuteNonQuery();
 				result = m_dbConn.LastInsertRowId;
@@ -1637,7 +1658,7 @@ namespace DirectDBconnector
 				while (r.Read())
 				{
 					var bt = new BlockType(r.GetInt64(4), r.GetString(6), r.GetString(7));
-					var attr = new Attribute(r.GetInt64(0), r.GetString(1), r.GetString(2), r.GetInt32(3), bt);
+					var attr = new BlockAttribute(r.GetInt64(0), r.GetString(1), r.GetString(2), r.GetInt32(3), bt);
 					attr.Order = r.GetInt32(5);
 					attrs.AddElement(attr);
 				}
@@ -1649,6 +1670,24 @@ namespace DirectDBconnector
 			}
 			return attrs;
 		}
+
+		public void AttributeUpdate(BlockAttribute attr)
+		{
+			try
+			{
+				m_sqlCmd.CommandText = string.Format(
+					"UPDATE mAttributes SET namekey = '{0}', nameui = '{1}', mt_id = {2}, bt_id = {3}, sorder = {4}, mandatory = {5} WHERE ma_id = {6}",
+					attr.NameKey, attr.NameUI, (int)attr.AttrType, attr.BlockType.BlockTypeID, attr.Order, attr.Mandatory == false ? 0 : 1, attr.AttrID);
+				m_sqlCmd.Parameters.Clear();
+				m_sqlCmd.ExecuteNonQuery();
+			}
+			catch (SQLiteException ex)
+			{
+				Console.WriteLine("dbAttrTypeUpdate Error: " + ex.Message);
+				throw ex;
+			}
+		}
+
 		#endregion
 
 		#region Функции для работы с Блоками
