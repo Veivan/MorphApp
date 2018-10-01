@@ -11,6 +11,7 @@ using System.Windows.Forms;
 //using LogicProcessor;
 using Schemas.BlockPlatform;
 using DirectDBconnector;
+using TMorph.Common;
 
 namespace AsmApp
 {
@@ -70,25 +71,19 @@ namespace AsmApp
 
 		private void RenameToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			MessageBox.Show("qq");
+			//MessageBox.Show("qq");
 			if (listBoxBlockTypes.SelectedIndex < 0) return;
+
+			var newVal = Utils.InputBox("Переименование типа блока", "Введите новое наименование типа блока", "");
+			if (newVal == "")
+				return;
+
 			var SelectedItem = (BlockType)listBoxBlockTypes.SelectedItem;
-
-			/*  
-
-			   var tmpValue = listBoxRooms.Items[listBoxRooms.SelectedIndex].ToString();
-			   RoomDisplayForm newRoomDisplayForm = new RoomDisplayForm();
-			   newRoomDisplayForm.value = tmpValue;
-			   newRoomDisplayForm.ShowDialog();
-
-			   //TODO: inside "newRoomDisplayForm" set the value to the textbox
-			   // ie.: myValueTextBox.Text = this.value;
-
-			   if(newRoomDisplayForm.DialogResult == DialogResult.OK)
-			   {
-				  // replace the selected item with the new value
-				  listBoxRooms.Items[listBoxRooms.SelectedIndex] = newRoomDisplayForm.value;
-			   }*/
+			var newBT = new BlockType(SelectedItem.BlockTypeID, SelectedItem.NameKey, newVal);
+			lowStore.BlockTypeChangeStrings(newBT);
+			var position = listBoxBlockTypes.SelectedIndex;
+			listBoxBlockTypes.DataSource = GetBlockTypes();
+			listBoxBlockTypes.SelectedIndex = position;
 		}
 	}
 }

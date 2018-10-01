@@ -42,6 +42,12 @@ namespace Schemas
 		/// <returns>список всех типов блоков</returns>
 		public abstract List<BlockType> GetAllBlockTypes();
 
+		/// <summary>
+		/// Обновление Ключа и Видимого наименования  типа блока в хранилище.
+		/// </summary>
+		/// <param name="blocktype">объект типа BlockType</param>
+		public abstract void BlockTypeChangeStrings(BlockType blocktype);
+
 		#endregion
 
 		#region Функции для работы с атрибутами типов блоков

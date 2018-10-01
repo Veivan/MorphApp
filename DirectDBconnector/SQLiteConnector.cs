@@ -1537,6 +1537,24 @@ namespace DirectDBconnector
 			return reslist;
 		}
 
+		public void dbBlockTypeChangeStrings(BlockType blocktype)
+		{
+			try
+			{
+				m_sqlCmd.CommandText = string.Format("UPDATE mBlockTypes SET namekey = @namekey, nameui = @nameui WHERE bt_id = {0}", blocktype.BlockTypeID);
+				m_sqlCmd.Parameters.Clear();
+				m_sqlCmd.Parameters.Add(new SQLiteParameter("@namekey", blocktype.NameKey));
+				m_sqlCmd.Parameters.Add(new SQLiteParameter("@nameui", blocktype.NameUI));
+				m_sqlCmd.ExecuteNonQuery();
+			}
+			catch (SQLiteException ex)
+			{
+				Console.WriteLine("dbBlockTypeChangeStrings Error: " + ex.Message);
+				throw ex;
+			}
+		}
+
+
 		#endregion
 
 		#region Функции для работы с атрибутами типов блоков
@@ -1612,7 +1630,7 @@ namespace DirectDBconnector
 			var attrs = new AttrsCollection();
 			try
 			{
-				m_sqlCmd.CommandText = 
+				m_sqlCmd.CommandText =
 					string.Format("SELECT A.ma_id, A.namekey, A.nameui, A.mt_id, A.bt_id, A.sorder, B.namekey, B.nameui FROM mAttributes A " +
 					" JOIN mBlockTypes B ON B.bt_id = A.bt_id WHERE A.bt_id = {0} ORDER BY A.sorder", blockType);
 				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
@@ -1913,7 +1931,7 @@ namespace DirectDBconnector
 				m_sqlCmd.CommandText = String.Format("SELECT blockdata FROM mFactHeap F JOIN mBlocks B ON B.fh_id = F.fh_id " +
 					"JOIN mDicts D ON D.b_id = B.b_id WHERE D.md_id = {0}", addr);
 				var executeScalar = m_sqlCmd.ExecuteScalar();
-				if (executeScalar != null && executeScalar != DBNull.Value) 
+				if (executeScalar != null && executeScalar != DBNull.Value)
 				{
 					result = (byte[])executeScalar;
 				}

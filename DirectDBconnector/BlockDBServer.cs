@@ -39,6 +39,13 @@ namespace DirectDBconnector
 		{
 			return dbConnector.dbGetAllBlockTypes();
 		}
+
+		public override void BlockTypeChangeStrings(BlockType blocktype)
+		{
+			dbConnector.dbBlockTypeChangeStrings(blocktype);
+		}
+
+
 		#endregion
 
 		#region Функции для работы с атрибутами типов блоков

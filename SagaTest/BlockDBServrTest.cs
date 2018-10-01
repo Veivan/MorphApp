@@ -42,7 +42,17 @@ namespace SagaTest
 			Assert.AreNotEqual(null, res);
 		}
 
-		
+		[TestMethod]
+		public void Test_BlockTypeChangeStrings()
+		{
+			var res = DBserver.CreateBlockType("Cabbige", "Капуста");
+			res.NameUI = res.NameUI + "бебе";
+			DBserver.BlockTypeChangeStrings(res);
+			var res2 = DBserver.GetBlockTypeByAddr(res.BlockTypeID);
+			Assert.AreEqual(res.NameUI, res2.NameUI);
+		}
+
+
 		#endregion
 
 		#region Функции для работы с атрибутами типов блоков
