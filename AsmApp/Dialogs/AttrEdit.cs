@@ -36,15 +36,17 @@ namespace AsmApp.Dialogs
 				edNameUI.Text = attr.NameUI;
 				edOrder.Text = attr.Order.ToString();
 				cbMandatory.Checked = attr.Mandatory;
-				cbAttrTypes.SelectedItem = attr.AttrType;
 			}
 		}
 
 		protected override void OnLoad(EventArgs e)
 		{
 			base.OnLoad(e);
-			cbAttrTypes.DisplayMember = "Name";
 			cbAttrTypes.DataSource = GetAttrTypes();
+			cbAttrTypes.DisplayMember = "Name";
+			cbAttrTypes.ValueMember = "Type";
+			if (attr != null)
+				cbAttrTypes.SelectedValue = attr.AttrType;
 		}
 
 		private IEnumerable<AttrType> GetAttrTypes()
