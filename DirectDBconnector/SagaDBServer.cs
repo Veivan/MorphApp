@@ -25,8 +25,15 @@ namespace DirectDBconnector
                     var created_at = rval.dtable.Rows[i].Field<DateTime?>("created_at");
                     if (created_at == null)
                         created_at = DateTime.Now;
-                    var cMap = new ContainerMap(ct_id, name, created_at, parent_id);
-                    rval.list.Add(new ContainerNode(cMap));
+					
+					long _order = 0;
+					long _fh_id = -1;
+					long _predecessor = -1;
+					long _successor = -1;
+					var cMap = new ContainerMap(name, ct_id, null, parent_id, _order,
+						_fh_id, _predecessor, _successor, created_at);
+
+					rval.list.Add(new ContainerNode(cMap));
                 }
             }
             return rval;

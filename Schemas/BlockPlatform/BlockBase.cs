@@ -9,66 +9,73 @@ namespace Schemas.BlockPlatform
 	/// </summary>
 	public class BlockBase
 	{
-		private BlockAddress _b_id;
-		private BlockType _bt;
-		private BlockAddress _parent = 0;
-		private long _treeorder = 0;
-		private BlockAddress _fh_id = 0;
-		private BlockAddress _predecessor = 0;
-		private BlockAddress _successor = 0;
+		protected BlockAddress b_id;
+		protected BlockType bt;
+		protected DateTime created_at;
+		protected BlockAddress parent = 0;
+		protected long treeorder = 0;
+		protected BlockAddress fh_id = 0;
+		protected BlockAddress predecessor = 0;
+		protected BlockAddress successor = 0;
 
 		/// <summary>
 		/// Идентификатор БД.
 		/// </summary>
-		public BlockAddress BlockID { get { return _b_id; } }
+		public BlockAddress BlockID { get { return b_id; } }
 
 		/// <summary>
 		/// Тип блока.
 		/// </summary>
-		public BlockType BlockType { get { return _bt; } }
+		public BlockType BlockType { get { return bt; } }
 
 		/// <summary>
 		/// Адрес блока, являющегося Родителем для текущего блока.
 		/// </summary>
-		public BlockAddress ParentID { get { return _parent; } }
+		public BlockAddress ParentID { get { return parent; } }
 
 		/// <summary>
 		/// Порядок следования блока в дереве.
 		/// </summary>
-		public long Order { get { return _treeorder; } }
+		public long Order { get { return treeorder; } }
 
 		/// <summary>
 		/// Адрес фактических данных блока.
 		/// </summary>
-		public BlockAddress FactID { get { return _fh_id; } }
+		public BlockAddress FactID { get { return fh_id; } }
 
 		/// <summary>
 		/// Поддержка версионности. Предшественник.
 		/// </summary>
-		public BlockAddress PredecessorID { get { return _predecessor; } }
+		public BlockAddress PredecessorID { get { return predecessor; } }
 
 		/// <summary>
 		/// Поддержка версионности. Последователь.
 		/// </summary>
-		public BlockAddress SuccessorID { get { return _successor; } }
+		public BlockAddress SuccessorID { get { return successor; } }
+
+		/// <summary>
+		/// Дата создания.
+		/// </summary>
+		public DateTime Created { get { return created_at; } }
 
 		/// <summary>
 		/// Конструктор
 		/// </summary>
-		public BlockBase(BlockAddress b_id, BlockAddress bt, string btnamekey, string btnameUI, BlockAddress parent, long order, BlockAddress fh_id, BlockAddress predecessor, BlockAddress successor)
+		public BlockBase(BlockAddress _b_id, BlockType _bt, BlockAddress _parent, long _order, 
+			BlockAddress _fh_id, BlockAddress _predecessor, BlockAddress _successor, DateTime? _created_at = null)
 		{
-			_b_id = b_id;
-			_bt = new BlockType(bt, btnamekey, btnameUI);
-			_parent = parent;
-			_treeorder = order;
-			_fh_id = fh_id;
-			_predecessor = predecessor;
-			_successor = successor;
-			/*	if (created_at == null)
-					_created_at = DateTime.Now;
-				else
-					_created_at = (DateTime)created_at;
-			} */
+			b_id = _b_id;
+			bt = _bt;
+			parent = _parent;
+			treeorder = _order;
+			fh_id = _fh_id;
+			predecessor = _predecessor;
+			successor = _successor;
+			if (_created_at == null)
+				created_at = DateTime.Now;
+			else
+				created_at = (DateTime)_created_at;
 		}
 	}
 }
+

@@ -206,7 +206,7 @@ namespace MorphApp
         {
             var aNode = treeView1.SelectedNode as MorphNode;
             if (aNode == null) return;
-            if (aNode.NodeType != clNodeType.clnContainer || aNode.bdID == Session.MainStroreID)
+            if (aNode.NodeType != clNodeType.clnContainer || aNode.bdID == Session.MainStoreID)
                 return;
             string result = Microsoft.VisualBasic.Interaction.InputBox("Введите имя документа:");
             if (String.IsNullOrEmpty(result))

@@ -1494,7 +1494,6 @@ namespace DirectDBconnector
 			return result;
 		}
 
-
 		public BlockType dbGetBlockTypeByNameKey(string nameKey)
 		{
 			BlockType result = null;
@@ -1745,7 +1744,8 @@ namespace DirectDBconnector
 					var fh_id = r[5] as long? ?? 0;
 					var predecessor = r[6] as long? ?? 0;
 					var successor = r[7] as long? ?? 0;
-					result = new BlockBase(addr, r.GetInt64(1), r.GetString(2), r.GetString(8), r.GetInt64(3), r.GetInt64(4), fh_id, predecessor, successor);
+					var bt = new BlockType(r.GetInt64(1), r.GetString(2), r.GetString(8));
+					result = new BlockBase(addr, bt, r.GetInt64(3), r.GetInt64(4), fh_id, predecessor, successor);
 				}
 				r.Close();
 			}
@@ -2083,14 +2083,18 @@ namespace DirectDBconnector
 		/// </summary>
 		/// <param name="list_ids">список ID родительских контейнеров</param>
 		/// <returns>DataTable</returns>
-		public DataTable GetChildrenInContainerList2(List<string> list_ids)
+		public DataTable dbGetChildrenInContainerList(List<string> list_ids)
 		{
 			DataTable dTable = new DataTable();
 			string result = string.Join(",", list_ids.ToArray());
 			if (String.IsNullOrEmpty(result))
 				return dTable;
 
-			var stmnt = string.Format("SELECT ct_id, created_at, name, parent_id FROM mContainers WHERE parent_id IN ({0})", result);
+			var stmnt = string.Format("SELECT B.b_id, B.bt_id, B.created_at, B.parent, B.treeorder, B.predecessor, B.successor, " +
+				" B.fh_id, F.blockdata FROM mBlocks B LEFT JOIN mFactHeap F ON F.fh_id = B.fh_id " +
+				" WHERE B.parent_id IN ({0})", result);
+
+			//var stmnt = string.Format("SELECT ct_id, created_at, name, parent_id FROM mContainers WHERE parent_id IN ({0})", result);
 			try
 			{
 				SQLiteDataAdapter adapter = new SQLiteDataAdapter(stmnt, m_dbConn);
@@ -2098,7 +2102,7 @@ namespace DirectDBconnector
 			}
 			catch (SQLiteException ex)
 			{
-				Console.WriteLine("GetChildrenInContainerList Error: " + ex.Message);
+				Console.WriteLine("dbGetChildrenInContainerList Error: " + ex.Message);
 			}
 			return dTable;
 		}

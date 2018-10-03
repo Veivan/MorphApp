@@ -33,12 +33,20 @@ namespace MorphApp
         public override void Refresh()
         {
             containers.Clear();
-            var MainMap = new ContainerMap(Session.MainStroreID, Session.MainStroreName, DateTime.Now, -1);
-            var maincontainer = new ContainerNode(MainMap);
+
+			long parent_id = -1;
+			long _order = 0;
+			long _fh_id = -1;
+			long _predecessor = -1;
+			long _successor = -1;
+			var MainMap = new ContainerMap(Session.MainStoreName, Session.MainStoreID, null, parent_id, _order,
+				_fh_id, _predecessor, _successor, DateTime.Now);
+
+			var maincontainer = new ContainerNode(MainMap);
             containers.Add(maincontainer);
 
             var list_ids = new List<string>();
-            list_ids.Add(Session.MainStroreID.ToString());
+            list_ids.Add(Session.MainStoreID.ToString());
             var list = dbServer.GetChildrenInContainerList(tpList.tplDBtable, list_ids);
             this.FillChildren(maincontainer, list);
         }
@@ -132,14 +140,16 @@ namespace MorphApp
                 var name = dTable.Rows[i].Field<string>("name");
                 var created_at = dTable.Rows[i].Field<DateTime?>("created_at");
 
-                var cMap = new ContainerMap(ct_id, name, created_at, parent_id);
-                var cont = new ContainerNode(cMap);
+				var cMap = new ContainerMap(name, ct_id, null, parent_id, 0,
+					-1, -1, -1, created_at);
+
+				var cont = new ContainerNode(cMap);
                 ContainerNode parentCont = in_parentCont;
                 if (in_parentCont == null)
                     parentCont = GetContainerByID(parent_id);
                 parentCont.AddChild(cont);
             }
-        }
+		}
 
         public override void FillDocs(ContainerNode in_cont, ComplexValue list)
 		{
