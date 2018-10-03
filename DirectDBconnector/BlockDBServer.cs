@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Data;
 
 using Schemas;
 using Schemas.BlockPlatform;
@@ -11,7 +10,7 @@ namespace DirectDBconnector
 {
 	/// <summary>
 	/// Класс, реализющий интерфейс IBlockDealer - методы работы с блоками.
-	/// Представляет API для работы с блоками.
+	/// Представляет API для работы с блоками напрямую в БД.
 	/// </summary>
 	public class BlockDBServer : IBlockDealer
 	{
@@ -234,6 +233,37 @@ namespace DirectDBconnector
 			var dDictBlob = new DictBlob(arbt);
 			dDictBlob.RemoveElements(subaddr);
 			dbConnector.dbDictPerfomElements(addr, dDictBlob.Data);
+		}
+
+		#endregion
+
+		#region Функции для работы с Контейнерами
+
+		public override long CreateContainer(string name, long parent, int treeorder)
+		{
+			BlockAddress result = dbConnector.dbCreateContainer(name, parent, treeorder);
+			return result;
+		}
+
+		public override ComplexValue GetChildrenInContainerList(tpList resulttype, List<string> list_ids)
+		{
+			ComplexValue rval = new ComplexValue();
+			rval.dtable = dbConnector.GetChildrenInContainerList(list_ids);
+			if (resulttype == tpList.tblList)
+			{
+				for (int i = 0; i < rval.dtable.Rows.Count; i++)
+				{
+					var ct_id = rval.dtable.Rows[i].Field<long>("ct_id");
+					var parent_id = rval.dtable.Rows[i].Field<long>("parent_id");
+					var name = rval.dtable.Rows[i].Field<string>("name");
+					var created_at = rval.dtable.Rows[i].Field<DateTime?>("created_at");
+					if (created_at == null)
+						created_at = DateTime.Now;
+					var cMap = new ContainerMap(ct_id, name, created_at, parent_id);
+					rval.list.Add(new ContainerNode(cMap));
+				}
+			}
+			return rval;
 		}
 
 		#endregion

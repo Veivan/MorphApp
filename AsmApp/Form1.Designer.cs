@@ -34,6 +34,7 @@
 			this.listBoxAttrs = new System.Windows.Forms.ListBox();
 			this.contextMenuAttrs = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuAttrsAdd = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuAttrsEdit = new System.Windows.Forms.ToolStripMenuItem();
 			this.panel2 = new System.Windows.Forms.Panel();
 			this.listBoxBlockTypes = new System.Windows.Forms.ListBox();
 			this.contextMenuBlockTypes = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -41,7 +42,15 @@
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.refreshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuAttrsEdit = new System.Windows.Forms.ToolStripMenuItem();
+			this.tabPage1 = new System.Windows.Forms.TabPage();
+			this.panel3 = new System.Windows.Forms.Panel();
+			this.btAddCont = new System.Windows.Forms.Button();
+			this.btAddDoc = new System.Windows.Forms.Button();
+			this.btParaDel = new System.Windows.Forms.Button();
+			this.btEdit = new System.Windows.Forms.Button();
+			this.btAddPara = new System.Windows.Forms.Button();
+			this.btRefresh = new System.Windows.Forms.Button();
+			this.treeView1 = new System.Windows.Forms.TreeView();
 			this.tabPage3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
 			this.splitContainer2.Panel1.SuspendLayout();
@@ -51,6 +60,8 @@
 			this.contextMenuBlockTypes.SuspendLayout();
 			this.tabControl1.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
+			this.tabPage1.SuspendLayout();
+			this.panel3.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tabPage3
@@ -62,7 +73,7 @@
 			this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPage3.Size = new System.Drawing.Size(560, 546);
 			this.tabPage3.TabIndex = 2;
-			this.tabPage3.Text = "Атрибуты блока";
+			this.tabPage3.Text = "Блоки и Атрибуты";
 			this.tabPage3.UseVisualStyleBackColor = true;
 			// 
 			// splitContainer2
@@ -96,7 +107,7 @@
             this.toolStripMenuAttrsAdd,
             this.toolStripMenuAttrsEdit});
 			this.contextMenuAttrs.Name = "contextMenuAttrs";
-			this.contextMenuAttrs.Size = new System.Drawing.Size(155, 70);
+			this.contextMenuAttrs.Size = new System.Drawing.Size(155, 48);
 			// 
 			// toolStripMenuAttrsAdd
 			// 
@@ -104,6 +115,13 @@
 			this.toolStripMenuAttrsAdd.Size = new System.Drawing.Size(154, 22);
 			this.toolStripMenuAttrsAdd.Text = "Добавить";
 			this.toolStripMenuAttrsAdd.Click += new System.EventHandler(this.toolStripMenuAttrsAdd_Click);
+			// 
+			// toolStripMenuAttrsEdit
+			// 
+			this.toolStripMenuAttrsEdit.Name = "toolStripMenuAttrsEdit";
+			this.toolStripMenuAttrsEdit.Size = new System.Drawing.Size(154, 22);
+			this.toolStripMenuAttrsEdit.Text = "Редактировать";
+			this.toolStripMenuAttrsEdit.Click += new System.EventHandler(this.toolStripMenuAttrsEdit_Click);
 			// 
 			// panel2
 			// 
@@ -142,6 +160,7 @@
 			// 
 			// tabControl1
 			// 
+			this.tabControl1.Controls.Add(this.tabPage1);
 			this.tabControl1.Controls.Add(this.tabPage3);
 			this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabControl1.Location = new System.Drawing.Point(0, 24);
@@ -167,12 +186,93 @@
 			this.refreshToolStripMenuItem.Text = "Refresh";
 			this.refreshToolStripMenuItem.Click += new System.EventHandler(this.refreshToolStripMenuItem_Click);
 			// 
-			// toolStripMenuAttrsEdit
+			// tabPage1
 			// 
-			this.toolStripMenuAttrsEdit.Name = "toolStripMenuAttrsEdit";
-			this.toolStripMenuAttrsEdit.Size = new System.Drawing.Size(154, 22);
-			this.toolStripMenuAttrsEdit.Text = "Редактировать";
-			this.toolStripMenuAttrsEdit.Click += new System.EventHandler(this.toolStripMenuAttrsEdit_Click);
+			this.tabPage1.Controls.Add(this.treeView1);
+			this.tabPage1.Controls.Add(this.panel3);
+			this.tabPage1.Location = new System.Drawing.Point(4, 22);
+			this.tabPage1.Name = "tabPage1";
+			this.tabPage1.Size = new System.Drawing.Size(560, 546);
+			this.tabPage1.TabIndex = 3;
+			this.tabPage1.Text = "Хранилище";
+			this.tabPage1.UseVisualStyleBackColor = true;
+			// 
+			// panel3
+			// 
+			this.panel3.Controls.Add(this.btAddCont);
+			this.panel3.Controls.Add(this.btAddDoc);
+			this.panel3.Controls.Add(this.btParaDel);
+			this.panel3.Controls.Add(this.btEdit);
+			this.panel3.Controls.Add(this.btAddPara);
+			this.panel3.Controls.Add(this.btRefresh);
+			this.panel3.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.panel3.Location = new System.Drawing.Point(0, 424);
+			this.panel3.Name = "panel3";
+			this.panel3.Size = new System.Drawing.Size(560, 122);
+			this.panel3.TabIndex = 23;
+			// 
+			// btAddCont
+			// 
+			this.btAddCont.Location = new System.Drawing.Point(211, 49);
+			this.btAddCont.Name = "btAddCont";
+			this.btAddCont.Size = new System.Drawing.Size(107, 23);
+			this.btAddCont.TabIndex = 5;
+			this.btAddCont.Text = "Новый контейнер";
+			this.btAddCont.UseVisualStyleBackColor = true;
+			// 
+			// btAddDoc
+			// 
+			this.btAddDoc.Location = new System.Drawing.Point(98, 49);
+			this.btAddDoc.Name = "btAddDoc";
+			this.btAddDoc.Size = new System.Drawing.Size(107, 23);
+			this.btAddDoc.TabIndex = 4;
+			this.btAddDoc.Text = "Новый документ";
+			this.btAddDoc.UseVisualStyleBackColor = true;
+			// 
+			// btParaDel
+			// 
+			this.btParaDel.Location = new System.Drawing.Point(5, 78);
+			this.btParaDel.Name = "btParaDel";
+			this.btParaDel.Size = new System.Drawing.Size(87, 26);
+			this.btParaDel.TabIndex = 3;
+			this.btParaDel.Text = "Удалить абзац";
+			this.btParaDel.UseVisualStyleBackColor = true;
+			// 
+			// btEdit
+			// 
+			this.btEdit.Location = new System.Drawing.Point(98, 14);
+			this.btEdit.Name = "btEdit";
+			this.btEdit.Size = new System.Drawing.Size(107, 26);
+			this.btEdit.TabIndex = 2;
+			this.btEdit.Text = "Редактировать";
+			this.btEdit.UseVisualStyleBackColor = true;
+			// 
+			// btAddPara
+			// 
+			this.btAddPara.Location = new System.Drawing.Point(5, 46);
+			this.btAddPara.Name = "btAddPara";
+			this.btAddPara.Size = new System.Drawing.Size(87, 26);
+			this.btAddPara.TabIndex = 1;
+			this.btAddPara.Text = "Новый абзац";
+			this.btAddPara.UseVisualStyleBackColor = true;
+			// 
+			// btRefresh
+			// 
+			this.btRefresh.Location = new System.Drawing.Point(5, 14);
+			this.btRefresh.Name = "btRefresh";
+			this.btRefresh.Size = new System.Drawing.Size(87, 26);
+			this.btRefresh.TabIndex = 0;
+			this.btRefresh.Text = "Обновить";
+			this.btRefresh.UseVisualStyleBackColor = true;
+			this.btRefresh.Click += new System.EventHandler(this.btRefresh_Click);
+			// 
+			// treeView1
+			// 
+			this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.treeView1.Location = new System.Drawing.Point(0, 0);
+			this.treeView1.Name = "treeView1";
+			this.treeView1.Size = new System.Drawing.Size(560, 424);
+			this.treeView1.TabIndex = 24;
 			// 
 			// Form1
 			// 
@@ -193,6 +293,8 @@
 			this.tabControl1.ResumeLayout(false);
 			this.menuStrip1.ResumeLayout(false);
 			this.menuStrip1.PerformLayout();
+			this.tabPage1.ResumeLayout(false);
+			this.panel3.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -213,6 +315,15 @@
 		private System.Windows.Forms.ContextMenuStrip contextMenuAttrs;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuAttrsAdd;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuAttrsEdit;
+		private System.Windows.Forms.TabPage tabPage1;
+		private System.Windows.Forms.Panel panel3;
+		private System.Windows.Forms.Button btAddCont;
+		private System.Windows.Forms.Button btAddDoc;
+		private System.Windows.Forms.Button btParaDel;
+		private System.Windows.Forms.Button btEdit;
+		private System.Windows.Forms.Button btAddPara;
+		private System.Windows.Forms.Button btRefresh;
+		private System.Windows.Forms.TreeView treeView1;
 	}
 }
 

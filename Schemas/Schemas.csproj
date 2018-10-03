@@ -79,6 +79,7 @@
     <Compile Include="BlockPlatform\DictBlob.cs" />
     <Compile Include="IAsmDealear.cs" />
     <Compile Include="IBlockDealer.cs" />
+    <Compile Include="IContainerPerformer.cs" />
     <Compile Include="IDataDealer.cs" />
     <Compile Include="IntfInnerStore.cs" />
     <Compile Include="ObjectMaps\ContainerNode.cs" />

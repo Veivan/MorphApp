@@ -177,7 +177,7 @@ namespace DirectDBconnector
 			}
 		}
 
-		#region Методы работы с контейнерами
+		#region Методы работы с контейнерами /// TODO удалить в дальнейшем
 		/// <summary>
 		/// Вставка в mContainers.
 		/// </summary>
@@ -1471,6 +1471,30 @@ namespace DirectDBconnector
 			return result;
 		}
 
+		/// <summary>
+		/// Получение адреса типа блока по ключу.
+		/// </summary>
+		/// <returns>long</returns>
+		public long dbGetSystemType(string namekey)
+		{
+			long result = -1;
+			try
+			{
+				m_sqlCmd.CommandText = "SELECT bt_id FROM mBlockTypes WHERE LOWER(namekey) = LOWER(@namekey)";
+				m_sqlCmd.Parameters.Clear();
+				m_sqlCmd.Parameters.Add(new SQLiteParameter("@namekey", namekey));
+				var executeScalar = m_sqlCmd.ExecuteScalar();
+				if (executeScalar != null)
+					result = (long)executeScalar;
+			}
+			catch (SQLiteException ex)
+			{
+				Console.WriteLine("dbGetSystemType Error: " + ex.Message);
+			}
+			return result;
+		}
+
+
 		public BlockType dbGetBlockTypeByNameKey(string nameKey)
 		{
 			BlockType result = null;
@@ -1860,7 +1884,7 @@ namespace DirectDBconnector
 			try
 			{
 				transaction = m_dbConn.BeginTransaction();
-				var typeOfDict = dbGetTypeOfDictionary();
+				var typeOfDict = dbGetSystemType("Dictionary");
 				m_sqlCmd.CommandText = string.Format("INSERT INTO mBlocks(b_id, bt_id, parent, treeorder) VALUES(NULL, '{0}', {1}, {2})",
 					typeOfDict, -1, 0);
 				m_sqlCmd.ExecuteNonQuery();
@@ -1904,20 +1928,6 @@ namespace DirectDBconnector
 				transaction.Rollback();
 				Console.WriteLine("dbCreateDictionary Error: " + ex.Message);
 			}
-			return result;
-		}
-
-		/// <summary>
-		/// Получение типа блока - "Справочник".
-		/// </summary>
-		/// <remarks>
-		/// Имееется встроенный тип блока - "Справочник" с атрибутом типа "множество ссылок на объекты".
-		/// В дальнейшем можно сделать механизм его идентифкации по-другому (например SELECT bt_id from mBlockTypes WHERE мнемокод = ...).
-		/// </remarks>
-		/// <returns>long</returns>
-		private long dbGetTypeOfDictionary()
-		{
-			long result = 3;
 			return result;
 		}
 
@@ -2044,6 +2054,55 @@ namespace DirectDBconnector
 
 		#endregion
 
+		#region Функции для работы с Контейнерами
 
+		public long dbCreateContainer(string name, long parent, int treeorder)
+		{
+			long result = -1;
+			SQLiteTransaction transaction = null;
+			try
+			{
+				transaction = m_dbConn.BeginTransaction();
+				var typeOfDict = dbGetSystemType("DataContainer");
+				m_sqlCmd.CommandText = string.Format("INSERT INTO mBlocks(b_id, bt_id, parent, treeorder) VALUES(NULL, '{0}', {1}, {2})",
+					typeOfDict, parent, treeorder);
+				m_sqlCmd.ExecuteNonQuery();
+				result = m_dbConn.LastInsertRowId;
+				transaction.Commit();
+			}
+			catch (SQLiteException ex)
+			{
+				transaction.Rollback();
+				Console.WriteLine("dbCreateContainer Error: " + ex.Message);
+			}
+			return result;
+		}
+
+		/// <summary>
+		/// Чтения дочерних контейнеров множества родительских контейнеров.
+		/// </summary>
+		/// <param name="list_ids">список ID родительских контейнеров</param>
+		/// <returns>DataTable</returns>
+		public DataTable GetChildrenInContainerList2(List<string> list_ids)
+		{
+			DataTable dTable = new DataTable();
+			string result = string.Join(",", list_ids.ToArray());
+			if (String.IsNullOrEmpty(result))
+				return dTable;
+
+			var stmnt = string.Format("SELECT ct_id, created_at, name, parent_id FROM mContainers WHERE parent_id IN ({0})", result);
+			try
+			{
+				SQLiteDataAdapter adapter = new SQLiteDataAdapter(stmnt, m_dbConn);
+				adapter.Fill(dTable);
+			}
+			catch (SQLiteException ex)
+			{
+				Console.WriteLine("GetChildrenInContainerList Error: " + ex.Message);
+			}
+			return dTable;
+		}
+
+		#endregion
 	}
 }

@@ -113,5 +113,24 @@ namespace AsmApp
 			}
 		}
 
+		private void btRefresh_Click(object sender, EventArgs e)
+		{
+			//store.Refresh();
+			//PopulateTreeView();
+		}
+
+		private void PopulateTreeView()
+		{
+		/*	treeView1.Nodes.Clear();
+			foreach (var cont in store.containers)
+			{
+				var aNode = new MorphNode(cont.Name);
+				aNode.NodeType = clNodeType.clnContainer;
+				aNode.bdID = cont.ContainerID;
+				PopulateTreeChildrenConts(cont, aNode);
+				PopulateTreeDocuments(cont, aNode);
+				treeView1.Nodes.Add(aNode);
+			}*/
+		}
 	}
 }
