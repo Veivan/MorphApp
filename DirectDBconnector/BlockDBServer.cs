@@ -182,6 +182,36 @@ namespace DirectDBconnector
 				return (T)attrval;
 		}
 
+		public override ComplexValue GetChildren(tpList resulttype, List<string> list_ids)
+		{
+			ComplexValue rval = new ComplexValue();
+			rval.dtable = dbConnector.dbGetChildren(list_ids);
+			/// TODO нужно задавать входной параметр - тип детей. Сделать объект - фабрику и генерить детей с нужным типом.
+			/*if (resulttype == tpList.tblList)
+			{
+				for (int i = 0; i < rval.dtable.Rows.Count; i++)
+				{
+					var b_id = rval.dtable.Rows[i].Field<long>("b_id");
+					var created_at = rval.dtable.Rows[i].Field<DateTime?>("created_at");
+					if (created_at == null)
+						created_at = DateTime.Now;
+					var parent = rval.dtable.Rows[i].Field<long>("parent");
+					var treeorder = rval.dtable.Rows[i].Field<long>("treeorder");
+					var predecessor = rval.dtable.Rows[i].Field<long>("predecessor");
+					var successor = rval.dtable.Rows[i].Field<long>("successor");
+					var fh_id = rval.dtable.Rows[i].Field<long>("fh_id");
+
+					var name = rval.dtable.Rows[i].Field<string>("name");
+
+
+					var cMap = new ContainerMap(name, b_id, typeOfDict, parent, treeorder,
+						fh_id, predecessor, successor, created_at);
+
+					rval.list.Add(new ContainerNode(cMap));
+				}
+			}*/
+			return rval;
+		}
 		#endregion
 
 		#region Функции для работы со Справочниками
@@ -233,47 +263,6 @@ namespace DirectDBconnector
 			var dDictBlob = new DictBlob(arbt);
 			dDictBlob.RemoveElements(subaddr);
 			dbConnector.dbDictPerfomElements(addr, dDictBlob.Data);
-		}
-
-		#endregion
-
-		#region Функции для работы с Контейнерами
-
-		public override long CreateContainer(string name, long parent, int treeorder)
-		{
-			BlockAddress result = dbConnector.dbCreateContainer(name, parent, treeorder);
-			return result;
-		}
-
-		public override ComplexValue GetChildrenInContainerList(tpList resulttype, List<string> list_ids)
-		{
-			var typeOfDict = dbConnector.dbGetBlockTypeByNameKey("DataContainer");
-			ComplexValue rval = new ComplexValue();
-			rval.dtable = dbConnector.dbGetChildrenInContainerList(list_ids);
-			if (resulttype == tpList.tblList)
-			{
-				for (int i = 0; i < rval.dtable.Rows.Count; i++)
-				{
-					var b_id = rval.dtable.Rows[i].Field<long>("b_id");
-					var created_at = rval.dtable.Rows[i].Field<DateTime?>("created_at");
-					if (created_at == null)
-						created_at = DateTime.Now;
-					var parent = rval.dtable.Rows[i].Field<long>("parent");
-					var treeorder = rval.dtable.Rows[i].Field<long>("treeorder");
-					var predecessor = rval.dtable.Rows[i].Field<long>("predecessor");
-					var successor = rval.dtable.Rows[i].Field<long>("successor");
-					var fh_id = rval.dtable.Rows[i].Field<long>("fh_id");
-
-					var name = rval.dtable.Rows[i].Field<string>("name");
-
-
-					var cMap = new ContainerMap(name, b_id, typeOfDict, parent, treeorder,
-						fh_id, predecessor, successor, created_at);
-
-					rval.list.Add(new ContainerNode(cMap));
-				}
-			}
-			return rval;
 		}
 
 		#endregion

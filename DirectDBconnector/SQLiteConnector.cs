@@ -1847,6 +1847,36 @@ namespace DirectDBconnector
 			return result;
 		}
 
+		/// <summary>
+		/// Чтения дочерних блоков множества родительских блоков.
+		/// Выбираются только прямые наследники (без ссылок)
+		/// </summary>
+		/// <param name="list_ids">список ID родительских блоков</param>
+		/// <returns>DataTable</returns>
+		public DataTable dbGetChildren(List<string> list_ids)
+		{
+			DataTable dTable = new DataTable();
+			string result = string.Join(",", list_ids.ToArray());
+			if (String.IsNullOrEmpty(result))
+				return dTable;
+			///TODO В дальнейшем для контейнеров надо брать дочерние контейнеры из атрибута Содержимое 
+
+			var stmnt = string.Format("SELECT B.b_id, B.bt_id, B.created_at, B.parent, B.treeorder, B.predecessor, B.successor, " +
+				" B.fh_id, F.blockdata FROM mBlocks B LEFT JOIN mFactHeap F ON F.fh_id = B.fh_id " +
+				" WHERE B.parent_id IN ({0})", result);
+
+			//var stmnt = string.Format("SELECT ct_id, created_at, name, parent_id FROM mContainers WHERE parent_id IN ({0})", result);
+			try
+			{
+				SQLiteDataAdapter adapter = new SQLiteDataAdapter(stmnt, m_dbConn);
+				adapter.Fill(dTable);
+			}
+			catch (SQLiteException ex)
+			{
+				Console.WriteLine("dbGetChildren Error: " + ex.Message);
+			}
+			return dTable;
+		}
 
 		#endregion
 
@@ -2054,59 +2084,5 @@ namespace DirectDBconnector
 
 		#endregion
 
-		#region Функции для работы с Контейнерами
-
-		public long dbCreateContainer(string name, long parent, int treeorder)
-		{
-			long result = -1;
-			SQLiteTransaction transaction = null;
-			try
-			{
-				transaction = m_dbConn.BeginTransaction();
-				var typeOfDict = dbGetSystemType("DataContainer");
-				m_sqlCmd.CommandText = string.Format("INSERT INTO mBlocks(b_id, bt_id, parent, treeorder) VALUES(NULL, '{0}', {1}, {2})",
-					typeOfDict, parent, treeorder);
-				m_sqlCmd.ExecuteNonQuery();
-				result = m_dbConn.LastInsertRowId;
-				transaction.Commit();
-			}
-			catch (SQLiteException ex)
-			{
-				transaction.Rollback();
-				Console.WriteLine("dbCreateContainer Error: " + ex.Message);
-			}
-			return result;
-		}
-
-		/// <summary>
-		/// Чтения дочерних контейнеров множества родительских контейнеров.
-		/// </summary>
-		/// <param name="list_ids">список ID родительских контейнеров</param>
-		/// <returns>DataTable</returns>
-		public DataTable dbGetChildrenInContainerList(List<string> list_ids)
-		{
-			DataTable dTable = new DataTable();
-			string result = string.Join(",", list_ids.ToArray());
-			if (String.IsNullOrEmpty(result))
-				return dTable;
-
-			var stmnt = string.Format("SELECT B.b_id, B.bt_id, B.created_at, B.parent, B.treeorder, B.predecessor, B.successor, " +
-				" B.fh_id, F.blockdata FROM mBlocks B LEFT JOIN mFactHeap F ON F.fh_id = B.fh_id " +
-				" WHERE B.parent_id IN ({0})", result);
-
-			//var stmnt = string.Format("SELECT ct_id, created_at, name, parent_id FROM mContainers WHERE parent_id IN ({0})", result);
-			try
-			{
-				SQLiteDataAdapter adapter = new SQLiteDataAdapter(stmnt, m_dbConn);
-				adapter.Fill(dTable);
-			}
-			catch (SQLiteException ex)
-			{
-				Console.WriteLine("dbGetChildrenInContainerList Error: " + ex.Message);
-			}
-			return dTable;
-		}
-
-		#endregion
 	}
 }
