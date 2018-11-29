@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-//using LogicProcessor;
 using Schemas.BlockPlatform;
 using DirectDBconnector;
 using TMorph.Common;
@@ -21,7 +20,8 @@ namespace AsmApp
 
 		// Работа с БД напрямую
 		BlockDBServer lowStore = new BlockDBServer();
-		//AssemblyServer store = new AssemblyServer();
+
+		ClientStoreMediator store = new ClientStoreMediator();
 
 		public Form1()
 		{
@@ -98,6 +98,7 @@ namespace AsmApp
 				listBoxAttrs.DataSource = GetBlockAttrs(SelectedBlockType.BlockTypeID);
 			}
 		}
+
 		private void toolStripMenuAttrsEdit_Click(object sender, EventArgs e)
 		{
 			var SelectedItem = (BlockAttribute)listBoxAttrs.SelectedItem;
@@ -115,7 +116,7 @@ namespace AsmApp
 
 		private void btRefresh_Click(object sender, EventArgs e)
 		{
-			//store.Refresh();
+			store.Refresh();
 			//PopulateTreeView();
 		}
 
