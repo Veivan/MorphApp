@@ -9,7 +9,7 @@ namespace SagaTest
 	[TestClass]
 	public class AsmServerTest
 	{
-		public AssemblyServer AsmServer = new AssemblyServer();
+		public StoreServer store = new StoreServer();
 		public BlockDBServer DBserver = new BlockDBServer();
 
 		[TestMethod]
@@ -17,7 +17,7 @@ namespace SagaTest
 		{
 			var nameKey = "Document";
 			var type = DBserver.GetBlockTypeByNameKey(nameKey);
-			var asm = AsmServer.CreateAssembly(type);
+			var asm = store.CreateAssembly(type);
 			Assert.AreNotEqual(null, asm);
 		}
 		
@@ -26,7 +26,7 @@ namespace SagaTest
 		{
 			var nameKey = "Document";
 			var type = DBserver.GetBlockTypeByNameKey(nameKey);
-			var asm = AsmServer.CreateAssembly(type);
+			var asm = store.CreateAssembly(type);
 			Assert.AreNotEqual(null, asm);
 		}
 

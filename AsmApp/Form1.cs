@@ -117,13 +117,13 @@ namespace AsmApp
 		private void btRefresh_Click(object sender, EventArgs e)
 		{
 			store.Refresh();
-			//PopulateTreeView();
+			PopulateTreeView();
 		}
 
 		private void PopulateTreeView()
 		{
-		/*	treeView1.Nodes.Clear();
-			foreach (var cont in store.containers)
+			treeView1.Nodes.Clear();
+			/*foreach (var cont in store.containers)
 			{
 				var aNode = new MorphNode(cont.Name);
 				aNode.NodeType = clNodeType.clnContainer;

@@ -70,7 +70,7 @@ namespace LogicProcessor
 			foreach (var child in src_children)
 			{
 				var chid = DBserver.CreateBlock(child.BlockType.BlockTypeID, child.ParentAssemblyID, (int)child.Treeorder);
-				child.RootBlock_id = chid;
+				//child.RootBlock_id = chid;
 				CreateChildrenRequrs(child.Children);
 			}
 		}

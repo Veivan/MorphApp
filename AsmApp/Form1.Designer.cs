@@ -29,6 +29,7 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
 			this.tabPage3 = new System.Windows.Forms.TabPage();
 			this.splitContainer2 = new System.Windows.Forms.SplitContainer();
 			this.listBoxAttrs = new System.Windows.Forms.ListBox();
@@ -40,9 +41,8 @@
 			this.contextMenuBlockTypes = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.RenameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabControl1 = new System.Windows.Forms.TabControl();
-			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-			this.refreshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabPage1 = new System.Windows.Forms.TabPage();
+			this.treeView1 = new System.Windows.Forms.TreeView();
 			this.panel3 = new System.Windows.Forms.Panel();
 			this.btAddCont = new System.Windows.Forms.Button();
 			this.btAddDoc = new System.Windows.Forms.Button();
@@ -50,7 +50,8 @@
 			this.btEdit = new System.Windows.Forms.Button();
 			this.btAddPara = new System.Windows.Forms.Button();
 			this.btRefresh = new System.Windows.Forms.Button();
-			this.treeView1 = new System.Windows.Forms.TreeView();
+			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+			this.refreshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabPage3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
 			this.splitContainer2.Panel1.SuspendLayout();
@@ -59,9 +60,9 @@
 			this.panel2.SuspendLayout();
 			this.contextMenuBlockTypes.SuspendLayout();
 			this.tabControl1.SuspendLayout();
-			this.menuStrip1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.panel3.SuspendLayout();
+			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tabPage3
@@ -169,23 +170,6 @@
 			this.tabControl1.Size = new System.Drawing.Size(568, 572);
 			this.tabControl1.TabIndex = 21;
 			// 
-			// menuStrip1
-			// 
-			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.refreshToolStripMenuItem});
-			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(568, 24);
-			this.menuStrip1.TabIndex = 22;
-			this.menuStrip1.Text = "menuStrip1";
-			// 
-			// refreshToolStripMenuItem
-			// 
-			this.refreshToolStripMenuItem.Name = "refreshToolStripMenuItem";
-			this.refreshToolStripMenuItem.Size = new System.Drawing.Size(58, 20);
-			this.refreshToolStripMenuItem.Text = "Refresh";
-			this.refreshToolStripMenuItem.Click += new System.EventHandler(this.refreshToolStripMenuItem_Click);
-			// 
 			// tabPage1
 			// 
 			this.tabPage1.Controls.Add(this.treeView1);
@@ -196,6 +180,14 @@
 			this.tabPage1.TabIndex = 3;
 			this.tabPage1.Text = "Хранилище";
 			this.tabPage1.UseVisualStyleBackColor = true;
+			// 
+			// treeView1
+			// 
+			this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.treeView1.Location = new System.Drawing.Point(0, 0);
+			this.treeView1.Name = "treeView1";
+			this.treeView1.Size = new System.Drawing.Size(560, 424);
+			this.treeView1.TabIndex = 24;
 			// 
 			// panel3
 			// 
@@ -266,13 +258,22 @@
 			this.btRefresh.UseVisualStyleBackColor = true;
 			this.btRefresh.Click += new System.EventHandler(this.btRefresh_Click);
 			// 
-			// treeView1
+			// menuStrip1
 			// 
-			this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.treeView1.Location = new System.Drawing.Point(0, 0);
-			this.treeView1.Name = "treeView1";
-			this.treeView1.Size = new System.Drawing.Size(560, 424);
-			this.treeView1.TabIndex = 24;
+			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.refreshToolStripMenuItem});
+			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+			this.menuStrip1.Name = "menuStrip1";
+			this.menuStrip1.Size = new System.Drawing.Size(568, 24);
+			this.menuStrip1.TabIndex = 22;
+			this.menuStrip1.Text = "menuStrip1";
+			// 
+			// refreshToolStripMenuItem
+			// 
+			this.refreshToolStripMenuItem.Name = "refreshToolStripMenuItem";
+			this.refreshToolStripMenuItem.Size = new System.Drawing.Size(58, 20);
+			this.refreshToolStripMenuItem.Text = "Refresh";
+			this.refreshToolStripMenuItem.Click += new System.EventHandler(this.refreshToolStripMenuItem_Click);
 			// 
 			// Form1
 			// 
@@ -281,6 +282,7 @@
 			this.ClientSize = new System.Drawing.Size(568, 596);
 			this.Controls.Add(this.tabControl1);
 			this.Controls.Add(this.menuStrip1);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "Form1";
 			this.Text = "Form1";
 			this.tabPage3.ResumeLayout(false);
@@ -291,10 +293,10 @@
 			this.panel2.ResumeLayout(false);
 			this.contextMenuBlockTypes.ResumeLayout(false);
 			this.tabControl1.ResumeLayout(false);
-			this.menuStrip1.ResumeLayout(false);
-			this.menuStrip1.PerformLayout();
 			this.tabPage1.ResumeLayout(false);
 			this.panel3.ResumeLayout(false);
+			this.menuStrip1.ResumeLayout(false);
+			this.menuStrip1.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

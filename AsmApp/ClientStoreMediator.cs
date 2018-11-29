@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Data;
-	
+
 using Schemas;
+using Schemas.BlockPlatform;
 using LogicProcessor;
 
 namespace AsmApp
@@ -14,7 +15,7 @@ namespace AsmApp
 	public class ClientStoreMediator
 	{
 		// Список контейнеров для клиента
-		public List<ContainerNode> containers = new List<ContainerNode>();
+		public List<AsmNode> containers = new List<AsmNode>();
 
 		StoreServer store = new StoreServer();
 
@@ -26,15 +27,8 @@ namespace AsmApp
 		{
 			containers.Clear();
 
-			long parent_id = -1;
-			long _order = 0;
-			long _fh_id = -1;
-			long _predecessor = -1;
-			long _successor = -1;
-			var MainMap = new ContainerMap(Session.MainStoreName, Session.MainStoreID, null, parent_id, _order,
-				_fh_id, _predecessor, _successor, DateTime.Now);
-
-			var maincontainer = new ContainerNode(MainMap);
+			var MainStore = new ContainerBase(Session.MainStoreName);
+			var maincontainer = new AsmNode(MainStore.Name, MainStore);
 			containers.Add(maincontainer);
 
 			var list_ids = new List<string>();
@@ -43,30 +37,32 @@ namespace AsmApp
 			this.FillChildren(maincontainer, list);
 		}
 
-		public void FillChildren(ContainerNode in_parentCont, ComplexValue list)
+		public void FillChildren(AsmNode in_parentCont, ComplexValue list)
 		{
 			DataTable dTable = list.dtable;
 			for (int i = 0; i < dTable.Rows.Count; i++)
 			{
+				/// TODO Тут надо пересмотреть - что возвращает метод?
 				var ct_id = dTable.Rows[i].Field<long>("ct_id");
 				var parent_id = dTable.Rows[i].Field<long>("parent_id");
 				var name = dTable.Rows[i].Field<string>("name");
 				var created_at = dTable.Rows[i].Field<DateTime?>("created_at");
 
-				var cMap = new ContainerMap(name, ct_id, null, parent_id, 0,
-					-1, -1, -1, created_at);
+				var container = new ContainerBase(name);
 
-				var cont = new ContainerNode(cMap);
+
+				var cont = new AsmNode(name, container);
+				/*
 				ContainerNode parentCont = in_parentCont;
 				if (in_parentCont == null)
 					parentCont = GetContainerByID(parent_id);
-				parentCont.AddChild(cont);
+				parentCont.AddChild(cont); */
 			}
 		}
 
 		#region Собственные непереопределяемые методы работы с хранилищем
 
-		/// <summary>
+		/*// <summary>
 		/// Поиск контейнера в хранилище по его ID.
 		/// </summary>
 		/// <param name="ContainerID">ID контейнера</param>
@@ -76,7 +72,7 @@ namespace AsmApp
 			var result = RecursGetContainerByID(containers, ContainerID);
 			return result;
 		}
-
+		*/
 		private ContainerNode RecursGetContainerByID(List<ContainerNode> containers, long ContainerID)
 		{
 			var result = containers.Where(x => x.ContainerID == ContainerID).FirstOrDefault();

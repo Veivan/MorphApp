@@ -11,44 +11,21 @@ namespace Schemas.BlockPlatform
 	/// <summary>
 	/// Базовый класс для сборок.
 	/// </summary>
-	public class AssemblyBase
+	public class AssemblyBase : BlockBase
 	{
-		private BlockAddress _rootBlock_id;
-		private BlockType _blockType;
 		private AttrsCollection _SysAttrs;
 		private AttrsCollection _UserAttrs;
 		private AssemblyBase templAsm;
 		private BlockAddress _parentAsmId = 0;
 		private long _treeorder = 0;
-		private List<AssemblyBase> children = new List<AssemblyBase>();
+
+		protected List<AssemblyBase> children = new List<AssemblyBase>();
 
 		#region Свойства
 		/// <summary>
 		/// Стартовый блок сборки.
 		/// </summary>
-		public long RootBlock_id
-		{
-			get
-			{
-				return _rootBlock_id;
-			}
-
-			set
-			{
-				_rootBlock_id = value;
-			}
-		}
-
-		/// <summary>
-		/// Тип сборки.
-		/// </summary>
-		public BlockType BlockType
-		{
-			get
-			{
-				return _blockType;
-			}
-		}
+		public long RootBlock_id { get { return this.BlockID;} }
 
 		/// <summary>
 		/// Коллекция системных атрибутов.
@@ -141,13 +118,15 @@ namespace Schemas.BlockPlatform
 		#endregion
 
 		#region Конструкторы
+
+
 		/// <summary>
 		/// Конструктор.
 		/// </summary>
 		/// <param name="blockType">тип сборки</param>
-		public AssemblyBase(BlockType blockType)
+		public AssemblyBase(BlockType blockType) :
+			base(-1, blockType, -1, 0, -1, -1, -1, DateTime.Now)
 		{
-			this._blockType = blockType;
 		}
 
 		/// <summary>
@@ -155,10 +134,9 @@ namespace Schemas.BlockPlatform
 		/// </summary>
 		/// <param name="blockType">тип сборки</param>
 		/// <param name="id">адрес стартового блока сборки</param>
-		public AssemblyBase(BlockType type, BlockAddress id)
+		public AssemblyBase(BlockType blockType, BlockAddress id) :
+			base(id, blockType, -1, 0, -1, -1, -1, DateTime.Now)
 		{
-			this._blockType = type;
-			this._rootBlock_id = id;
 		}
 
 		/// <summary>
@@ -167,10 +145,9 @@ namespace Schemas.BlockPlatform
 		/// <param name="templAsm">Сборка - образец/шаблон, на основе которой создаётся текущая сборка.</param>
 		/// <param name="id">адрес стартового блока сборки</param>
 		/// <param name="mode">признак, определяющий, сохранять ссылку на шаблон\образец или нет.</param>
-		public AssemblyBase(AssemblyBase templAsm, BlockAddress id, FOLLOWMODE mode)
+		public AssemblyBase(AssemblyBase templAsm, BlockAddress id, FOLLOWMODE mode) :
+			base(id, templAsm.BlockType, -1, 0, -1, -1, -1, DateTime.Now)
 		{
-			this._rootBlock_id = id;
-			this._blockType = templAsm.BlockType;
 			if (mode == FOLLOWMODE.Follow)
 				this.templAsm = templAsm;
 			CopyChildrenRequrs(this, templAsm.Children);
@@ -180,12 +157,9 @@ namespace Schemas.BlockPlatform
 		/// Конструктор.
 		/// </summary>
 		/// <param name="block">стартовый блок сборки.</param>
-		public AssemblyBase(BlockBase block)
+		public AssemblyBase(BlockBase block) :
+			base(block.BlockID, block.BlockType, block.ParentID, block.Order, -1, -1, -1, DateTime.Now)
 		{
-			this._rootBlock_id = block.BlockID;
-			this._blockType = block.BlockType;
-			this._parentAsmId = block.ParentID;
-			this._treeorder = block.Order;
 		}
 		#endregion
 
