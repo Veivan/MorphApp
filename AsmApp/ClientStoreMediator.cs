@@ -15,7 +15,7 @@ namespace AsmApp
 	public class ClientStoreMediator
 	{
 		// Список контейнеров для клиента
-		public List<AsmNode> containers = new List<AsmNode>();
+		public List<ContainerBase> containers = new List<ContainerBase>();
 
 		StoreServer store = new StoreServer();
 
@@ -28,16 +28,15 @@ namespace AsmApp
 			containers.Clear();
 
 			var MainStore = new ContainerBase(Session.MainStoreName);
-			var maincontainer = new AsmNode(MainStore.Name, MainStore);
-			containers.Add(maincontainer);
+			containers.Add(MainStore);
 
 			var list_ids = new List<string>();
 			list_ids.Add(Session.MainStoreID.ToString());
-			var list = store.GetChildrenInContainerList(tpList.tplDBtable, list_ids);
-			this.FillChildren(maincontainer, list);
+			var list = store.GetChildren(tpList.tplDBtable, list_ids);
+			this.FillChildren(MainStore, list);
 		}
 
-		public void FillChildren(AsmNode in_parentCont, ComplexValue list)
+		public void FillChildren(ContainerBase in_parentCont, ComplexValue list)
 		{
 			DataTable dTable = list.dtable;
 			for (int i = 0; i < dTable.Rows.Count; i++)
@@ -49,10 +48,11 @@ namespace AsmApp
 				var created_at = dTable.Rows[i].Field<DateTime?>("created_at");
 
 				var container = new ContainerBase(name);
+				in_parentCont.AddChild(container);
 
 
-				var cont = new AsmNode(name, container);
-				/*
+				/*var cont = new AsmNode(name, container);
+				
 				ContainerNode parentCont = in_parentCont;
 				if (in_parentCont == null)
 					parentCont = GetContainerByID(parent_id);

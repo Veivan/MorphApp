@@ -1859,13 +1859,9 @@ namespace DirectDBconnector
 			string result = string.Join(",", list_ids.ToArray());
 			if (String.IsNullOrEmpty(result))
 				return dTable;
-			///TODO В дальнейшем для контейнеров надо брать дочерние контейнеры из атрибута Содержимое 
-
 			var stmnt = string.Format("SELECT B.b_id, B.bt_id, B.created_at, B.parent, B.treeorder, B.predecessor, B.successor, " +
 				" B.fh_id, F.blockdata FROM mBlocks B LEFT JOIN mFactHeap F ON F.fh_id = B.fh_id " +
 				" WHERE B.parent_id IN ({0})", result);
-
-			//var stmnt = string.Format("SELECT ct_id, created_at, name, parent_id FROM mContainers WHERE parent_id IN ({0})", result);
 			try
 			{
 				SQLiteDataAdapter adapter = new SQLiteDataAdapter(stmnt, m_dbConn);

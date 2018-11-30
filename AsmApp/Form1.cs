@@ -123,15 +123,33 @@ namespace AsmApp
 		private void PopulateTreeView()
 		{
 			treeView1.Nodes.Clear();
-			/*foreach (var cont in store.containers)
+			foreach (var cont in store.containers)
 			{
-				var aNode = new MorphNode(cont.Name);
-				aNode.NodeType = clNodeType.clnContainer;
-				aNode.bdID = cont.ContainerID;
+				var aNode = new AsmNode(cont.Name);
 				PopulateTreeChildrenConts(cont, aNode);
-				PopulateTreeDocuments(cont, aNode);
 				treeView1.Nodes.Add(aNode);
-			}*/
+			}
+		}
+
+		private void PopulateTreeChildrenConts(ContainerBase container, AsmNode nodeToAddTo)
+		{
+			foreach (var chld in container.Children)
+			{
+				if (FindNode(chld.BlockID, nodeToAddTo) != null)
+					continue;
+				var aNode = new AsmNode(((ContainerBase)chld).Name);
+				nodeToAddTo.Nodes.Add(aNode);
+			}
+		}
+
+		private TreeNode FindNode(long bdID, TreeNode aNode)
+		{
+			foreach (AsmNode node in aNode.Nodes)
+			{
+				if (node.Assembly.BlockID == bdID)
+					return node;
+			}
+			return null;
 		}
 	}
 }

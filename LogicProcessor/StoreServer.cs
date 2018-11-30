@@ -74,6 +74,19 @@ namespace LogicProcessor
 				CreateChildrenRequrs(child.Children);
 			}
 		}
+
+		/// <summary>
+		/// Получение дочерних сборок множества родительских сборок.
+		/// Выбираются только прямые наследники (без ссылок)
+		/// </summary>
+		/// <param name="list_ids">список ID родительских сборок</param>
+		/// <returns>DataTable</returns>
+		public ComplexValue GetChildren(tpList resulttype, List<string> list_ids)
+		{
+			ComplexValue rval = DBserver.GetChildren(resulttype, list_ids);
+			return rval;
+		}
+
 		#endregion
 
 		#region API для работы с контейнерами : создание, редактирование и различные выборки для визуализации.
@@ -94,18 +107,6 @@ namespace LogicProcessor
 			BlockAddress id = DBserver.CreateBlock(typeOfDict.BlockTypeID, parent, treeorder);
 			DBserver.AttrSetValue(id, "Name", name);
 			return id;
-		}
-
-		/// <summary>
-		/// Чтения дочерних контейнеров множества родительских контейнеров.
-		/// </summary>
-		/// <param name="resulttype">тип возвращаемого результата</param>
-		/// <param name="list_ids">список ID родительских контейнеров</param>
-		/// <returns>ComplexValue</returns>
-		public ComplexValue GetChildrenInContainerList(tpList resulttype, List<string> list_ids)
-		{
-			ComplexValue rval = DBserver.GetChildren(resulttype, list_ids);
-			return rval;
 		}
 
 	#endregion

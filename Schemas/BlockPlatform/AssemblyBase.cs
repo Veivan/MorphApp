@@ -163,6 +163,13 @@ namespace Schemas.BlockPlatform
 		}
 		#endregion
 
+		public void AddChild(AssemblyBase asm)
+		{
+			var cont = children.Where(x => x.BlockID == asm.BlockID).FirstOrDefault();
+			if (cont == null)
+				this.children.Add(asm);
+		}
+
 		#region Вспомогательные функции
 		/// <summary>
 		/// Получение плоского списка из дерева рекурсивно.
