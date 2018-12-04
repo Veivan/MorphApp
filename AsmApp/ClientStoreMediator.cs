@@ -41,11 +41,11 @@ namespace AsmApp
 			DataTable dTable = list.dtable;
 			for (int i = 0; i < dTable.Rows.Count; i++)
 			{
-				/// TODO Тут надо пересмотреть - что возвращает метод?
-				var ct_id = dTable.Rows[i].Field<long>("ct_id");
-				var parent_id = dTable.Rows[i].Field<long>("parent_id");
-				var name = dTable.Rows[i].Field<string>("name");
-				var created_at = dTable.Rows[i].Field<DateTime?>("created_at");
+				var b_id = dTable.Rows[i].Field<long>("b_id");
+				var name = "qq"; // dTable.Rows[i].Field<string>("name");
+
+				/*var parent_id = dTable.Rows[i].Field<long>("parent_id");
+				var created_at = dTable.Rows[i].Field<DateTime?>("created_at");*/
 
 				var container = new ContainerBase(name);
 				in_parentCont.AddChild(container);

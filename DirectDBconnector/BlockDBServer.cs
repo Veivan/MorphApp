@@ -182,35 +182,11 @@ namespace DirectDBconnector
 				return (T)attrval;
 		}
 
-		public override ComplexValue GetChildren(tpList resulttype, List<string> list_ids)
+		public override List<BlockBase> GetChildren(tpList resulttype, List<string> list_ids)
 		{
-			ComplexValue rval = new ComplexValue();
-			rval.dtable = dbConnector.dbGetChildren(list_ids);
 			/// TODO нужно задавать входной параметр - тип детей. Сделать объект - фабрику и генерить детей с нужным типом.
-			/*if (resulttype == tpList.tblList)
-			{
-				for (int i = 0; i < rval.dtable.Rows.Count; i++)
-				{
-					var b_id = rval.dtable.Rows[i].Field<long>("b_id");
-					var created_at = rval.dtable.Rows[i].Field<DateTime?>("created_at");
-					if (created_at == null)
-						created_at = DateTime.Now;
-					var parent = rval.dtable.Rows[i].Field<long>("parent");
-					var treeorder = rval.dtable.Rows[i].Field<long>("treeorder");
-					var predecessor = rval.dtable.Rows[i].Field<long>("predecessor");
-					var successor = rval.dtable.Rows[i].Field<long>("successor");
-					var fh_id = rval.dtable.Rows[i].Field<long>("fh_id");
-
-					var name = rval.dtable.Rows[i].Field<string>("name");
-
-
-					var cMap = new ContainerMap(name, b_id, typeOfDict, parent, treeorder,
-						fh_id, predecessor, successor, created_at);
-
-					rval.list.Add(new ContainerNode(cMap));
-				}
-			}*/
-			return rval;
+			var result = dbConnector.dbGetChildren(list_ids);
+			return result;
 		}
 		#endregion
 

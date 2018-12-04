@@ -11,7 +11,6 @@ namespace Schemas.BlockPlatform
 	public class ContainerBase : AssemblyBase
 	{
 		private string name;
-		private ContainerBlob blob;
 		private List<AssemblyBase> Content = new List<AssemblyBase>();
 
 		/// <summary>
@@ -41,7 +40,7 @@ namespace Schemas.BlockPlatform
 		public ContainerBase(BlockAddress id) :
 			base(new BlockType(3, "", ""), id)
 		{
-			FillContent();
+			FillBlob();
 		}
 
 		#endregion
@@ -49,7 +48,7 @@ namespace Schemas.BlockPlatform
 		/// <summary>
 		/// Метод заполняет содержимое списка Children значениями атрибута Content.
 		/// </summary>
-		private void FillContent()
+		private void FillBlob()
 		{
 			var Content = UserAttrs["Content"];
 			if (Content != null)

@@ -68,10 +68,9 @@ namespace Schemas
 		public List<AttrFactData> ValueList { get { return _factdata; } }
 		
 		/// <summary>
-		/// Присвоение нового значения атрибуту
+		/// Получение значения атрибута
 		/// </summary>
 		/// <param name="order">Порядок следования атрибута в списке атрибутов</param>
-		/// <param name="value">Новое значение атрибута</param>
 		public object GetAttrValue(int order)
 		{
 			if (order >= this._factdata.Count)

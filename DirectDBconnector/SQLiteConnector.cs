@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using System.Data;
 using System.IO;
@@ -1645,6 +1646,31 @@ namespace DirectDBconnector
 		}
 
 		/// <summary>
+		/// Получение списка типов атрибутов блока.
+		/// </summary>
+		/// <param name="addr">адрес блока</param>
+		/// <returns>список типов атрибутов</returns>
+		public List<int> dbGetAttrTypesListByType(long blockType)
+		{
+			var reslist = new List<int>();
+			try
+			{
+				m_sqlCmd.CommandText = string.Format("SELECT mt_id FROM mAttributes A WHERE  A.bt_id = {0} ORDER BY A.sorder", blockType);
+				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
+				while (r.Read())
+				{
+					reslist.Add(r.GetInt32(0));
+				}
+				r.Close();
+			}
+			catch (SQLiteException ex)
+			{
+				Console.WriteLine("dbGetAttrTypesListByType Error: " + ex.Message);
+			}
+			return reslist;
+		}
+
+		/// <summary>
 		/// Получение списка ключей атрибутов типа блока.
 		/// </summary>
 		/// <param name="addr">адрес типа блока</param>
@@ -1736,8 +1762,8 @@ namespace DirectDBconnector
 			BlockBase result = null;
 			try
 			{
-				m_sqlCmd.CommandText = string.Format("SELECT b_id, B.bt_id, T.namekey, parent, treeorder, fh_id, predecessor, successor, T.nameui FROM mBlocks B " +
-					"JOIN mBlockTypes T ON T.bt_id = B.bt_id WHERE b_id = {0}", addr);
+				m_sqlCmd.CommandText = string.Format("SELECT B.b_id, B.bt_id, T.namekey, B.parent, B.treeorder, B.fh_id, B.predecessor, B.successor, T.nameui, B.created_at " +
+					"FROM mBlocks B JOIN mBlockTypes T ON T.bt_id = B.bt_id WHERE b_id = {0}", addr);
 				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
 				while (r.Read())
 				{
@@ -1745,7 +1771,7 @@ namespace DirectDBconnector
 					var predecessor = r[6] as long? ?? 0;
 					var successor = r[7] as long? ?? 0;
 					var bt = new BlockType(r.GetInt64(1), r.GetString(2), r.GetString(8));
-					result = new BlockBase(addr, bt, r.GetInt64(3), r.GetInt64(4), fh_id, predecessor, successor);
+					result = new BlockBase(addr, bt, r.GetInt64(3), r.GetInt64(4), fh_id, predecessor, successor, r.GetDateTime(9));
 				}
 				r.Close();
 			}
@@ -1853,25 +1879,75 @@ namespace DirectDBconnector
 		/// </summary>
 		/// <param name="list_ids">список ID родительских блоков</param>
 		/// <returns>DataTable</returns>
-		public DataTable dbGetChildren(List<string> list_ids)
+		public List<BlockBase> dbGetChildren(List<string> list_ids)
 		{
-			DataTable dTable = new DataTable();
-			string result = string.Join(",", list_ids.ToArray());
-			if (String.IsNullOrEmpty(result))
-				return dTable;
-			var stmnt = string.Format("SELECT B.b_id, B.bt_id, B.created_at, B.parent, B.treeorder, B.predecessor, B.successor, " +
-				" B.fh_id, F.blockdata FROM mBlocks B LEFT JOIN mFactHeap F ON F.fh_id = B.fh_id " +
-				" WHERE B.parent_id IN ({0})", result);
+			int bufferSize = 100;                   // Size of the BLOB buffer.
+			byte[] outbyte = new byte[bufferSize];  // The BLOB byte[] buffer to be filled by GetBytes.
+			long retval;                            // The bytes returned from GetBytes.
+			long startIndex = 0;                    // The starting position in the BLOB output.
+
+			var result = new List<BlockBase>();
+			string ids = string.Join(",", list_ids.ToArray());
+			if (String.IsNullOrEmpty(ids))
+				return null;
+			m_sqlCmd.CommandText = string.Format("SELECT B.b_id, B.bt_id, T.namekey, B.parent, B.treeorder, B.fh_id, B.predecessor, B.successor,  T.nameui, B.created_at, " +
+				" F.blockdata FROM mBlocks B JOIN mBlockTypes T ON T.bt_id = B.bt_id LEFT JOIN mFactHeap F ON F.fh_id = B.fh_id " +
+				" WHERE B.parent IN ({0})", ids);
 			try
 			{
-				SQLiteDataAdapter adapter = new SQLiteDataAdapter(stmnt, m_dbConn);
-				adapter.Fill(dTable);
+				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
+				while (r.Read())
+				{
+					var bt_id = r.GetInt64(1);
+					var fh_id = r[5] as long? ?? 0;
+					var predecessor = r[6] as long? ?? 0;
+					var successor = r[7] as long? ?? 0;
+					var bt = new BlockType(bt_id, r.GetString(2), r.GetString(8));
+					var block = new BlockBase(r.GetInt64(0), bt, r.GetInt64(3), r.GetInt64(4), fh_id, predecessor, successor, r.GetDateTime(9));
+
+					if (fh_id <= 0) continue;
+
+					// Getting attrtypes
+					var idtplist = dbGetAttrTypesListByType(bt_id);
+					var tplist = new List<enAttrTypes>();
+					foreach (var idtp in idtplist)
+						tplist.Add((enAttrTypes)idtp);
+
+					// Reading BLOB
+					// Reset the starting byte for the new BLOB.
+					startIndex = 0;
+					var BytesList = new List<byte>();
+					// Read the bytes into outbyte[] and retain the number of bytes returned.
+					retval = r.GetBytes(10, startIndex, outbyte, 0, bufferSize);
+					// Continue reading and writing while there are bytes beyond the size of the buffer.
+					while (retval == bufferSize)
+					{
+						BytesList.AddRange(outbyte.ToList());
+						// Reposition the start index to the end of the last buffer and fill the buffer.
+						startIndex += bufferSize;
+						retval = r.GetBytes(10, startIndex, outbyte, 0, bufferSize);
+					}
+
+					// Write the remaining buffer.
+					if (retval > 0) // if file size can divide to buffer size
+					{
+						byte[] x = new byte[(int)retval];
+						var lastlist = outbyte.ToList();
+						lastlist.CopyTo(0, x, 0, (int)retval);
+						BytesList.AddRange(lastlist);
+					}
+					var attrs = dbGetAttrsCollection(bt_id);
+					block.PerformBlob(tplist, BytesList.ToArray(), attrs);
+
+					result.Add(block);
+				}
+				r.Close();
 			}
 			catch (SQLiteException ex)
 			{
 				Console.WriteLine("dbGetChildren Error: " + ex.Message);
 			}
-			return dTable;
+			return result;
 		}
 
 		#endregion

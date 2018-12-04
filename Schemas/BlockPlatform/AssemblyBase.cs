@@ -13,8 +13,6 @@ namespace Schemas.BlockPlatform
 	/// </summary>
 	public class AssemblyBase : BlockBase
 	{
-		private AttrsCollection _SysAttrs;
-		private AttrsCollection _UserAttrs;
 		private AssemblyBase templAsm;
 		private BlockAddress _parentAsmId = 0;
 		private long _treeorder = 0;
@@ -205,6 +203,7 @@ namespace Schemas.BlockPlatform
 				CopyChildrenRequrs(newchild, src_child.children);
 			}
 		}
+
 		#endregion
 	}
 }

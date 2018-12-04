@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using BlockAddress = System.Int64;
 
@@ -17,6 +18,10 @@ namespace Schemas.BlockPlatform
 		protected BlockAddress fh_id = 0;
 		protected BlockAddress predecessor = 0;
 		protected BlockAddress successor = 0;
+
+		protected Blob blob;
+		protected AttrsCollection _SysAttrs;
+		protected AttrsCollection _UserAttrs;
 
 		/// <summary>
 		/// Идентификатор БД.
@@ -59,6 +64,11 @@ namespace Schemas.BlockPlatform
 		public DateTime Created { get { return created_at; } }
 
 		/// <summary>
+		/// Пользовательские атрибуты.
+		/// </summary>
+		public AttrsCollection UserAttrs { get { return _UserAttrs; } }
+
+		/// <summary>
 		/// Конструктор
 		/// </summary>
 		public BlockBase(BlockAddress _b_id, BlockType _bt, BlockAddress _parent, long _order, 
@@ -76,6 +86,16 @@ namespace Schemas.BlockPlatform
 			else
 				created_at = (DateTime)_created_at;
 		}
+
+		/// <summary>
+		/// Формирование атрибутов из блоба.
+		/// </summary>
+		public void PerformBlob(List<enAttrTypes> attrTypes, byte[] data, AttrsCollection UserAttrs)
+		{
+			this.blob = new Blob(attrTypes, data);
+			this._UserAttrs = UserAttrs;
+		}
+
 	}
 }
 

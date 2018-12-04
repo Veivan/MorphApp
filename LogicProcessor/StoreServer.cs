@@ -81,10 +81,10 @@ namespace LogicProcessor
 		/// </summary>
 		/// <param name="list_ids">список ID родительских сборок</param>
 		/// <returns>DataTable</returns>
-		public ComplexValue GetChildren(tpList resulttype, List<string> list_ids)
+		public List<BlockBase> GetChildren(tpList resulttype, List<string> list_ids)
 		{
-			ComplexValue rval = DBserver.GetChildren(resulttype, list_ids);
-			return rval;
+			var result = DBserver.GetChildren(resulttype, list_ids);
+			return result;
 		}
 
 		#endregion
@@ -109,6 +109,6 @@ namespace LogicProcessor
 			return id;
 		}
 
-	#endregion
-}
+		#endregion
+	}
 }
