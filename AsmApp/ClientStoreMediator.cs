@@ -32,31 +32,15 @@ namespace AsmApp
 
 			var list_ids = new List<string>();
 			list_ids.Add(Session.MainStoreID.ToString());
-			var list = store.GetChildren(tpList.tplDBtable, list_ids);
+			var list = store.GetChildren(list_ids);
 			this.FillChildren(MainStore, list);
 		}
 
-		public void FillChildren(ContainerBase in_parentCont, ComplexValue list)
+		public void FillChildren(ContainerBase in_parentCont, List<BlockBase> list)
 		{
-			DataTable dTable = list.dtable;
-			for (int i = 0; i < dTable.Rows.Count; i++)
+			foreach (var container in list)
 			{
-				var b_id = dTable.Rows[i].Field<long>("b_id");
-				var name = "qq"; // dTable.Rows[i].Field<string>("name");
-
-				/*var parent_id = dTable.Rows[i].Field<long>("parent_id");
-				var created_at = dTable.Rows[i].Field<DateTime?>("created_at");*/
-
-				var container = new ContainerBase(name);
-				in_parentCont.AddChild(container);
-
-
-				/*var cont = new AsmNode(name, container);
-				
-				ContainerNode parentCont = in_parentCont;
-				if (in_parentCont == null)
-					parentCont = GetContainerByID(parent_id);
-				parentCont.AddChild(cont); */
+				in_parentCont.AddChild(new AssemblyBase(container));
 			}
 		}
 

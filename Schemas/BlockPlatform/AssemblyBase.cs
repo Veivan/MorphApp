@@ -16,6 +16,7 @@ namespace Schemas.BlockPlatform
 		private AssemblyBase templAsm;
 		private BlockAddress _parentAsmId = 0;
 		private long _treeorder = 0;
+		private string name;
 
 		protected List<AssemblyBase> children = new List<AssemblyBase>();
 
@@ -156,17 +157,18 @@ namespace Schemas.BlockPlatform
 		/// </summary>
 		/// <param name="block">стартовый блок сборки.</param>
 		public AssemblyBase(BlockBase block) :
-			base(block.BlockID, block.BlockType, block.ParentID, block.Order, -1, -1, -1, DateTime.Now)
+			base(block.BlockID, block.BlockType, block.ParentID, block.Order, block.FactID, 
+				block.PredecessorID, block.SuccessorID, block.Created)
 		{
 		}
 		#endregion
 
-		public void AddChild(AssemblyBase asm)
+	/*	public void AddChild(AssemblyBase asm)
 		{
 			var cont = children.Where(x => x.BlockID == asm.BlockID).FirstOrDefault();
 			if (cont == null)
 				this.children.Add(asm);
-		}
+		} */
 
 		#region Вспомогательные функции
 		/// <summary>

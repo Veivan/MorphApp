@@ -8,10 +8,11 @@ using BlockAddress = System.Int64;
 
 namespace Schemas.BlockPlatform
 {
-	public class ContainerBase : AssemblyBase
+	public class ContainerBase
 	{
 		private string name;
-		private List<AssemblyBase> Content = new List<AssemblyBase>();
+		private AssemblyBase assembly;
+		protected List<AssemblyBase> content = new List<AssemblyBase>();
 
 		/// <summary>
 		/// Наименование контейнера
@@ -25,14 +26,34 @@ namespace Schemas.BlockPlatform
 		/// <summary>
 		/// Конструктор. Создание пустого контейнера.
 		/// </summary>
-		/// <param name="blockType">тип сборки</param>
-		public ContainerBase(string _name) :
-			base(new BlockType(3, "", ""))
+		/// <param name="_name">Наименование контейнера</param>
+		public ContainerBase(string _name)
 		{
+			if (string.IsNullOrEmpty(_name))
+				_name = Session.DefaulContainerName;
 			this.name = _name;
 		}
 
 		/// <summary>
+		/// Конструктор. Создание контейнера из сборки.
+		/// </summary>
+		/// <param name="blockType">тип сборки</param>
+		public ContainerBase(AssemblyBase _assembly)
+		{
+			if (_assembly == null) {
+				this.assembly = new AssemblyBase(new BlockType(3, "", ""));
+				this.name = Session.DefaulContainerName;
+			}
+			else
+			{
+				this.assembly = _assembly;
+				_assembly.
+				//_assembly.UserAttrs
+			}
+
+		}
+
+		/*// <summary>
 		/// Конструктор. Создание контейнера из данных хранилища.
 		/// </summary>
 		/// <param name="blockType">тип сборки</param>
@@ -40,8 +61,7 @@ namespace Schemas.BlockPlatform
 		public ContainerBase(BlockAddress id) :
 			base(new BlockType(3, "", ""), id)
 		{
-			FillBlob();
-		}
+		}*/
 
 		#endregion
 
@@ -50,7 +70,7 @@ namespace Schemas.BlockPlatform
 		/// </summary>
 		private void FillBlob()
 		{
-			var Content = UserAttrs["Content"];
+			//var Content = UserAttrs["Content"];
 			if (Content != null)
 			{ }
 		}

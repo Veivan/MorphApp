@@ -1655,13 +1655,17 @@ namespace DirectDBconnector
 			var reslist = new List<int>();
 			try
 			{
-				m_sqlCmd.CommandText = string.Format("SELECT mt_id FROM mAttributes A WHERE  A.bt_id = {0} ORDER BY A.sorder", blockType);
-				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
-				while (r.Read())
+				using (var local_sqlCmd = new SQLiteCommand())
 				{
-					reslist.Add(r.GetInt32(0));
+					local_sqlCmd.CommandText = string.Format("SELECT mt_id FROM mAttributes A WHERE  A.bt_id = {0} ORDER BY A.sorder", blockType);
+					local_sqlCmd.Connection = m_dbConn;
+					SQLiteDataReader r = local_sqlCmd.ExecuteReader();
+					while (r.Read())
+					{
+						reslist.Add(r.GetInt32(0));
+					}
+					r.Close();
 				}
-				r.Close();
 			}
 			catch (SQLiteException ex)
 			{
@@ -1700,18 +1704,22 @@ namespace DirectDBconnector
 			var attrs = new AttrsCollection();
 			try
 			{
-				m_sqlCmd.CommandText =
+				using (var local_sqlCmd = new SQLiteCommand())
+				{
+					local_sqlCmd.CommandText =
 					string.Format("SELECT A.ma_id, A.namekey, A.nameui, A.mt_id, A.bt_id, A.sorder, B.namekey, B.nameui FROM mAttributes A " +
 					" JOIN mBlockTypes B ON B.bt_id = A.bt_id WHERE A.bt_id = {0} ORDER BY A.sorder", blockType);
-				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
-				while (r.Read())
-				{
-					var bt = new BlockType(r.GetInt64(4), r.GetString(6), r.GetString(7));
-					var attr = new BlockAttribute(r.GetInt64(0), r.GetString(1), r.GetString(2), r.GetInt32(3), bt);
-					attr.Order = r.GetInt32(5);
-					attrs.AddElement(attr);
+					local_sqlCmd.Connection = m_dbConn;
+					SQLiteDataReader r = local_sqlCmd.ExecuteReader();
+					while (r.Read())
+					{
+						var bt = new BlockType(r.GetInt64(4), r.GetString(6), r.GetString(7));
+						var attr = new BlockAttribute(r.GetInt64(0), r.GetString(1), r.GetString(2), r.GetInt32(3), bt);
+						attr.Order = r.GetInt32(5);
+						attrs.AddElement(attr);
+					}
+					r.Close();
 				}
-				r.Close();
 			}
 			catch (SQLiteException ex)
 			{
@@ -1902,43 +1910,48 @@ namespace DirectDBconnector
 					var fh_id = r[5] as long? ?? 0;
 					var predecessor = r[6] as long? ?? 0;
 					var successor = r[7] as long? ?? 0;
+					var order = r[4] as long? ?? 0;
 					var bt = new BlockType(bt_id, r.GetString(2), r.GetString(8));
-					var block = new BlockBase(r.GetInt64(0), bt, r.GetInt64(3), r.GetInt64(4), fh_id, predecessor, successor, r.GetDateTime(9));
+					var block = new BlockBase(r.GetInt64(0), bt, r.GetInt64(3), order, fh_id, predecessor, successor, r.GetDateTime(9));
 
-					if (fh_id <= 0) continue;
-
-					// Getting attrtypes
-					var idtplist = dbGetAttrTypesListByType(bt_id);
-					var tplist = new List<enAttrTypes>();
-					foreach (var idtp in idtplist)
-						tplist.Add((enAttrTypes)idtp);
-
-					// Reading BLOB
-					// Reset the starting byte for the new BLOB.
-					startIndex = 0;
-					var BytesList = new List<byte>();
-					// Read the bytes into outbyte[] and retain the number of bytes returned.
-					retval = r.GetBytes(10, startIndex, outbyte, 0, bufferSize);
-					// Continue reading and writing while there are bytes beyond the size of the buffer.
-					while (retval == bufferSize)
+					if (fh_id > 0)
 					{
-						BytesList.AddRange(outbyte.ToList());
-						// Reposition the start index to the end of the last buffer and fill the buffer.
-						startIndex += bufferSize;
+
+						// Getting attrtypes
+						var idtplist = dbGetAttrTypesListByType(bt_id);
+						var tplist = new List<enAttrTypes>();
+						foreach (var idtp in idtplist)
+							tplist.Add((enAttrTypes)idtp);
+
+						// Reading BLOB
+						/*/ Reset the starting byte for the new BLOB.
+						startIndex = 0;
+						var BytesList = new List<byte>();
+						// Read the bytes into outbyte[] and retain the number of bytes returned.
 						retval = r.GetBytes(10, startIndex, outbyte, 0, bufferSize);
-					}
+						// Continue reading and writing while there are bytes beyond the size of the buffer.
+						while (retval == bufferSize)
+						{
+							BytesList.AddRange(outbyte.ToList());
+							// Reposition the start index to the end of the last buffer and fill the buffer.
+							startIndex += bufferSize;
+							retval = r.GetBytes(10, startIndex, outbyte, 0, bufferSize);
+						}
 
-					// Write the remaining buffer.
-					if (retval > 0) // if file size can divide to buffer size
-					{
-						byte[] x = new byte[(int)retval];
-						var lastlist = outbyte.ToList();
-						lastlist.CopyTo(0, x, 0, (int)retval);
-						BytesList.AddRange(lastlist);
-					}
-					var attrs = dbGetAttrsCollection(bt_id);
-					block.PerformBlob(tplist, BytesList.ToArray(), attrs);
+						// Write the remaining buffer.
+						if (retval > 0) // if file size can divide to buffer size
+						{
+							byte[] x = new byte[(int)retval];
+							var lastlist = outbyte.ToList();
+							lastlist.CopyTo(0, x, 0, (int)retval);
+							BytesList.AddRange(lastlist);
+						}*/
+						var attrs = dbGetAttrsCollection(bt_id);
+						//block.PerformBlob(tplist, BytesList.ToArray(), attrs);
 
+						var bytearr = GetBytes(r, 10);
+						block.PerformBlob(tplist, bytearr, attrs);
+					}
 					result.Add(block);
 				}
 				r.Close();
@@ -1950,6 +1963,22 @@ namespace DirectDBconnector
 			return result;
 		}
 
+		static byte[] GetBytes(SQLiteDataReader reader, int col)
+		{
+			const int CHUNK_SIZE = 2 * 1024;
+			byte[] buffer = new byte[CHUNK_SIZE];
+			long bytesRead;
+			long fieldOffset = 0;
+			using (MemoryStream stream = new MemoryStream())
+			{
+				while ((bytesRead = reader.GetBytes(col, fieldOffset, buffer, 0, buffer.Length)) > 0)
+				{
+					stream.Write(buffer, 0, (int)bytesRead);
+					fieldOffset += bytesRead;
+				}
+				return stream.ToArray();
+			}
+		}
 		#endregion
 
 		#region Функции для работы с Фактическими значениями

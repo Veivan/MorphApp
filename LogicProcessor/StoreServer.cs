@@ -81,9 +81,9 @@ namespace LogicProcessor
 		/// </summary>
 		/// <param name="list_ids">список ID родительских сборок</param>
 		/// <returns>DataTable</returns>
-		public List<BlockBase> GetChildren(tpList resulttype, List<string> list_ids)
+		public List<BlockBase> GetChildren(List<string> list_ids)
 		{
-			var result = DBserver.GetChildren(resulttype, list_ids);
+			var result = DBserver.GetChildren(list_ids);
 			return result;
 		}
 

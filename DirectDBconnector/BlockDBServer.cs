@@ -182,7 +182,7 @@ namespace DirectDBconnector
 				return (T)attrval;
 		}
 
-		public override List<BlockBase> GetChildren(tpList resulttype, List<string> list_ids)
+		public override List<BlockBase> GetChildren(List<string> list_ids)
 		{
 			/// TODO нужно задавать входной параметр - тип детей. Сделать объект - фабрику и генерить детей с нужным типом.
 			var result = dbConnector.dbGetChildren(list_ids);

@@ -200,7 +200,7 @@ namespace Schemas
 		/// </summary>
 		/// <param name="list_ids">список ID родительских блоков</param>
 		/// <returns>DataTable</returns>
-		public abstract List<BlockBase> GetChildren(tpList resulttype, List<string> list_ids);
+		public abstract List<BlockBase> GetChildren(List<string> list_ids);
 
 		#endregion
 
