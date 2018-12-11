@@ -16,7 +16,7 @@ namespace Schemas.BlockPlatform
 		private AssemblyBase templAsm;
 		private BlockAddress _parentAsmId = 0;
 		private long _treeorder = 0;
-		private string name;
+		//private string name;
 
 		protected List<AssemblyBase> children = new List<AssemblyBase>();
 
@@ -91,17 +91,33 @@ namespace Schemas.BlockPlatform
 				_treeorder = value;
 			}
 		}
-		#endregion
-
-		#region Конструкторы
-
 
 		/// <summary>
-		/// Конструктор.
+		/// Наименование сборки
 		/// </summary>
-		/// <param name="blockType">тип сборки</param>
-		public AssemblyBase(BlockType blockType) :
-			base(-1, blockType, -1, 0, -1, -1, -1, DateTime.Now)
+		public string Name { get { return (string)GetValue("Name"); } /*set { name = value; }*/ }
+
+		#endregion
+
+		#region Характеристики
+
+		public bool IsDataContainer
+		{
+			get
+			{
+				return BlockType.NameKey == "DataContainer";
+			}
+		}
+	#endregion
+
+	#region Конструкторы
+
+	/// <summary>
+	/// Конструктор.
+	/// </summary>
+	/// <param name="blockType">тип сборки</param>
+	public AssemblyBase(BlockType blockType) :
+			base(-1, blockType, -1, 0, -1, -1, -1, null, DateTime.Now)
 		{
 		}
 
@@ -111,7 +127,7 @@ namespace Schemas.BlockPlatform
 		/// <param name="blockType">тип сборки</param>
 		/// <param name="id">адрес стартового блока сборки</param>
 		public AssemblyBase(BlockType blockType, BlockAddress id) :
-			base(id, blockType, -1, 0, -1, -1, -1, DateTime.Now)
+			base(id, blockType, -1, 0, -1, -1, -1, null, DateTime.Now)
 		{
 		}
 
@@ -122,7 +138,7 @@ namespace Schemas.BlockPlatform
 		/// <param name="id">адрес стартового блока сборки</param>
 		/// <param name="mode">признак, определяющий, сохранять ссылку на шаблон\образец или нет.</param>
 		public AssemblyBase(AssemblyBase templAsm, BlockAddress id, FOLLOWMODE mode) :
-			base(id, templAsm.BlockType, -1, 0, -1, -1, -1, DateTime.Now)
+			base(id, templAsm.BlockType, -1, 0, -1, -1, -1, null, DateTime.Now)
 		{
 			if (mode == FOLLOWMODE.Follow)
 				this.templAsm = templAsm;
@@ -135,7 +151,7 @@ namespace Schemas.BlockPlatform
 		/// <param name="block">стартовый блок сборки.</param>
 		public AssemblyBase(BlockBase block) :
 			base(block.BlockID, block.BlockType, block.ParentID, block.Order, block.FactID, 
-				block.PredecessorID, block.SuccessorID, block.Created)
+				block.PredecessorID, block.SuccessorID, block.UserAttrs, block.Created)
 		{
 		}
 
@@ -145,7 +161,7 @@ namespace Schemas.BlockPlatform
 		/// <param name="assembly">Исходная сборка.</param>
 		public AssemblyBase(AssemblyBase assembly) :
 			base(assembly.BlockID, assembly.BlockType, assembly.ParentID, assembly.Order, assembly.FactID,
-				assembly.PredecessorID, assembly.SuccessorID, assembly.Created)
+				assembly.PredecessorID, assembly.SuccessorID, assembly.UserAttrs, assembly.Created)
 		{
 		}
 

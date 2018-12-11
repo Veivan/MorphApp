@@ -82,18 +82,30 @@ namespace Schemas.BlockPlatform
 		public AttrsCollection UserAttrs { get { return _UserAttrs; } }
 
 		public object GetValue(string attrNameKey)
-		{			
+		{
+			if (_UserAttrs == null)
+				return null;
 			var attr = _UserAttrs.Attrs.Where(o => o.NameKey == attrNameKey).FirstOrDefault();
 			if (attr == null)
 				return null;
 			return this.blob.GetAttrValue(attr.Order);
 		}
 
+		public void SetValue(string attrNameKey, object Value)
+		{
+			if (_UserAttrs != null)
+			{
+				var attr = _UserAttrs.Attrs.Where(o => o.NameKey == attrNameKey).FirstOrDefault();
+				if (attr != null)
+					this.blob.SetAttrValue(attr.Order, Value);
+			}
+		}
+
 		/// <summary>
 		/// Конструктор
 		/// </summary>
 		public BlockBase(BlockAddress _b_id, BlockType _bt, BlockAddress _parent, long _order, 
-			BlockAddress _fh_id, BlockAddress _predecessor, BlockAddress _successor, DateTime? _created_at = null)
+			BlockAddress _fh_id, BlockAddress _predecessor, BlockAddress _successor, AttrsCollection _userAttrs, DateTime? _created_at = null)
 		{
 			b_id = _b_id;
 			bt = _bt;
@@ -106,15 +118,19 @@ namespace Schemas.BlockPlatform
 				created_at = DateTime.Now;
 			else
 				created_at = (DateTime)_created_at;
+
+			if (_userAttrs == null)
+				this._UserAttrs = Session.Instance().GetUserAttrs(_bt);
+			else
+				this._UserAttrs = _userAttrs;
 		}
 
 		/// <summary>
 		/// Формирование атрибутов из блоба.
 		/// </summary>
-		public void PerformBlob(List<enAttrTypes> attrTypes, byte[] data, AttrsCollection UserAttrs)
+		public void PerformBlob(List<enAttrTypes> attrTypes, byte[] data)
 		{
 			this.blob = new Blob(attrTypes, data);
-			this._UserAttrs = UserAttrs;
 		}
 
 	}

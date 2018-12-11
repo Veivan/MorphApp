@@ -131,13 +131,13 @@ namespace AsmApp
 			}
 		}
 
-		private void PopulateTreeChildrenConts(ContainerBase container, AsmNode nodeToAddTo)
+		private void PopulateTreeChildrenConts(AssemblyBase container, AsmNode nodeToAddTo)
 		{
 			foreach (var chld in container.Children)
 			{
 				if (FindNode(chld.BlockID, nodeToAddTo) != null)
 					continue;
-				var aNode = new AsmNode(((ContainerBase)chld).Name);
+				var aNode = new AsmNode(chld.Name);
 				nodeToAddTo.Nodes.Add(aNode);
 			}
 		}

@@ -8,7 +8,7 @@ using BlockAddress = System.Int64;
 
 namespace Schemas.BlockPlatform
 {
-	public class ContainerBase : AssemblyBase
+	public class ContainerBase2 : AssemblyBase
 	{
 		private string name;
 
@@ -28,7 +28,7 @@ namespace Schemas.BlockPlatform
 		/// Конструктор. Создание пустого контейнера.
 		/// </summary>
 		/// <param name="_name">Наименование контейнера</param>
-		public ContainerBase(string _name = null) : base(new BlockType(3, "", ""))
+		public ContainerBase2(string _name = null) : base(new BlockType(3, "", ""))
 		{
 			if (string.IsNullOrEmpty(_name))
 				_name = Session.DefaulContainerName;
@@ -39,7 +39,7 @@ namespace Schemas.BlockPlatform
 		/// Конструктор. Создание контейнера из сборки.
 		/// </summary>
 		/// <param name="blockType">тип сборки</param>
-		public ContainerBase(AssemblyBase _assembly) : base(_assembly)
+		public ContainerBase2(AssemblyBase _assembly) : base(_assembly)
 		{
 			if (_assembly == null) {
 				this.name = Session.DefaulContainerName;

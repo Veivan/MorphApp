@@ -30,7 +30,7 @@ namespace Schemas
 		/// </summary>
 		public ContainerMap(string _name, BlockAddress _b_id, BlockType _bt, BlockAddress _parent, long _order,
 			BlockAddress _fh_id, BlockAddress _predecessor, BlockAddress _successor, DateTime? _created_at = null) : 
-			base(_b_id, _bt, _parent, _order, _fh_id, _predecessor, _successor, _created_at)
+			base(_b_id, _bt, _parent, _order, _fh_id, _predecessor, _successor, null, _created_at)
 		{
 			name = _name;
 		}

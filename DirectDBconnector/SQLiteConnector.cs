@@ -1779,7 +1779,7 @@ namespace DirectDBconnector
 					var predecessor = r[6] as long? ?? 0;
 					var successor = r[7] as long? ?? 0;
 					var bt = new BlockType(r.GetInt64(1), r.GetString(2), r.GetString(8));
-					result = new BlockBase(addr, bt, r.GetInt64(3), r.GetInt64(4), fh_id, predecessor, successor, r.GetDateTime(9));
+					result = new BlockBase(addr, bt, r.GetInt64(3), r.GetInt64(4), fh_id, predecessor, successor, null, r.GetDateTime(9));
 				}
 				r.Close();
 			}
@@ -1913,7 +1913,8 @@ namespace DirectDBconnector
 					var order = r[4] as long? ?? 0;
 					var DateCreate = r[9] as DateTime? ?? DateTime.Now;
 					var bt = new BlockType(bt_id, r.GetString(2), r.GetString(8));
-					var block = new BlockBase(r.GetInt64(0), bt, r.GetInt64(3), order, fh_id, predecessor, successor, DateCreate);
+					var attrs = dbGetAttrsCollection(bt_id);
+					var block = new BlockBase(r.GetInt64(0), bt, r.GetInt64(3), order, fh_id, predecessor, successor, attrs, DateCreate);
 
 					if (fh_id > 0)
 					{
@@ -1947,11 +1948,10 @@ namespace DirectDBconnector
 							lastlist.CopyTo(0, x, 0, (int)retval);
 							BytesList.AddRange(lastlist);
 						}*/
-						var attrs = dbGetAttrsCollection(bt_id);
 						//block.PerformBlob(tplist, BytesList.ToArray(), attrs);
 
 						var bytearr = GetBytes(r, 10);
-						block.PerformBlob(tplist, bytearr, attrs);
+						block.PerformBlob(tplist, bytearr);
 					}
 					result.Add(block);
 				}

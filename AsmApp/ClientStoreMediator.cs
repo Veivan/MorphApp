@@ -15,7 +15,7 @@ namespace AsmApp
 	public class ClientStoreMediator
 	{
 		// Список контейнеров для клиента
-		public List<ContainerBase> containers = new List<ContainerBase>();
+		public List<AssemblyBase> containers = new List<AssemblyBase>();
 
 		StoreServer store = new StoreServer();
 
@@ -27,7 +27,8 @@ namespace AsmApp
 		{
 			containers.Clear();
 
-			var MainStore = new ContainerBase(Session.MainStoreName);
+			var MainStore = new AssemblyBase(new BlockType(3, "", ""));
+			MainStore.SetValue("Name", Session.MainStoreName);
 			containers.Add(MainStore);
 
 			var list_ids = new List<string>();
@@ -36,7 +37,7 @@ namespace AsmApp
 			this.FillChildren(MainStore, list);
 		}
 
-		public void FillChildren(ContainerBase in_parentCont, List<BlockBase> list)
+		public void FillChildren(AssemblyBase in_parentCont, List<BlockBase> list)
 		{
 			foreach (var container in list)
 			{

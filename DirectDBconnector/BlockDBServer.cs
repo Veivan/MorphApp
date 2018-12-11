@@ -16,6 +16,11 @@ namespace DirectDBconnector
 	{
 		SQLiteConnector dbConnector = SQLiteConnector.Instance;
 
+		public BlockDBServer()
+		{
+			Session.Instance().Init(this);
+		}
+
 		#region Функции для работы с Типами блоков
 		public override BlockType CreateBlockType(string nameKey, string nameUI)
 		{

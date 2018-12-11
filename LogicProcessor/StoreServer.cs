@@ -108,6 +108,15 @@ namespace LogicProcessor
 			DBserver.AttrSetValue(id, "Name", name);
 			return id;
 		}
+		
+
+		#endregion
+
+		#region API для работы с типами блоков.
+		public List<BlockType> GetAllBlockTypes()
+		{
+			return DBserver.GetAllBlockTypes();
+		}
 
 		#endregion
 	}

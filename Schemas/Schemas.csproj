@@ -85,12 +85,12 @@
     <Compile Include="ObjectMaps\ContainerNode.cs" />
     <Compile Include="ComplexValue.cs" />
     <Compile Include="ObjectMaps\ParagraphMap.cs" />
-    <Compile Include="Session.cs" />
     <Compile Include="ObjectMaps\ContainerMap.cs" />
     <Compile Include="ObjectMaps\DocumentMap.cs" />
     <Compile Include="ConstEnums.cs" />
     <Compile Include="HasDict.cs" />
     <Compile Include="ObjectMaps\SentenceMap.cs" />
+    <Compile Include="Session.cs" />
     <Compile Include="TMorph\Schema\ComType.cs" />
     <Compile Include="TMorph\Schema\Container.cs" />
     <Compile Include="TMorph\Schema\Document.cs" />
