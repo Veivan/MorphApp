@@ -81,14 +81,16 @@ namespace Schemas.BlockPlatform
 		/// </summary>
 		public AttrsCollection UserAttrs { get { return _UserAttrs; } }
 
-		public object GetValue(string attrNameKey)
+		public object GetValue(string attrNameKey, object defvalue = null)
 		{
+			var result = defvalue;
 			if (_UserAttrs == null)
-				return null;
+				return result;
 			var attr = _UserAttrs.Attrs.Where(o => o.NameKey == attrNameKey).FirstOrDefault();
-			if (attr == null)
-				return null;
-			return this.blob.GetAttrValue(attr.Order);
+			if (attr != null && this.blob != null)
+				return this.blob.GetAttrValue(attr.Order);
+			else
+				return result;
 		}
 
 		public void SetValue(string attrNameKey, object Value)
@@ -96,7 +98,7 @@ namespace Schemas.BlockPlatform
 			if (_UserAttrs != null)
 			{
 				var attr = _UserAttrs.Attrs.Where(o => o.NameKey == attrNameKey).FirstOrDefault();
-				if (attr != null)
+				if (attr != null && this.blob != null)
 					this.blob.SetAttrValue(attr.Order, Value);
 			}
 		}

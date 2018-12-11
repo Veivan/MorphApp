@@ -91,7 +91,7 @@ namespace LogicProcessor
 
 		#region API для работы с контейнерами : создание, редактирование и различные выборки для визуализации.
 
-
+		//TODO - вроде не нужно
 		/// <summary>
 		/// Создание нового Контейнера.
 		/// </summary>
@@ -109,14 +109,6 @@ namespace LogicProcessor
 			return id;
 		}
 		
-
-		#endregion
-
-		#region API для работы с типами блоков.
-		public List<BlockType> GetAllBlockTypes()
-		{
-			return DBserver.GetAllBlockTypes();
-		}
 
 		#endregion
 	}

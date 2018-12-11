@@ -27,8 +27,8 @@ namespace AsmApp
 		{
 			containers.Clear();
 
-			var MainStore = new AssemblyBase(new BlockType(3, "", ""));
-			MainStore.SetValue("Name", Session.MainStoreName);
+			var MainStore = new AssemblyBase(Session.Instance().GetBlockTypeByNameKey(Session.containerTypeName));
+			MainStore.IsMainDataContainer = true;
 			containers.Add(MainStore);
 
 			var list_ids = new List<string>();

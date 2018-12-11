@@ -47,8 +47,7 @@ namespace Schemas
 					var contval = cont.Value;
 					var created_at = DateTime.Parse(contval.CreatedAt);
 
-					///TODO надо где-то иметь в кэше объект BlockType с типом Контейнер
-					var bt = new BlockType(3, "", "");
+					var bt = Session.Instance().GetBlockTypeByNameKey(Session.containerTypeName);
 					long _order = 0;
 					BlockAddress _fh_id = -1;
 					BlockAddress _predecessor = -1;

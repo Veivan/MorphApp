@@ -24,7 +24,7 @@ namespace Schemas.BlockPlatform
 		/// <summary>
 		/// Стартовый блок сборки.
 		/// </summary>
-		public long RootBlock_id { get { return this.BlockID;} }
+		public long RootBlock_id { get { return this.BlockID; } }
 
 		/// <summary>
 		/// Сборка - образец/шаблон, на основе которой была сделана текущая сборка.
@@ -95,11 +95,24 @@ namespace Schemas.BlockPlatform
 		/// <summary>
 		/// Наименование сборки
 		/// </summary>
-		public string Name { get { return (string)GetValue("Name"); } /*set { name = value; }*/ }
+		public string Name
+		{
+			get
+			{
+				if (IsMainDataContainer)
+					return (string)GetValue("Name", Session.MainStoreName);
+				if (IsDataContainer)
+					return (string)GetValue("Name", Session.DefaulContainerName);
+				else
+					return (string)GetValue("Name");
+			}
+		}
 
 		#endregion
 
 		#region Характеристики
+
+		public bool IsMainDataContainer	{ get; set;	}
 
 		public bool IsDataContainer
 		{
@@ -108,16 +121,16 @@ namespace Schemas.BlockPlatform
 				return BlockType.NameKey == "DataContainer";
 			}
 		}
-	#endregion
+		#endregion
 
-	#region Конструкторы
+		#region Конструкторы
 
-	/// <summary>
-	/// Конструктор.
-	/// </summary>
-	/// <param name="blockType">тип сборки</param>
-	public AssemblyBase(BlockType blockType) :
-			base(-1, blockType, -1, 0, -1, -1, -1, null, DateTime.Now)
+		/// <summary>
+		/// Конструктор.
+		/// </summary>
+		/// <param name="blockType">тип сборки</param>
+		public AssemblyBase(BlockType blockType) :
+				base(-1, blockType, -1, 0, -1, -1, -1, null, DateTime.Now)
 		{
 		}
 
@@ -150,7 +163,7 @@ namespace Schemas.BlockPlatform
 		/// </summary>
 		/// <param name="block">стартовый блок сборки.</param>
 		public AssemblyBase(BlockBase block) :
-			base(block.BlockID, block.BlockType, block.ParentID, block.Order, block.FactID, 
+			base(block.BlockID, block.BlockType, block.ParentID, block.Order, block.FactID,
 				block.PredecessorID, block.SuccessorID, block.UserAttrs, block.Created)
 		{
 		}
@@ -172,7 +185,7 @@ namespace Schemas.BlockPlatform
 			var cont = children.Where(x => x.BlockID == asm.BlockID).FirstOrDefault();
 			if (cont == null)
 				this.children.Add(asm);
-		} 
+		}
 
 		#region Вспомогательные функции
 		/// <summary>

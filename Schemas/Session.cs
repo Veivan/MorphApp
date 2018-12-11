@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+
 using Schemas.BlockPlatform;
 using System.Collections.Generic;
 
@@ -62,13 +64,10 @@ namespace Schemas
 		/// <summary>
 		/// Возвращает тип блока - Контейнер
 		/// </summary>
-		/*	public BlockPlatform.BlockType ContainerType
-			{
-				get
-				{
-					BlockDBServer lowStore = new BlockDBServer();
-					return name;
-				}
-			} */
+		public BlockType GetBlockTypeByNameKey(string NameKey)
+		{
+			return typeList.Where(o => o.NameKey == NameKey).FirstOrDefault();
+		} 
+
 	}
 }
