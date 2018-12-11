@@ -8,16 +8,17 @@ using BlockAddress = System.Int64;
 
 namespace Schemas.BlockPlatform
 {
-	public class ContainerBase
+	public class ContainerBase : AssemblyBase
 	{
 		private string name;
-		private AssemblyBase assembly;
-		protected List<AssemblyBase> content = new List<AssemblyBase>();
 
+		#region Свойства
 		/// <summary>
 		/// Наименование контейнера
 		/// </summary>
 		public string Name { get { return name; } set { name = value; } }
+
+		#endregion
 
 		#region Конструкторы
 
@@ -27,7 +28,7 @@ namespace Schemas.BlockPlatform
 		/// Конструктор. Создание пустого контейнера.
 		/// </summary>
 		/// <param name="_name">Наименование контейнера</param>
-		public ContainerBase(string _name)
+		public ContainerBase(string _name = null) : base(new BlockType(3, "", ""))
 		{
 			if (string.IsNullOrEmpty(_name))
 				_name = Session.DefaulContainerName;
@@ -38,17 +39,14 @@ namespace Schemas.BlockPlatform
 		/// Конструктор. Создание контейнера из сборки.
 		/// </summary>
 		/// <param name="blockType">тип сборки</param>
-		public ContainerBase(AssemblyBase _assembly)
+		public ContainerBase(AssemblyBase _assembly) : base(_assembly)
 		{
 			if (_assembly == null) {
-				this.assembly = new AssemblyBase(new BlockType(3, "", ""));
 				this.name = Session.DefaulContainerName;
 			}
 			else
 			{
-				this.assembly = _assembly;
-				_assembly.
-				//_assembly.UserAttrs
+				this.name = (string)_assembly.GetValue("Name");
 			}
 
 		}
@@ -65,14 +63,6 @@ namespace Schemas.BlockPlatform
 
 		#endregion
 
-		/// <summary>
-		/// Метод заполняет содержимое списка Children значениями атрибута Content.
-		/// </summary>
-		private void FillBlob()
-		{
-			//var Content = UserAttrs["Content"];
-			if (Content != null)
-			{ }
-		}
+
 	}
 }

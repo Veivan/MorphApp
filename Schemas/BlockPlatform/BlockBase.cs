@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using BlockAddress = System.Int64;
 
@@ -64,9 +65,29 @@ namespace Schemas.BlockPlatform
 		public DateTime Created { get { return created_at; } }
 
 		/// <summary>
-		/// Пользовательские атрибуты.
+		/// Коллекция системных атрибутов.
+		/// </summary>
+		public AttrsCollection SysAttrs
+		{
+			get
+			{
+				return _SysAttrs;
+			}
+			/// TODO Сделать системный атрибут "ссылка на источник"
+		}
+
+		/// <summary>
+		/// Коллекция пользовательских атрибутов.
 		/// </summary>
 		public AttrsCollection UserAttrs { get { return _UserAttrs; } }
+
+		public object GetValue(string attrNameKey)
+		{			
+			var attr = _UserAttrs.Attrs.Where(o => o.NameKey == attrNameKey).FirstOrDefault();
+			if (attr == null)
+				return null;
+			return this.blob.GetAttrValue(attr.Order);
+		}
 
 		/// <summary>
 		/// Конструктор

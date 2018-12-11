@@ -27,29 +27,6 @@ namespace Schemas.BlockPlatform
 		public long RootBlock_id { get { return this.BlockID;} }
 
 		/// <summary>
-		/// Коллекция системных атрибутов.
-		/// </summary>
-		public AttrsCollection SysAttrs
-		{
-			get
-			{
-				return _SysAttrs;
-			}
-			/// TODO Сделать системный атрибут "ссылка на источник"
-		}
-
-		/// <summary>
-		/// Коллекция пользовательских атрибутов.
-		/// </summary>
-		public AttrsCollection UserAttrs
-		{
-			get
-			{
-				return _UserAttrs;
-			}
-		}
-
-		/// <summary>
 		/// Сборка - образец/шаблон, на основе которой была сделана текущая сборка.
 		/// </summary>
 		public AssemblyBase Following
@@ -161,14 +138,25 @@ namespace Schemas.BlockPlatform
 				block.PredecessorID, block.SuccessorID, block.Created)
 		{
 		}
+
+		/// <summary>
+		/// Конструктор - копировщик.
+		/// </summary>
+		/// <param name="assembly">Исходная сборка.</param>
+		public AssemblyBase(AssemblyBase assembly) :
+			base(assembly.BlockID, assembly.BlockType, assembly.ParentID, assembly.Order, assembly.FactID,
+				assembly.PredecessorID, assembly.SuccessorID, assembly.Created)
+		{
+		}
+
 		#endregion
 
-	/*	public void AddChild(AssemblyBase asm)
+		public void AddChild(AssemblyBase asm)
 		{
 			var cont = children.Where(x => x.BlockID == asm.BlockID).FirstOrDefault();
 			if (cont == null)
 				this.children.Add(asm);
-		} */
+		} 
 
 		#region Вспомогательные функции
 		/// <summary>

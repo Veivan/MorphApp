@@ -1911,8 +1911,9 @@ namespace DirectDBconnector
 					var predecessor = r[6] as long? ?? 0;
 					var successor = r[7] as long? ?? 0;
 					var order = r[4] as long? ?? 0;
+					var DateCreate = r[9] as DateTime? ?? DateTime.Now;
 					var bt = new BlockType(bt_id, r.GetString(2), r.GetString(8));
-					var block = new BlockBase(r.GetInt64(0), bt, r.GetInt64(3), order, fh_id, predecessor, successor, r.GetDateTime(9));
+					var block = new BlockBase(r.GetInt64(0), bt, r.GetInt64(3), order, fh_id, predecessor, successor, DateCreate);
 
 					if (fh_id > 0)
 					{
