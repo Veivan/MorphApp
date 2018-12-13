@@ -23,6 +23,7 @@ namespace Schemas
 
 		private List<BlockType> typeList;
 		public IBlockDealer DBserver;
+		public IAsmDealer Store;
 
 		/// <summary>
 		/// Конструктор
@@ -50,8 +51,9 @@ namespace Schemas
 			return _session;
 		}
 
-		public void Init(IBlockDealer _DBserver)
+		public void Init(IAsmDealer _Store, IBlockDealer _DBserver)
 		{
+			Store = _Store;
 			DBserver = _DBserver;
 			typeList = _DBserver.GetAllBlockTypes();
 		}

@@ -81,6 +81,11 @@ namespace Schemas.BlockPlatform
 		/// </summary>
 		public AttrsCollection UserAttrs { get { return _UserAttrs; } }
 
+		/// <summary>
+		/// Двоичные данные атрибутов.
+		/// </summary>
+		public Blob Blob { get { return blob; } }
+
 		public object GetValue(string attrNameKey, object defvalue = null)
 		{
 			var result = defvalue;
@@ -98,8 +103,11 @@ namespace Schemas.BlockPlatform
 			if (_UserAttrs != null)
 			{
 				var attr = _UserAttrs.Attrs.Where(o => o.NameKey == attrNameKey).FirstOrDefault();
-				if (attr != null && this.blob != null)
-					this.blob.SetAttrValue(attr.Order, Value);
+				if (attr == null)
+					return;
+				if (this.blob == null)
+					this.blob = new Blob(new List<AttrFactData>() { new AttrFactData(attr.AttrType, Value) });
+				this.blob.SetAttrValue(attr.Order, Value);
 			}
 		}
 

@@ -52,6 +52,7 @@ namespace AsmApp
 		{
 			var asm = store.CreateAssembly(Session.Instance().GetBlockTypeDataContainer(), ParentContID);
 			asm.SetValue("Name", name);
+			asm.Save();
 			return asm;
 		}
 

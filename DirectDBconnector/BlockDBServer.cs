@@ -18,7 +18,6 @@ namespace DirectDBconnector
 
 		public BlockDBServer()
 		{
-			Session.Instance().Init(this);
 		}
 
 		#region Функции для работы с Типами блоков

@@ -189,6 +189,12 @@ namespace Schemas.BlockPlatform
 				this.children.Add(asm);
 		}
 
+		public void Save()
+		{
+			var store = Session.Instance().Store;
+			store.Save(this);
+		}
+
 		#region Вспомогательные функции
 		/// <summary>
 		/// Получение плоского списка из дерева рекурсивно.

@@ -12,13 +12,18 @@ using BlockAddress = System.Int64;
 namespace LogicProcessor
 {
 	/// <summary>
-	/// Класс, обобщающий методы работы с хранилищем данных.
+	/// Реализация интерфейса, обобщающего методы работы с хранилищем данных.
 	/// Представляет API хранилища сборок, контейнеров и справочников.
 	/// </summary>
-	public class StoreServer
+	public class StoreServer : IAsmDealer
 	{
 
-		public BlockDBServer DBserver = new BlockDBServer();
+		private BlockDBServer DBserver = new BlockDBServer();
+
+		public StoreServer()
+		{
+			Session.Instance().Init(this, DBserver);
+		}
 
 		#region API для работы со сборками
 		/// <summary>
@@ -87,6 +92,11 @@ namespace LogicProcessor
 			return result;
 		}
 
+		public override void Save(AssemblyBase asm)
+		{
+			DBserver.SetFactData(asm.BlockID, asm.Blob);
+		}
+
 		#endregion
 
 		#region API для работы с контейнерами : создание, редактирование и различные выборки для визуализации.
@@ -108,7 +118,6 @@ namespace LogicProcessor
 			DBserver.AttrSetValue(id, "Name", name);
 			return id;
 		}
-		
 
 		#endregion
 	}
