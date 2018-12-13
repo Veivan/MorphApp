@@ -62,12 +62,20 @@ namespace Schemas
 		}
 
 		/// <summary>
-		/// Возвращает тип блока - Контейнер
+		/// Возвращает тип блока из кэша
 		/// </summary>
 		public BlockType GetBlockTypeByNameKey(string NameKey)
 		{
 			return typeList.Where(o => o.NameKey == NameKey).FirstOrDefault();
-		} 
+		}
+
+		/// <summary>
+		/// Возвращает тип блока-Контейнера из кэша
+		/// </summary>
+		public BlockType GetBlockTypeDataContainer()
+		{
+			return typeList.Where(o => o.NameKey == containerTypeName).FirstOrDefault();
+		}
 
 	}
 }

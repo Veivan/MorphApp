@@ -7,6 +7,9 @@ using Schemas;
 using Schemas.BlockPlatform;
 using LogicProcessor;
 
+using BlockAddress = System.Int64;
+
+
 namespace AsmApp
 {
 	/// <summary>
@@ -45,7 +48,21 @@ namespace AsmApp
 			}
 		}
 
-		#region Собственные непереопределяемые методы работы с хранилищем
+		public AssemblyBase CreateContainer(string name, BlockAddress ParentContID)
+		{
+			var asm = store.CreateAssembly(Session.Instance().GetBlockTypeDataContainer(), ParentContID);
+			asm.SetValue("Name", name);
+			return asm;
+		}
+
+		public void RefreshContainer(AssemblyBase cont)
+		{
+			var list = store.GetChildren(new List<string>() { cont.BlockID.ToString() });
+			this.FillChildren(cont, list);
+		}
+		#endregion
+
+		#region Оставшиеся (ненужные?) методы работы с хранилищем
 
 		/*// <summary>
 		/// Поиск контейнера в хранилище по его ID.
@@ -72,105 +89,6 @@ namespace AsmApp
 			return result;
 		}
 		#endregion
-
-		/*// <summary>
-		/// Формирование заголовков абзацев.
-		/// </summary>
-		public abstract DocumentMap RefreshParagraphs(long contID, long docID);
-
-		/// <summary>
-		/// Заполнение детей и документов самого абзаца и детей на один уровень вниз данными из БД.
-		/// </summary>
-		public abstract void RefreshContainer(long contID);
-
-		/// <summary>
-		/// Заполнение дочерних контейнеров.
-		/// </summary>
-		/// <param name="parentCont">родительский контейнер</param>
-		/// <param name="list">Набор данных или список</param>
-		/// <returns></returns>
-		public abstract void FillChildren(ContainerNode parentCont, ComplexValue list);
-
-		/// <summary>
-		/// Заполнение Хранилища данными о документах.
-		/// </summary>
-		/// <param name="cont">родительский контейнер</param>
-		/// <param name="list">Набор данных или список</param>
-		/// <returns></returns>
-		public abstract void FillDocs(ContainerNode cont, ComplexValue list);
-
-		/// <summary>
-		/// Заполнение Документа данными о его абзацах.
-		/// </summary>
-		/// <param name="list">Набор данных или список</param>
-		/// <returns></returns>
-		public abstract void FillDocsParagraphs(ComplexValue list);
-
-		/// <summary>
-		/// Сохранение контейнера в БД.
-		/// </summary>
-		/// <param name="name">имя контейнера</param>
-		/// <param name="parentID">ID родительского контейнера</param>
-		/// <returns>List of SimpleParam</returns>
-		public abstract List<SimpleParam> SaveContainerBD(string name, long parentID = -1);
-
-		/// <summary>
-		/// Сохранение документа в БД.
-		/// </summary>
-		/// <param name="name">Имя документа</param>
-		/// <param name="ct_id">ID контейнера</param>
-		/// <returns>List of SimpleParam</returns>
-		public abstract List<SimpleParam> SaveDocumentBD(string name, long ct_ID);
-
-		/// <summary>
-		/// Сохранение абзаца в БД.
-		/// </summary>
-		/// <param name="pMap">ParagraphMap</param>
-		/// <returns>List of SimpleParam</returns>
-		public abstract List<SimpleParam> SaveParagraphBD(ParagraphMap pMap);
-
-		/// <summary>
-		/// Чтение одного абзаца из БД.
-		/// </summary>
-		/// <param name="pg_id">ID абзаца</param>
-		/// <returns>List of SentenceMap</returns>
-		public abstract List<SentenceMap> ReadParagraphDB(long pg_id);
-
-		/// <summary>
-		/// Удаление одного абзаца из БД.
-		/// </summary>
-		/// <param name="pg_id">ID абзаца</param>
-		/// <returns></returns>
-		public abstract void DelParagraph(long ct_id, long doc_id, long pg_id);
-
-		/// <summary>
-		/// Удаление одного документа из БД.
-		/// </summary>
-		/// <param name="doc_id">ID документа</param>
-		/// <returns></returns>
-		public abstract void DelDocument(long ct_id, long doc_id);
-
-		/// <summary>
-		/// Удаление одного контейнера из БД.
-		/// </summary>
-		/// <param name="c_id">ID контейнера</param>
-		/// <returns></returns>
-		public abstract void DelContainer(long ct_id);
-
-		/// <summary>
-		/// Поиск слова в БД.
-		/// </summary>
-		/// <param name="word">слово</param>
-		/// <returns>List of SimpleParam</returns>
-		public abstract List<SimpleParam> GetLexema(string word);
-
-		/// <summary>   
-		/// Сохранение слова в БД.
-		/// </summary>
-		/// <param name="word">слово</param>
-		/// <returns>List of SimpleParam</returns>
-		public abstract List<SimpleParam> SaveLexema(string word);
-		*/
-		#endregion
+	
 	}
 }

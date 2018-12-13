@@ -15,7 +15,7 @@ using AsmApp.Dialogs;
 
 namespace AsmApp
 {
-	public partial class Form1 : Form
+	public partial class AsmMainForm : Form
 	{
 
 		// Работа с БД напрямую
@@ -23,7 +23,7 @@ namespace AsmApp
 
 		ClientStoreMediator store = new ClientStoreMediator();
 
-		public Form1()
+		public AsmMainForm()
 		{
 			InitializeComponent();
 		}
@@ -120,24 +120,30 @@ namespace AsmApp
 			PopulateTreeView();
 		}
 
+		/// <summary>
+		/// Заполнение узлами первого уровня дерева
+		/// </summary>
 		private void PopulateTreeView()
 		{
 			treeView1.Nodes.Clear();
 			foreach (var cont in store.containers)
 			{
-				var aNode = new AsmNode(cont.Name);
+				var aNode = new AsmNode(cont);
 				PopulateTreeChildrenConts(cont, aNode);
 				treeView1.Nodes.Add(aNode);
 			}
 		}
 
+		/// <summary>
+		/// Заполнение узла дочерними узлами
+		/// </summary>
 		private void PopulateTreeChildrenConts(AssemblyBase container, AsmNode nodeToAddTo)
 		{
 			foreach (var chld in container.Children)
 			{
 				if (FindNode(chld.BlockID, nodeToAddTo) != null)
 					continue;
-				var aNode = new AsmNode(chld.Name);
+				var aNode = new AsmNode(chld);
 				nodeToAddTo.Nodes.Add(aNode);
 			}
 		}
@@ -150,6 +156,34 @@ namespace AsmApp
 					return node;
 			}
 			return null;
+		}
+
+		private void btAddCont_Click(object sender, EventArgs e)
+		{
+			var nodeToAddTo = treeView1.SelectedNode as AsmNode;
+			if (nodeToAddTo == null) return;
+			if (!nodeToAddTo.Assembly.IsDataContainer)
+				return;
+			string result = Microsoft.VisualBasic.Interaction.InputBox("Введите имя контейнера:");
+			if (String.IsNullOrEmpty(result))
+				return;
+			var ParentContID = nodeToAddTo.Assembly.BlockID;
+			var asm = store.CreateContainer(result, ParentContID);
+			var aNode = new AsmNode(asm);
+			nodeToAddTo.Nodes.Add(aNode);
+		}
+
+		private void treeView1_BeforeExpand(object sender, TreeViewCancelEventArgs e)
+		{
+			var aNode = (AsmNode)e.Node;
+
+			foreach (AsmNode chldNode in aNode.Nodes)
+			{
+				store.RefreshContainer(chldNode.Assembly);
+				var newNode = (AsmNode)FindNode(chldNode.Assembly.BlockID, chldNode);
+				if (newNode == null)
+					PopulateTreeChildrenConts(chldNode.Assembly, chldNode);
+			}
 		}
 	}
 }

@@ -121,6 +121,8 @@ namespace Schemas.BlockPlatform
 				return BlockType.NameKey == "DataContainer";
 			}
 		}
+
+		public bool IsVirtual { get { return this.BlockID == -1; } }
 		#endregion
 
 		#region Конструкторы
@@ -139,8 +141,8 @@ namespace Schemas.BlockPlatform
 		/// </summary>
 		/// <param name="blockType">тип сборки</param>
 		/// <param name="id">адрес стартового блока сборки</param>
-		public AssemblyBase(BlockType blockType, BlockAddress id) :
-			base(id, blockType, -1, 0, -1, -1, -1, null, DateTime.Now)
+		public AssemblyBase(BlockAddress id, BlockType blockType, BlockAddress ParentContID = -1) :
+			base(id, blockType, ParentContID, 0, -1, -1, -1, null, DateTime.Now)
 		{
 		}
 

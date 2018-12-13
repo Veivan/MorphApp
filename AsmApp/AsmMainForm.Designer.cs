@@ -1,6 +1,6 @@
 ﻿namespace AsmApp
 {
-	partial class Form1
+	partial class AsmMainForm
 	{
 		/// <summary>
 		/// Обязательная переменная конструктора.
@@ -29,7 +29,7 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AsmMainForm));
 			this.tabPage3 = new System.Windows.Forms.TabPage();
 			this.splitContainer2 = new System.Windows.Forms.SplitContainer();
 			this.listBoxAttrs = new System.Windows.Forms.ListBox();
@@ -188,6 +188,7 @@
 			this.treeView1.Name = "treeView1";
 			this.treeView1.Size = new System.Drawing.Size(560, 424);
 			this.treeView1.TabIndex = 24;
+			this.treeView1.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeView1_BeforeExpand);
 			// 
 			// panel3
 			// 
@@ -211,6 +212,7 @@
 			this.btAddCont.TabIndex = 5;
 			this.btAddCont.Text = "Новый контейнер";
 			this.btAddCont.UseVisualStyleBackColor = true;
+			this.btAddCont.Click += new System.EventHandler(this.btAddCont_Click);
 			// 
 			// btAddDoc
 			// 
@@ -275,7 +277,7 @@
 			this.refreshToolStripMenuItem.Text = "Refresh";
 			this.refreshToolStripMenuItem.Click += new System.EventHandler(this.refreshToolStripMenuItem_Click);
 			// 
-			// Form1
+			// AsmMainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -283,7 +285,7 @@
 			this.Controls.Add(this.tabControl1);
 			this.Controls.Add(this.menuStrip1);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.Name = "Form1";
+			this.Name = "AsmMainForm";
 			this.Text = "Form1";
 			this.tabPage3.ResumeLayout(false);
 			this.splitContainer2.Panel1.ResumeLayout(false);

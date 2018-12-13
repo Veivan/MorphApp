@@ -7,10 +7,11 @@ namespace AsmApp
 {
 	public class AsmNode : TreeNode
 	{
+		const string defaultName = "Объект";
 		private AssemblyBase assembly;
 
-		public AsmNode(string text, AssemblyBase _assembly = null) : base(text)
-        {
+		public AsmNode(AssemblyBase _assembly, string Name = null) : base(_assembly == null ? Name ?? defaultName : _assembly.Name)
+		{
 			assembly = _assembly;
 		}
 

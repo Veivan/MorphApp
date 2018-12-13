@@ -26,10 +26,10 @@ namespace LogicProcessor
 		/// </summary>
 		/// <param name="type">тип блока</param>
 		/// <returns>сборка</returns>
-		public AssemblyBase CreateAssembly(BlockType type)
+		public AssemblyBase CreateAssembly(BlockType type, BlockAddress ParentContID = -1)
 		{
-			var id = DBserver.CreateBlock(type.BlockTypeID, -1, 0);
-			var asm = new AssemblyBase(type, id);
+			var id = DBserver.CreateBlock(type.BlockTypeID, ParentContID, 0);
+			var asm = new AssemblyBase(id, type);
 			return asm;
 		}
 
@@ -103,7 +103,7 @@ namespace LogicProcessor
 		/// <returns>адрес добавленного объекта</returns>
 		public BlockAddress CreateContainer(string name, BlockAddress parent, int treeorder)
 		{
-			var typeOfDict = DBserver.GetBlockTypeByNameKey(Session.containerTypeName);
+			var typeOfDict = Session.Instance().GetBlockTypeByNameKey(Session.containerTypeName);
 			BlockAddress id = DBserver.CreateBlock(typeOfDict.BlockTypeID, parent, treeorder);
 			DBserver.AttrSetValue(id, "Name", name);
 			return id;
