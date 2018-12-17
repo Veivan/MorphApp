@@ -106,7 +106,15 @@ namespace Schemas.BlockPlatform
 				if (attr == null)
 					return;
 				if (this.blob == null)
-					this.blob = new Blob(new List<AttrFactData>() { new AttrFactData(attr.AttrType, Value) });
+				{
+					var listFD = new List<AttrFactData>();
+					foreach (var userAttr in _UserAttrs.Attrs.OrderBy(o => o.Order))
+					{
+						var factVal = userAttr.NameKey == attrNameKey ? Value : null;
+						listFD.Add(new AttrFactData(userAttr.AttrType, factVal));
+					}
+					this.blob = new Blob(listFD);
+				}
 				this.blob.SetAttrValue(attr.Order, Value);
 			}
 		}

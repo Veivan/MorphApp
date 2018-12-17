@@ -90,8 +90,8 @@ namespace SagaTest
 		public void Test_MakeBlob_String()
 		{
 			//const string testval = "value1";
-			//const string testval = "хорошо";
-			const string testval = null;
+			const string testval = "хорошо";
+			//const string testval = null;
 			var testtype = enAttrTypes.mntxt;
 			var attr1 = new AttrFactData(testtype, testval);
 			var list = new List<AttrFactData>();
