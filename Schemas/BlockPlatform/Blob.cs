@@ -22,12 +22,18 @@ namespace Schemas
 		protected List<AttrFactData> _factdata; // хранилище фактических данных атрибутов
 
 		// Сделан доступным для вызова только из наследников
-		protected Blob(byte[] data)
+		protected Blob(byte[] data, int fieldsCount)
 		{
-			if (data != null)
+			int idx = 0;
+			if (data == null)
+			{
+				this._bytedata = new byte[fieldsCount];
+				for (int i = 0; i < _bytedata.Length; i++)
+					_bytedata[idx++] = 1;
+			}
+			else
 			{
 				this._bytedata = new byte[data.Length];
-				int idx = 0;
 				for (int i = 0; i < _bytedata.Length; i++)
 					_bytedata[idx++] = data[i];
 			}
@@ -38,7 +44,7 @@ namespace Schemas
 		/// </summary>
 		/// <param name="attrTypes">Список типов атрибутов блоков</param>
 		/// <param name="data">массив байт</param>
-		public Blob(List<enAttrTypes> attrTypes, byte[] data) : this (data)
+		public Blob(List<enAttrTypes> attrTypes, byte[] data) : this (data, attrTypes.Count)
 		{
 			_factdata = new List<AttrFactData>();
 			if (data == null)
@@ -98,8 +104,17 @@ namespace Schemas
 		private void MakeBlob()
 		{
 			byte[] arrbt;
-			foreach (var rec in _factdata.Where(o => o.Value != null))
+			foreach (var rec in _factdata)
 			{
+				// Добавление флага, определяещего состояние IsNull последующего поля
+				// IsNull = 1 (true), иначе = 0 (false)
+				if (rec.Value == null)
+				{
+					AddData(new byte[] { 1 });
+					continue;
+				}
+				else
+					AddData(new byte[] { 0 });
 
 				switch (rec.Type)
 				{
@@ -166,84 +181,95 @@ namespace Schemas
 
 			foreach (var type in _attrTypes)
 			{
-				switch (type)
+				value = null;
+				// Читаем значение IsNull
+				arrbt = new byte[boolen];
+				for (int i = 0; i < boolen; i++)
+					arrbt[i] = _bytedata[offset++];
+				if (BitConverter.IsLittleEndian) Array.Reverse(arrbt);
+				var IsNull = BitConverter.ToBoolean(arrbt, 0);
+
+				if (!IsNull)
 				{
-					case enAttrTypes.mntxt:
-					case enAttrTypes.mnrtf:
-						// Определяем длину текста
-						arrbt = new byte[intlen];
-						for (int i = 0; i < intlen; i++)
-							arrbt[i] = _bytedata[offset++];
-						if (BitConverter.IsLittleEndian) Array.Reverse(arrbt);
-						var txtlen = BitConverter.ToInt32(arrbt, 0);
-						// Чтение текста
-						arrbt = new byte[txtlen];
-						for (int i = 0; i < txtlen; i++)
-							arrbt[i] = _bytedata[offset++];
-						if (BitConverter.IsLittleEndian) Array.Reverse(arrbt);
-						value = Encoding.UTF8.GetString(arrbt);
-						break;
-					case enAttrTypes.mnlink:
-					case enAttrTypes.mnlong:
-						arrbt = new byte[lnglen];
-						for (int i = 0; i < lnglen; i++)
-							arrbt[i] = _bytedata[offset++];
-						if (BitConverter.IsLittleEndian) Array.Reverse(arrbt);
-						value = BitConverter.ToInt64(arrbt, 0);
-						break;
-					case enAttrTypes.mnreal:
-						arrbt = new byte[lnglen];
-						for (int i = 0; i < lnglen; i++)
-							arrbt[i] = _bytedata[offset++];
-						if (BitConverter.IsLittleEndian) Array.Reverse(arrbt);
-						value = BitConverter.ToSingle(arrbt, 0);
-						break;
-					case enAttrTypes.mnbool:
-						arrbt = new byte[boolen];
-						for (int i = 0; i < boolen; i++)
-							arrbt[i] = _bytedata[offset++];
-						if (BitConverter.IsLittleEndian) Array.Reverse(arrbt);
-						value = BitConverter.ToBoolean(arrbt, 0);
-						break;
-					case enAttrTypes.mnblob:
-						// Определяем длину массива байт картинки
-						arrbt = new byte[intlen];
-						for (int i = 0; i < intlen; i++)
-							arrbt[i] = _bytedata[offset++];
-						if (BitConverter.IsLittleEndian) Array.Reverse(arrbt);
-						var imglen = BitConverter.ToInt32(arrbt, 0);
-						// Чтение массива байт картинки
-						arrbt = new byte[imglen];
-						for (int i = 0; i < imglen; i++)
-							arrbt[i] = _bytedata[offset++];
-						if (BitConverter.IsLittleEndian) Array.Reverse(arrbt);
-
-						//value = TMorph.Common.Utils.GetImageFromByteArray(arrbt);
-
-						using (var ms = new MemoryStream(arrbt))
-						{
-							value = Image.FromStream(ms, true);
-						}
-						break;
-					case enAttrTypes.mnarr:
-						// Определяем длину списка ссылок
-						arrbt = new byte[intlen];
-						for (int i = 0; i < intlen; i++)
-							arrbt[i] = _bytedata[offset++];
-						if (BitConverter.IsLittleEndian) Array.Reverse(arrbt);
-						var listlen = BitConverter.ToInt32(arrbt, 0);
-						// Чтение списка
-						var lst = new List<long>();
-						arrbt = new byte[lnglen];
-						for (int i = 0; i < listlen; i++)
-						{
-							for (int j = 0; j < lnglen; j++)
-								arrbt[j] = _bytedata[offset++];
+					switch (type)
+					{
+						case enAttrTypes.mntxt:
+						case enAttrTypes.mnrtf:
+							// Определяем длину текста
+							arrbt = new byte[intlen];
+							for (int i = 0; i < intlen; i++)
+								arrbt[i] = _bytedata[offset++];
 							if (BitConverter.IsLittleEndian) Array.Reverse(arrbt);
-							lst.Add(BitConverter.ToInt64(arrbt, 0));
-						}
-						value = lst;
-						break;
+							var txtlen = BitConverter.ToInt32(arrbt, 0);
+							// Чтение текста
+							arrbt = new byte[txtlen];
+							for (int i = 0; i < txtlen; i++)
+								arrbt[i] = _bytedata[offset++];
+							if (BitConverter.IsLittleEndian) Array.Reverse(arrbt);
+							value = Encoding.UTF8.GetString(arrbt);
+							break;
+						case enAttrTypes.mnlink:
+						case enAttrTypes.mnlong:
+							arrbt = new byte[lnglen];
+							for (int i = 0; i < lnglen; i++)
+								arrbt[i] = _bytedata[offset++];
+							if (BitConverter.IsLittleEndian) Array.Reverse(arrbt);
+							value = BitConverter.ToInt64(arrbt, 0);
+							break;
+						case enAttrTypes.mnreal:
+							arrbt = new byte[lnglen];
+							for (int i = 0; i < lnglen; i++)
+								arrbt[i] = _bytedata[offset++];
+							if (BitConverter.IsLittleEndian) Array.Reverse(arrbt);
+							value = BitConverter.ToSingle(arrbt, 0);
+							break;
+						case enAttrTypes.mnbool:
+							arrbt = new byte[boolen];
+							for (int i = 0; i < boolen; i++)
+								arrbt[i] = _bytedata[offset++];
+							if (BitConverter.IsLittleEndian) Array.Reverse(arrbt);
+							value = BitConverter.ToBoolean(arrbt, 0);
+							break;
+						case enAttrTypes.mnblob:
+							// Определяем длину массива байт картинки
+							arrbt = new byte[intlen];
+							for (int i = 0; i < intlen; i++)
+								arrbt[i] = _bytedata[offset++];
+							if (BitConverter.IsLittleEndian) Array.Reverse(arrbt);
+							var imglen = BitConverter.ToInt32(arrbt, 0);
+							// Чтение массива байт картинки
+							arrbt = new byte[imglen];
+							for (int i = 0; i < imglen; i++)
+								arrbt[i] = _bytedata[offset++];
+							if (BitConverter.IsLittleEndian) Array.Reverse(arrbt);
+
+							//value = TMorph.Common.Utils.GetImageFromByteArray(arrbt);
+
+							using (var ms = new MemoryStream(arrbt))
+							{
+								value = Image.FromStream(ms, true);
+							}
+							break;
+						case enAttrTypes.mnarr:
+							// Определяем длину списка ссылок
+							arrbt = new byte[intlen];
+							for (int i = 0; i < intlen; i++)
+								arrbt[i] = _bytedata[offset++];
+							if (BitConverter.IsLittleEndian) Array.Reverse(arrbt);
+							var listlen = BitConverter.ToInt32(arrbt, 0);
+							// Чтение списка
+							var lst = new List<long>();
+							arrbt = new byte[lnglen];
+							for (int i = 0; i < listlen; i++)
+							{
+								for (int j = 0; j < lnglen; j++)
+									arrbt[j] = _bytedata[offset++];
+								if (BitConverter.IsLittleEndian) Array.Reverse(arrbt);
+								lst.Add(BitConverter.ToInt64(arrbt, 0));
+							}
+							value = lst;
+							break;
+					}
 				}
 				attrfactdata = new AttrFactData(type, value);
 				_factdata.Add(attrfactdata);

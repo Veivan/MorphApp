@@ -17,7 +17,7 @@ namespace Schemas
 		/// Конструктор - создание Blob-справочника из двоичных данных (После чтения из БД)
 		/// </summary>
 		/// <param name="data">массив байт</param>
-		public ContainerBlob(byte[] data) : base(data)
+		public ContainerBlob(byte[] data) : base(data, 2)
 		{
 			var attrTypes = new List<enAttrTypes>();
 			attrTypes.Add(enAttrTypes.mntxt);  // атрибут "Name"
