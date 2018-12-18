@@ -13,17 +13,18 @@ namespace Schemas.BlockPlatform
 	{
 		protected BlockAddress b_id;
 		protected BlockType bt;
-		protected DateTime created_at;
 		protected BlockAddress parent = 0;
 		protected long treeorder = 0;
 		protected BlockAddress fh_id = 0;
 		protected BlockAddress predecessor = 0;
 		protected BlockAddress successor = 0;
+		protected AttrsCollection _UserAttrs;
+		protected DateTime created_at;
 
 		protected Blob blob;
 		protected AttrsCollection _SysAttrs;
-		protected AttrsCollection _UserAttrs;
 
+		#region Свойства
 		/// <summary>
 		/// Идентификатор БД.
 		/// </summary>
@@ -86,6 +87,8 @@ namespace Schemas.BlockPlatform
 		/// </summary>
 		public Blob Blob { get { return blob; } }
 
+		#endregion
+
 		public object GetValue(string attrNameKey, object defvalue = null)
 		{
 			var result = defvalue;
@@ -119,6 +122,7 @@ namespace Schemas.BlockPlatform
 			}
 		}
 
+		#region Constructors
 		/// <summary>
 		/// Конструктор
 		/// </summary>
@@ -142,6 +146,31 @@ namespace Schemas.BlockPlatform
 			else
 				this._UserAttrs = _userAttrs;
 		}
+
+		/// <summary>
+		/// Конструктор-копировщик
+		/// </summary>
+		public BlockBase(BlockBase srcBlock)
+		{
+			b_id = srcBlock.b_id;
+			bt = srcBlock.bt;
+			parent = srcBlock.parent;
+			treeorder = srcBlock.treeorder;
+			fh_id = srcBlock.fh_id;
+			predecessor = srcBlock.predecessor;
+			successor = srcBlock.successor;
+			_UserAttrs = new AttrsCollection();
+			var tplist = new List<enAttrTypes>();
+			foreach (var attr in srcBlock.UserAttrs.Attrs.OrderBy(o => o.Order))
+			{
+				_UserAttrs.AddElement(attr);
+				tplist.Add(attr.AttrType);
+			}
+			created_at = srcBlock.created_at;
+			this.blob = new Blob(tplist, srcBlock.blob.Data);
+		}
+
+		#endregion
 
 		/// <summary>
 		/// Формирование атрибутов из блоба.

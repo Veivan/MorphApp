@@ -164,9 +164,7 @@ namespace Schemas.BlockPlatform
 		/// Конструктор.
 		/// </summary>
 		/// <param name="block">стартовый блок сборки.</param>
-		public AssemblyBase(BlockBase block) :
-			base(block.BlockID, block.BlockType, block.ParentID, block.Order, block.FactID,
-				block.PredecessorID, block.SuccessorID, block.UserAttrs, block.Created)
+		public AssemblyBase(BlockBase block) : base(block)
 		{
 		}
 

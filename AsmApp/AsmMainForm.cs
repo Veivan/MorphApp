@@ -143,7 +143,7 @@ namespace AsmApp
 			{
 				if (FindNode(chld.BlockID, nodeToAddTo) != null)
 					continue;
-				var aNode = new AsmNode(chld);
+				var aNode = new AsmNode(chld, chld.Name);
 				nodeToAddTo.Nodes.Add(aNode);
 			}
 		}

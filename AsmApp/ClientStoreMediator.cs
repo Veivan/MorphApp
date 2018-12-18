@@ -30,7 +30,7 @@ namespace AsmApp
 		{
 			containers.Clear();
 
-			var MainStore = new AssemblyBase(Session.Instance().GetBlockTypeByNameKey(Session.containerTypeName));
+			var MainStore = new AssemblyBase(Session.MainStoreID, Session.Instance().GetBlockTypeByNameKey(Session.containerTypeName));
 			MainStore.IsMainDataContainer = true;
 			containers.Add(MainStore);
 

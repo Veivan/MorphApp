@@ -21,7 +21,13 @@ namespace Schemas
 		protected byte[] _bytedata; // данные атрибутов в двоичном виде
 		protected List<AttrFactData> _factdata; // хранилище фактических данных атрибутов
 
-		// Сделан доступным для вызова только из наследников
+		#region Constructors
+		/// <summary>
+		/// Конструктор - копировщик.
+		/// Доступен только в наслелнике - DictBlob. Возможно и не нужен после ликвидации DictBlob.
+		/// </summary>
+		/// <param name="data">массив байт</param>
+		/// <param name="fieldsCount">Количество атрибутов блоба</param>
 		protected Blob(byte[] data, int fieldsCount)
 		{
 			int idx = 0;
@@ -68,6 +74,7 @@ namespace Schemas
 			_factdata = new List<AttrFactData>(attrs);
 			MakeBlob();
 		}
+		#endregion
 
 		public byte[] Data { get { return _bytedata; } }
 
