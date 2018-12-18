@@ -1889,11 +1889,6 @@ namespace DirectDBconnector
 		/// <returns>DataTable</returns>
 		public List<BlockBase> dbGetChildren(List<string> list_ids)
 		{
-			int bufferSize = 100;                   // Size of the BLOB buffer.
-			byte[] outbyte = new byte[bufferSize];  // The BLOB byte[] buffer to be filled by GetBytes.
-			long retval;                            // The bytes returned from GetBytes.
-			long startIndex = 0;                    // The starting position in the BLOB output.
-
 			var result = new List<BlockBase>();
 			string ids = string.Join(",", list_ids.ToArray());
 			if (String.IsNullOrEmpty(ids))
@@ -1918,7 +1913,6 @@ namespace DirectDBconnector
 
 					if (fh_id > 0)
 					{
-
 						// Getting attrtypes
 						var idtplist = dbGetAttrTypesListByType(bt_id);
 						var tplist = new List<enAttrTypes>();
@@ -1926,30 +1920,6 @@ namespace DirectDBconnector
 							tplist.Add((enAttrTypes)idtp);
 
 						// Reading BLOB
-						/*/ Reset the starting byte for the new BLOB.
-						startIndex = 0;
-						var BytesList = new List<byte>();
-						// Read the bytes into outbyte[] and retain the number of bytes returned.
-						retval = r.GetBytes(10, startIndex, outbyte, 0, bufferSize);
-						// Continue reading and writing while there are bytes beyond the size of the buffer.
-						while (retval == bufferSize)
-						{
-							BytesList.AddRange(outbyte.ToList());
-							// Reposition the start index to the end of the last buffer and fill the buffer.
-							startIndex += bufferSize;
-							retval = r.GetBytes(10, startIndex, outbyte, 0, bufferSize);
-						}
-
-						// Write the remaining buffer.
-						if (retval > 0) // if file size can divide to buffer size
-						{
-							byte[] x = new byte[(int)retval];
-							var lastlist = outbyte.ToList();
-							lastlist.CopyTo(0, x, 0, (int)retval);
-							BytesList.AddRange(lastlist);
-						}*/
-						//block.PerformBlob(tplist, BytesList.ToArray(), attrs);
-
 						var bytearr = GetBytes(r, 10);
 						block.PerformBlob(tplist, bytearr);
 					}
