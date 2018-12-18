@@ -430,6 +430,11 @@ namespace DirectDBA
 						DataPropertyName = "successor",
 						HeaderText = "successor"
 					});
+					dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
+					{
+						DataPropertyName = "deleted",
+						HeaderText = "deleted"
+					});
 					#endregion
 					break;
 				case dbTables.mFactHeap:

@@ -163,7 +163,7 @@ namespace DirectDBconnector
 						+ "	ma_id integer PRIMARY KEY, namekey text, nameui text, mt_id integer, bt_id integer, sorder integer, mandatory integer);\n" +
 					"CREATE TABLE IF NOT EXISTS mBlocks (\n"
 						+ "	b_id integer PRIMARY KEY, bt_id integer, created_at DATETIME DEFAULT CURRENT_TIMESTAMP, \n"
-						+ " parent integer, treeorder integer, fh_id integer, predecessor integer, successor integer);\n" +
+						+ " parent integer, treeorder integer, fh_id integer, predecessor integer, successor integer, deleted integer DEFAULT 0);\n" +
 					"CREATE TABLE IF NOT EXISTS mFactHeap (\n"
 						+ "	fh_id integer PRIMARY KEY, blockdata blob);\n" +
 					"CREATE TABLE IF NOT EXISTS mDicts (\n"
@@ -1215,9 +1215,11 @@ namespace DirectDBconnector
 			try
 			{
 				var stmt =
-					"ALTER TABLE mAttributes ADD COLUMN namekey text;\n"
+					"ALTER TABLE mBlocks ADD COLUMN deleted integer DEFAULT 0;";
+
+/*					"ALTER TABLE mAttributes ADD COLUMN namekey text;\n"
 					+ "ALTER TABLE mAttributes ADD COLUMN nameui text;\n"
-					+ "UPDATE mAttributes SET namekey = name;";
+					+ "UPDATE mAttributes SET namekey = name;"; */
 				m_sqlCmd.CommandText = stmt;
 				m_sqlCmd.ExecuteNonQuery();
 			}
@@ -1895,7 +1897,7 @@ namespace DirectDBconnector
 				return null;
 			m_sqlCmd.CommandText = string.Format("SELECT B.b_id, B.bt_id, T.namekey, B.parent, B.treeorder, B.fh_id, B.predecessor, B.successor,  T.nameui, B.created_at, " +
 				" F.blockdata FROM mBlocks B JOIN mBlockTypes T ON T.bt_id = B.bt_id LEFT JOIN mFactHeap F ON F.fh_id = B.fh_id " +
-				" WHERE B.parent IN ({0})", ids);
+				" WHERE B.deleted = 0 AND B.parent IN ({0})", ids);
 			try
 			{
 				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
