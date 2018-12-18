@@ -74,7 +74,7 @@ namespace LogicProcessor
 		{
 			foreach (var child in src_children)
 			{
-				var chid = DBserver.CreateBlock(child.BlockType.BlockTypeID, child.ParentAssemblyID, (int)child.Treeorder);
+				var chid = DBserver.CreateBlock(child.BlockType.BlockTypeID, child.ParentAssemblyID, (int)child.Order);
 				//child.RootBlock_id = chid;
 				CreateChildrenRequrs(child.Children);
 			}
@@ -94,6 +94,8 @@ namespace LogicProcessor
 
 		public override void Save(AssemblyBase asm)
 		{
+			if (asm.IsDeleted == 1)
+				DBserver.Delete(asm.BlockID);
 			DBserver.SetFactData(asm.BlockID, asm.Blob);
 		}
 

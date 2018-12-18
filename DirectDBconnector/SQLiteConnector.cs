@@ -1810,6 +1810,18 @@ namespace DirectDBconnector
 		}
 
 		/// <summary>
+		/// Указание/отмена у блока состояниея "Удалён".
+		/// </summary>
+		/// <param name="addr">ID - адрес блока</param>
+		/// <param name="mark">1 - удалён, 0 - нет</param>
+		/// <returns></returns>
+		public void MarkBlock4Delete(long addr, int mark)
+		{
+			m_sqlCmd.CommandText = string.Format("UPDATE mBlocks SET deleted = {0} WHERE b_id = {1}", mark, addr);
+			m_sqlCmd.ExecuteNonQuery();
+		}
+
+		/// <summary>
 		/// Присвоение фактического значения блоку.
 		/// </summary>
 		/// <param name="addr">ID - адрес блока</param>

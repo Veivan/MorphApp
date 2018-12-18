@@ -185,5 +185,12 @@ namespace AsmApp
 					PopulateTreeChildrenConts(chldNode.Assembly, chldNode);
 			}
 		}
+
+		private void btDelNode_Click(object sender, EventArgs e)
+		{
+			var aNode = treeView1.SelectedNode as AsmNode;
+			if (aNode == null) return;
+			aNode.Delete();
+		}
 	}
 }

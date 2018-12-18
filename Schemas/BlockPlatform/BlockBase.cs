@@ -20,6 +20,7 @@ namespace Schemas.BlockPlatform
 		protected BlockAddress successor = 0;
 		protected AttrsCollection _UserAttrs;
 		protected DateTime created_at;
+		protected int isDeleted = 0;
 
 		protected Blob blob;
 		protected AttrsCollection _SysAttrs;
@@ -65,6 +66,19 @@ namespace Schemas.BlockPlatform
 		/// </summary>
 		public DateTime Created { get { return created_at; } }
 
+		public int IsDeleted
+		{
+			get
+			{
+				return isDeleted;
+			}
+
+			set
+			{
+				isDeleted = value;
+			}
+		}
+
 		/// <summary>
 		/// Коллекция системных атрибутов.
 		/// </summary>
@@ -88,39 +102,6 @@ namespace Schemas.BlockPlatform
 		public Blob Blob { get { return blob; } }
 
 		#endregion
-
-		public object GetValue(string attrNameKey, object defvalue = null)
-		{
-			var result = defvalue;
-			if (_UserAttrs == null)
-				return result;
-			var attr = _UserAttrs.Attrs.Where(o => o.NameKey == attrNameKey).FirstOrDefault();
-			if (attr != null && this.blob != null)
-				return this.blob.GetAttrValue(attr.Order);
-			else
-				return result;
-		}
-
-		public void SetValue(string attrNameKey, object Value)
-		{
-			if (_UserAttrs != null)
-			{
-				var attr = _UserAttrs.Attrs.Where(o => o.NameKey == attrNameKey).FirstOrDefault();
-				if (attr == null)
-					return;
-				if (this.blob == null)
-				{
-					var listFD = new List<AttrFactData>();
-					foreach (var userAttr in _UserAttrs.Attrs.OrderBy(o => o.Order))
-					{
-						var factVal = userAttr.NameKey == attrNameKey ? Value : null;
-						listFD.Add(new AttrFactData(userAttr.AttrType, factVal));
-					}
-					this.blob = new Blob(listFD);
-				}
-				this.blob.SetAttrValue(attr.Order, Value);
-			}
-		}
 
 		#region Constructors
 		/// <summary>
@@ -179,6 +160,53 @@ namespace Schemas.BlockPlatform
 		{
 			this.blob = new Blob(attrTypes, data);
 		}
+
+		#region Methods
+
+		public object GetValue(string attrNameKey, object defvalue = null)
+		{
+			var result = defvalue;
+			if (_UserAttrs == null)
+				return result;
+			var attr = _UserAttrs.Attrs.Where(o => o.NameKey == attrNameKey).FirstOrDefault();
+			if (attr != null && this.blob != null)
+				return this.blob.GetAttrValue(attr.Order);
+			else
+				return result;
+		}
+
+		public void SetValue(string attrNameKey, object Value)
+		{
+			if (_UserAttrs != null)
+			{
+				var attr = _UserAttrs.Attrs.Where(o => o.NameKey == attrNameKey).FirstOrDefault();
+				if (attr == null)
+					return;
+				if (this.blob == null)
+				{
+					var listFD = new List<AttrFactData>();
+					foreach (var userAttr in _UserAttrs.Attrs.OrderBy(o => o.Order))
+					{
+						var factVal = userAttr.NameKey == attrNameKey ? Value : null;
+						listFD.Add(new AttrFactData(userAttr.AttrType, factVal));
+					}
+					this.blob = new Blob(listFD);
+				}
+				this.blob.SetAttrValue(attr.Order, Value);
+			}
+		}
+
+		public void Delete()
+		{
+			isDeleted = 1;
+		}
+
+		public void Recall()
+		{
+			isDeleted = 0;
+		}
+
+		#endregion
 
 	}
 }

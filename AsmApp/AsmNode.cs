@@ -15,7 +15,21 @@ namespace AsmApp
 			assembly = _assembly;
 		}
 
-		public AssemblyBase Assembly { get { return assembly; }  set { assembly = value; } }
+		public AssemblyBase Assembly { get { return assembly; } set { assembly = value; } }
+
+		public void Delete()
+		{
+			try
+			{
+				assembly.Delete();
+				assembly.Save();
+				this.Remove();
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message, ex.Source);
+			}
+		}
 
 	}
 }

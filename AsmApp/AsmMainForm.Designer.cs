@@ -46,7 +46,7 @@
 			this.panel3 = new System.Windows.Forms.Panel();
 			this.btAddCont = new System.Windows.Forms.Button();
 			this.btAddDoc = new System.Windows.Forms.Button();
-			this.btParaDel = new System.Windows.Forms.Button();
+			this.btDelNode = new System.Windows.Forms.Button();
 			this.btEdit = new System.Windows.Forms.Button();
 			this.btAddPara = new System.Windows.Forms.Button();
 			this.btRefresh = new System.Windows.Forms.Button();
@@ -194,7 +194,7 @@
 			// 
 			this.panel3.Controls.Add(this.btAddCont);
 			this.panel3.Controls.Add(this.btAddDoc);
-			this.panel3.Controls.Add(this.btParaDel);
+			this.panel3.Controls.Add(this.btDelNode);
 			this.panel3.Controls.Add(this.btEdit);
 			this.panel3.Controls.Add(this.btAddPara);
 			this.panel3.Controls.Add(this.btRefresh);
@@ -206,7 +206,7 @@
 			// 
 			// btAddCont
 			// 
-			this.btAddCont.Location = new System.Drawing.Point(211, 49);
+			this.btAddCont.Location = new System.Drawing.Point(5, 46);
 			this.btAddCont.Name = "btAddCont";
 			this.btAddCont.Size = new System.Drawing.Size(107, 23);
 			this.btAddCont.TabIndex = 5;
@@ -216,25 +216,26 @@
 			// 
 			// btAddDoc
 			// 
-			this.btAddDoc.Location = new System.Drawing.Point(98, 49);
+			this.btAddDoc.Location = new System.Drawing.Point(348, 80);
 			this.btAddDoc.Name = "btAddDoc";
 			this.btAddDoc.Size = new System.Drawing.Size(107, 23);
 			this.btAddDoc.TabIndex = 4;
 			this.btAddDoc.Text = "Новый документ";
 			this.btAddDoc.UseVisualStyleBackColor = true;
 			// 
-			// btParaDel
+			// btDelNode
 			// 
-			this.btParaDel.Location = new System.Drawing.Point(5, 78);
-			this.btParaDel.Name = "btParaDel";
-			this.btParaDel.Size = new System.Drawing.Size(87, 26);
-			this.btParaDel.TabIndex = 3;
-			this.btParaDel.Text = "Удалить абзац";
-			this.btParaDel.UseVisualStyleBackColor = true;
+			this.btDelNode.Location = new System.Drawing.Point(5, 78);
+			this.btDelNode.Name = "btDelNode";
+			this.btDelNode.Size = new System.Drawing.Size(87, 26);
+			this.btDelNode.TabIndex = 3;
+			this.btDelNode.Text = "Удалить";
+			this.btDelNode.UseVisualStyleBackColor = true;
+			this.btDelNode.Click += new System.EventHandler(this.btDelNode_Click);
 			// 
 			// btEdit
 			// 
-			this.btEdit.Location = new System.Drawing.Point(98, 14);
+			this.btEdit.Location = new System.Drawing.Point(201, 17);
 			this.btEdit.Name = "btEdit";
 			this.btEdit.Size = new System.Drawing.Size(107, 26);
 			this.btEdit.TabIndex = 2;
@@ -243,7 +244,7 @@
 			// 
 			// btAddPara
 			// 
-			this.btAddPara.Location = new System.Drawing.Point(5, 46);
+			this.btAddPara.Location = new System.Drawing.Point(348, 46);
 			this.btAddPara.Name = "btAddPara";
 			this.btAddPara.Size = new System.Drawing.Size(87, 26);
 			this.btAddPara.TabIndex = 1;
@@ -323,7 +324,7 @@
 		private System.Windows.Forms.Panel panel3;
 		private System.Windows.Forms.Button btAddCont;
 		private System.Windows.Forms.Button btAddDoc;
-		private System.Windows.Forms.Button btParaDel;
+		private System.Windows.Forms.Button btDelNode;
 		private System.Windows.Forms.Button btEdit;
 		private System.Windows.Forms.Button btAddPara;
 		private System.Windows.Forms.Button btRefresh;

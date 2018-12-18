@@ -145,6 +145,13 @@ namespace Schemas
 		public abstract int GetOrder(BlockAddress addr);
 
 		/// <summary>
+		/// "Удаление" блока - Присвоение 1 полю Deleted.
+		/// </summary>
+		/// <param name="addr">адрес блока</param>
+		/// <returns></returns>
+		public abstract void Delete(BlockAddress addr);
+
+		/// <summary>
 		/// Присвоение фактических данных блоку.
 		/// </summary>
 		/// <param name="addr">адрес блока</param>

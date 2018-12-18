@@ -77,22 +77,6 @@ namespace Schemas.BlockPlatform
 		}
 
 		/// <summary>
-		/// Поддержка дерева. Порядок сборки в дереве.
-		/// </summary>
-		public long Treeorder
-		{
-			get
-			{
-				return _treeorder;
-			}
-
-			set
-			{
-				_treeorder = value;
-			}
-		}
-
-		/// <summary>
 		/// Наименование сборки
 		/// </summary>
 		public string Name

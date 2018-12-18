@@ -117,6 +117,11 @@ namespace DirectDBconnector
 			return result;
 		}
 
+		public override void Delete(BlockAddress addr)
+		{
+			dbConnector.MarkBlock4Delete(addr, 1);
+		}
+
 		public override long SetFactData(long addr, Blob blob, bool MakeVersion = false)
 		{
 			var result = dbConnector.dbSetFactData(addr, blob.Data, MakeVersion);
