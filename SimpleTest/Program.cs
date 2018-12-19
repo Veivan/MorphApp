@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Windows.Forms;
 using DirectDBconnector;
 using Schemas;
 
@@ -42,18 +42,18 @@ namespace SimpleTest
 	}
 
 	class Program
-    {
-        static void Main()
-        {
-			TestList();
+	{
+		static void Main()
+		{
+			TestInputBox();
 
 			return;
 
 			RunTest();
 
-            UI user1;
-            for (user1 = UI.Name; user1 <= UI.Sex; user1++)
-                Console.WriteLine("Элемент: \"{0}\", значение {1}",user1,(int)user1);
+			UI user1;
+			for (user1 = UI.Name; user1 <= UI.Sex; user1++)
+				Console.WriteLine("Элемент: \"{0}\", значение {1}", user1, (int)user1);
 			string s = Enum.GetName(typeof(UI), 0);
 
 
@@ -68,7 +68,7 @@ namespace SimpleTest
 			mainlist.Add(n);
 
 			Console.WriteLine("mainlist before");
-			foreach(var item in mainlist)
+			foreach (var item in mainlist)
 				Console.WriteLine(item.order.ToString() + " - " + item.sentence);
 
 			var reslist = new List<SProps>();
@@ -80,17 +80,17 @@ namespace SimpleTest
 				Console.WriteLine(item.order.ToString() + " - " + item.sentence);
 
 
-            Console.ReadLine();
-        }
+			Console.ReadLine();
+		}
 
-        static void RunTest()
-        {
-            SQLiteConnector dbConnector = SQLiteConnector.Instance;
-            // act
-            //dbConnector.EmptyDB();
-            //dbConnector.selectAll(dbTables.tblTermContent);
+		static void RunTest()
+		{
+			SQLiteConnector dbConnector = SQLiteConnector.Instance;
+			// act
+			//dbConnector.EmptyDB();
+			//dbConnector.selectAll(dbTables.tblTermContent);
 
-        }
+		}
 
 		static void TestList()
 		{
@@ -105,5 +105,14 @@ namespace SimpleTest
 			x.Print();
 		}
 
+		static void TestInputBox()
+		{
+			string value = "Document 1";
+			var strVal = TMorph.Common.Utils.InputBox("New document", "New document name:", "def");
+			if (strVal != "")
+			{
+				MessageBox.Show(value);
+			}
+		}
 	}
 }

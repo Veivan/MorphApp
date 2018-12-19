@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using Schemas;
 using Schemas.BlockPlatform;
 using DirectDBconnector;
 using TMorph.Common;
@@ -164,7 +162,8 @@ namespace AsmApp
 			if (nodeToAddTo == null) return;
 			if (!nodeToAddTo.Assembly.IsDataContainer)
 				return;
-			string result = Microsoft.VisualBasic.Interaction.InputBox("Введите имя контейнера:");
+
+			var result = Utils.InputBox("Создание контейнера", "Введите имя контейнера:", Session.DefaulContainerName);
 			if (String.IsNullOrEmpty(result))
 				return;
 			var ParentContID = nodeToAddTo.Assembly.BlockID;
