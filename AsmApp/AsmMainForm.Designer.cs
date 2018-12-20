@@ -216,12 +216,13 @@
 			// 
 			// btAddDoc
 			// 
-			this.btAddDoc.Location = new System.Drawing.Point(348, 80);
+			this.btAddDoc.Location = new System.Drawing.Point(118, 49);
 			this.btAddDoc.Name = "btAddDoc";
 			this.btAddDoc.Size = new System.Drawing.Size(107, 23);
 			this.btAddDoc.TabIndex = 4;
 			this.btAddDoc.Text = "Новый документ";
 			this.btAddDoc.UseVisualStyleBackColor = true;
+			this.btAddDoc.Click += new System.EventHandler(this.btAddDoc_Click);
 			// 
 			// btDelNode
 			// 
@@ -244,12 +245,13 @@
 			// 
 			// btAddPara
 			// 
-			this.btAddPara.Location = new System.Drawing.Point(348, 46);
+			this.btAddPara.Location = new System.Drawing.Point(231, 49);
 			this.btAddPara.Name = "btAddPara";
 			this.btAddPara.Size = new System.Drawing.Size(87, 26);
 			this.btAddPara.TabIndex = 1;
 			this.btAddPara.Text = "Новый абзац";
 			this.btAddPara.UseVisualStyleBackColor = true;
+			this.btAddPara.Click += new System.EventHandler(this.btAddPara_Click);
 			// 
 			// btRefresh
 			// 

@@ -22,7 +22,7 @@ namespace Schemas
         private long _pg_id = -1;
         private long _doc_id = -1;
         private long _ct_id = -1;
-        private DateTime _created_at;
+        private DateTime _created_at = DateTime.Now;
 		
 		/// <summary>
 		/// Список предназначен для хранения предложений абзаца.
@@ -77,10 +77,17 @@ namespace Schemas
             this.sents2Del.Clear();
         }
 
-        /// <summary>
-        /// Конструктор
-        /// </summary>
-        public ParagraphMap(long pg_id = -1, long doc_id = -1, DateTime? created_at = null, long ct_id = -1)
+		/// <summary>
+		/// Конструктор по умолчанию
+		/// </summary>
+		public ParagraphMap()
+		{
+		}
+
+		/// <summary>
+		/// Конструктор
+		/// </summary>
+		public ParagraphMap(long pg_id = -1, long doc_id = -1, DateTime? created_at = null, long ct_id = -1)
         {
             _pg_id = pg_id;
             _doc_id = doc_id;

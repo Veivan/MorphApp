@@ -19,7 +19,10 @@ namespace Schemas
 		public static long MainStoreID = 1;
 		public static string MainStoreName = "Хранилище";
 		public static string DefaulContainerName = "Контейнер";
+		public static string DefaulDocumentName = "Документ";
+
 		public static string containerTypeName = "DataContainer";
+		public static string documentTypeName = "Document";
 
 		private List<BlockType> typeList;
 		public IBlockDealer DBserver;

@@ -26,12 +26,8 @@ namespace LogicProcessor
 		}
 
 		#region API для работы со сборками
-		/// <summary>
-		/// Создание пустой сборки заданного типа.
-		/// </summary>
-		/// <param name="type">тип блока</param>
-		/// <returns>сборка</returns>
-		public AssemblyBase CreateAssembly(BlockType type, BlockAddress ParentContID = -1)
+
+		public override AssemblyBase CreateAssembly(BlockType type, BlockAddress ParentContID = -1)
 		{
 			var id = DBserver.CreateBlock(type.BlockTypeID, ParentContID, 0);
 			var asm = new AssemblyBase(id, type);
@@ -103,7 +99,13 @@ namespace LogicProcessor
 
 		#region API для работы с контейнерами : создание, редактирование и различные выборки для визуализации.
 
-		//TODO - вроде не нужно
+		public AssemblyBase CreateContainer(string name, BlockAddress ParentContID)
+		{
+			var asm = this.CreateAssembly(Session.Instance().GetBlockTypeDataContainer(), ParentContID);
+			asm.SetValue("Name", name);
+			return asm;
+		}
+
 		/// <summary>
 		/// Создание нового Контейнера.
 		/// </summary>
@@ -120,7 +122,21 @@ namespace LogicProcessor
 			DBserver.AttrSetValue(id, "Name", name);
 			return id;
 		}
-
 		#endregion
+
+		#region Методы работы с GREN
+		public override List<SentenceMap> MorphMakeSyntan(string text)
+		{
+			//throw new NotImplementedException();
+			return null;
+		}
+
+		public override List<string> MorphGetSeparatedSentsList(string text)
+		{
+			//throw new NotImplementedException();
+			return null;
+		}
+		#endregion
+
 	}
 }

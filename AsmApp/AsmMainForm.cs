@@ -191,5 +191,28 @@ namespace AsmApp
 			if (aNode == null) return;
 			aNode.Delete();
 		}
+
+		private void btAddDoc_Click(object sender, EventArgs e)
+		{
+			var nodeToAddTo = treeView1.SelectedNode as AsmNode;
+			if (nodeToAddTo == null) return;
+
+			var result = Utils.InputBox("Создание документа", "Введите имя документа:", Session.DefaulDocumentName);
+			if (String.IsNullOrEmpty(result))
+				return;
+			var ParentNodeID = nodeToAddTo.Assembly.BlockID;
+			var asm = store.CreateDocument(result, ParentNodeID);
+			var aNode = new AsmNode(asm);
+			nodeToAddTo.Nodes.Add(aNode);
+		}
+
+		private void btAddPara_Click(object sender, EventArgs e)
+		{
+			var nodeToAddTo = treeView1.SelectedNode as AsmNode;
+			if (nodeToAddTo == null) return;
+
+			var fParaEdit = new FormParaEdit(nodeToAddTo, treeOper.toAdd);
+			fParaEdit.Show();
+		}
 	}
 }

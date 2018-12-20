@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 
 using Schemas;
@@ -49,7 +50,14 @@ namespace AsmApp
 
 		public AssemblyBase CreateContainer(string name, BlockAddress ParentContID)
 		{
-			var asm = store.CreateAssembly(Session.Instance().GetBlockTypeDataContainer(), ParentContID);
+			var asm = store.CreateContainer(name, ParentContID);
+			asm.Save();
+			return asm;
+		}
+
+		public AssemblyBase CreateDocument(string name, BlockAddress ParentID)
+		{
+			var asm = store.CreateAssembly(Session.Instance().GetBlockTypeByNameKey(Session.documentTypeName), ParentID);
 			asm.SetValue("Name", name);
 			asm.Save();
 			return asm;
@@ -59,6 +67,36 @@ namespace AsmApp
 		{
 			var list = store.GetChildren(new List<string>() { cont.BlockID.ToString() });
 			this.FillChildren(cont, list);
+		}
+
+		/// <summary>
+		/// Формирование содержимого внутреннего объекта ParagraphMap.
+		/// </summary>
+		/// <param name="pAsm">объект ParagraphMap</param>
+		/// <param name="input">текстовое содержание абзаца</param>
+		/// <returns></returns>
+		public void UpdateParagraph(AssemblyBase pAsm, string input, bool IsHeader)
+		{
+			var ihash = input.GetHashCode();
+			int currenthash = pAsm.GetHashCode(IsHeader);
+			var range = IsHeader ? SentTypes.enstNotActualHead : SentTypes.enstNotActualBody;
+			var sentlist = pAsm.GetParagraphSents(range);
+			if (ihash == currenthash && sentlist.Count == 0)
+				return;
+
+			var sents = store.MorphGetSeparatedSentsList(input);
+			pAsm.RefreshParagraph(new ArrayList(sents), IsHeader);
+
+			sentlist = pAsm.GetParagraphSents(range);
+			if (sentlist.Count == 0)
+				return;
+			// Выполнение синтана для неактуальных предложений.
+			foreach (var sent in sentlist)
+			{
+				var sentlistRep = store.MorphMakeSyntan(sent.sentence);
+				if (sentlistRep.Count > 0)
+					pAsm.UpdateSentStruct(sent.order, sentlistRep[0]);
+			}
 		}
 		#endregion
 
