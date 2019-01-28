@@ -23,7 +23,9 @@ namespace Schemas
 
 		public static string containerTypeName = "DataContainer";
 		public static string documentTypeName = "Document";
-
+		public static string paragraphTypeName = "Paragraph";
+		public static string sentenceTypeName = "Phrase";
+		
 		private List<BlockType> typeList;
 		public IBlockDealer DBserver;
 		public IAsmDealer Store;

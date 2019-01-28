@@ -36,10 +36,6 @@
     <ApplicationIcon>accessoriesdictionaryicon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DirectDBconnector, Version=1.6.12.1, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\DirectDBconnector\bin\x64\Debug\DirectDBconnector.dll</HintPath>
-    </Reference>
     <Reference Include="LogicProcessor">
       <HintPath>..\LogicProcessor\bin\x64\Debug\LogicProcessor.dll</HintPath>
     </Reference>
@@ -56,7 +52,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AsmNode.cs" />
+    <Compile Include="Types\AsmNode.cs" />
     <Compile Include="AsmMainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -64,18 +60,21 @@
       <DependentUpon>AsmMainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ClientStoreMediator.cs" />
-    <Compile Include="FormParaEdit.cs">
+    <Compile Include="Dialogs\FormParaEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormParaEdit.Designer.cs">
+    <Compile Include="Dialogs\FormParaEdit.Designer.cs">
       <DependentUpon>FormParaEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Types\ParagraphAsm.cs" />
+    <Compile Include="Types\SentenceAsm.cs" />
+    <Compile Include="Types\WordAsm.cs" />
     <EmbeddedResource Include="AsmMainForm.resx">
       <DependentUpon>AsmMainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormParaEdit.resx">
+    <EmbeddedResource Include="Dialogs\FormParaEdit.resx">
       <DependentUpon>FormParaEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -103,10 +102,7 @@
   <ItemGroup>
     <Content Include="accessoriesdictionaryicon.ico" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Dialogs\" />
-    <Folder Include="Types\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
