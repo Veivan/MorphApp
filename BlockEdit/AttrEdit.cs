@@ -5,7 +5,7 @@ using System.Windows.Forms;
 using Schemas.BlockPlatform;
 using DirectDBconnector;
 
-namespace AsmApp.Dialogs
+namespace BlockEdit
 {
 	public partial class AttrEdit : Form
 	{

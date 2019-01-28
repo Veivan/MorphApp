@@ -1,4 +1,4 @@
-﻿namespace AsmApp.Dialogs
+﻿namespace BlockEdit
 {
 	partial class AttrEdit
 	{

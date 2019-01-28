@@ -77,7 +77,7 @@ namespace AsmApp
 		/// <returns></returns>
 		public void UpdateParagraph(AssemblyBase pAsm, string input, bool IsHeader)
 		{
-			var ihash = input.GetHashCode();
+/*			var ihash = input.GetHashCode();
 			int currenthash = pAsm.GetHashCode(IsHeader);
 			var range = IsHeader ? SentTypes.enstNotActualHead : SentTypes.enstNotActualBody;
 			var sentlist = pAsm.GetParagraphSents(range);
@@ -96,8 +96,8 @@ namespace AsmApp
 				var sentlistRep = store.MorphMakeSyntan(sent.sentence);
 				if (sentlistRep.Count > 0)
 					pAsm.UpdateSentStruct(sent.order, sentlistRep[0]);
-			}
-		}
+			} */
+		} 
 		#endregion
 
 		#region Оставшиеся (ненужные?) методы работы с хранилищем

@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{49B3D22B-6FA6-4E46-915F-1B05C3FB7E09}</ProjectGuid>
+    <ProjectGuid>{5F0F398D-DC30-4438-B3F7-77D385F9EBEB}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AsmApp</RootNamespace>
-    <AssemblyName>AsmApp</AssemblyName>
+    <RootNamespace>BlockEdit</RootNamespace>
+    <AssemblyName>BlockEdit</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -32,51 +32,39 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>accessoriesdictionaryicon.ico</ApplicationIcon>
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DirectDBconnector, Version=1.6.12.1, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\DirectDBconnector\bin\x64\Debug\DirectDBconnector.dll</HintPath>
-    </Reference>
-    <Reference Include="LogicProcessor">
-      <HintPath>..\LogicProcessor\bin\x64\Debug\LogicProcessor.dll</HintPath>
-    </Reference>
-    <Reference Include="RicherTextBox">
-      <HintPath>..\RicherTextBox\RicherTextBox.dll</HintPath>
-    </Reference>
-    <Reference Include="Schemas">
-      <HintPath>..\Schemas\bin\x64\Debug\Schemas.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AsmNode.cs" />
-    <Compile Include="AsmMainForm.cs">
+    <Compile Include="AttrEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AsmMainForm.Designer.cs">
-      <DependentUpon>AsmMainForm.cs</DependentUpon>
+    <Compile Include="AttrEdit.Designer.cs">
+      <DependentUpon>AttrEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="ClientStoreMediator.cs" />
-    <Compile Include="FormParaEdit.cs">
+    <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormParaEdit.Designer.cs">
-      <DependentUpon>FormParaEdit.cs</DependentUpon>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="AsmMainForm.resx">
-      <DependentUpon>AsmMainForm.cs</DependentUpon>
+    <EmbeddedResource Include="AttrEdit.resx">
+      <DependentUpon>AttrEdit.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormParaEdit.resx">
-      <DependentUpon>FormParaEdit.cs</DependentUpon>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -101,11 +89,14 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="accessoriesdictionaryicon.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Dialogs\" />
-    <Folder Include="Types\" />
+    <ProjectReference Include="..\DirectDBconnector\DirectDBconnector.csproj">
+      <Project>{be92f137-83a0-4f07-9ec5-2504ef561c7a}</Project>
+      <Name>DirectDBconnector</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Schemas\Schemas.csproj">
+      <Project>{bf7809e6-3e9d-49fc-888d-6d0c7187cc5b}</Project>
+      <Name>Schemas</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
