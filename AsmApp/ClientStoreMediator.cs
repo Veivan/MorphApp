@@ -13,7 +13,7 @@ using BlockAddress = System.Int64;
 namespace AsmApp
 {
 	/// <summary>
-	/// Класс поддерживает взаимодействие клиента с хранилищем данных SAGA.
+	/// Класс поддерживает взаимодействие клиента с хранилищем данных SAGA (с LogicProcessor).
 	/// </summary>
 	public class ClientStoreMediator
 	{
@@ -29,23 +29,16 @@ namespace AsmApp
 		public void Refresh()
 		{
 			containers.Clear();
-
 			var MainStore = new AssemblyBase(Session.MainStoreID, Session.Instance().GetBlockTypeByNameKey(Session.containerTypeName));
 			MainStore.IsMainDataContainer = true;
+			store.AsmFillChildren(MainStore);
 			containers.Add(MainStore);
-
-			var list_ids = new List<string>();
-			list_ids.Add(Session.MainStoreID.ToString());
-			var list = store.GetChildren(list_ids);
-			this.FillChildren(MainStore, list);
 		}
 
-		public void FillChildren(AssemblyBase in_parentCont, List<BlockBase> list)
+		public void RefreshAsm(AssemblyBase asm)
 		{
-			foreach (var container in list)
-			{
-				in_parentCont.AddChild(new AssemblyBase(container));
-			}
+			//TODO обновить здесь и все остальные поля
+			store.AsmFillChildren(asm);
 		}
 
 		public AssemblyBase CreateContainer(string name, BlockAddress ParentContID)
@@ -63,11 +56,6 @@ namespace AsmApp
 			return asm;
 		}
 
-		public void RefreshContainer(AssemblyBase cont)
-		{
-			var list = store.GetChildren(new List<string>() { cont.BlockID.ToString() });
-			this.FillChildren(cont, list);
-		}
 
 		/// <summary>
 		/// Формирование содержимого внутреннего объекта ParagraphMap.

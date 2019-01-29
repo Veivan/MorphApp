@@ -36,22 +36,34 @@ namespace AsmApp
 			foreach (var cont in store.containers)
 			{
 				var aNode = new AsmNode(cont);
-				PopulateTreeChildrenConts(cont, aNode);
+				PopulateChildrenTree(cont, aNode);
 				treeView1.Nodes.Add(aNode);
 			}
 		}
-
+		
 		/// <summary>
 		/// Заполнение узла дочерними узлами
 		/// </summary>
-		private void PopulateTreeChildrenConts(AssemblyBase container, AsmNode nodeToAddTo)
+		private void PopulateChildrenTree(AssemblyBase asm, AsmNode nodeToAddTo)
 		{
-			foreach (var chld in container.Children)
+			foreach (var chld in asm.Children)
 			{
 				if (FindNode(chld.BlockID, nodeToAddTo) != null)
 					continue;
 				var aNode = new AsmNode(chld, chld.Name);
 				nodeToAddTo.Nodes.Add(aNode);
+			}
+		}
+		private void treeView1_BeforeExpand(object sender, TreeViewCancelEventArgs e)
+		{
+			var aNode = (AsmNode)e.Node;
+
+			foreach (AsmNode chldNode in aNode.Nodes)
+			{
+				store.RefreshAsm(chldNode.Assembly);
+				var newNode = (AsmNode)FindNode(chldNode.Assembly.BlockID, chldNode);
+				if (newNode == null)
+					PopulateChildrenTree(chldNode.Assembly, chldNode);
 			}
 		}
 
@@ -81,18 +93,6 @@ namespace AsmApp
 			nodeToAddTo.Nodes.Add(aNode);
 		}
 
-		private void treeView1_BeforeExpand(object sender, TreeViewCancelEventArgs e)
-		{
-			var aNode = (AsmNode)e.Node;
-
-			foreach (AsmNode chldNode in aNode.Nodes)
-			{
-				store.RefreshContainer(chldNode.Assembly);
-				var newNode = (AsmNode)FindNode(chldNode.Assembly.BlockID, chldNode);
-				if (newNode == null)
-					PopulateTreeChildrenConts(chldNode.Assembly, chldNode);
-			}
-		}
 
 		private void btDelNode_Click(object sender, EventArgs e)
 		{

@@ -52,14 +52,29 @@ namespace LogicProcessor
 		/// <summary>
 		/// Получение сборки по адресу из хранилища.
 		/// </summary>
-		/// <param name="templAsm">сборка - образец или шаблон</param>
-		/// <param name="mode">признак, определяющий, учитывать ссылку на образцовую сборку или нет</param>
+		/// <param name="Addr">Адрес сборки</param>
+		/// <param name="FillChildren">признак, определяющий, заполгять сборку данными о детях или нет</param>
 		/// <returns>сборка</returns>
-		public AssemblyBase GetAssembly(long Addr, FOLLOWMODE mode = FOLLOWMODE.Forget)
+		public AssemblyBase GetAssembly(long Addr, bool FillChildren = true)
 		{
 			var block = DBserver.GetBlock(Addr);
 			var asm = new AssemblyBase(block);
+			if (FillChildren)
+				this.AsmFillChildren(asm);
 			return asm;
+		}
+
+		/// <summary>
+		/// Заполнение сборки данными о детях.
+		/// </summary>
+		/// <param name="parentAsm">сборка</param>
+		/// <returns></returns>
+		public void AsmFillChildren(AssemblyBase parentAsm)
+		{
+			var list_ids = new List<string> { parentAsm.BlockID.ToString() };
+			var listCh = this.GetChildren(list_ids);
+			foreach (var child in listCh)
+				parentAsm.AddChild(child);
 		}
 
 		/// <summary>
@@ -82,10 +97,16 @@ namespace LogicProcessor
 		/// </summary>
 		/// <param name="list_ids">список ID родительских сборок</param>
 		/// <returns>DataTable</returns>
-		public List<BlockBase> GetChildren(List<string> list_ids)
+		public List<AssemblyBase> GetChildren(List<string> list_ids)
 		{
-			var result = DBserver.GetChildren(list_ids);
-			return result;
+			var listBlocks = DBserver.GetChildren(list_ids);
+			var listAsm = new List<AssemblyBase>();
+			foreach (var block in listBlocks)
+			{
+				var asm = new AssemblyBase(block);
+				listAsm.Add(asm);
+			}
+			return listAsm;
 		}
 
 		public override void Save(AssemblyBase asm)
