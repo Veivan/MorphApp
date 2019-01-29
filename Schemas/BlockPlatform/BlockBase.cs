@@ -148,7 +148,10 @@ namespace Schemas.BlockPlatform
 				tplist.Add(attr.AttrType);
 			}
 			created_at = srcBlock.created_at;
-			this.blob = new Blob(tplist, srcBlock.blob.Data);
+			if (srcBlock.blob == null)
+				this.blob = new Blob(tplist, null);
+			else
+				this.blob = new Blob(tplist, srcBlock.blob.Data);
 		}
 
 		#endregion

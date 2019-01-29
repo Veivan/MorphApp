@@ -124,6 +124,8 @@ namespace DirectDBconnector
 
 		public override long SetFactData(long addr, Blob blob, bool MakeVersion = false)
 		{
+			if (blob == null)
+				return -1;
 			var result = dbConnector.dbSetFactData(addr, blob.Data, MakeVersion);
 			return result;
 		}

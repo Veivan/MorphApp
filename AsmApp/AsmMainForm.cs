@@ -14,11 +14,17 @@ namespace AsmApp
 	public partial class AsmMainForm : Form
 	{
 
-		ClientStoreMediator store = new ClientStoreMediator();
+		ClientStoreMediator store =  ClientStoreMediator.Instance();
 
 		public AsmMainForm()
 		{
 			InitializeComponent();
+		}
+
+		protected override void OnLoad(EventArgs e)
+		{
+			base.OnLoad(e);
+			this.btRefresh_Click(null, null);
 		}
 
 		private void btRefresh_Click(object sender, EventArgs e)
@@ -54,13 +60,14 @@ namespace AsmApp
 				nodeToAddTo.Nodes.Add(aNode);
 			}
 		}
+
 		private void treeView1_BeforeExpand(object sender, TreeViewCancelEventArgs e)
 		{
 			var aNode = (AsmNode)e.Node;
 
 			foreach (AsmNode chldNode in aNode.Nodes)
 			{
-				store.RefreshAsm(chldNode.Assembly);
+				store.RefreshAsm(chldNode);
 				var newNode = (AsmNode)FindNode(chldNode.Assembly.BlockID, chldNode);
 				if (newNode == null)
 					PopulateChildrenTree(chldNode.Assembly, chldNode);
@@ -93,14 +100,6 @@ namespace AsmApp
 			nodeToAddTo.Nodes.Add(aNode);
 		}
 
-
-		private void btDelNode_Click(object sender, EventArgs e)
-		{
-			var aNode = treeView1.SelectedNode as AsmNode;
-			if (aNode == null) return;
-			aNode.Delete();
-		}
-
 		private void btAddDoc_Click(object sender, EventArgs e)
 		{
 			var nodeToAddTo = treeView1.SelectedNode as AsmNode;
@@ -118,10 +117,39 @@ namespace AsmApp
 		private void btAddPara_Click(object sender, EventArgs e)
 		{
 			var nodeToAddTo = treeView1.SelectedNode as AsmNode;
-			if (nodeToAddTo == null) return;
+			if (nodeToAddTo == null || nodeToAddTo.NodeType == clNodeType.clnContainer ) return;
 
 			var fParaEdit = new FormParaEdit(nodeToAddTo, treeOper.toAdd);
 			fParaEdit.Show();
 		}
+
+		private void btEdit_Click(object sender, EventArgs e)
+		{
+			EditNode(treeView1.SelectedNode as AsmNode);
+		}
+
+		private void EditNode(AsmNode aNode)
+		{
+			if (aNode == null) return;
+
+			switch (aNode.NodeType)
+			{
+				case clNodeType.clnParagraph:
+					{
+						var fParaEdit = new FormParaEdit(aNode, treeOper.toEdit);
+						fParaEdit.Show();
+						break;
+					}
+			}
+		}
+
+
+		private void btDelNode_Click(object sender, EventArgs e)
+		{
+			var aNode = treeView1.SelectedNode as AsmNode;
+			if (aNode == null) return;
+			aNode.Delete();
+		}
+
 	}
 }

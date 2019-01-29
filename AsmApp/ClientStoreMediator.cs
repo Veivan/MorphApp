@@ -3,24 +3,54 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
 
-using Schemas;
+using Schemas; // Needs only for Session
 using Schemas.BlockPlatform;
 using LogicProcessor;
+using AsmApp.Types;
 
 using BlockAddress = System.Int64;
-
 
 namespace AsmApp
 {
 	/// <summary>
+	/// Класс-синглтон. 
 	/// Класс поддерживает взаимодействие клиента с хранилищем данных SAGA (с LogicProcessor).
 	/// </summary>
-	public class ClientStoreMediator
+	public sealed class ClientStoreMediator
 	{
+		static object _sunc = new object();
+		static ClientStoreMediator _session;
+
 		// Список контейнеров для клиента
 		public List<AssemblyBase> containers = new List<AssemblyBase>();
 
 		StoreServer store = new StoreServer();
+
+		/// <summary>
+		/// Конструктор
+		/// </summary>
+		private ClientStoreMediator()
+		{
+		}
+
+		public static ClientStoreMediator Instance()
+		{
+			//чтобы не лочить каждое обращение, так как null будет только 1 раз
+			if (_session == null)
+			{
+				lock (_sunc)
+				{
+					//теперь ещё раз проверяем, чтобы не создать несколько объектов, 
+					//остальные потоки после lock уже не создадут новые объекты
+					if (_session == null)
+					{
+						_session = new ClientStoreMediator();
+					}
+				}
+			}
+
+			return _session;
+		}
 
 		#region Методы работы с хранилищем данных
 		/// <summary>
@@ -35,15 +65,22 @@ namespace AsmApp
 			containers.Add(MainStore);
 		}
 
-		public void RefreshAsm(AssemblyBase asm)
+		public void RefreshAsm(AsmNode aNode)
 		{
 			//TODO обновить здесь и все остальные поля
-			store.AsmFillChildren(asm);
+
+			if (aNode.NodeType == clNodeType.clnDocument)
+			{
+				var nd = new DocumentAsm(aNode.Assembly);
+				aNode.Assembly = nd;
+			}
+			store.AsmFillChildren(aNode.Assembly);
 		}
 
 		public AssemblyBase CreateContainer(string name, BlockAddress ParentContID)
 		{
-			var asm = store.CreateContainer(name, ParentContID);
+			var asm = store.CreateAssembly(Session.Instance().GetBlockTypeDataContainer(), ParentContID);
+			asm.SetValue("Name", name);
 			asm.Save();
 			return asm;
 		}
@@ -56,6 +93,12 @@ namespace AsmApp
 			return asm;
 		}
 
+		public AssemblyBase CreateParagraph(BlockAddress ParentID)
+		{
+			var asm = store.CreateAssembly(Session.Instance().GetBlockTypeByNameKey(Session.paragraphTypeName), ParentID);
+			asm.Save();
+			return asm;
+		}
 
 		/// <summary>
 		/// Формирование содержимого внутреннего объекта ParagraphMap.

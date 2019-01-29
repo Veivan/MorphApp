@@ -88,7 +88,7 @@ namespace AsmApp.Types
 		/// Получение списка структур предложений абзаца.
 		/// </summary>
 		/// <param name="sttype">диапазон выбираемых предложений</param>
-		/// <returns>List of SentProps</returns>
+		/// <returns>List of SentenceAsm</returns>
 		public List<SentenceAsm> GetParagraphSents(SentTypes sttype = SentTypes.enstAll)
 		{
 			List<SentenceAsm> versionPara = new List<SentenceAsm>();

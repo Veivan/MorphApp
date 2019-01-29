@@ -126,6 +126,7 @@
 			this.btEdit.TabIndex = 2;
 			this.btEdit.Text = "Редактировать";
 			this.btEdit.UseVisualStyleBackColor = true;
+			this.btEdit.Click += new System.EventHandler(this.btEdit_Click);
 			// 
 			// btAddPara
 			// 

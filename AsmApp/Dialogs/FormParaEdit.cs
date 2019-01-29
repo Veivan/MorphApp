@@ -1,40 +1,37 @@
 ﻿using System;
 using System.Windows.Forms;
 
-using Schemas;
 using Schemas.BlockPlatform;
+using AsmApp.Types;
 
 namespace AsmApp
 {
 	public partial class FormParaEdit : Form
 	{
-		private IAsmDealer store;
+		ClientStoreMediator store = ClientStoreMediator.Instance();
 
 		private treeOper typeOper;
 		private AsmNode theNode;
-		private AssemblyBase paraAsm;
-		private ParagraphMap paraMap;
-
+		private ParagraphAsm paraAsm;
 
 		public FormParaEdit(AsmNode theNode, treeOper tOper)
 		{		
 			InitializeComponent();
 
-			this.store = Session.Instance().Store;
 			this.theNode = theNode;
 			this.typeOper = tOper;
 
 			AssemblyBase asm = null;
 			switch (tOper)
 			{
-				case (treeOper.toEdit):
-					//pMap = store.GetParagraph(contID, docID, parID);
+				case (treeOper.toEdit): //theNode.Assembly.BlockID
+										//pMap = store.GetParagraph(contID, docID, parID);
 					break;
 				case (treeOper.toAdd):
-					asm = store.CreateAssembly(Session.Instance().GetBlockTypeByNameKey(Session.documentTypeName), theNode.Assembly.BlockID);
+					asm = store.CreateParagraph(theNode.Assembly.BlockID);
 					break;
 			}
-			this.paraAsm = new AssemblyBase(asm);
+			this.paraAsm = new ParagraphAsm(asm);
 		
 		}
 

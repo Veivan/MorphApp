@@ -120,7 +120,7 @@ namespace LogicProcessor
 
 		#region API для работы с контейнерами : создание, редактирование и различные выборки для визуализации.
 
-		public AssemblyBase CreateContainer(string name, BlockAddress ParentContID)
+/*		public AssemblyBase CreateContainer(string name, BlockAddress ParentContID)
 		{
 			var asm = this.CreateAssembly(Session.Instance().GetBlockTypeDataContainer(), ParentContID);
 			asm.SetValue("Name", name);
@@ -142,7 +142,7 @@ namespace LogicProcessor
 			BlockAddress id = DBserver.CreateBlock(typeOfDict.BlockTypeID, parent, treeorder);
 			DBserver.AttrSetValue(id, "Name", name);
 			return id;
-		}
+		} */
 		#endregion
 
 		#region Методы работы с GREN
