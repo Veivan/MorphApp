@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using Schemas.BlockPlatform;
+using BlockAddress = System.Int64;
 
 namespace AsmApp.Types
 {
@@ -14,31 +15,30 @@ namespace AsmApp.Types
 		private AssemblyBase srcAsm; // Сборка, из которой был сформирован Документ
 
 		/// <summary>
-		/// Список предназначен для хранения параграфов Документа.
+		/// Список предназначен для хранения ссылок на абзацы других документов.
 		/// </summary>
-		private List<ParagraphAsm> paragraphs = new List<ParagraphAsm>();
+		private List<BlockAddress> ParagraphLinks = new List<BlockAddress>();
 		#endregion
 
 		#region Конструкторы
 		public DocumentAsm(AssemblyBase srcAsm) : base(srcAsm)
 		{
 			this.srcAsm = srcAsm;
-			var attrval = (List <AssemblyBase> )srcAsm.GetValue("Paragraphs");
+			var attrval = (List <BlockAddress> )srcAsm.GetValue("ParagraphLinks");
 			if (attrval == null) return;
-			foreach (var item in attrval)
-				paragraphs.Add(new ParagraphAsm(item));
+			ParagraphLinks.AddRange(attrval);
 		}
 		#endregion
 
 		#region Public Methods
 		/// <summary>
-		/// Получение списка абзацев Документа.
+		/// Получение списка ссылок на абзацы других Документов, задействованных в эток Документе.
 		/// </summary>
-		/// <returns>List of ParagraphAsm</returns>
-		public List<ParagraphAsm> GetParagraphs()
+		/// <returns>List of BlockAddress</returns>
+		public List<BlockAddress> GetParagraphsLinks()
 		{
-			var versionDoc = new List<ParagraphAsm>();
-			versionDoc.AddRange(paragraphs);
+			var versionDoc = new List<BlockAddress>();
+			versionDoc.AddRange(ParagraphLinks);
 			return versionDoc;
 		}
 		#endregion

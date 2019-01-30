@@ -24,6 +24,7 @@ namespace AsmApp
 		// Список контейнеров для клиента
 		public List<AssemblyBase> containers = new List<AssemblyBase>();
 
+		Courier courier = new Courier();
 		StoreServer store = new StoreServer();
 
 		/// <summary>
@@ -106,16 +107,16 @@ namespace AsmApp
 		/// <param name="pAsm">объект ParagraphMap</param>
 		/// <param name="input">текстовое содержание абзаца</param>
 		/// <returns></returns>
-		public void UpdateParagraph(AssemblyBase pAsm, string input, bool IsHeader)
+		public void UpdateParagraph(ParagraphAsm pAsm, string input, bool IsHeader)
 		{
-/*			var ihash = input.GetHashCode();
+			var ihash = input.GetHashCode();
 			int currenthash = pAsm.GetHashCode(IsHeader);
 			var range = IsHeader ? SentTypes.enstNotActualHead : SentTypes.enstNotActualBody;
 			var sentlist = pAsm.GetParagraphSents(range);
 			if (ihash == currenthash && sentlist.Count == 0)
 				return;
 
-			var sents = store.MorphGetSeparatedSentsList(input);
+			var sents = this.MorphGetSeparatedSentsList(input);
 			pAsm.RefreshParagraph(new ArrayList(sents), IsHeader);
 
 			sentlist = pAsm.GetParagraphSents(range);
@@ -124,40 +125,56 @@ namespace AsmApp
 			// Выполнение синтана для неактуальных предложений.
 			foreach (var sent in sentlist)
 			{
-				var sentlistRep = store.MorphMakeSyntan(sent.sentence);
+				var sentlistRep = this.MorphMakeSyntan(sent.sentence);
 				if (sentlistRep.Count > 0)
-					pAsm.UpdateSentStruct(sent.order, sentlistRep[0]);
-			} */
-		} 
+					pAsm.UpdateSentStruct(sent.Position, Map2Asm.Convert(sentlistRep[0]) );
+			} 
+		}
 		#endregion
 
-		#region Оставшиеся (ненужные?) методы работы с хранилищем
+		#region Методы работы с GREN
 
-		/*// <summary>
-		/// Поиск контейнера в хранилище по его ID.
+		/// <summary>
+		/// Выполнение синтана текста.
 		/// </summary>
-		/// <param name="ContainerID">ID контейнера</param>
-		/// <returns>ContainerNode</returns>
-		public ContainerNode GetContainerByID(long ContainerID)
+		public List<SentenceMap> MorphMakeSyntan(string text)
 		{
-			var result = RecursGetContainerByID(containers, ContainerID);
-			return result;
+			courier.servType = TMorph.Schema.ServType.svMorph;
+			courier.command = TMorph.Schema.ComType.Synt;
+			courier.SendText(text);
+			var sentlistRep = courier.GetSentenceStructList();
+			return sentlistRep;
 		}
-		*/
-		private ContainerNode RecursGetContainerByID(List<ContainerNode> containers, long ContainerID)
+
+		/// <summary>
+		/// Получение списка восстановленных текстов предложений от сервиса.
+		/// </summary>
+		public List<string> MorphGetReparedSentsList(List<SentenceMap> sentlist)
 		{
-			var result = containers.Where(x => x.ContainerID == ContainerID).FirstOrDefault();
-			if (result == null)
-				foreach (var cont in containers)
-				{
-					var children = cont.Children();
-					result = RecursGetContainerByID(cont.Children(), ContainerID);
-					if (result != null)
-						break;
-				}
-			return result;
+			var outlist = new List<string>();
+			courier.servType = TMorph.Schema.ServType.svMorph;
+			courier.command = TMorph.Schema.ComType.Repar;
+			foreach (var sent in sentlist)
+			{
+				courier.SendStruct(sent);
+				var sents = courier.GetSeparatedSentsList();
+				outlist.AddRange(sents);
+			}
+			return outlist;
+		}
+
+		/// <summary>
+		/// Разделение текста на предложения с помощью сервиса.
+		/// </summary>
+		public List<string> MorphGetSeparatedSentsList(string text)
+		{
+			courier.servType = TMorph.Schema.ServType.svMorph;
+			courier.command = TMorph.Schema.ComType.Separ;
+			courier.SendText(text);
+			var outlist = courier.GetSeparatedSentsList();
+			return outlist;
 		}
 		#endregion
-	
+		
 	}
 }
