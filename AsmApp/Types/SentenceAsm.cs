@@ -24,24 +24,20 @@ namespace AsmApp.Types
 		#region Privates
 		// Сборка, из которой было сформировано Предложение
 		private AssemblyBase srcAsm;
+	
 		/// <summary>
 		/// Хранилище структур слов предложения.
 		/// </summary>
 		private SortedList<int, WordAsm> words = new SortedList<int, WordAsm>();
-		#endregion
 
 		/// <summary>
 		/// Хранилище синтаксических связей предложения.
 		/// </summary>
 		private List<tNode> treeList = new List<tNode>();
+		#endregion
 
 		#region Properties
-
-
-		/// <summary>
-		/// Хранилище синтаксических связей предложения.
-		/// </summary>
-		public int Position { get; set; }
+//		public int Position { get; set; }
 
 		public string sentence;
 		public int hash;

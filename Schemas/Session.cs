@@ -25,7 +25,8 @@ namespace Schemas
 		public static string documentTypeName = "Document";
 		public static string paragraphTypeName = "Paragraph";
 		public static string sentenceTypeName = "Phrase";
-		
+		public static string wordTypeName = "SingleWord";
+
 		private List<BlockType> typeList;
 		public IBlockDealer DBserver;
 		public IAsmDealer Store;

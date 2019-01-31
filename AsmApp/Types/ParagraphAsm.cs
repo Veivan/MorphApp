@@ -37,7 +37,7 @@ namespace AsmApp.Types
 		/// </summary>
 		public string GetSentenseByOrder(int Position)
 		{
-			SentenceAsm sent = innerPara.Where(x => x.Position == Position).FirstOrDefault();
+			SentenceAsm sent = innerPara.Where(x => x.Order == Order).FirstOrDefault();
 			return sent == null ? "" : sent.sentence;
 		}
 
@@ -71,7 +71,7 @@ namespace AsmApp.Types
 					newsprops = sentprops[0];
 					newsprops.IsActual = true;
 				}
-				newsprops.Position = i;
+//				newsprops.Order = i;
 				versionPara.Add(newsprops);
 				i++;
 			}
@@ -98,23 +98,23 @@ namespace AsmApp.Types
 					versionPara.AddRange(innerPara);
 					break;
 				case SentTypes.enstNotActualHead:
-					versionPara.AddRange(innerPara.Where(x => x.Position < 0 && !x.IsActual)
-						.OrderBy(x => x.Position)
+					versionPara.AddRange(innerPara.Where(x => x.Order < 0 && !x.IsActual)
+						.OrderBy(x => x.Order)
 						.ToList());
 					break;
 				case SentTypes.enstNotActualBody:
-					versionPara.AddRange(innerPara.Where(x => x.Position > -1 && !x.IsActual)
-						.OrderBy(x => x.Position)
+					versionPara.AddRange(innerPara.Where(x => x.Order > -1 && !x.IsActual)
+						.OrderBy(x => x.Order)
 						.ToList());
 					break;
 				case SentTypes.enstHeader:
-					versionPara.AddRange(innerPara.Where(x => x.Position < 0)
-						.OrderBy(x => x.Position)
+					versionPara.AddRange(innerPara.Where(x => x.Order < 0)
+						.OrderBy(x => x.Order)
 						.ToList());
 					break;
 				case SentTypes.enstBody:
-					versionPara.AddRange(innerPara.Where(x => x.Position > -1)
-						.OrderBy(x => x.Position)
+					versionPara.AddRange(innerPara.Where(x => x.Order > -1)
+						.OrderBy(x => x.Order)
 						.ToList());
 					break;
 			}
@@ -124,12 +124,12 @@ namespace AsmApp.Types
 		/// <summary>
 		/// Запиcь в хранилище предложения новой структуры синтана этого предложения.
 		/// </summary>
-		public void UpdateSentStruct(int Position, SentenceAsm sentstruct)
+		public void UpdateSentStruct(long Order, SentenceAsm sentstruct)
 		{
-			var sent = innerPara.Where(x => x.Position == Position).FirstOrDefault();
+			var sent = innerPara.Where(x => x.Order == Order).FirstOrDefault();
 			if (sent == null)
 			{
-				sentstruct.Position = Position;
+//				sentstruct.Order = Order;
 //				sent.sentstruct = new SentenceMap(sentstruct);
 			}
 			sent.IsActual = true;
@@ -141,7 +141,7 @@ namespace AsmApp.Types
 		public void AddSentStruct(int Position, SentenceAsm sentstruct)
 		{
 //			sentstruct.ParagraphID = this.ParagraphID;
-			sentstruct.Position = Position;
+//			sentstruct.Order = Position;
 			innerPara.Add(sentstruct);
 		}
 
@@ -150,8 +150,8 @@ namespace AsmApp.Types
 		/// </summary>
 		public void RefreshSentProp(string sentence, SentenceAsm sentstruct, bool IsActual)
 		{
-			int Position = sentstruct.Position;
-			var sprop = innerPara.Where(x => x.Position == Position).FirstOrDefault();
+			var Position = sentstruct.Order;
+			var sprop = innerPara.Where(x => x.Order == Position).FirstOrDefault();
 			if (sprop == null)
 			{
 				innerPara.Add(sprop);
@@ -188,12 +188,12 @@ namespace AsmApp.Types
 		#region Private Methods
 		private static bool Belongs2Header(SentenceAsm p)
 		{
-			return p.Position < 0;
+			return p.Order < 0;
 		}
 
 		private static bool Belongs2Body(SentenceAsm p)
 		{
-			return p.Position > -1;
+			return p.Order > -1;
 		}
 
 		#endregion

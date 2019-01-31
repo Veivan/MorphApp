@@ -56,7 +56,7 @@ namespace AsmApp.Types
 			this.srcAsm = srcAsm;
 		}
 
-		public WordAsm(int _id_entry, int _id_partofspeech) : base(Session.Instance().GetBlockTypeByNameKey(Session.paragraphTypeName))
+		public WordAsm(int _id_entry, int _id_partofspeech) : base(Session.Instance().GetBlockTypeByNameKey(Session.wordTypeName))
 		{
 			id_entry = _id_entry;
 			id_partofspeech = _id_partofspeech;

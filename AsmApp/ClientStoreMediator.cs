@@ -127,7 +127,7 @@ namespace AsmApp
 			{
 				var sentlistRep = this.MorphMakeSyntan(sent.sentence);
 				if (sentlistRep.Count > 0)
-					pAsm.UpdateSentStruct(sent.Position, Map2Asm.Convert(sentlistRep[0]) );
+					pAsm.UpdateSentStruct(sent.Order, Map2Asm.Convert(sentlistRep[0]) );
 			} 
 		}
 		#endregion

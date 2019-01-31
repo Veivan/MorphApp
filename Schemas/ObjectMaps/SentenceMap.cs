@@ -134,10 +134,10 @@ namespace Schemas
 			treeList.Add(node);
         }
 
-        /// <summary>
-        /// Количество слов предложения.
-        /// </summary>
-        public WordMap GetWordByOrder(int order)
+		/// <summary>
+		/// Получение слова предложения по порядковому номеру.
+		/// </summary>
+		public WordMap GetWordByOrder(int order)
         {
             if (words.ContainsKey(order))
                 return words[order];

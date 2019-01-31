@@ -182,7 +182,7 @@ namespace AsmApp
 		private void btSavePara_Click(object sender, EventArgs e)
 		{
 			ParagraphMap para = new ParagraphMap();
-			store.UpdateParagraph(para, memoInp.Text, false);
+//			store.UpdateParagraph(para, memoInp.Text, false);
 
 			/*			var paramlist = store.SaveParagraphBD(para);
 						if (paramlist == null)
