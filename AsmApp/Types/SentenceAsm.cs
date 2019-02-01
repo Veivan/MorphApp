@@ -37,7 +37,6 @@ namespace AsmApp.Types
 		#endregion
 
 		#region Properties
-//		public int Position { get; set; }
 
 		public string sentence;
 		public int hash;

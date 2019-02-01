@@ -44,7 +44,7 @@ namespace Schemas.BlockPlatform
 		/// <summary>
 		/// Порядок следования блока в дереве.
 		/// </summary>
-		public long Order { get { return treeorder; } }
+		public long Order { get { return treeorder; }  set { treeorder = value; } }
 
 		/// <summary>
 		/// Адрес фактических данных блока.

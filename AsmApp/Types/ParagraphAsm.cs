@@ -23,7 +23,11 @@ namespace AsmApp.Types
 		private List<SentenceAsm> innerPara = new List<SentenceAsm>();
 		#endregion
 
-		#region Конструкторы
+		#region Constructors
+		public ParagraphAsm() : base(Session.Instance().GetBlockTypeByNameKey(Session.paragraphTypeName))
+		{
+		}
+
 		public ParagraphAsm(AssemblyBase srcAsm) : base(srcAsm)
 		{
 			this.srcAsm = srcAsm;
@@ -71,7 +75,7 @@ namespace AsmApp.Types
 					newsprops = sentprops[0];
 					newsprops.IsActual = true;
 				}
-//				newsprops.Order = i;
+				newsprops.Order = i;
 				versionPara.Add(newsprops);
 				i++;
 			}
@@ -127,12 +131,11 @@ namespace AsmApp.Types
 		public void UpdateSentStruct(long Order, SentenceAsm sentstruct)
 		{
 			var sent = innerPara.Where(x => x.Order == Order).FirstOrDefault();
-			if (sent == null)
-			{
-//				sentstruct.Order = Order;
-//				sent.sentstruct = new SentenceMap(sentstruct);
-			}
-			sent.IsActual = true;
+			if (sent != null)
+				innerPara.Remove(sent);
+			sentstruct.IsActual = true;
+			sentstruct.Order = Order;
+			innerPara.Add(sent);
 		}
 
 		/// <summary>

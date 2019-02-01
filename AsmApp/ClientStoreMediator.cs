@@ -102,9 +102,9 @@ namespace AsmApp
 		}
 
 		/// <summary>
-		/// Формирование содержимого внутреннего объекта ParagraphMap.
+		/// Формирование содержимого внутреннего объекта ParagraphAsm.
 		/// </summary>
-		/// <param name="pAsm">объект ParagraphMap</param>
+		/// <param name="pAsm">объект ParagraphAsm</param>
 		/// <param name="input">текстовое содержание абзаца</param>
 		/// <returns></returns>
 		public void UpdateParagraph(ParagraphAsm pAsm, string input, bool IsHeader)
