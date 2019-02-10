@@ -66,6 +66,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SetKeeper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StoreServer.cs" />
   </ItemGroup>

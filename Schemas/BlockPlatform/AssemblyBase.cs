@@ -171,10 +171,11 @@ namespace Schemas.BlockPlatform
 				this.children.Add(asm);
 		}
 
-		public void Save()
+		public virtual void Save()
 		{
 			var store = Session.Instance().Store;
-			store.Save(this);
+			store.Add2SaveSet(this);
+			store.Save();
 		}
 
 		#region Вспомогательные функции

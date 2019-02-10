@@ -126,6 +126,13 @@ namespace AsmApp.Types
 			return newlist;
 		}
 
+		public void Add2SaveSet()
+		{
+			var store = Session.Instance().Store;
+			foreach (var word in words) // where !sent.IsActual
+				word.Value.Add2SaveSet();
+		}
+
 		#endregion
 
 	}

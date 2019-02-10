@@ -24,15 +24,17 @@ namespace Schemas
 		public abstract AssemblyBase CreateAssembly(BlockType type, BlockAddress ParentContID = -1);
 
 		/// <summary>
-		/// Сохранение сборки в БД.
+		/// Добаление объекта к набору для Сохранение в БД.
 		/// </summary>
-		/// <param name="BlockType">адрес типа блока (объект справочника "Типы блоков")</param>
-		/// <param name="parent">Поддержка дерева.Родитель.Это ссылка на блок, являющийся Родителем для блока.</param>
-		/// <param name="treeorder">Поддержка дерева. Последовательность блока в списке детей Родителя (порядок блока в дереве).
-		///		Можно задать явно.Можно задать = 0, тогда функция должна определить последний максимальный номер атрибута и
-		///		присвоить новому атрибуту последний максимальный номер +1</param>
-		/// <returns>адрес добавленного объекта</returns>
-		public abstract void Save(AssemblyBase asm);
+		/// <param name="asm">сборка</param>
+		/// <returns></returns>
+		public abstract void Add2SaveSet(AssemblyBase asm);
+
+		/// <summary>
+		/// Выполнение операции Сохранение в БД.
+		/// </summary>
+		/// <returns></returns>
+		public abstract void Save();
 		#endregion
 
 		#region Методы работы с GREN

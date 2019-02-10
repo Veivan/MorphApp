@@ -185,6 +185,13 @@ namespace AsmApp.Types
 			return str.GetHashCode();
 		}
 
+		public override void Save()
+		{
+			var store = Session.Instance().Store;
+			foreach (var sent in innerPara) // where !sent.IsActual
+				sent.Add2SaveSet();
+			base.Save();
+		}
 
 		#endregion
 
