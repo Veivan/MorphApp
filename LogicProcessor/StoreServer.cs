@@ -120,9 +120,11 @@ namespace LogicProcessor
 			var saveSet = SetKeeper.Instance();
 			if(saveSet.IsDirty)
 			{
-				// В DBServer надо сделать функции с групповым входным параметром, а внутри их - транзакции
 				var list = saveSet.GetSet();
 				saveSet.Clear();
+				//TODO В DBServer надо сделать функции с групповым входным параметром, а внутри их - транзакции
+				foreach (var asm in list)
+					DBserver.SetFactData(asm.BlockID, asm.Blob); 
 			}
 
 /*			if (asm.IsDeleted == 1)
@@ -130,33 +132,6 @@ namespace LogicProcessor
 			DBserver.SetFactData(asm.BlockID, asm.Blob);*/
 		}
 
-		#endregion
-
-		#region API для работы с контейнерами : создание, редактирование и различные выборки для визуализации.
-
-		/*		public AssemblyBase CreateContainer(string name, BlockAddress ParentContID)
-				{
-					var asm = this.CreateAssembly(Session.Instance().GetBlockTypeDataContainer(), ParentContID);
-					asm.SetValue("Name", name);
-					return asm;
-				}
-
-				/// <summary>
-				/// Создание нового Контейнера.
-				/// </summary>
-				/// <param name="name">Наименование Контейнера</param>
-				/// <param name="parent">Поддержка дерева.Родитель.Это ссылка на блок, являющийся Родителем для блока.</param>
-				/// <param name="treeorder">Поддержка дерева. Последовательность блока в списке детей Родителя (порядок блока в дереве).
-				///		Можно задать явно.Можно задать = 0, тогда функция должна определить последний максимальный номер атрибута и
-				///		присвоить новому атрибуту последний максимальный номер +1</param>
-				/// <returns>адрес добавленного объекта</returns>
-				public BlockAddress CreateContainer(string name, BlockAddress parent, int treeorder)
-				{
-					var typeOfDict = Session.Instance().GetBlockTypeByNameKey(Session.containerTypeName);
-					BlockAddress id = DBserver.CreateBlock(typeOfDict.BlockTypeID, parent, treeorder);
-					DBserver.AttrSetValue(id, "Name", name);
-					return id;
-				} */
 		#endregion
 
 		#region Методы работы с GREN
