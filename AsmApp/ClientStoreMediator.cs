@@ -94,6 +94,31 @@ namespace AsmApp
 			return asm;
 		}
 
+		public AssemblyBase CreateDictionary(string name, BlockAddress ParentID)
+		{
+			var asm = store.CreateAssembly(Session.Instance().GetBlockTypeByNameKey(Session.dictTypeName), ParentID);
+			asm.SetValue("Name", name);
+			asm.Save();
+			return asm;
+		}
+
+		public AssemblyBase CreateLexema(BlockAddress ParentID, long grenPart, string lemma)
+		{
+			var lexType = Session.Instance().GetBlockTypeByNameKey(Session.lexTypeName);
+			var args = new Dictionary<string, object>();
+			args.Add("GrenPart", grenPart);
+			args.Add("Lemma", lemma.ToLower());
+
+			var asm = store.SearchAsms(lexType.BlockTypeID, args).FirstOrDefault();
+			if (asm == null) 
+				asm = store.CreateAssembly(lexType, ParentID);
+			asm.SetValue("Name", lemma);
+			asm.SetValue("GrenPart", grenPart);
+			asm.SetValue("Lemma", lemma);		
+			asm.Save();
+			return asm;
+		}
+
 		public AssemblyBase CreateParagraph(BlockAddress ParentID)
 		{
 			var asm = store.CreateAssembly(Session.Instance().GetBlockTypeByNameKey(Session.paragraphTypeName), ParentID);

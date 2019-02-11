@@ -99,7 +99,7 @@ namespace Schemas.BlockPlatform
 		/// <summary>
 		/// Двоичные данные атрибутов.
 		/// </summary>
-		public Blob Blob { get { return blob; } }
+		public Blob Blob { get { return blob; } /*set { this.Blob = value; } */ }
 
 		#endregion
 
@@ -125,7 +125,7 @@ namespace Schemas.BlockPlatform
 			if (_userAttrs == null)
 				this._UserAttrs = Session.Instance().GetUserAttrs(_bt);
 			else
-				this._UserAttrs = _userAttrs;
+				this._UserAttrs = _userAttrs; 
 		}
 
 		/// <summary>

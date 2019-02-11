@@ -1215,9 +1215,9 @@ namespace DirectDBconnector
 				var stmt =
 					"ALTER TABLE mBlocks ADD COLUMN deleted integer DEFAULT 0;";
 
-/*					"ALTER TABLE mAttributes ADD COLUMN namekey text;\n"
-					+ "ALTER TABLE mAttributes ADD COLUMN nameui text;\n"
-					+ "UPDATE mAttributes SET namekey = name;"; */
+				/*					"ALTER TABLE mAttributes ADD COLUMN namekey text;\n"
+									+ "ALTER TABLE mAttributes ADD COLUMN nameui text;\n"
+									+ "UPDATE mAttributes SET namekey = name;"; */
 				m_sqlCmd.CommandText = stmt;
 				m_sqlCmd.ExecuteNonQuery();
 			}
@@ -1253,11 +1253,11 @@ namespace DirectDBconnector
 			{
 				m_sqlCmd.CommandText = "DROP TABLE IF EXISTS mLemms;\n VACUUM;";
 
-/*				m_sqlCmd.CommandText = string.Format("UPDATE mBlocks SET created_at = @date WHERE b_id = {0}", 8);
-				m_sqlCmd.Parameters.Clear();
-				var dt = String.Format("{0:yyyy-MM-dd HH:mm:ss}", DateTime.Now);
-				//m_sqlCmd.Parameters.Add(new SQLiteParameter("@date", "2018-08-20 18:02:25"));
-				m_sqlCmd.Parameters.Add(new SQLiteParameter("@date", dt));*/
+				/*				m_sqlCmd.CommandText = string.Format("UPDATE mBlocks SET created_at = @date WHERE b_id = {0}", 8);
+								m_sqlCmd.Parameters.Clear();
+								var dt = String.Format("{0:yyyy-MM-dd HH:mm:ss}", DateTime.Now);
+								//m_sqlCmd.Parameters.Add(new SQLiteParameter("@date", "2018-08-20 18:02:25"));
+								m_sqlCmd.Parameters.Add(new SQLiteParameter("@date", dt));*/
 
 				m_sqlCmd.ExecuteNonQuery();
 			}
@@ -1702,6 +1702,11 @@ namespace DirectDBconnector
 			return reslist;
 		}
 
+		/// <summary>
+		/// Получение списка атрибутов типа блока.
+		/// </summary>
+		/// <param name="addr">адрес типа блока</param>
+		/// <returns>список атрибутов типа блока</returns>
 		public AttrsCollection dbGetAttrsCollection(long blockType)
 		{
 			var attrs = new AttrsCollection();
@@ -1949,6 +1954,70 @@ namespace DirectDBconnector
 			return result;
 		}
 
+		/// <summary>
+		/// Поиск блока по типу (если задан) и значениям атрибутов.
+		/// Все значения атрибутов должны совпадать.
+		/// </summary>
+		/// <param name="blockType">тип блока</param>
+		/// <param name="args">справочник аргументов поиска</param>
+		/// <returns>список блоков</returns>
+		public List<BlockBase> dbSearchBlocks(long blockType, Dictionary<string, object> args)
+		{
+			var result = new List<BlockBase>();
+			var attrs = dbGetAttrsCollection(blockType);
+			var tplist = attrs.GetAttrTypesList();
+			try
+			{
+				m_sqlCmd.CommandText = string.Format("SELECT B.b_id, B.bt_id, T.namekey, B.parent, B.treeorder, " +
+				"B.fh_id, B.predecessor, B.successor, T.nameui, B.created_at, F.blockdata " +
+				"FROM mBlocks B JOIN mBlockTypes T ON T.bt_id = B.bt_id AND T.bt_id = {0} " +
+				"INNER JOIN mFactHeap F ON F.fh_id = B.fh_id ", blockType);
+				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
+				Blob blob = null;
+				while (r.Read())
+				{
+					var addr = r.GetInt64(0);
+					// Reading BLOB
+					var bytearr = GetBytes(r, 10);
+					blob = new Blob(tplist, bytearr);
+					var IsMatch = false;
+					foreach (var arg in args)
+					{
+						var attrOrd = -1;
+						IsMatch = false;
+						try
+						{
+							attrOrd = attrs.GetOrdByNameKey(arg.Key);
+							var curval = blob.GetAttrValue(attrOrd);
+							IsMatch = curval != null && curval.Equals(arg.Value);
+						}
+						catch { }
+
+						if (IsMatch == false)
+							break;						
+					}
+					if (IsMatch == false)
+						continue;
+
+					var fh_id = r[5] as long? ?? 0;
+					var predecessor = r[6] as long? ?? 0;
+					var successor = r[7] as long? ?? 0;
+					var bt = new BlockType(r.GetInt64(1), r.GetString(2), r.GetString(8));
+					var block = new BlockBase(addr, bt, r.GetInt64(3), r.GetInt64(4), fh_id, predecessor, successor, null, r.GetDateTime(9));
+					//					block.Blob = blob;
+					block.PerformBlob(tplist, bytearr);
+					result.Add(block);
+				}
+				r.Close();
+			}
+			catch (SQLiteException ex)
+			{
+				Console.WriteLine("dbSearchBlocks Error: " + ex.Message);
+			}
+
+			return result;
+		}
+
 		static byte[] GetBytes(SQLiteDataReader reader, int col)
 		{
 			const int CHUNK_SIZE = 2 * 1024;
@@ -2017,7 +2086,7 @@ namespace DirectDBconnector
 				list.Add(attr0);
 				list.Add(attr1);
 				Blob blobpar = new Blob(list);
-				var bdata = blobpar.Data; 
+				var bdata = blobpar.Data;
 
 				/*var bdata = BitConverter.GetBytes(blockType);
 				if (BitConverter.IsLittleEndian)

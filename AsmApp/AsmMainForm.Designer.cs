@@ -51,6 +51,8 @@
 			this.btDBGetWord = new System.Windows.Forms.Button();
 			this.memoOut = new System.Windows.Forms.TextBox();
 			this.memoInp = new System.Windows.Forms.TextBox();
+			this.btAddDict = new System.Windows.Forms.Button();
+			this.btAddLemma = new System.Windows.Forms.Button();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.panel3.SuspendLayout();
@@ -91,6 +93,8 @@
 			// 
 			// panel3
 			// 
+			this.panel3.Controls.Add(this.btAddLemma);
+			this.panel3.Controls.Add(this.btAddDict);
 			this.panel3.Controls.Add(this.btAddCont);
 			this.panel3.Controls.Add(this.btAddDoc);
 			this.panel3.Controls.Add(this.btDelNode);
@@ -288,6 +292,26 @@
 			this.memoInp.TabIndex = 5;
 			this.memoInp.Text = "Мама мыла раму.";
 			// 
+			// btAddDict
+			// 
+			this.btAddDict.Location = new System.Drawing.Point(409, 14);
+			this.btAddDict.Name = "btAddDict";
+			this.btAddDict.Size = new System.Drawing.Size(134, 23);
+			this.btAddDict.TabIndex = 6;
+			this.btAddDict.Text = "Новый справочник";
+			this.btAddDict.UseVisualStyleBackColor = true;
+			this.btAddDict.Click += new System.EventHandler(this.btAddDict_Click);
+			// 
+			// btAddLemma
+			// 
+			this.btAddLemma.Location = new System.Drawing.Point(409, 43);
+			this.btAddLemma.Name = "btAddLemma";
+			this.btAddLemma.Size = new System.Drawing.Size(134, 23);
+			this.btAddLemma.TabIndex = 7;
+			this.btAddLemma.Text = "Add lemma";
+			this.btAddLemma.UseVisualStyleBackColor = true;
+			this.btAddLemma.Click += new System.EventHandler(this.btAddLemma_Click);
+			// 
 			// AsmMainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -330,6 +354,8 @@
 		private System.Windows.Forms.Button btTokenize;
 		private System.Windows.Forms.Button btSaveLex;
 		private System.Windows.Forms.Button btDBGetWord;
+		private System.Windows.Forms.Button btAddDict;
+		private System.Windows.Forms.Button btAddLemma;
 	}
 }
 

@@ -86,7 +86,7 @@ namespace Schemas.BlockPlatform
 				if (IsMainDataContainer)
 					return (string)GetValue("Name", Session.MainStoreName);
 				if (IsDataContainer)
-					return (string)GetValue("Name", Session.DefaulContainerName);
+					return (string)GetValue("Name", Session.DefaultContainerName);
 				else
 					return (string)GetValue("Name");
 			}

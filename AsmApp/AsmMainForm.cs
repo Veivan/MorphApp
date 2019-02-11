@@ -92,7 +92,7 @@ namespace AsmApp
 			if (!nodeToAddTo.Assembly.IsDataContainer)
 				return;
 
-			var result = Utils.InputBox("Создание контейнера", "Введите имя контейнера:", Session.DefaulContainerName);
+			var result = Utils.InputBox("Создание контейнера", "Введите имя контейнера:", Session.DefaultContainerName);
 			if (String.IsNullOrEmpty(result))
 				return;
 			var ParentContID = nodeToAddTo.Assembly.BlockID;
@@ -106,13 +106,43 @@ namespace AsmApp
 			var nodeToAddTo = treeView1.SelectedNode as AsmNode;
 			if (nodeToAddTo == null) return;
 
-			var result = Utils.InputBox("Создание документа", "Введите имя документа:", Session.DefaulDocumentName);
+			var result = Utils.InputBox("Создание документа", "Введите имя документа:", Session.DefaultDocumentName);
 			if (String.IsNullOrEmpty(result))
 				return;
 			var ParentNodeID = nodeToAddTo.Assembly.BlockID;
 			var asm = store.CreateDocument(result, ParentNodeID);
 			var aNode = new AsmNode(asm);
 			nodeToAddTo.Nodes.Add(aNode);
+		}
+
+		private void btAddDict_Click(object sender, EventArgs e)
+		{
+			var nodeToAddTo = treeView1.SelectedNode as AsmNode;
+			if (nodeToAddTo == null) return;
+
+			/// TODO Здесь надо делать диалог и помимо имени выбирать тип элементов
+			var result = Utils.InputBox("Создание справочника", "Введите имя справочника:", Session.DefaultDictionaryName);
+			if (String.IsNullOrEmpty(result))
+				return;
+			var ParentNodeID = nodeToAddTo.Assembly.BlockID;
+			var asm = store.CreateDictionary(result, ParentNodeID);
+			var aNode = new AsmNode(asm);
+			nodeToAddTo.Nodes.Add(aNode);
+		}
+
+		private void btAddLemma_Click(object sender, EventArgs e)
+		{
+			var nodeToAddTo = treeView1.SelectedNode as AsmNode;
+			if (nodeToAddTo == null) return;
+
+			var result = Utils.InputBox("Добавление леммы", "Введите лемму:", "");
+			if (String.IsNullOrEmpty(result))
+				return;
+			var ParentNodeID = nodeToAddTo.Assembly.BlockID;
+			var asm = store.CreateLexema(ParentNodeID, (long)GrenPart.NOUN_ru, result);
+			var aNode = new AsmNode(asm);
+			nodeToAddTo.Nodes.Add(aNode);
+
 		}
 
 		private void btAddPara_Click(object sender, EventArgs e)
@@ -199,7 +229,7 @@ namespace AsmApp
 							}
 						memoOut.Text = this.para.ParagraphID.ToString();*/
 		}
-		
+
 		#endregion
 
 	}

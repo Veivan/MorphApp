@@ -179,6 +179,26 @@ namespace SagaTest
 			Console.WriteLine("After : " + (val == null ? "null" : val.ToString()));
 			Assert.AreEqual(newval, val);
 		}
+
+		[TestMethod()]
+		public void Test_dbSearchBlocks()
+		{
+			var sess = Session.Instance();
+			sess.Init(null, DBserver);
+
+			var blockType = 10; //Lexema
+			var grenPart = (long)GrenPart.NOUN_ru;
+			var lemma = "мама";
+			//var lemma = "папа";
+			var args = new Dictionary<string, object>();
+			args.Add("GrenPart", grenPart);
+			args.Add("Lemma", lemma.ToLower());
+
+			var result = DBserver.SearchBlocks(blockType, args);
+
+			Assert.AreNotEqual(0, result.Count);
+		}
+
 		#endregion
 
 		#region Функции для работы со Справочниками

@@ -35,6 +35,16 @@ namespace Schemas
 		/// </summary>
 		/// <returns></returns>
 		public abstract void Save();
+
+		/// <summary>
+		/// Поиск сборки по типу блока (если задан) и значениям атрибутов.
+		/// Все значения атрибутов должны совпадать.
+		/// </summary>
+		/// <param name="blockType">тип блока</param>
+		/// <param name="args">справочник аргументов поиска</param>
+		/// <returns>список сборок</returns>
+		public abstract List<AssemblyBase> SearchAsms(long blockType, Dictionary<string, object> args);
+
 		#endregion
 
 		#region Методы работы с GREN

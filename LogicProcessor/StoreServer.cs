@@ -132,6 +132,18 @@ namespace LogicProcessor
 			DBserver.SetFactData(asm.BlockID, asm.Blob);*/
 		}
 
+		public override List<AssemblyBase> SearchAsms(long blockType, Dictionary<string, object> args)
+		{
+			var blocklist = DBserver.SearchBlocks(blockType, args);
+			var result = new List<AssemblyBase>();
+			foreach (var block in blocklist)
+			{
+				var asm = new AssemblyBase(block);
+				result.Add(asm);
+			}
+			return result;
+		}
+
 		#endregion
 
 		#region Методы работы с GREN
@@ -146,6 +158,7 @@ namespace LogicProcessor
 			//throw new NotImplementedException();
 			return null;
 		}
+
 		#endregion
 
 	}

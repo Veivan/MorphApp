@@ -199,6 +199,12 @@ namespace DirectDBconnector
 			var result = dbConnector.dbGetChildren(list_ids);
 			return result;
 		}
+
+		public override List<BlockBase> SearchBlocks(long blockType, Dictionary<string, object> args)
+		{
+			var result = dbConnector.dbSearchBlocks(blockType, args);
+			return result;
+		}
 		#endregion
 
 		#region Функции для работы со Справочниками

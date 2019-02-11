@@ -206,10 +206,19 @@ namespace Schemas
 		/// Выбираются только прямые наследники (без ссылок)
 		/// </summary>
 		/// <param name="list_ids">список ID родительских блоков</param>
-		/// <returns>DataTable</returns>
+		/// <returns>список блоков</returns>
 		public abstract List<BlockBase> GetChildren(List<string> list_ids);
 
 		#endregion
+
+		/// <summary>
+		/// Поиск блока по типу (если задан) и значениям атрибутов.
+		/// Все значения атрибутов должны совпадать.
+		/// </summary>
+		/// <param name="blockType">тип блока</param>
+		/// <param name="args">справочник аргументов поиска</param>
+		/// <returns>список блоков</returns>
+		public abstract List<BlockBase> SearchBlocks(long blockType, Dictionary<string, object> args);
 
 		#region Функции для работы со Справочниками
 

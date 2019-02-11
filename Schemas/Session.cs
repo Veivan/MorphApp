@@ -18,9 +18,11 @@ namespace Schemas
 
 		public static long MainStoreID = 1;
 		public static string MainStoreName = "Хранилище";
-		public static string DefaulContainerName = "Контейнер";
-		public static string DefaulDocumentName = "Документ";
-
+		public static string DefaultContainerName = "Контейнер";
+		public static string DefaultDocumentName = "Документ";
+		public static string DefaultDictionaryName = "Справочник";
+		
+		public static string dictTypeName = "Dictionary";
 		public static string containerTypeName = "DataContainer";
 		public static string documentTypeName = "Document";
 		public static string paragraphTypeName = "Paragraph";
