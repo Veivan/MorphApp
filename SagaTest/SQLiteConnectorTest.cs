@@ -29,7 +29,7 @@ namespace DirectDBconnector.Tests
 		[TestMethod]
 		public void Sys_ShowSelectAll()
 		{
-			dbConnector.selectAll(dbTables.mBlockTypes);
+			dbConnector.selectAll(dbTables.tblParts);
 			Assert.AreEqual(0, 0);
 		}
 

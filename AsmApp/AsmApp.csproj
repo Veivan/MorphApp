@@ -80,6 +80,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Types\DocumentAsm.cs" />
     <Compile Include="Types\GrammemAsm.cs" />
+    <Compile Include="Types\LexemaAsm.cs" />
     <Compile Include="Types\ParagraphAsm.cs" />
     <Compile Include="Types\SentenceAsm.cs" />
     <Compile Include="Types\WordAsm.cs" />

@@ -27,6 +27,7 @@ namespace Schemas
 		public static string sentenceTypeName = "Phrase";
 		public static string wordTypeName = "SingleWord";
 		public static string grammTypeName = "Grammema";
+		public static string lexTypeName = "Lexema";
 
 		private List<BlockType> typeList;
 		public IBlockDealer DBserver;
