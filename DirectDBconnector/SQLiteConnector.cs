@@ -165,9 +165,7 @@ namespace DirectDBconnector
 						+ "	b_id integer PRIMARY KEY, bt_id integer, created_at DATETIME DEFAULT CURRENT_TIMESTAMP, \n"
 						+ " parent integer, treeorder integer, fh_id integer, predecessor integer, successor integer, deleted integer DEFAULT 0);\n" +
 					"CREATE TABLE IF NOT EXISTS mFactHeap (\n"
-						+ "	fh_id integer PRIMARY KEY, blockdata blob);\n" +
-					"CREATE TABLE IF NOT EXISTS mDicts (\n"
-						+ "	md_id integer PRIMARY KEY, name text, b_id integer);\n";
+						+ "	fh_id integer PRIMARY KEY, blockdata blob);\n";
 
 
 				m_sqlCmd.ExecuteNonQuery();
@@ -1253,11 +1251,14 @@ namespace DirectDBconnector
 		{
 			try
 			{
-				m_sqlCmd.CommandText = string.Format("UPDATE mBlocks SET created_at = @date WHERE b_id = {0}", 8);
+				m_sqlCmd.CommandText = "DROP TABLE IF EXISTS mLemms;\n VACUUM;";
+
+/*				m_sqlCmd.CommandText = string.Format("UPDATE mBlocks SET created_at = @date WHERE b_id = {0}", 8);
 				m_sqlCmd.Parameters.Clear();
 				var dt = String.Format("{0:yyyy-MM-dd HH:mm:ss}", DateTime.Now);
 				//m_sqlCmd.Parameters.Add(new SQLiteParameter("@date", "2018-08-20 18:02:25"));
-				m_sqlCmd.Parameters.Add(new SQLiteParameter("@date", dt));
+				m_sqlCmd.Parameters.Add(new SQLiteParameter("@date", dt));*/
+
 				m_sqlCmd.ExecuteNonQuery();
 			}
 			catch (SQLiteException ex)
@@ -2004,20 +2005,23 @@ namespace DirectDBconnector
 				m_sqlCmd.CommandText = string.Format("INSERT INTO mBlocks(b_id, bt_id, parent, treeorder) VALUES(NULL, '{0}', {1}, {2})",
 					typeOfDict, -1, 0);
 				m_sqlCmd.ExecuteNonQuery();
-				var addr = m_dbConn.LastInsertRowId;
+				result = m_dbConn.LastInsertRowId;
 
-				// Записать в атрибут ResolvedType (0-й по порядку тип элемента справочника)
+				// Записать в атрибуты 
+				// - ResolvedType 
+				// - Name
 
-				/*var testtype = enAttrTypes.mnint;
-				var attr1 = new AttrFactData(testtype, blockType);
 				var list = new List<AttrFactData>();
+				var attr0 = new AttrFactData(enAttrTypes.mnlong, blockType);
+				var attr1 = new AttrFactData(enAttrTypes.mntxt, name);
+				list.Add(attr0);
 				list.Add(attr1);
 				Blob blobpar = new Blob(list);
-				var bdata = blobpar.Data; */
+				var bdata = blobpar.Data; 
 
-				var bdata = BitConverter.GetBytes(blockType);
+				/*var bdata = BitConverter.GetBytes(blockType);
 				if (BitConverter.IsLittleEndian)
-					Array.Reverse(bdata);
+					Array.Reverse(bdata); */
 
 				m_sqlCmd.CommandText = "INSERT INTO mFactHeap(fh_id, blockdata) VALUES(NULL, @blob)";
 				m_sqlCmd.Parameters.Clear();
@@ -2028,14 +2032,10 @@ namespace DirectDBconnector
 				// обновить адрес факт.данных в блоке
 				m_sqlCmd.CommandText = "UPDATE mBlocks SET fh_id = @fh_id WHERE b_id = @b_id";
 				m_sqlCmd.Parameters.Clear();
-				m_sqlCmd.Parameters.Add(new SQLiteParameter("@b_id", addr));
+				m_sqlCmd.Parameters.Add(new SQLiteParameter("@b_id", result));
 				m_sqlCmd.Parameters.Add(new SQLiteParameter("@fh_id", fh_id));
 				m_sqlCmd.ExecuteNonQuery();
 
-				m_sqlCmd.CommandText = string.Format("INSERT INTO mDicts(md_id, name, b_id) VALUES(NULL, '{0}', {1})",
-					name, addr);
-				m_sqlCmd.ExecuteNonQuery();
-				result = m_dbConn.LastInsertRowId;
 				transaction.Commit();
 			}
 			catch (SQLiteException ex)
@@ -2047,31 +2047,8 @@ namespace DirectDBconnector
 			return result;
 		}
 
+		#endregion
 
-		/// <summary>
-		/// Получение блоба, содержащего адреса элементов Справочника.
-		/// </summary>
-		/// <param name="addr">адрес Справочника</param>
-		/// <returns>byte[]</returns>
-		public byte[] dbGetDictBlob(long addr)
-		{
-			byte[] result = null;
-			try
-			{
-				m_sqlCmd.CommandText = String.Format("SELECT blockdata FROM mFactHeap F JOIN mBlocks B ON B.fh_id = F.fh_id " +
-					"JOIN mDicts D ON D.b_id = B.b_id WHERE D.md_id = {0}", addr);
-				var executeScalar = m_sqlCmd.ExecuteScalar();
-				if (executeScalar != null && executeScalar != DBNull.Value)
-				{
-					result = (byte[])executeScalar;
-				}
-			}
-			catch (SQLiteException ex)
-			{
-				Console.WriteLine("dbGetDictBlob Error: " + ex.Message);
-			}
-			return result;
-		}
 
 		/// <summary>
 		/// !!!! Функция нигде не используется!!!
@@ -2137,7 +2114,6 @@ namespace DirectDBconnector
 			}
 		}
 
-		#endregion
 
 	}
 }

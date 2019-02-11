@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 using DirectDBconnector;
@@ -18,7 +15,7 @@ namespace DirectDBA
 		SagaDBServer dbServer = new SagaDBServer();
         string[] stables = { "Контейнеры", "Документы", "Абзацы", "Предложения", "Содержание фраз", "Леммы",
             "Граммемы", "Синт.связи", "Формы слов", "Термины", "Undefs",
-			"Типы блоков", "Типы атрибутов", "Атрибуты", "Блоки", "Факты", "Справочники"};
+			"Типы блоков", "Типы атрибутов", "Атрибуты", "Блоки", "Факты"};
 
         private dbTables _aspect; 
         public dbTables ActiveAspect
@@ -451,26 +448,6 @@ namespace DirectDBA
 					});
 					#endregion
 					break;
-				case dbTables.mDicts:
-					#region Создание колонок для Справочников
-					dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
-					{
-						DataPropertyName = "md_id",
-						HeaderText = "md_id"
-					});
-					dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
-					{
-						DataPropertyName = "name",
-						HeaderText = "name"
-					});
-					dgvCommon.Columns.Add(new DataGridViewTextBoxColumn
-					{
-						DataPropertyName = "b_id",
-						HeaderText = "b_id"
-					});
-					#endregion
-					break;
-
 			}
 		}
 

@@ -222,7 +222,6 @@ namespace Schemas
 		mAttributes,
 		mBlocks,
 		mFactHeap,
-		mDicts,
 
 		tblParts,
 		tblSiGram,
