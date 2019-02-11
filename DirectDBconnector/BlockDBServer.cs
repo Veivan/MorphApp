@@ -208,50 +208,6 @@ namespace DirectDBconnector
 			return result;
 		}
 
-		public override long GetDictionaryByName(string name)
-		{
-			var result = dbConnector.dbGetDictionary(name);
-			return result;
-		}
-
-		public override string GetDictName(long addr)
-		{
-			var result = dbConnector.dbGetDictName(addr);
-			return result;
-		}
-
-		public override long GetDictType(long addr)
-		{
-			byte[] arbt = dbConnector.dbGetDictBlob(addr);
-			var dDictBlob = new DictBlob(arbt);
-			var result = dDictBlob.GetDictResolvedTypeFromBytes();
-			return result;
-		}
-
-		public override long[] GetDictContent(long addr)
-		{
-			byte[] arbt = dbConnector.dbGetDictBlob(addr);
-			var dDictBlob = new DictBlob(arbt);
-			var result = dDictBlob.GetDictContentFromBytes();
-			return result;
-		}
-
-		public override void DictAddBlocks(long addr, long[] subaddr)
-		{
-			byte[] arbt = dbConnector.dbGetDictBlob(addr);
-			var dDictBlob = new DictBlob(arbt);
-			dDictBlob.AddElements(subaddr);
-			dbConnector.dbDictPerfomElements(addr, dDictBlob.Data);
-		}
-
-		public override void DictRemoveBlocks(long addr, long[] subaddr)
-		{
-			byte[] arbt = dbConnector.dbGetDictBlob(addr);
-			var dDictBlob = new DictBlob(arbt);
-			dDictBlob.RemoveElements(subaddr);
-			dbConnector.dbDictPerfomElements(addr, dDictBlob.Data);
-		}
-
 		#endregion
 
 	}

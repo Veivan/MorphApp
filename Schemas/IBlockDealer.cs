@@ -221,50 +221,6 @@ namespace Schemas
 		/// <returns>адрес добавленного объекта</returns>
 		public abstract BlockAddress CreateDictionary(string name, int BlockType);
 
-		/// <summary>
-		/// Получение адреса Справочника по наименованию.
-		/// </summary>
-		/// <param name="name">Наименование Справочника</param>
-		/// <returns>адрес объекта </returns>
-		public abstract BlockAddress GetDictionaryByName(string name);
-
-		/// <summary>
-		/// Получение наименования Справочника по адресу.
-		/// </summary>
-		/// <param name="addr">адрес Справочника</param>
-		/// <returns>наименования объекта </returns>
-		public abstract string GetDictName(BlockAddress addr);
-
-		/// <summary>
-		/// Получение типа блока, который может содержаться в справочнике, по адресу.
-		/// </summary>
-		/// <param name="addr">адрес Справочника</param>
-		/// <returns>адрес типа блока</returns>
-		public abstract long GetDictType(BlockAddress addr);
-
-		/// <summary>
-		/// Получение адресов блоков, содержащихся в справочнике.
-		/// </summary>
-		/// <param name="addr">адрес Справочника</param>
-		/// <returns>массив адресов блоков </returns>
-		public abstract BlockAddress[] GetDictContent(BlockAddress addr);
-
-		/// <summary>
-		/// Добавление элементов(блоков) в справочник.
-		/// </summary>
-		/// <param name="addr">адрес Справочника</param>
-		/// <param name="subaddr">массив адресов добавляемых блоков</param>
-		/// <returns></returns>
-		public abstract void DictAddBlocks(BlockAddress addr, BlockAddress[] subaddr);
-
-		/// <summary>
-		/// Удаление элементов(блоков) из справочника.
-		/// </summary>
-		/// <param name="addr">адрес Справочника</param>
-		/// <param name="subaddr">массив адресов удаляемого блоков</param>
-		/// <returns></returns>
-		public abstract void DictRemoveBlocks(BlockAddress addr, BlockAddress[] subaddr);
-
 		#endregion
 
 	}

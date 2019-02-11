@@ -192,45 +192,6 @@ namespace SagaTest
 		}
 		#endregion
 
-		#region Тестирование блоба-справочника
-		/// <summary>
-		/// Запись в Blob нескольких INT для тестирования чтения первого из них - типа элементов справочника (dbGetDictType)
-		/// </summary>
-		[TestMethod]
-		public void Test_MakeBlob_SomeInt()
-		{
-			bool eq = false;
-			var list = new List<AttrFactData>();
-			list.Add(new AttrFactData(enAttrTypes.mnlong, 1)); // тип элементов справочника
-			list.Add(new AttrFactData(enAttrTypes.mnarr, new List<long>() { 3 }));
-			Blob blobpar = new Blob(list);
-
-			var bdata = blobpar.Data;
-
-			var dDictBlob = new DictBlob(bdata);
-			var btype = dDictBlob.GetDictResolvedTypeFromBytes();
-			eq = btype == 1;
-			Assert.AreEqual(eq, true);
-		}
-
-		/// <summary>
-		/// Создание пустого справочника и присвоение элементов
-		/// </summary>
-		[TestMethod]
-		public void Test_MakeEmptyBlob()
-		{
-			var dDictBlob = new DictBlob(null);
-			dDictBlob.AddElements(new long[] { 5, 2 });
-			var result = "";
-			var arr = dDictBlob.GetDictContentFromBytes();
-			if (arr == null)
-				result = "empty";
-			else
-				result = string.Join(",", arr);
-			Console.WriteLine("Elements : " + result);
-			Assert.AreNotEqual("", result);
-		}
-
 		/// <summary>
 		/// Присвоение типа string
 		/// </summary>
@@ -258,7 +219,6 @@ namespace SagaTest
 			Console.WriteLine(val);
 			Assert.AreEqual(newval.Count, val.Length);
 		}
-		#endregion
 
 		#region Тестирование присвоения значения атрибуту
 		/// <summary>

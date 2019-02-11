@@ -53,7 +53,7 @@ namespace AsmApp.Types
 		/// <summary>
 		/// Лемма.
 		/// </summary>
-		public int Lemma
+		public string Lemma
 		{
 			get
 			{

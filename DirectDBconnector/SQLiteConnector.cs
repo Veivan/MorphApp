@@ -2047,41 +2047,6 @@ namespace DirectDBconnector
 			return result;
 		}
 
-		public long dbGetDictionary(string name)
-		{
-			long result = -1;
-			try
-			{
-				m_sqlCmd.CommandText = "SELECT md_id FROM mDicts WHERE LOWER(name) = LOWER(@name)";
-				m_sqlCmd.Parameters.Clear();
-				m_sqlCmd.Parameters.Add(new SQLiteParameter("@name", name));
-				var executeScalar = m_sqlCmd.ExecuteScalar();
-				if (executeScalar != null)
-					result = (long)executeScalar;
-			}
-			catch (SQLiteException ex)
-			{
-				Console.WriteLine("dbGetDictionary Error: " + ex.Message);
-			}
-			return result;
-		}
-
-		public string dbGetDictName(long addr)
-		{
-			string result = "";
-			try
-			{
-				m_sqlCmd.CommandText = String.Format("SELECT name FROM mDicts WHERE md_id = {0}", addr);
-				var executeScalar = m_sqlCmd.ExecuteScalar();
-				if (executeScalar != null)
-					result = (string)executeScalar;
-			}
-			catch (SQLiteException ex)
-			{
-				Console.WriteLine("dbGetDictName Error: " + ex.Message);
-			}
-			return result;
-		}
 
 		/// <summary>
 		/// Получение блоба, содержащего адреса элементов Справочника.
@@ -2109,6 +2074,10 @@ namespace DirectDBconnector
 		}
 
 		/// <summary>
+		/// !!!! Функция нигде не используется!!!
+		/// Оставлена как пример - что делать с блоком после изменения фактических данных.
+		/// 
+		/// 
 		/// Изменение элементов в Справочнике.
 		/// </summary>
 		/// <param name="addr">адрес Справочника</param>
@@ -2118,7 +2087,7 @@ namespace DirectDBconnector
 		/// Адрес нового блока заменит адрес блока в Справочнике.
 		/// </remarks>
 		/// <returns></returns>
-		public void dbDictPerfomElements(long addr, byte[] blob)
+		public void dbDictPerfomElements_unused(long addr, byte[] blob)
 		{
 			SQLiteTransaction transaction = null;
 			try

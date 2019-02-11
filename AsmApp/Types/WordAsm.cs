@@ -92,8 +92,8 @@ namespace AsmApp.Types
 		public void Add2SaveSet()
 		{
 			var store = Session.Instance().Store;
-			foreach (var pair in pairs) // where !sent.IsActual
-				pair.Add2SaveSet();
+			foreach (var pair in pairs) ;// where !sent.IsActual
+//				pair.Add2SaveSet();
 		}
 
 		#endregion

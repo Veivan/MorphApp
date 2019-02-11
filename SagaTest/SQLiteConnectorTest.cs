@@ -168,7 +168,7 @@ namespace DirectDBconnector.Tests
 			var result = "";
 			try
 			{
-				dbConnector.dbDictPerfomElements(id, x);
+				dbConnector.dbDictPerfomElements_unused(id, x);
 			}
 			catch (Exception ex)
 			{
