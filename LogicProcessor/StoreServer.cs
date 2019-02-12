@@ -124,7 +124,10 @@ namespace LogicProcessor
 				saveSet.Clear();
 				//TODO В DBServer надо сделать функции с групповым входным параметром, а внутри их - транзакции
 				foreach (var asm in list)
-					DBserver.SetFactData(asm.BlockID, asm.Blob); 
+				{
+					// Здесь надо проверять IsPersists и если нет, то создавать в БД
+					DBserver.SetFactData(asm.BlockID, asm.Blob);
+				}
 			}
 
 /*			if (asm.IsDeleted == 1)

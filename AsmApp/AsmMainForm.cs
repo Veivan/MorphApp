@@ -15,7 +15,7 @@ namespace AsmApp
 	public partial class AsmMainForm : Form
 	{
 
-		ClientStoreMediator store =  ClientStoreMediator.Instance();
+		ClientStoreMediator store = ClientStoreMediator.Instance();
 
 		public AsmMainForm()
 		{
@@ -47,7 +47,7 @@ namespace AsmApp
 				treeView1.Nodes.Add(aNode);
 			}
 		}
-		
+
 		/// <summary>
 		/// Заполнение узла дочерними узлами
 		/// </summary>
@@ -134,21 +134,20 @@ namespace AsmApp
 		{
 			var nodeToAddTo = treeView1.SelectedNode as AsmNode;
 			if (nodeToAddTo == null) return;
+			var ParentNodeID = Session.IdDictLemms; // nodeToAddTo.Assembly.BlockID;
 
 			var result = Utils.InputBox("Добавление леммы", "Введите лемму:", "");
 			if (String.IsNullOrEmpty(result))
 				return;
-			var ParentNodeID = nodeToAddTo.Assembly.BlockID;
 			var asm = store.CreateLexema(ParentNodeID, (long)GrenPart.NOUN_ru, result);
 			var aNode = new AsmNode(asm);
 			nodeToAddTo.Nodes.Add(aNode);
-
 		}
 
 		private void btAddPara_Click(object sender, EventArgs e)
 		{
 			var nodeToAddTo = treeView1.SelectedNode as AsmNode;
-			if (nodeToAddTo == null || nodeToAddTo.NodeType == clNodeType.clnContainer ) return;
+			if (nodeToAddTo == null || nodeToAddTo.NodeType == clNodeType.clnContainer) return;
 
 			var fParaEdit = new FormParaEdit(nodeToAddTo, treeOper.toAdd);
 			fParaEdit.Show();
@@ -173,7 +172,6 @@ namespace AsmApp
 					}
 			}
 		}
-
 
 		private void btDelNode_Click(object sender, EventArgs e)
 		{
@@ -212,8 +210,23 @@ namespace AsmApp
 
 		private void btSavePara_Click(object sender, EventArgs e)
 		{
-			var para = new ParagraphAsm();
-			store.UpdateParagraph(para, memoInp.Text, false);
+			var aNode = treeView1.SelectedNode as AsmNode;
+			if (aNode == null) return;
+
+			var para = new ParagraphAsm(aNode.Assembly);
+			aNode.Assembly = para;
+
+			var sentlistRep = store.MorphMakeSyntan(memoInp.Text);
+			if (sentlistRep == null || sentlistRep.Count == 0)
+				return;
+
+			var sent = Map2Asm.Convert(sentlistRep[0]);
+			para.UpdateSentStruct(0, sent);
+
+			para.Save();
+
+			//			var para = new ParagraphAsm();
+			//			store.UpdateParagraph(para, memoInp.Text, false);
 
 			/*			var paramlist = store.SaveParagraphBD(para);
 						if (paramlist == null)

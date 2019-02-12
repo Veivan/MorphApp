@@ -16,6 +16,8 @@ namespace AsmApp.Types
 		private int id_entry;
 		private int id_partofspeech;
 		private Dictionary<int, int> pairs = new Dictionary<int, int>();
+
+		private long lx_id; // Ссылка на сборку лексемы
 		#endregion
 
 		#region Properties
@@ -92,8 +94,24 @@ namespace AsmApp.Types
 		public void Add2SaveSet()
 		{
 			var store = Session.Instance().Store;
-			foreach (var pair in pairs) ;// where !sent.IsActual
+//			lx_id = 
+			store.Add2SaveSet(this.Revert2Asm());
+			foreach (var pair in pairs) ;
 //				pair.Add2SaveSet();
+		}
+
+		/// <summary>
+		/// Обратное преобразование из объекта программы в AssemblyBase.
+		/// Происходит заполнение полей исходной сборки srcAsm актуальными значениями.
+		/// </summary>
+		private AssemblyBase Revert2Asm()
+		{
+			if (srcAsm == null)
+				srcAsm = new AssemblyBase(-1, Session.Instance().GetBlockTypeByNameKey(Session.wordTypeName));
+
+			srcAsm.SetValue("lx_id", lx_id);
+			//			srcAsm.SetValue("Value", value);
+			return srcAsm;
 		}
 
 		#endregion

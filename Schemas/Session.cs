@@ -17,6 +17,9 @@ namespace Schemas
 		static Session _session;
 
 		public static long MainStoreID = 1;
+		public static long IdDictLemms = 19;
+
+
 		public static string MainStoreName = "Хранилище";
 		public static string DefaultContainerName = "Контейнер";
 		public static string DefaultDocumentName = "Документ";

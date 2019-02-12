@@ -135,7 +135,7 @@ namespace AsmApp.Types
 				innerPara.Remove(sent);
 			sentstruct.IsActual = true;
 			sentstruct.Order = Order;
-			innerPara.Add(sent);
+			innerPara.Add(sentstruct);
 		}
 
 		/// <summary>

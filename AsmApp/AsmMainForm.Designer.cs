@@ -33,6 +33,8 @@
 			this.tabPage1 = new System.Windows.Forms.TabPage();
 			this.treeView1 = new System.Windows.Forms.TreeView();
 			this.panel3 = new System.Windows.Forms.Panel();
+			this.btAddLemma = new System.Windows.Forms.Button();
+			this.btAddDict = new System.Windows.Forms.Button();
 			this.btAddCont = new System.Windows.Forms.Button();
 			this.btAddDoc = new System.Windows.Forms.Button();
 			this.btDelNode = new System.Windows.Forms.Button();
@@ -44,15 +46,11 @@
 			this.btMakeSynAn = new System.Windows.Forms.Button();
 			this.btMakeDoc = new System.Windows.Forms.Button();
 			this.btReadPara = new System.Windows.Forms.Button();
-			this.btSavePara = new System.Windows.Forms.Button();
 			this.btRestore = new System.Windows.Forms.Button();
 			this.btTokenize = new System.Windows.Forms.Button();
-			this.btSaveLex = new System.Windows.Forms.Button();
-			this.btDBGetWord = new System.Windows.Forms.Button();
 			this.memoOut = new System.Windows.Forms.TextBox();
 			this.memoInp = new System.Windows.Forms.TextBox();
-			this.btAddDict = new System.Windows.Forms.Button();
-			this.btAddLemma = new System.Windows.Forms.Button();
+			this.btSavePara = new System.Windows.Forms.Button();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.panel3.SuspendLayout();
@@ -93,6 +91,7 @@
 			// 
 			// panel3
 			// 
+			this.panel3.Controls.Add(this.btSavePara);
 			this.panel3.Controls.Add(this.btAddLemma);
 			this.panel3.Controls.Add(this.btAddDict);
 			this.panel3.Controls.Add(this.btAddCont);
@@ -106,6 +105,26 @@
 			this.panel3.Name = "panel3";
 			this.panel3.Size = new System.Drawing.Size(560, 122);
 			this.panel3.TabIndex = 23;
+			// 
+			// btAddLemma
+			// 
+			this.btAddLemma.Location = new System.Drawing.Point(409, 43);
+			this.btAddLemma.Name = "btAddLemma";
+			this.btAddLemma.Size = new System.Drawing.Size(134, 23);
+			this.btAddLemma.TabIndex = 7;
+			this.btAddLemma.Text = "Add lemma";
+			this.btAddLemma.UseVisualStyleBackColor = true;
+			this.btAddLemma.Click += new System.EventHandler(this.btAddLemma_Click);
+			// 
+			// btAddDict
+			// 
+			this.btAddDict.Location = new System.Drawing.Point(409, 14);
+			this.btAddDict.Name = "btAddDict";
+			this.btAddDict.Size = new System.Drawing.Size(134, 23);
+			this.btAddDict.TabIndex = 6;
+			this.btAddDict.Text = "Новый справочник";
+			this.btAddDict.UseVisualStyleBackColor = true;
+			this.btAddDict.Click += new System.EventHandler(this.btAddDict_Click);
 			// 
 			// btAddCont
 			// 
@@ -185,11 +204,8 @@
 			this.panel1.Controls.Add(this.btMakeSynAn);
 			this.panel1.Controls.Add(this.btMakeDoc);
 			this.panel1.Controls.Add(this.btReadPara);
-			this.panel1.Controls.Add(this.btSavePara);
 			this.panel1.Controls.Add(this.btRestore);
 			this.panel1.Controls.Add(this.btTokenize);
-			this.panel1.Controls.Add(this.btSaveLex);
-			this.panel1.Controls.Add(this.btDBGetWord);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this.panel1.Location = new System.Drawing.Point(3, 467);
 			this.panel1.Name = "panel1";
@@ -224,16 +240,6 @@
 			this.btReadPara.Text = "Read Para";
 			this.btReadPara.UseVisualStyleBackColor = true;
 			// 
-			// btSavePara
-			// 
-			this.btSavePara.Location = new System.Drawing.Point(138, 40);
-			this.btSavePara.Name = "btSavePara";
-			this.btSavePara.Size = new System.Drawing.Size(75, 20);
-			this.btSavePara.TabIndex = 20;
-			this.btSavePara.Text = "Save para";
-			this.btSavePara.UseVisualStyleBackColor = true;
-			this.btSavePara.Click += new System.EventHandler(this.btSavePara_Click);
-			// 
 			// btRestore
 			// 
 			this.btRestore.Location = new System.Drawing.Point(300, 14);
@@ -251,24 +257,6 @@
 			this.btTokenize.TabIndex = 18;
 			this.btTokenize.Text = "Tokenize";
 			this.btTokenize.UseVisualStyleBackColor = true;
-			// 
-			// btSaveLex
-			// 
-			this.btSaveLex.Location = new System.Drawing.Point(138, 66);
-			this.btSaveLex.Name = "btSaveLex";
-			this.btSaveLex.Size = new System.Drawing.Size(78, 23);
-			this.btSaveLex.TabIndex = 17;
-			this.btSaveLex.Text = "SaveLex";
-			this.btSaveLex.UseVisualStyleBackColor = true;
-			// 
-			// btDBGetWord
-			// 
-			this.btDBGetWord.Location = new System.Drawing.Point(222, 66);
-			this.btDBGetWord.Name = "btDBGetWord";
-			this.btDBGetWord.Size = new System.Drawing.Size(75, 23);
-			this.btDBGetWord.TabIndex = 16;
-			this.btDBGetWord.Text = "DBGetWord";
-			this.btDBGetWord.UseVisualStyleBackColor = true;
 			// 
 			// memoOut
 			// 
@@ -292,25 +280,15 @@
 			this.memoInp.TabIndex = 5;
 			this.memoInp.Text = "Мама мыла раму.";
 			// 
-			// btAddDict
+			// btSavePara
 			// 
-			this.btAddDict.Location = new System.Drawing.Point(409, 14);
-			this.btAddDict.Name = "btAddDict";
-			this.btAddDict.Size = new System.Drawing.Size(134, 23);
-			this.btAddDict.TabIndex = 6;
-			this.btAddDict.Text = "Новый справочник";
-			this.btAddDict.UseVisualStyleBackColor = true;
-			this.btAddDict.Click += new System.EventHandler(this.btAddDict_Click);
-			// 
-			// btAddLemma
-			// 
-			this.btAddLemma.Location = new System.Drawing.Point(409, 43);
-			this.btAddLemma.Name = "btAddLemma";
-			this.btAddLemma.Size = new System.Drawing.Size(134, 23);
-			this.btAddLemma.TabIndex = 7;
-			this.btAddLemma.Text = "Add lemma";
-			this.btAddLemma.UseVisualStyleBackColor = true;
-			this.btAddLemma.Click += new System.EventHandler(this.btAddLemma_Click);
+			this.btSavePara.Location = new System.Drawing.Point(409, 72);
+			this.btSavePara.Name = "btSavePara";
+			this.btSavePara.Size = new System.Drawing.Size(75, 20);
+			this.btSavePara.TabIndex = 21;
+			this.btSavePara.Text = "Save para";
+			this.btSavePara.UseVisualStyleBackColor = true;
+			this.btSavePara.Click += new System.EventHandler(this.btSavePara_Click);
 			// 
 			// AsmMainForm
 			// 
@@ -349,13 +327,11 @@
 		private System.Windows.Forms.Button btMakeSynAn;
 		private System.Windows.Forms.Button btMakeDoc;
 		private System.Windows.Forms.Button btReadPara;
-		private System.Windows.Forms.Button btSavePara;
 		private System.Windows.Forms.Button btRestore;
 		private System.Windows.Forms.Button btTokenize;
-		private System.Windows.Forms.Button btSaveLex;
-		private System.Windows.Forms.Button btDBGetWord;
 		private System.Windows.Forms.Button btAddDict;
 		private System.Windows.Forms.Button btAddLemma;
+		private System.Windows.Forms.Button btSavePara;
 	}
 }
 

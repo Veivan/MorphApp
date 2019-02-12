@@ -110,8 +110,13 @@ namespace AsmApp
 			args.Add("Lemma", lemma.ToLower());
 
 			var asm = store.SearchAsms(lexType.BlockTypeID, args).FirstOrDefault();
-			if (asm == null) 
-				asm = store.CreateAssembly(lexType, ParentID);
+			if (asm == null)
+			{
+				//asm = store.CreateAssembly(lexType, ParentID);
+				asm = new AssemblyBase(lexType);
+				asm.ParentAssemblyID = ParentID;
+			}
+
 			asm.SetValue("Name", lemma);
 			asm.SetValue("GrenPart", grenPart);
 			asm.SetValue("Lemma", lemma);		
