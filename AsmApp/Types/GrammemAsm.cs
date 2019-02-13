@@ -11,8 +11,8 @@ namespace AsmApp.Types
 	{
 		#region Privates		
 		private AssemblyBase srcAsm; // Сборка, из которой был сформирован объект
-		private int grenProperty;
-		private int value;
+		private long grenProperty;
+		private long value;
 		#endregion
 
 		#region Constructors
@@ -20,7 +20,7 @@ namespace AsmApp.Types
 		{
 			this.srcAsm = srcAsm;
 		}
-		public GrammemAsm(int _grenProperty, int _value) : base(Session.Instance().GetBlockTypeByNameKey(Session.grammTypeName))
+		public GrammemAsm(long _grenProperty, long _value) : base(Session.Instance().GetBlockTypeByNameKey(Session.grammTypeName))
 		{
 			grenProperty = _grenProperty;
 			value = _value;
@@ -31,7 +31,7 @@ namespace AsmApp.Types
 		/// <summary>
 		/// Идентификатор грамматической характеристики -  знчение члена перечисления Schemas.GrenProperty.
 		/// </summary>
-		public int GrenProperty
+		public long GrenProperty
 		{
 			get
 			{
@@ -42,7 +42,7 @@ namespace AsmApp.Types
 		/// <summary>
 		/// Значение грамматической характеристики.
 		/// </summary>
-		public int Value
+		public long Value
 		{
 			get
 			{
@@ -52,15 +52,12 @@ namespace AsmApp.Types
 		#endregion
 
 		#region Methods
-		/// <summary>
-		/// Обратное преобразование из объекта программы в AssemblyBase.
-		/// Происходит заполнение полей исходной сборки srcAsm актуальными значениями.
-		/// </summary>
-		public AssemblyBase Revert2Asm()
+
+		public override void Save()
 		{
-			srcAsm.SetValue("GrenProperty", grenProperty);
-			srcAsm.SetValue("Value", value);
-			return srcAsm;
+			this.SetValue("GrenProperty", grenProperty);
+			this.SetValue("Value", value);
+			base.Save();
 		}
 		#endregion
 

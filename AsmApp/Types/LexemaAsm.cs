@@ -61,5 +61,13 @@ namespace AsmApp.Types
 			}
 		}
 		#endregion
+
+		#region Methods
+		public override void Save()
+		{
+			var store = Session.Instance().Store;
+			srcAsm = store.GetLexema(grenPart, lemma, true);
+		}
+		#endregion
 	}
 }

@@ -187,9 +187,13 @@ namespace AsmApp.Types
 
 		public override void Save()
 		{
-			var store = Session.Instance().Store;
+			var sentlist = new List<long>();
 			foreach (var sent in innerPara) // where !sent.IsActual
-				sent.Add2SaveSet();
+			{
+				sent.Save();
+				sentlist.Add(sent.BlockID);
+			}
+			this.SetValue("Phrases", sentlist);
 			base.Save();
 		}
 

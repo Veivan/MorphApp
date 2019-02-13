@@ -15,7 +15,7 @@ namespace AsmApp.Types
 		private AssemblyBase srcAsm; // Сборка, из которой было сформировано Слово
 		private int id_entry;
 		private int id_partofspeech;
-		private Dictionary<int, int> pairs = new Dictionary<int, int>();
+		private Dictionary<long, long> pairs = new Dictionary<long, long>();
 
 		private long lx_id; // Ссылка на сборку лексемы
 		#endregion
@@ -74,7 +74,7 @@ namespace AsmApp.Types
 		/// <summary>
 		/// Добавление ID характеристик слова в словарь.
 		/// </summary>
-		public void AddPair(int Key, int Value)
+		public void AddPair(long Key, long Value)
 		{
 			if (!pairs.ContainsKey(Key))
 				pairs.Add(Key, Value);
@@ -83,51 +83,41 @@ namespace AsmApp.Types
 		/// <summary>
 		/// Получение словаря ID характеристик.
 		/// </summary>
-		public Dictionary<int, int> GetPairs()
+		public Dictionary<long, long> GetPairs()
 		{
 			return pairs;
 		}
 
-		public int GetPropertyValue(GrenProperty property)
+		public long GetPropertyValue(GrenProperty property)
 		{
-			if (pairs.ContainsKey((int)property))
-				return pairs[(int)property];
+			if (pairs.ContainsKey((long)property))
+				return pairs[(long)property];
 			else
 				return -1;
 		}
 
-		public void Add2SaveSet()
+		public override void Save()
 		{
-			var store = Session.Instance().Store;
 			// Сохранение лексемы в БД
-			var asmlex = store.GetLexema(id_partofspeech, EntryName, true);
+			var asmlex = new LexemaAsm(id_partofspeech, EntryName);
+			asmlex.Save();
 			lx_id = asmlex.BlockID;
 			// Сохранение граммем в БД
 			var gramlist = new List<long>();
-
-			srcAsm.SetValue("Grammems", gramlist);
 			foreach (var pair in pairs)
-//				var asmgram = store.GetLexema(id_partofspeech, EntryName, true);
-			;
-			//				pair.Add2SaveSet();
+			{
+				var asmgramm = new GrammemAsm(pair.Key, pair.Value);
+				asmgramm.Save();
+				gramlist.Add(asmgramm.BlockID);
+			}
 
-			store.Add2SaveSet(this.Revert2Asm());
-		}
+			this.SetValue("lx_id", lx_id);
+			this.SetValue("rcind", rcind);
+			this.SetValue("order", order);
+			this.SetValue("RealWord", RealWord);
+			this.SetValue("Grammems", gramlist);
 
-		/// <summary>
-		/// Обратное преобразование из объекта программы в AssemblyBase.
-		/// Происходит заполнение полей исходной сборки srcAsm актуальными значениями.
-		/// </summary>
-		private AssemblyBase Revert2Asm()
-		{
-			if (srcAsm == null)
-				srcAsm = new AssemblyBase(-1, Session.Instance().GetBlockTypeByNameKey(Session.wordTypeName));
-
-			srcAsm.SetValue("lx_id", lx_id);
-			srcAsm.SetValue("rcind", rcind);
-			srcAsm.SetValue("order", order);
-			srcAsm.SetValue("RealWord", RealWord);
-			return srcAsm;
+			base.Save();
 		}
 
 		#endregion

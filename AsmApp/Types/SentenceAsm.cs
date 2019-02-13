@@ -126,11 +126,34 @@ namespace AsmApp.Types
 			return newlist;
 		}
 
-		public void Add2SaveSet()
+		public override void Save()
 		{
-			var store = Session.Instance().Store;
-			foreach (var word in words) // where !sent.IsActual
-				word.Value.Add2SaveSet();
+			var wordlist = new List<long>();
+			// Сохранение слов в БД
+			foreach (var word in words) { 
+				word.Value.Save();
+				wordlist.Add(word.Value.BlockID);
+			}
+			this.SetValue("Words", wordlist);
+
+			// Сохранение списка синтаксических связей предложения в БД
+/*			for (int i = 0; i < sent.Capasity; i++)
+			{
+				var word = sent.GetWordByOrder(i);
+				// Определение узла в синтаксическом дереве предложения по порядковому номеру слова в предложении.
+				var cnt = nodes.Where(x => x.index == word.order).Count();
+				if (cnt > 0)
+				{
+					var node = nodes.Where(x => x.index == word.order).First();
+					var parentWord = sent.GetWordByOrder(node.parentind);
+					long WordID = -1;
+					if (parentWord != null)
+						WordID = parentWord.WordID;
+					dbConnector.InsertSyntNodesDB(word.WordID, node.linktype, node.Level, WordID);
+				}
+			}*/
+
+			base.Save();
 		}
 
 		#endregion
