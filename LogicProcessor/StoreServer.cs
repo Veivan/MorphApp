@@ -32,7 +32,7 @@ namespace LogicProcessor
 			var id = DBserver.CreateBlock(type.BlockTypeID, ParentContID, 0);
 			var asm = new AssemblyBase(id, type);
 			return asm;
-		}
+		} 
 
 		/// <summary>
 		/// Создание сборки по образцу / шаблону.
@@ -125,8 +125,13 @@ namespace LogicProcessor
 				//TODO В DBServer надо сделать функции с групповым входным параметром, а внутри их - транзакции
 				foreach (var asm in list)
 				{
-					// Здесь надо проверять IsPersists и если нет, то создавать в БД
-					DBserver.SetFactData(asm.BlockID, asm.Blob);
+					if (asm.IsVirtual)
+					{
+						var id = DBserver.CreateBlock(asm.BlockType.BlockTypeID, asm.ParentAssemblyID, 0);
+						asm.BlockID = id;
+					}
+					var fh_id = DBserver.SetFactData(asm.BlockID, asm.Blob);
+					asm.FactID = fh_id;
 				}
 			}
 

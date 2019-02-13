@@ -1867,7 +1867,8 @@ namespace DirectDBconnector
 					m_sqlCmd.CommandText = string.Format("UPDATE mBlocks SET fh_id = {0} WHERE b_id = {1}", fh_id, addr);
 					m_sqlCmd.ExecuteNonQuery();
 				}
-				result = addr;
+				//result = addr;
+				result = fh_id;
 				transaction.Commit();
 			}
 			catch (SQLiteException ex)

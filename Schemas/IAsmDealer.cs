@@ -21,7 +21,7 @@ namespace Schemas
 		/// </summary>
 		/// <param name="type">тип блока</param>
 		/// <returns>сборка</returns>
-		public abstract AssemblyBase CreateAssembly(BlockType type, BlockAddress ParentContID = -1);
+		public abstract AssemblyBase CreateAssembly(BlockType type, BlockAddress ParentContID = -1); 
 
 		/// <summary>
 		/// Добаление объекта к набору для Сохранение в БД.

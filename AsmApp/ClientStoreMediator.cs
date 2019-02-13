@@ -78,9 +78,11 @@ namespace AsmApp
 			store.AsmFillChildren(aNode.Assembly);
 		}
 
-		public AssemblyBase CreateContainer(string name, BlockAddress ParentContID)
+		public AssemblyBase CreateContainer(string name, BlockAddress ParentID)
 		{
-			var asm = store.CreateAssembly(Session.Instance().GetBlockTypeDataContainer(), ParentContID);
+			var containerType = Session.Instance().GetBlockTypeByNameKey(Session.containerTypeName);
+			var asm = new AssemblyBase(containerType);
+			asm.ParentAssemblyID = ParentID;
 			asm.SetValue("Name", name);
 			asm.Save();
 			return asm;
@@ -88,7 +90,9 @@ namespace AsmApp
 
 		public AssemblyBase CreateDocument(string name, BlockAddress ParentID)
 		{
-			var asm = store.CreateAssembly(Session.Instance().GetBlockTypeByNameKey(Session.documentTypeName), ParentID);
+			var documentType = Session.Instance().GetBlockTypeByNameKey(Session.documentTypeName);
+			var asm = new AssemblyBase(documentType);
+			asm.ParentAssemblyID = ParentID;
 			asm.SetValue("Name", name);
 			asm.Save();
 			return asm;
@@ -96,7 +100,9 @@ namespace AsmApp
 
 		public AssemblyBase CreateDictionary(string name, BlockAddress ParentID)
 		{
-			var asm = store.CreateAssembly(Session.Instance().GetBlockTypeByNameKey(Session.dictTypeName), ParentID);
+			var dictType = Session.Instance().GetBlockTypeByNameKey(Session.dictTypeName);
+			var asm = new AssemblyBase(dictType);
+			asm.ParentAssemblyID = ParentID;
 			asm.SetValue("Name", name);
 			asm.Save();
 			return asm;
@@ -112,7 +118,6 @@ namespace AsmApp
 			var asm = store.SearchAsms(lexType.BlockTypeID, args).FirstOrDefault();
 			if (asm == null)
 			{
-				//asm = store.CreateAssembly(lexType, ParentID);
 				asm = new AssemblyBase(lexType);
 				asm.ParentAssemblyID = ParentID;
 			}
@@ -126,7 +131,10 @@ namespace AsmApp
 
 		public AssemblyBase CreateParagraph(BlockAddress ParentID)
 		{
-			var asm = store.CreateAssembly(Session.Instance().GetBlockTypeByNameKey(Session.paragraphTypeName), ParentID);
+			var paragraphType = Session.Instance().GetBlockTypeByNameKey(Session.paragraphTypeName);
+			var asm = new AssemblyBase(paragraphType);
+			asm.ParentAssemblyID = ParentID;
+			//asm.SetValue("Name", name);
 			asm.Save();
 			return asm;
 		}

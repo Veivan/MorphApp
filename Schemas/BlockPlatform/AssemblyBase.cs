@@ -24,7 +24,7 @@ namespace Schemas.BlockPlatform
 		/// <summary>
 		/// Стартовый блок сборки.
 		/// </summary>
-		public long RootBlock_id { get { return this.BlockID; } }
+		public long RootBlock_id { get { return this.BlockID; }  set { this.BlockID = value; } }
 
 		/// <summary>
 		/// Сборка - образец/шаблон, на основе которой была сделана текущая сборка.

@@ -29,7 +29,7 @@ namespace Schemas.BlockPlatform
 		/// <summary>
 		/// Идентификатор БД.
 		/// </summary>
-		public BlockAddress BlockID { get { return b_id; } }
+		public BlockAddress BlockID { get { return b_id; } set { b_id = value; } }
 
 		/// <summary>
 		/// Тип блока.
@@ -49,7 +49,7 @@ namespace Schemas.BlockPlatform
 		/// <summary>
 		/// Адрес фактических данных блока.
 		/// </summary>
-		public BlockAddress FactID { get { return fh_id; } }
+		public BlockAddress FactID { get { return fh_id; } set { fh_id = value; } }
 
 		/// <summary>
 		/// Поддержка версионности. Предшественник.
