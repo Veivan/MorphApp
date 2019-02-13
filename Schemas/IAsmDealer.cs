@@ -45,6 +45,16 @@ namespace Schemas
 		/// <returns>список сборок</returns>
 		public abstract List<AssemblyBase> SearchAsms(long blockType, Dictionary<string, object> args);
 
+		/// <summary>
+		/// Выборка лексемы из БД.
+		/// При отсутствии можно создать, задав флаг CreateIfNotExists
+		/// </summary>
+		/// <param name="grenPart">ID части речи</param>
+		/// <param name="lemma">Лемма</param>
+		/// <param name="CreateIfNotExists">Флаг создания сборки в БД при отсутствии</param>
+		/// <returns>сборка</returns>
+		public abstract AssemblyBase GetLexema(long grenPart, string lemma, bool CreateIfNotExists = false);
+
 		#endregion
 
 		#region Методы работы с GREN

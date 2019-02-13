@@ -139,7 +139,7 @@ namespace AsmApp
 			var result = Utils.InputBox("Добавление леммы", "Введите лемму:", "");
 			if (String.IsNullOrEmpty(result))
 				return;
-			var asm = store.CreateLexema(ParentNodeID, (long)GrenPart.NOUN_ru, result);
+			var asm = store.CreateLexema((long)GrenPart.NOUN_ru, result);
 			var aNode = new AsmNode(asm);
 			nodeToAddTo.Nodes.Add(aNode);
 		}

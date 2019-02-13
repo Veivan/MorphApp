@@ -25,10 +25,15 @@ namespace AsmApp.Types
 		public string EntryName = "";
 		public string RealWord = "";
 		public int order; // Порядок слова в предложении
-		public int rcind; // характеристика словарной статьи (нашлось слово или нет)
 
 		/// <summary>
-		/// ID словарной статьи.
+		/// характеристика словарной статьи (=0 слово нашлось; =1 EntryName == "???"; =2 EntryName == "number_")
+		/// </summary>
+		public int rcind; 
+
+		/// <summary>
+		/// ID словарной статьи (из справочника GREN). 
+		/// Может меняться при перекомпиляции справочника, поэтому в БД не сохраняется.
 		/// </summary>
 		public int ID_Entry
 		{
@@ -94,10 +99,19 @@ namespace AsmApp.Types
 		public void Add2SaveSet()
 		{
 			var store = Session.Instance().Store;
-//			lx_id = 
+			// Сохранение лексемы в БД
+			var asmlex = store.GetLexema(id_partofspeech, EntryName, true);
+			lx_id = asmlex.BlockID;
+			// Сохранение граммем в БД
+			var gramlist = new List<long>();
+
+			srcAsm.SetValue("Grammems", gramlist);
+			foreach (var pair in pairs)
+//				var asmgram = store.GetLexema(id_partofspeech, EntryName, true);
+			;
+			//				pair.Add2SaveSet();
+
 			store.Add2SaveSet(this.Revert2Asm());
-			foreach (var pair in pairs) ;
-//				pair.Add2SaveSet();
 		}
 
 		/// <summary>
@@ -110,7 +124,9 @@ namespace AsmApp.Types
 				srcAsm = new AssemblyBase(-1, Session.Instance().GetBlockTypeByNameKey(Session.wordTypeName));
 
 			srcAsm.SetValue("lx_id", lx_id);
-			//			srcAsm.SetValue("Value", value);
+			srcAsm.SetValue("rcind", rcind);
+			srcAsm.SetValue("order", order);
+			srcAsm.SetValue("RealWord", RealWord);
 			return srcAsm;
 		}
 

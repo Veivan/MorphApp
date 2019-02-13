@@ -152,6 +152,29 @@ namespace LogicProcessor
 			return result;
 		}
 
+		public override AssemblyBase GetLexema(long grenPart, string lemma, bool CreateIfNotExists = false)
+		{
+			var lexType = Session.Instance().GetBlockTypeByNameKey(Session.lexTypeName);
+			var args = new Dictionary<string, object>();
+			args.Add("GrenPart", grenPart);
+			args.Add("Lemma", lemma.ToLower());
+
+			var asm = this.SearchAsms(lexType.BlockTypeID, args).FirstOrDefault();
+			if (asm == null && CreateIfNotExists)
+			{
+				asm = new AssemblyBase(lexType);
+				asm.ParentAssemblyID = Session.IdDictLemms;
+			}
+			if (asm != null)
+			{
+				asm.SetValue("Name", lemma);
+				asm.SetValue("GrenPart", grenPart);
+				asm.SetValue("Lemma", lemma);
+				asm.Save();
+			}
+			return asm;
+		}
+
 		#endregion
 
 		#region Методы работы с GREN

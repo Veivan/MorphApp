@@ -108,24 +108,9 @@ namespace AsmApp
 			return asm;
 		}
 
-		public AssemblyBase CreateLexema(BlockAddress ParentID, long grenPart, string lemma)
+		public AssemblyBase CreateLexema(long grenPart, string lemma)
 		{
-			var lexType = Session.Instance().GetBlockTypeByNameKey(Session.lexTypeName);
-			var args = new Dictionary<string, object>();
-			args.Add("GrenPart", grenPart);
-			args.Add("Lemma", lemma.ToLower());
-
-			var asm = store.SearchAsms(lexType.BlockTypeID, args).FirstOrDefault();
-			if (asm == null)
-			{
-				asm = new AssemblyBase(lexType);
-				asm.ParentAssemblyID = ParentID;
-			}
-
-			asm.SetValue("Name", lemma);
-			asm.SetValue("GrenPart", grenPart);
-			asm.SetValue("Lemma", lemma);		
-			asm.Save();
+			var asm = store.GetLexema(grenPart, lemma, true);
 			return asm;
 		}
 
