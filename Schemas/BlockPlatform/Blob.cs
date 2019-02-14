@@ -135,7 +135,7 @@ namespace Schemas
 						break;
 					case enAttrTypes.mnlink:
 					case enAttrTypes.mnlong:
-						var number = (long)rec.Value;
+						long number = Convert.ToInt64(rec.Value);
 						arrbt = BitConverter.GetBytes(number);
 						AddData(arrbt);
 						break;

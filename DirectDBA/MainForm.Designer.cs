@@ -34,6 +34,9 @@
 			this.tabPageCommon = new System.Windows.Forms.TabPage();
 			this.dgvCommon = new System.Windows.Forms.DataGridView();
 			this.panel3 = new System.Windows.Forms.Panel();
+			this.RenameColumn = new System.Windows.Forms.Button();
+			this.DropColumn = new System.Windows.Forms.Button();
+			this.AddColumn = new System.Windows.Forms.Button();
 			this.btRefresh = new System.Windows.Forms.Button();
 			this.cbTables = new System.Windows.Forms.ComboBox();
 			this.navigator = new System.Windows.Forms.BindingNavigator(this.components);
@@ -55,9 +58,7 @@
 			this.dgvViewer = new System.Windows.Forms.DataGridView();
 			this.listBox1 = new System.Windows.Forms.ListBox();
 			this.binding1 = new System.Windows.Forms.BindingSource(this.components);
-			this.AddColumn = new System.Windows.Forms.Button();
-			this.DropColumn = new System.Windows.Forms.Button();
-			this.RenameColumn = new System.Windows.Forms.Button();
+			this.btDelBlocks = new System.Windows.Forms.Button();
 			this.tabControl1.SuspendLayout();
 			this.tabPageCommon.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dgvCommon)).BeginInit();
@@ -102,6 +103,7 @@
 			// 
 			// panel3
 			// 
+			this.panel3.Controls.Add(this.btDelBlocks);
 			this.panel3.Controls.Add(this.RenameColumn);
 			this.panel3.Controls.Add(this.DropColumn);
 			this.panel3.Controls.Add(this.AddColumn);
@@ -113,6 +115,36 @@
 			this.panel3.Name = "panel3";
 			this.panel3.Size = new System.Drawing.Size(817, 65);
 			this.panel3.TabIndex = 0;
+			// 
+			// RenameColumn
+			// 
+			this.RenameColumn.Location = new System.Drawing.Point(517, 36);
+			this.RenameColumn.Name = "RenameColumn";
+			this.RenameColumn.Size = new System.Drawing.Size(75, 23);
+			this.RenameColumn.TabIndex = 6;
+			this.RenameColumn.Text = "Rename column";
+			this.RenameColumn.UseVisualStyleBackColor = true;
+			this.RenameColumn.Click += new System.EventHandler(this.RenameColumn_Click);
+			// 
+			// DropColumn
+			// 
+			this.DropColumn.Location = new System.Drawing.Point(436, 36);
+			this.DropColumn.Name = "DropColumn";
+			this.DropColumn.Size = new System.Drawing.Size(75, 23);
+			this.DropColumn.TabIndex = 5;
+			this.DropColumn.Text = "Drop column";
+			this.DropColumn.UseVisualStyleBackColor = true;
+			this.DropColumn.Click += new System.EventHandler(this.DropColumn_Click);
+			// 
+			// AddColumn
+			// 
+			this.AddColumn.Location = new System.Drawing.Point(355, 36);
+			this.AddColumn.Name = "AddColumn";
+			this.AddColumn.Size = new System.Drawing.Size(75, 23);
+			this.AddColumn.TabIndex = 4;
+			this.AddColumn.Text = "Add column";
+			this.AddColumn.UseVisualStyleBackColor = true;
+			this.AddColumn.Click += new System.EventHandler(this.AddColumn_Click);
 			// 
 			// btRefresh
 			// 
@@ -301,35 +333,15 @@
 			this.listBox1.TabIndex = 15;
 			this.listBox1.Visible = false;
 			// 
-			// AddColumn
+			// btDelBlocks
 			// 
-			this.AddColumn.Location = new System.Drawing.Point(355, 36);
-			this.AddColumn.Name = "AddColumn";
-			this.AddColumn.Size = new System.Drawing.Size(75, 23);
-			this.AddColumn.TabIndex = 4;
-			this.AddColumn.Text = "Add column";
-			this.AddColumn.UseVisualStyleBackColor = true;
-			this.AddColumn.Click += new System.EventHandler(this.AddColumn_Click);
-			// 
-			// DropColumn
-			// 
-			this.DropColumn.Location = new System.Drawing.Point(436, 36);
-			this.DropColumn.Name = "DropColumn";
-			this.DropColumn.Size = new System.Drawing.Size(75, 23);
-			this.DropColumn.TabIndex = 5;
-			this.DropColumn.Text = "Drop column";
-			this.DropColumn.UseVisualStyleBackColor = true;
-			this.DropColumn.Click += new System.EventHandler(this.DropColumn_Click);
-			// 
-			// RenameColumn
-			// 
-			this.RenameColumn.Location = new System.Drawing.Point(517, 36);
-			this.RenameColumn.Name = "RenameColumn";
-			this.RenameColumn.Size = new System.Drawing.Size(75, 23);
-			this.RenameColumn.TabIndex = 6;
-			this.RenameColumn.Text = "Rename column";
-			this.RenameColumn.UseVisualStyleBackColor = true;
-			this.RenameColumn.Click += new System.EventHandler(this.RenameColumn_Click);
+			this.btDelBlocks.Location = new System.Drawing.Point(598, 36);
+			this.btDelBlocks.Name = "btDelBlocks";
+			this.btDelBlocks.Size = new System.Drawing.Size(75, 23);
+			this.btDelBlocks.TabIndex = 7;
+			this.btDelBlocks.Text = "Del blocks";
+			this.btDelBlocks.UseVisualStyleBackColor = true;
+			this.btDelBlocks.Click += new System.EventHandler(this.btDelBlocks_Click);
 			// 
 			// MainForm
 			// 
@@ -385,6 +397,7 @@
 		private System.Windows.Forms.Button AddColumn;
 		private System.Windows.Forms.Button DropColumn;
 		private System.Windows.Forms.Button RenameColumn;
+		private System.Windows.Forms.Button btDelBlocks;
 	}
 }
 

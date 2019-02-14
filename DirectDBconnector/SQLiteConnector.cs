@@ -1268,6 +1268,22 @@ namespace DirectDBconnector
 			}
 		}
 
+		public void DelBlocks()
+		{
+			try
+			{
+				m_sqlCmd.CommandText = "DELETE FROM mFactHeap WHERE fh_id > 23;";
+				m_sqlCmd.ExecuteNonQuery();
+				m_sqlCmd.CommandText = "DELETE FROM mBlocks WHERE b_id > 21;";
+				m_sqlCmd.ExecuteNonQuery();
+			}
+			catch (SQLiteException ex)
+			{
+				Console.WriteLine("DelBlocks Error: " + ex.Message);
+				throw ex;
+			}
+		}
+
 		///
 		/// select all rows in the mPhrases table
 		/// 

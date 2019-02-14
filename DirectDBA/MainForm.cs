@@ -534,5 +534,10 @@ namespace DirectDBA
 		{
 			dbConnector.RenameColumn();
 		}
+
+		private void btDelBlocks_Click(object sender, EventArgs e)
+		{
+			dbConnector.DelBlocks();
+		}
 	}
 }
