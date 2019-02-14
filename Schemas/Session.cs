@@ -33,6 +33,7 @@ namespace Schemas
 		public static string wordTypeName = "SingleWord";
 		public static string grammTypeName = "Grammema";
 		public static string lexTypeName = "Lexema";
+		public static string syntNodeTypeName = "SyntNode";
 
 		private List<BlockType> typeList;
 		public IBlockDealer DBserver;

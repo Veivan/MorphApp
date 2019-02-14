@@ -83,6 +83,7 @@
     <Compile Include="Types\LexemaAsm.cs" />
     <Compile Include="Types\ParagraphAsm.cs" />
     <Compile Include="Types\SentenceAsm.cs" />
+    <Compile Include="Types\SyntNodeAsm.cs" />
     <Compile Include="Types\WordAsm.cs" />
     <EmbeddedResource Include="AsmMainForm.resx">
       <DependentUpon>AsmMainForm.cs</DependentUpon>

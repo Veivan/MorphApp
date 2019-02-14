@@ -137,22 +137,25 @@ namespace AsmApp.Types
 			this.SetValue("Words", wordlist);
 
 			// Сохранение списка синтаксических связей предложения в БД
-/*			for (int i = 0; i < sent.Capasity; i++)
+			var syntNodes = new List<long>();
+			foreach (var word in words)
 			{
-				var word = sent.GetWordByOrder(i);
 				// Определение узла в синтаксическом дереве предложения по порядковому номеру слова в предложении.
-				var cnt = nodes.Where(x => x.index == word.order).Count();
+				var cnt = treeList.Where(x => x.index == word.Value.order).Count();
 				if (cnt > 0)
 				{
-					var node = nodes.Where(x => x.index == word.order).First();
-					var parentWord = sent.GetWordByOrder(node.parentind);
-					long WordID = -1;
+					var node = treeList.Where(x => x.index == word.Value.order).First();
+					var parentWord = this.GetWordByOrder(node.parentind);
+					long ParentWordID = -1;
 					if (parentWord != null)
-						WordID = parentWord.WordID;
-					dbConnector.InsertSyntNodesDB(word.WordID, node.linktype, node.Level, WordID);
+						ParentWordID = parentWord.BlockID;
+					var asmgsynt = new SyntNodeAsm(word.Value.BlockID, node.linktype, node.Level, ParentWordID);
+					asmgsynt.Save();
+					syntNodes.Add(asmgsynt.BlockID);
 				}
-			}*/
 
+			}
+			this.SetValue("SyntNodes", syntNodes);
 			base.Save();
 		}
 
