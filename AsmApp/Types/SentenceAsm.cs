@@ -6,16 +6,6 @@ using Schemas.BlockPlatform;
 
 namespace AsmApp.Types
 {
-
-	public struct tNode
-	{
-		public int ID;          // Порядок добавления в дерево, для сортировки в виде плоского списка
-		public int Level;       // Уровень вложенности, для отображения
-		public int index;       // порядковый номер слова (ребёнка в синт.связи) в предложении
-		public int linktype;    // тип взаимосвязи с родителем
-		public int parentind;   // порядковый номер слова (родителя в синт.связи) в предложении
-	}
-
 	/// <summary>
 	/// Класс хранит информацию о предложении.
 	/// </summary>
@@ -33,7 +23,7 @@ namespace AsmApp.Types
 		/// <summary>
 		/// Хранилище синтаксических связей предложения.
 		/// </summary>
-		private List<tNode> treeList = new List<tNode>();
+		private List<SyntNodeAsm> treeList = new List<SyntNodeAsm>();
 		#endregion
 
 		#region Properties
@@ -64,12 +54,27 @@ namespace AsmApp.Types
 		public SentenceAsm(AssemblyBase srcAsm) : base(srcAsm)
 		{
 			this.srcAsm = srcAsm;
+			var store = Session.Instance().Store;
+			var wordIDs = (List<long>)srcAsm.GetValue("Words");
+			foreach (var ID in wordIDs)
+			{
+				var asm = store.GetAssembly(ID);
+				var word = new WordAsm(asm);
+				words.Add(word.order, word);
+			}
+			var syntIDs = (List<long>)srcAsm.GetValue("SyntNodes");
+			foreach (var ID in syntIDs)
+			{
+				var asm = store.GetAssembly(ID);
+				var syntNode = new SyntNodeAsm(asm);
+				treeList.Add(syntNode);
+			}
 		}
 		#endregion
 
 		#region Methods
 		/// <summary>
-		/// Добавление слова и синт.узла во внутренние хранилища.
+		/// Добавление слова во внутренние хранилища.
 		/// </summary>
 		/// <param name="order">Порядок следования слова в предложении</param>
 		/// <param name="word">Структура слова</param>
@@ -83,24 +88,10 @@ namespace AsmApp.Types
 		/// <summary>
 		/// Добавление синт.узла во внутреннее хранилище.
 		/// </summary>
-		/// <param name="order">порядковый номер слова (ребёнка в синт.связи) в предложении</param>
-		/// <param name="Level">Уровень вложенности синтаксического узла</param>
-		/// <param name="linktype">тип взаимосвязи с родителем</param>
-		/// <param name="parentind">порядковый номер слова (родителя в синт.связи) в предложении</param>
+		/// <param name="node">объект типа SyntNodeAsm</param>
 		/// <returns></returns>
-		public void AddNode(int order, int Level, int linktype, int parentind)
+		public void AddNode(SyntNodeAsm node)
 		{
-			if (Level == -1)
-				return;
-			int maxID = 0;
-			if (treeList.Count > 0)
-				maxID = (int)(treeList.OrderByDescending(x => x.ID).First().ID + 1);
-			var node = new tNode();
-			node.ID = maxID;
-			node.Level = Level;
-			node.index = order;
-			node.linktype = linktype;
-			node.parentind = parentind;
 			treeList.Add(node);
 		}
 
@@ -118,11 +109,9 @@ namespace AsmApp.Types
 		/// <summary>
 		/// Получение списка синтаксических связей предложения.
 		/// </summary>
-		public List<tNode> GetTreeList()
+		public List<SyntNodeAsm> GetTreeList()
 		{
-			var newlist = treeList.OrderBy(x => x.ID)
-				//.ThenBy(x => x.orderlvl)
-				.ToList();
+			var newlist = new List<SyntNodeAsm>(treeList);
 			return newlist;
 		}
 
@@ -138,22 +127,16 @@ namespace AsmApp.Types
 
 			// Сохранение списка синтаксических связей предложения в БД
 			var syntNodes = new List<long>();
-			foreach (var word in words)
+			foreach (var node in treeList)
 			{
-				// Определение узла в синтаксическом дереве предложения по порядковому номеру слова в предложении.
-				var cnt = treeList.Where(x => x.index == word.Value.order).Count();
-				if (cnt > 0)
-				{
-					var node = treeList.Where(x => x.index == word.Value.order).First();
-					var parentWord = this.GetWordByOrder(node.parentind);
-					long ParentWordID = -1;
-					if (parentWord != null)
-						ParentWordID = parentWord.BlockID;
-					var asmgsynt = new SyntNodeAsm(word.Value.BlockID, node.linktype, node.Level, ParentWordID);
-					asmgsynt.Save();
-					syntNodes.Add(asmgsynt.BlockID);
-				}
-
+				var word = words.Where(o => o.Value.order == node.ChildOrder).Select(o => o.Value).FirstOrDefault();
+				if (word != null)
+					node.CID = word.BlockID;
+				var pword = words.Where(o => o.Value.order == node.ParentOrder).Select(o => o.Value).FirstOrDefault();
+				if (pword != null)
+					node.PCID = pword.BlockID;
+				node.Save();
+				syntNodes.Add(node.BlockID);
 			}
 			this.SetValue("SyntNodes", syntNodes);
 			base.Save();

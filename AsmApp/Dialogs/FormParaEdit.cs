@@ -24,15 +24,14 @@ namespace AsmApp
 			AssemblyBase asm = null;
 			switch (tOper)
 			{
-				case (treeOper.toEdit): //theNode.Assembly.BlockID
-										//pMap = store.GetParagraph(contID, docID, parID);
+				case (treeOper.toEdit):
+					asm = theNode.Assembly;
 					break;
 				case (treeOper.toAdd):
 					asm = store.CreateParagraph(theNode.Assembly.BlockID);
 					break;
 			}
-			this.paraAsm = new ParagraphAsm(asm);
-		
+			this.paraAsm = new ParagraphAsm(asm);	
 		}
 
 
@@ -42,15 +41,15 @@ namespace AsmApp
 			rtbBody.HideToolstripItemsByGroup(RicherTextBox.RicherTextBoxToolStripGroups.SaveAndLoad, false);
 			rtbBody.ToggleBold();
 			rtbBody.SetFontSize(11.0f);
-/*
+
 			if (paraAsm != null)
 			{
-				memoHeader.Text = paraMap.GetHeader();
+				memoHeader.Text = paraAsm.GetHeader();
 				//memoBody.Text = paraMap.GetBody();
 
-				rtbBody.Text = paraMap.GetBody();
+				rtbBody.Text = paraAsm.GetBody();
 				//rtbBody.Rtf = memoBody.Text;
-			} */
+			} 
 		}
 
 		private void btParaSave_Click(object sender, EventArgs e)

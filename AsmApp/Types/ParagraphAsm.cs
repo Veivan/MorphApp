@@ -31,7 +31,16 @@ namespace AsmApp.Types
 		public ParagraphAsm(AssemblyBase srcAsm) : base(srcAsm)
 		{
 			this.srcAsm = srcAsm;
+			var store = Session.Instance().Store;
+			var sentIDs = (List<long>)srcAsm.GetValue("Phrases");
+			foreach (var sentID in sentIDs) 
+			{
+				var asm = store.GetAssembly(sentID);
+				var sent = new SentenceAsm(asm);
+				innerPara.Add(sent);
+			}
 		}
+
 		#endregion
 
 		#region Public Methods

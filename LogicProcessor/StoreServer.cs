@@ -46,13 +46,7 @@ namespace LogicProcessor
 			return asm;
 		}
 
-		/// <summary>
-		/// Получение сборки по адресу из хранилища.
-		/// </summary>
-		/// <param name="Addr">Адрес сборки</param>
-		/// <param name="FillChildren">признак, определяющий, заполгять сборку данными о детях или нет</param>
-		/// <returns>сборка</returns>
-		public AssemblyBase GetAssembly(long Addr, bool FillChildren = true)
+		public override AssemblyBase GetAssembly(long Addr, bool FillChildren = true)
 		{
 			var block = DBserver.GetBlock(Addr);
 			var asm = new AssemblyBase(block);

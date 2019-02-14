@@ -34,8 +34,12 @@ namespace AsmApp
 			}
 
 			var mapNodes = smap.GetTreeList();
+
 			foreach (var node in mapNodes)
-				asm.AddNode(node.index, node.Level, node.linktype, node.parentind);
+			{
+				var asmgsynt = new SyntNodeAsm(-1, node.linktype, node.Level, -1, node.index, node.parentind);
+				asm.AddNode(asmgsynt);
+			}
 
 			return asm;
 		}

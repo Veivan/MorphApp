@@ -200,9 +200,9 @@ namespace AsmApp
 			var ordlist = sent.GetTreeList();
 			foreach (var x in ordlist)
 			{
-				sb.Append(new String('\t', x.Level) +
+				sb.Append(new String('\t', (int)x.Level) +
 					String.Format("{0} Level {1} link {2} \r\n",
-						sent.GetWordByOrder(x.index).EntryName, x.Level, x.linktype));
+						sent.GetWordByOrder((int)x.ChildOrder).EntryName, x.Level, x.GrenLink));
 			}
 
 			memoOut.Text = sb.ToString();
