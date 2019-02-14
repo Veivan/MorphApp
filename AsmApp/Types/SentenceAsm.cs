@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 using Schemas;
 using Schemas.BlockPlatform;
@@ -14,7 +15,9 @@ namespace AsmApp.Types
 		#region Privates
 		// Сборка, из которой было сформировано Предложение
 		private AssemblyBase srcAsm;
-	
+
+		private string sentence;
+
 		/// <summary>
 		/// Хранилище структур слов предложения.
 		/// </summary>
@@ -28,21 +31,18 @@ namespace AsmApp.Types
 
 		#region Properties
 
-		public string sentence;
 		public int hash;
 		public bool IsActual;
 
 		/// <summary>
 		/// Количество слов предложения.
 		/// </summary>
-		public int Capasity
-		{
-			get
-			{
-				return words.Count;
-			}
-		}
+		public int Capasity	{ get { return words.Count;	} }
 
+		/// <summary>
+		/// Текст предложения.
+		/// </summary>
+		public string Text { get { return sentence; } set { sentence = value; } }
 		#endregion
 
 		#region Constructors
@@ -60,7 +60,7 @@ namespace AsmApp.Types
 			{
 				var asm = store.GetAssembly(ID);
 				var word = new WordAsm(asm);
-				words.Add(word.order, word);
+				words.Add((int)word.Order, word);
 			}
 			var syntIDs = (List<long>)srcAsm.GetValue("SyntNodes");
 			foreach (var ID in syntIDs)
@@ -69,10 +69,12 @@ namespace AsmApp.Types
 				var syntNode = new SyntNodeAsm(asm);
 				treeList.Add(syntNode);
 			}
+
+			this.sentence = RestorePhrase();
 		}
 		#endregion
 
-		#region Methods
+		#region Public Methods
 		/// <summary>
 		/// Добавление слова во внутренние хранилища.
 		/// </summary>
@@ -129,10 +131,10 @@ namespace AsmApp.Types
 			var syntNodes = new List<long>();
 			foreach (var node in treeList)
 			{
-				var word = words.Where(o => o.Value.order == node.ChildOrder).Select(o => o.Value).FirstOrDefault();
+				var word = words.Where(o => o.Value.Order == node.ChildOrder).Select(o => o.Value).FirstOrDefault();
 				if (word != null)
 					node.CID = word.BlockID;
-				var pword = words.Where(o => o.Value.order == node.ParentOrder).Select(o => o.Value).FirstOrDefault();
+				var pword = words.Where(o => o.Value.Order == node.ParentOrder).Select(o => o.Value).FirstOrDefault();
 				if (pword != null)
 					node.PCID = pword.BlockID;
 				node.Save();
@@ -141,7 +143,24 @@ namespace AsmApp.Types
 			this.SetValue("SyntNodes", syntNodes);
 			base.Save();
 		}
+		#endregion
 
+		#region Private Methods
+		/// <summary>
+		/// Восстановление предложения по формам слов, хранящимся в структурах WordAsm
+		/// </summary>
+		private string RestorePhrase()
+		{
+			var sb = new StringBuilder();
+			for (int i = 0; i < Capasity; i++)
+			{
+				var word = GetWordByOrder(i);
+				if (i > 0 && i < Capasity && word.ID_PartOfSpeech != (int)GrenPart.PUNCTUATION_class)
+					sb.Append(" ");
+				sb.Append(word.RealWord);
+			}
+			return sb.ToString();
+		}
 		#endregion
 
 	}

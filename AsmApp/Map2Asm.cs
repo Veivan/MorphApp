@@ -21,7 +21,7 @@ namespace AsmApp
 				var wasm = new WordAsm(wmap.ID_Entry, wmap.ID_PartOfSpeech);
 				wasm.xPart = wmap.xPart;
 				wasm.EntryName = wmap.EntryName;
-				wasm.order = wmap.order;
+				wasm.Order = wmap.order;
 				wasm.RealWord = wmap.RealWord;
 				wasm.rcind = wmap.rcind;
 				// Чтение граммем

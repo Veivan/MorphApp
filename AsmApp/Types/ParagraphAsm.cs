@@ -51,7 +51,7 @@ namespace AsmApp.Types
 		public string GetSentenseByOrder(int Position)
 		{
 			SentenceAsm sent = innerPara.Where(x => x.Order == Order).FirstOrDefault();
-			return sent == null ? "" : sent.sentence;
+			return sent == null ? "" : sent.Text;
 		}
 
 		/// <summary>
@@ -75,7 +75,7 @@ namespace AsmApp.Types
 				if (sentprops.Count == 0)
 				{
 					newsprops = new SentenceAsm();
-					newsprops.sentence = sent as string;
+					newsprops.Text = sent as string;
 					newsprops.hash = ihash;
 					newsprops.IsActual = false;
 				}
@@ -175,13 +175,13 @@ namespace AsmApp.Types
 		public string GetHeader()
 		{
 			return String.Join(" ", this.GetParagraphSents(SentTypes.enstHeader)
-								.Select(x => x.sentence).ToList());
+								.Select(x => x.Text).ToList());
 		}
 
 		public string GetBody()
 		{
 			return String.Join(" ", this.GetParagraphSents(SentTypes.enstBody)
-								.Select(x => x.sentence).ToList());
+								.Select(x => x.Text).ToList());
 		}
 
 		public int GetHashCode(bool IsHeader)

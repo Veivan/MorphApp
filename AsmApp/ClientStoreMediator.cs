@@ -148,7 +148,7 @@ namespace AsmApp
 			// Выполнение синтана для неактуальных предложений.
 			foreach (var sent in sentlist)
 			{
-				var sentlistRep = this.MorphMakeSyntan(sent.sentence);
+				var sentlistRep = this.MorphMakeSyntan(sent.Text);
 				if (sentlistRep.Count > 0)
 					pAsm.UpdateSentStruct(sent.Order, Map2Asm.Convert(sentlistRep[0]) );
 			} 

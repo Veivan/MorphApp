@@ -24,7 +24,6 @@ namespace AsmApp.Types
 		public HasDict xPart = null;
 		public string EntryName = "";
 		public string RealWord = "";
-		public int order; // Порядок слова в предложении
 
 		/// <summary>
 		/// характеристика словарной статьи (=0 слово нашлось; =1 EntryName == "???"; =2 EntryName == "number_")
@@ -113,7 +112,7 @@ namespace AsmApp.Types
 
 			this.SetValue("lx_id", lx_id);
 			this.SetValue("rcind", rcind);
-			this.SetValue("order", order);
+//			this.SetValue("order", order);
 			this.SetValue("RealWord", RealWord);
 			this.SetValue("Grammems", gramlist);
 
