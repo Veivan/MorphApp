@@ -101,18 +101,23 @@ namespace AsmApp.Types
 			var asmlex = new LexemaAsm(id_partofspeech, EntryName);
 			asmlex.Save();
 			lx_id = asmlex.BlockID;
+
+			//Сохранение предложения для получения ID
+			if (this.IsVirtual)
+				base.Save();
+
 			// Сохранение граммем в БД
 			var gramlist = new List<long>();
 			foreach (var pair in pairs)
 			{
 				var asmgramm = new GrammemAsm(pair.Key, pair.Value);
+				asmgramm.ParentAssemblyID = this.BlockID;
 				asmgramm.Save();
 				gramlist.Add(asmgramm.BlockID);
 			}
 
 			this.SetValue("lx_id", lx_id);
 			this.SetValue("rcind", rcind);
-//			this.SetValue("order", order);
 			this.SetValue("RealWord", RealWord);
 			this.SetValue("Grammems", gramlist);
 

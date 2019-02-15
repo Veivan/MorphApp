@@ -56,19 +56,23 @@ namespace AsmApp.Types
 			this.srcAsm = srcAsm;
 			var store = Session.Instance().Store;
 			var wordIDs = (List<long>)srcAsm.GetValue("Words");
-			foreach (var ID in wordIDs)
-			{
-				var asm = store.GetAssembly(ID);
-				var word = new WordAsm(asm);
-				words.Add((int)word.Order, word);
-			}
+			int i = 0;
+			if(wordIDs != null)
+				foreach (var ID in wordIDs)
+				{
+					var asm = store.GetAssembly(ID);
+					var word = new WordAsm(asm);
+					word.Order = i++;
+					words.Add((int)word.Order, word);
+				}
 			var syntIDs = (List<long>)srcAsm.GetValue("SyntNodes");
-			foreach (var ID in syntIDs)
-			{
-				var asm = store.GetAssembly(ID);
-				var syntNode = new SyntNodeAsm(asm);
-				treeList.Add(syntNode);
-			}
+			if (syntIDs != null)
+				foreach (var ID in syntIDs)
+				{
+					var asm = store.GetAssembly(ID);
+					var syntNode = new SyntNodeAsm(asm);
+					treeList.Add(syntNode);
+				}
 
 			this.sentence = RestorePhrase();
 		}
@@ -120,12 +124,18 @@ namespace AsmApp.Types
 		public override void Save()
 		{
 			var wordlist = new List<long>();
+			//Сохранение предложения для получения ID
+			if (this.IsVirtual)
+				base.Save();
+			
 			// Сохранение слов в БД
-			foreach (var word in words) { 
+			foreach (var word in words) {
+				word.Value.ParentAssemblyID = this.RootBlock_id;
 				word.Value.Save();
 				wordlist.Add(word.Value.BlockID);
 			}
 			this.SetValue("Words", wordlist);
+
 
 			// Сохранение списка синтаксических связей предложения в БД
 			var syntNodes = new List<long>();
@@ -137,6 +147,7 @@ namespace AsmApp.Types
 				var pword = words.Where(o => o.Value.Order == node.ParentOrder).Select(o => o.Value).FirstOrDefault();
 				if (pword != null)
 					node.PCID = pword.BlockID;
+				node.ParentAssemblyID = this.BlockID;
 				node.Save();
 				syntNodes.Add(node.BlockID);
 			}

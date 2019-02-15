@@ -118,8 +118,13 @@ namespace LogicProcessor
 				{
 					if (asm.IsVirtual)
 					{
-						var id = DBserver.CreateBlock(asm.BlockType.BlockTypeID, asm.ParentAssemblyID, 0);
+						var id = DBserver.CreateBlock(asm.BlockType.BlockTypeID, asm.ParentAssemblyID, (int)asm.Order);
 						asm.BlockID = id;
+					}
+					else
+					{
+						DBserver.SetParent(asm.BlockID, asm.ParentAssemblyID);
+						DBserver.SetOrder(asm.BlockID, (int)asm.Order);
 					}
 					var fh_id = DBserver.SetFactData(asm.BlockID, asm.Blob);
 					asm.FactID = fh_id;
