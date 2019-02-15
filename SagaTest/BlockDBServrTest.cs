@@ -136,9 +136,10 @@ namespace SagaTest
 		[TestMethod]
 		public void Test_AttrGetValueByOrd()
 		{
-			var addr = 2;
+			var addr = 37;
 			var val = DBserver.AttrGetValue<string>(addr, 0);
-			Console.WriteLine("Attr0 : " + val.ToString());
+			var res = val == null ? "null" : val.ToString();
+			Console.WriteLine("Attr0 : " + res);
 			Assert.AreNotEqual(-1, val);
 		}
 

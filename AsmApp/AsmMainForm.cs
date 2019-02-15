@@ -32,6 +32,7 @@ namespace AsmApp
 		{
 			store.Refresh();
 			PopulateTreeView();
+			treeView1.Nodes[0].ExpandAll();
 		}
 
 		/// <summary>

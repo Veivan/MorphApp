@@ -1272,9 +1272,9 @@ namespace DirectDBconnector
 		{
 			try
 			{
-				m_sqlCmd.CommandText = "DELETE FROM mFactHeap WHERE fh_id > 23;";
+				m_sqlCmd.CommandText = "DELETE FROM mFactHeap WHERE fh_id > 4;";
 				m_sqlCmd.ExecuteNonQuery();
-				m_sqlCmd.CommandText = "DELETE FROM mBlocks WHERE b_id > 21;";
+				m_sqlCmd.CommandText = "DELETE FROM mBlocks WHERE b_id > 7;";
 				m_sqlCmd.ExecuteNonQuery();
 			}
 			catch (SQLiteException ex)
@@ -1794,16 +1794,31 @@ namespace DirectDBconnector
 			BlockBase result = null;
 			try
 			{
-				m_sqlCmd.CommandText = string.Format("SELECT B.b_id, B.bt_id, T.namekey, B.parent, B.treeorder, B.fh_id, B.predecessor, B.successor, T.nameui, B.created_at " +
-					"FROM mBlocks B JOIN mBlockTypes T ON T.bt_id = B.bt_id WHERE b_id = {0}", addr);
+				m_sqlCmd.CommandText = string.Format("SELECT B.b_id, B.bt_id, T.namekey, B.parent, B.treeorder, B.fh_id, " +
+					" B.predecessor, B.successor, T.nameui, B.created_at, F.blockdata " +
+					"FROM mBlocks B JOIN mBlockTypes T ON T.bt_id = B.bt_id LEFT JOIN mFactHeap F ON F.fh_id = B.fh_id  " +
+					"WHERE b_id = {0}", addr);
 				SQLiteDataReader r = m_sqlCmd.ExecuteReader();
 				while (r.Read())
 				{
+					var bt_id = r.GetInt64(1);
 					var fh_id = r[5] as long? ?? 0;
 					var predecessor = r[6] as long? ?? 0;
 					var successor = r[7] as long? ?? 0;
-					var bt = new BlockType(r.GetInt64(1), r.GetString(2), r.GetString(8));
+					var bt = new BlockType(bt_id, r.GetString(2), r.GetString(8));
 					result = new BlockBase(addr, bt, r.GetInt64(3), r.GetInt64(4), fh_id, predecessor, successor, null, r.GetDateTime(9));
+					if (fh_id > 0)
+					{
+						// Getting attrtypes
+						var idtplist = dbGetAttrTypesListByType(bt_id);
+						var tplist = new List<enAttrTypes>();
+						foreach (var idtp in idtplist)
+							tplist.Add((enAttrTypes)idtp);
+
+						// Reading BLOB
+						var bytearr = GetBytes(r, 10);
+						result.PerformBlob(tplist, bytearr);
+					}
 				}
 				r.Close();
 			}
