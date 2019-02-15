@@ -64,6 +64,11 @@ namespace AsmApp
 			MainStore.IsMainDataContainer = true;
 			store.AsmFillChildren(MainStore);
 			containers.Add(MainStore);
+
+			var DictsStore = new AssemblyBase(Session.DictsStoreID, Session.Instance().GetBlockTypeByNameKey(Session.containerTypeName));
+			DictsStore.IsDictsStore = true;
+			store.AsmFillChildren(DictsStore);
+			containers.Add(DictsStore);
 		}
 
 		public void RefreshAsm(AsmNode aNode)

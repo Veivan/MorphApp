@@ -154,7 +154,7 @@ namespace LogicProcessor
 			if (asm == null && CreateIfNotExists)
 			{
 				asm = new AssemblyBase(lexType);
-				asm.ParentAssemblyID = Session.IdDictLemms;
+				asm.ParentAssemblyID = Session.DictLemmsID;
 			}
 			if (asm != null)
 			{

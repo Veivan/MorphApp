@@ -85,6 +85,9 @@ namespace Schemas.BlockPlatform
 			{
 				if (IsMainDataContainer)
 					return (string)GetValue("Name", Session.MainStoreName);
+				if (IsDictsStore)
+					return (string)GetValue("Name", Session.DictsStoreName);
+				
 				if (IsDataContainer)
 					return (string)GetValue("Name", Session.DefaultContainerName);
 				else
@@ -97,6 +100,8 @@ namespace Schemas.BlockPlatform
 		#region Характеристики
 
 		public bool IsMainDataContainer	{ get; set;	}
+
+		public bool IsDictsStore { get; set; }
 
 		public bool IsDataContainer
 		{

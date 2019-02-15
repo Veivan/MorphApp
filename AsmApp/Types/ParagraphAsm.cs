@@ -33,12 +33,13 @@ namespace AsmApp.Types
 			this.srcAsm = srcAsm;
 			var store = Session.Instance().Store;
 			var sentIDs = (List<long>)srcAsm.GetValue("Phrases");
-			foreach (var sentID in sentIDs) 
-			{
-				var asm = store.GetAssembly(sentID);
-				var sent = new SentenceAsm(asm);
-				innerPara.Add(sent);
-			}
+			if (sentIDs != null)
+				foreach (var sentID in sentIDs) 
+				{
+					var asm = store.GetAssembly(sentID);
+					var sent = new SentenceAsm(asm);
+					innerPara.Add(sent);
+				}
 		}
 
 		#endregion

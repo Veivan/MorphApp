@@ -85,6 +85,32 @@ namespace AsmApp
 			return null;
 		}
 
+		/// <summary>
+		/// Поиск узла справочника в дереве
+		/// </summary>
+		/// <param name="DictID">ID справочника в БД</param>
+		private TreeNode FindDict(long DictID)
+		{
+			AsmNode DictsStore = null;
+			foreach (AsmNode node in treeView1.Nodes)
+			{
+				if (node.Assembly.BlockID == Session.DictsStoreID)
+				{
+					DictsStore = node;
+					break;
+				}					
+			}
+			if (DictsStore == null)
+				return null;
+
+			foreach (AsmNode node in DictsStore.Nodes)
+			{
+				if (node.Assembly.BlockID == DictID)
+					return node;
+			}
+			return null;
+		}
+
 		private void btAddCont_Click(object sender, EventArgs e)
 		{
 			var nodeToAddTo = treeView1.SelectedNode as AsmNode;
@@ -132,9 +158,8 @@ namespace AsmApp
 
 		private void btAddLemma_Click(object sender, EventArgs e)
 		{
-			var nodeToAddTo = treeView1.SelectedNode as AsmNode;
+			var nodeToAddTo = FindDict(Session.DictLemmsID);
 			if (nodeToAddTo == null) return;
-			var ParentNodeID = Session.IdDictLemms; // nodeToAddTo.Assembly.BlockID;
 
 			var result = Utils.InputBox("Добавление леммы", "Введите лемму:", "");
 			if (String.IsNullOrEmpty(result))
