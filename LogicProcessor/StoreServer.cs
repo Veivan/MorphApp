@@ -76,7 +76,7 @@ namespace LogicProcessor
 		{
 			foreach (var child in src_children)
 			{
-				var chid = DBserver.CreateBlock(child.BlockType.BlockTypeID, child.ParentAssemblyID, (int)child.Order);
+				var chid = DBserver.CreateBlock(child.BlockType.BlockTypeID, child.ParentID, (int)child.Order);
 				//child.RootBlock_id = chid;
 				CreateChildrenRequrs(child.Children);
 			}
@@ -118,12 +118,12 @@ namespace LogicProcessor
 				{
 					if (asm.IsVirtual)
 					{
-						var id = DBserver.CreateBlock(asm.BlockType.BlockTypeID, asm.ParentAssemblyID, (int)asm.Order);
+						var id = DBserver.CreateBlock(asm.BlockType.BlockTypeID, asm.ParentID, (int)asm.Order);
 						asm.BlockID = id;
 					}
 					else
 					{
-						DBserver.SetParent(asm.BlockID, asm.ParentAssemblyID);
+						DBserver.SetParent(asm.BlockID, asm.ParentID);
 						DBserver.SetOrder(asm.BlockID, (int)asm.Order);
 					}
 					var fh_id = DBserver.SetFactData(asm.BlockID, asm.Blob);
@@ -159,7 +159,7 @@ namespace LogicProcessor
 			if (asm == null && CreateIfNotExists)
 			{
 				asm = new AssemblyBase(lexType);
-				asm.ParentAssemblyID = Session.DictLemmsID;
+				asm.ParentID = Session.DictLemmsID;
 			}
 			if (asm != null)
 			{

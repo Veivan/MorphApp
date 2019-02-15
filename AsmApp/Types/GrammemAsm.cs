@@ -19,7 +19,10 @@ namespace AsmApp.Types
 		public GrammemAsm(AssemblyBase srcAsm) : base(srcAsm)
 		{
 			this.srcAsm = srcAsm;
+			this.grenProperty = (long)srcAsm.GetValue("GrenProperty");
+			this.value = (long)srcAsm.GetValue("Value");
 		}
+
 		public GrammemAsm(long _grenProperty, long _value) : base(Session.Instance().GetBlockTypeByNameKey(Session.grammTypeName))
 		{
 			grenProperty = _grenProperty;

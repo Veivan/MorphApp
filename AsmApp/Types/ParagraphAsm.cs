@@ -36,7 +36,7 @@ namespace AsmApp.Types
 			if (sentIDs != null)
 				foreach (var sentID in sentIDs) 
 				{
-					var asm = store.GetAssembly(sentID);
+					var asm = store.GetAssembly(sentID, false);
 					var sent = new SentenceAsm(asm);
 					innerPara.Add(sent);
 				}
@@ -197,9 +197,13 @@ namespace AsmApp.Types
 
 		public override void Save()
 		{
+			//Сохранение абзаца для получения ID
+			if (this.IsVirtual)
+				base.Save();
 			var sentlist = new List<long>();
 			foreach (var sent in innerPara) // where !sent.IsActual
 			{
+				sent.ParentID = this.RootBlock_id;
 				sent.Save();
 				sentlist.Add(sent.BlockID);
 			}

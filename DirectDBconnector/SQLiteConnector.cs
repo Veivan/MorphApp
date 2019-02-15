@@ -1829,6 +1829,35 @@ namespace DirectDBconnector
 			return result;
 		}
 
+		public int dbGetParent(long addr)
+		{
+			int result = -1;
+			try
+			{
+				m_sqlCmd.CommandText = String.Format("SELECT parent FROM mBlocks WHERE b_id = {0}", addr);
+				var executeScalar = m_sqlCmd.ExecuteScalar();
+				if (executeScalar != null)
+					result = Convert.ToInt32(executeScalar);
+			}
+			catch (SQLiteException ex)
+			{
+				Console.WriteLine("dbGetParent Error: " + ex.Message);
+			}
+			return result;
+		}
+
+		/// <summary>
+		/// Присвоение блоку родителя.
+		/// </summary>
+		/// <param name="addr">ID - адрес блока</param>
+		/// <param name="parentID">ID - адрес блока-родителя</param>
+		/// <returns></returns>
+		public void dbSetParent(long addr, long parentID)
+		{
+			m_sqlCmd.CommandText = string.Format("UPDATE mBlocks SET parent = {0} WHERE b_id = {1}", parentID, addr);
+			m_sqlCmd.ExecuteNonQuery();
+		}
+
 		public int dbGetOrder(long addr)
 		{
 			int result = -1;
@@ -1844,6 +1873,41 @@ namespace DirectDBconnector
 				Console.WriteLine("dbGetOrder Error: " + ex.Message);
 			}
 			return result;
+		}
+
+		/// <summary>
+		/// Получение адреса типа блока.
+		/// </summary>
+		/// <param name="addr">ID - адрес блока</param>
+		/// <returns>ID - адрес типа блока</returns>
+		public long dbGetBlockType(long addr)
+		{
+			int result = -1;
+			try
+			{
+				m_sqlCmd.CommandText = String.Format("SELECT bt_id FROM mBlocks WHERE b_id = {0}", addr);
+				var executeScalar = m_sqlCmd.ExecuteScalar();
+				if (executeScalar != null)
+					result = Convert.ToInt32(executeScalar);
+			}
+			catch (SQLiteException ex)
+			{
+				Console.WriteLine("dbGetBlockType Error: " + ex.Message);
+			}
+			return result;
+		}
+
+
+		/// <summary>
+		/// Присвоение блоку порядка в составе родителя.
+		/// </summary>
+		/// <param name="addr">ID - адрес блока</param>
+		/// <param name="order">номер по порядку</param>
+		/// <returns></returns>
+		public void dbSetOrder(long addr, int order)
+		{
+			m_sqlCmd.CommandText = string.Format("UPDATE mBlocks SET treeorder = {0} WHERE b_id = {1}", order, addr);
+			m_sqlCmd.ExecuteNonQuery();
 		}
 
 		/// <summary>

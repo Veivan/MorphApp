@@ -90,11 +90,6 @@ namespace DirectDBconnector
 			return result;
 		}
 
-		public override void SetParent(long addr, long parent)
-		{
-			throw new NotImplementedException();
-		}
-
 		public override BlockBase GetBlock(long addr)
 		{
 			BlockBase result = dbConnector.dbGetBlock(addr);
@@ -103,18 +98,24 @@ namespace DirectDBconnector
 
 		public override long GetParent(long addr)
 		{
-			throw new NotImplementedException();
+			var result = dbConnector.dbGetParent(addr);
+			return result;
 		}
 
-		public override void SetOrder(long addr, int order)
-		{
-			throw new NotImplementedException();
+		public override void SetParent(long addr, long parent)
+		{			
+			dbConnector.dbSetParent(addr, parent);
 		}
 
 		public override int GetOrder(long addr)
 		{
 			var result = dbConnector.dbGetOrder(addr);
 			return result;
+		}
+
+		public override void SetOrder(long addr, int order)
+		{
+			dbConnector.dbSetOrder(addr, order);
 		}
 
 		public override void Delete(BlockAddress addr)
@@ -171,7 +172,8 @@ namespace DirectDBconnector
 		public override void AttrSetValue(long addr, string attrnamekey, object value)
 		{
 			byte[] bytes = dbConnector.dbGetFactData(addr);
-			var attrs = dbConnector.dbGetAttrsCollection(addr);
+			var bt_id = dbConnector.dbGetBlockType(addr);
+			var attrs = dbConnector.dbGetAttrsCollection(bt_id);
 			var tplist = attrs.GetAttrTypesList();
 			var ord = attrs.GetOrdByNameKey(attrnamekey);
 			Blob blob = new Blob(tplist, bytes);
@@ -182,7 +184,8 @@ namespace DirectDBconnector
 		public override T AttrGetValue<T>(long addr, string attrnamekey)
 		{
 			byte[] bytes = dbConnector.dbGetFactData(addr);
-			var attrs = dbConnector.dbGetAttrsCollection(addr);
+			var bt_id = dbConnector.dbGetBlockType(addr);
+			var attrs = dbConnector.dbGetAttrsCollection(bt_id);
 			var tplist = attrs.GetAttrTypesList();
 			var ord = attrs.GetOrdByNameKey(attrnamekey);
 			Blob blob = new Blob(tplist, bytes);

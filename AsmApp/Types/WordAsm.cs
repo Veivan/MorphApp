@@ -15,13 +15,20 @@ namespace AsmApp.Types
 		private AssemblyBase srcAsm; // Сборка, из которой было сформировано Слово
 		private int id_entry;
 		private int id_partofspeech;
-		private Dictionary<long, long> pairs = new Dictionary<long, long>();
+
+//		private Dictionary<long, long> pairs = new Dictionary<long, long>();
+		
+		/// <summary>
+		/// Хранилище грамматическиз характеристик слова в предложении.
+		/// </summary>
+		private List<GrammemAsm> grammems = new List<GrammemAsm>();
 
 		private long lx_id; // Ссылка на сборку лексемы
 		#endregion
 
 		#region Properties
 		public HasDict xPart = null;
+
 		public string EntryName = "";
 		public string RealWord = "";
 
@@ -59,7 +66,26 @@ namespace AsmApp.Types
 		#region Constructors
 		public WordAsm(AssemblyBase srcAsm) : base(srcAsm)
 		{
+			var store = Session.Instance().Store;
 			this.srcAsm = srcAsm;
+			this.Order = srcAsm.Order;
+			this.lx_id = Convert.ToInt64(srcAsm.GetValue("lx_id"));
+			var asmlex = store.GetAssembly(lx_id);
+			this.id_partofspeech = Convert.ToInt32(asmlex.GetValue("GrenPart"));
+			this.EntryName = (string)asmlex.GetValue("Lemma");
+
+			this.rcind = Convert.ToInt32(srcAsm.GetValue("rcind"));
+			//wasm.xPart = wmap.xPart;
+			this.RealWord = (string)srcAsm.GetValue("RealWord");
+			var gramIDs = (List<long>)srcAsm.GetValue("Grammems");
+			int i = 0;
+			if (gramIDs != null)
+				foreach (var ID in gramIDs)
+				{
+					var asm = store.GetAssembly(ID);
+					var gram = new GrammemAsm(asm);
+					grammems.Add(gram);
+				}
 		}
 
 		public WordAsm(int _id_entry, int _id_partofspeech) : base(Session.Instance().GetBlockTypeByNameKey(Session.wordTypeName))
@@ -71,28 +97,11 @@ namespace AsmApp.Types
 
 		#region Methods
 		/// <summary>
-		/// Добавление ID характеристик слова в словарь.
+		/// Добавление характеристики слова в словарь.
 		/// </summary>
-		public void AddPair(long Key, long Value)
+		internal void AddGrammem(GrammemAsm asmgramm)
 		{
-			if (!pairs.ContainsKey(Key))
-				pairs.Add(Key, Value);
-		}
-
-		/// <summary>
-		/// Получение словаря ID характеристик.
-		/// </summary>
-		public Dictionary<long, long> GetPairs()
-		{
-			return pairs;
-		}
-
-		public long GetPropertyValue(GrenProperty property)
-		{
-			if (pairs.ContainsKey((long)property))
-				return pairs[(long)property];
-			else
-				return -1;
+			grammems.Add(asmgramm);
 		}
 
 		public override void Save()
@@ -102,16 +111,15 @@ namespace AsmApp.Types
 			asmlex.Save();
 			lx_id = asmlex.BlockID;
 
-			//Сохранение предложения для получения ID
+			//Сохранение слова для получения ID
 			if (this.IsVirtual)
 				base.Save();
 
 			// Сохранение граммем в БД
 			var gramlist = new List<long>();
-			foreach (var pair in pairs)
+			foreach (var asmgramm in grammems)
 			{
-				var asmgramm = new GrammemAsm(pair.Key, pair.Value);
-				asmgramm.ParentAssemblyID = this.BlockID;
+				asmgramm.ParentID = this.BlockID;
 				asmgramm.Save();
 				gramlist.Add(asmgramm.BlockID);
 			}

@@ -87,7 +87,7 @@ namespace AsmApp
 		{
 			var containerType = Session.Instance().GetBlockTypeByNameKey(Session.containerTypeName);
 			var asm = new AssemblyBase(containerType);
-			asm.ParentAssemblyID = ParentID;
+			asm.ParentID = ParentID;
 			asm.SetValue("Name", name);
 			asm.Save();
 			return asm;
@@ -97,7 +97,7 @@ namespace AsmApp
 		{
 			var documentType = Session.Instance().GetBlockTypeByNameKey(Session.documentTypeName);
 			var asm = new AssemblyBase(documentType);
-			asm.ParentAssemblyID = ParentID;
+			asm.ParentID = ParentID;
 			asm.SetValue("Name", name);
 			asm.Save();
 			return asm;
@@ -107,7 +107,7 @@ namespace AsmApp
 		{
 			var dictType = Session.Instance().GetBlockTypeByNameKey(Session.dictTypeName);
 			var asm = new AssemblyBase(dictType);
-			asm.ParentAssemblyID = ParentID;
+			asm.ParentID = ParentID;
 			asm.SetValue("Name", name);
 			asm.Save();
 			return asm;
@@ -123,7 +123,7 @@ namespace AsmApp
 		{
 			var paragraphType = Session.Instance().GetBlockTypeByNameKey(Session.paragraphTypeName);
 			var asm = new AssemblyBase(paragraphType);
-			asm.ParentAssemblyID = ParentID;
+			asm.ParentID = ParentID;
 			//asm.SetValue("Name", name);
 			asm.Save();
 			return asm;

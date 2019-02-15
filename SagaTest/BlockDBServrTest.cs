@@ -136,7 +136,7 @@ namespace SagaTest
 		[TestMethod]
 		public void Test_AttrGetValueByOrd()
 		{
-			var addr = 37;
+			var addr = 9;
 			var val = DBserver.AttrGetValue<string>(addr, 0);
 			var res = val == null ? "null" : val.ToString();
 			Console.WriteLine("Attr0 : " + res);
@@ -146,9 +146,9 @@ namespace SagaTest
 		[TestMethod]
 		public void Test_AttrGetValueByNameKey()
 		{
-			var addr = 2;
-			var attrnamekey = "attr2";
-			var val = DBserver.AttrGetValue<string>(addr, attrnamekey);
+			var addr = 9;
+			var attrnamekey = "lx_id";
+			var val = DBserver.AttrGetValue<long>(addr, attrnamekey);
 			Console.WriteLine(attrnamekey + ": " + val.ToString());
 			Assert.AreNotEqual(-1, val);
 		}

@@ -60,7 +60,7 @@ namespace AsmApp.Types
 			if(wordIDs != null)
 				foreach (var ID in wordIDs)
 				{
-					var asm = store.GetAssembly(ID);
+					var asm = store.GetAssembly(ID, false);
 					var word = new WordAsm(asm);
 					word.Order = i++;
 					words.Add((int)word.Order, word);
@@ -69,12 +69,13 @@ namespace AsmApp.Types
 			if (syntIDs != null)
 				foreach (var ID in syntIDs)
 				{
-					var asm = store.GetAssembly(ID);
+					var asm = store.GetAssembly(ID, false);
 					var syntNode = new SyntNodeAsm(asm);
 					treeList.Add(syntNode);
 				}
 
 			this.sentence = RestorePhrase();
+			this.IsActual = true;
 		}
 		#endregion
 
@@ -130,7 +131,7 @@ namespace AsmApp.Types
 			
 			// Сохранение слов в БД
 			foreach (var word in words) {
-				word.Value.ParentAssemblyID = this.RootBlock_id;
+				word.Value.ParentID = this.RootBlock_id;
 				word.Value.Save();
 				wordlist.Add(word.Value.BlockID);
 			}
@@ -147,7 +148,7 @@ namespace AsmApp.Types
 				var pword = words.Where(o => o.Value.Order == node.ParentOrder).Select(o => o.Value).FirstOrDefault();
 				if (pword != null)
 					node.PCID = pword.BlockID;
-				node.ParentAssemblyID = this.BlockID;
+				node.ParentID = this.BlockID;
 				node.Save();
 				syntNodes.Add(node.BlockID);
 			}

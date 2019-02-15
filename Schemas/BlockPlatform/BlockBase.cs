@@ -39,7 +39,7 @@ namespace Schemas.BlockPlatform
 		/// <summary>
 		/// Адрес блока, являющегося Родителем для текущего блока.
 		/// </summary>
-		public BlockAddress ParentID { get { return parent; } }
+		public BlockAddress ParentID { get { return parent; } set { parent = value; } }
 
 		/// <summary>
 		/// Порядок следования блока в дереве.

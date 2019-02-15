@@ -14,9 +14,6 @@ namespace Schemas.BlockPlatform
 	public class AssemblyBase : BlockBase
 	{
 		private AssemblyBase templAsm;
-		private BlockAddress _parentAsmId = 0;
-		private long _treeorder = 0;
-		//private string name;
 
 		protected List<AssemblyBase> children = new List<AssemblyBase>();
 
@@ -57,22 +54,6 @@ namespace Schemas.BlockPlatform
 			{
 				var ret = GetAllNodes(children);
 				return ret.ToList();
-			}
-		}
-
-		/// <summary>
-		/// Адрес сборки, являющейся Родителем для текущий сборки.
-		/// </summary>
-		public BlockAddress ParentAssemblyID
-		{
-			get
-			{
-				return _parentAsmId;
-			}
-
-			set
-			{
-				_parentAsmId = value;
 			}
 		}
 
@@ -212,8 +193,8 @@ namespace Schemas.BlockPlatform
 			foreach (var src_child in src_children)
 			{
 				var newchild = new AssemblyBase(src_child.BlockType);
-				newchild._parentAsmId = asm.RootBlock_id;
-				newchild._treeorder = src_child._treeorder;
+				newchild.ParentID = asm.RootBlock_id;
+				newchild.Order = src_child.Order;
 				asm.children.Add(newchild);
 				CopyChildrenRequrs(newchild, src_child.children);
 			}

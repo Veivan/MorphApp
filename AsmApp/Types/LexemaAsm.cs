@@ -1,4 +1,6 @@
-﻿using Schemas;
+﻿using System;
+
+using Schemas;
 using Schemas.BlockPlatform;
 
 namespace AsmApp.Types
@@ -22,7 +24,8 @@ namespace AsmApp.Types
 		public LexemaAsm(AssemblyBase srcAsm) : base(srcAsm)
 		{
 			this.srcAsm = srcAsm;
-			/// TODO здесь надо заполнять внутренние поля
+			this.grenPart = Convert.ToInt32(srcAsm.GetValue("GrenPart"));
+			this.lemma = (string)srcAsm.GetValue("Lemma");
 		}
 
 		/// <summary>
@@ -67,6 +70,9 @@ namespace AsmApp.Types
 		{
 			var store = Session.Instance().Store;
 			srcAsm = store.GetLexema(grenPart, lemma, true);
+			this.BlockID = srcAsm.BlockID;
+			this.ParentID = srcAsm.ParentID;
+			this.FactID = srcAsm.FactID;
 		}
 		#endregion
 	}

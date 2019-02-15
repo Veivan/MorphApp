@@ -28,7 +28,8 @@ namespace AsmApp
 				var Grammems = wmap.GetPairs();
 				foreach(var g in Grammems)
 				{
-					wasm.AddPair(g.Key, g.Value);
+					var asmgramm = new GrammemAsm(g.Key, g.Value);
+					wasm.AddGrammem(asmgramm);
 				}
 				asm.AddWord(i, wasm);
 			}

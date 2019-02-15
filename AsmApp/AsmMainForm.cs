@@ -67,6 +67,10 @@ namespace AsmApp
 		{
 			var aNode = (AsmNode)e.Node;
 
+			var tps = new List<clNodeType>() { clNodeType.clnContainer }; // , clNodeType.clnDocument
+			if ( !tps.Contains(aNode.NodeType))
+				return;
+
 			foreach (AsmNode chldNode in aNode.Nodes)
 			{
 				store.RefreshAsm(chldNode);
