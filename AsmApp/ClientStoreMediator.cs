@@ -157,7 +157,7 @@ namespace AsmApp
 				if (sentlistRep.Count > 0)
 					pAsm.UpdateSentStruct(sent.Order, Map2Asm.Convert(sentlistRep[0]) );
 			} 
-		}
+		} 
 		#endregion
 
 		#region Методы работы с GREN

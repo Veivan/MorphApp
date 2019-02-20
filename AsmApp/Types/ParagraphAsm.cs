@@ -56,7 +56,7 @@ namespace AsmApp.Types
 		}
 
 		/// <summary>
-		/// Добавление предложений абзаца в хранилище.
+		/// Добавление предложений из списка в хранилище абзаца.
 		/// При добавлении вычисляется хэш предложения и по жэшу происходит поиск существующего предложения в хранилище.
 		/// Если предложение есть, то структура переносится в новый список,
 		/// если нет, то добавляется новая структура с признаком "Неактуальная".
@@ -96,7 +96,7 @@ namespace AsmApp.Types
 			else
 				innerPara.RemoveAll(Belongs2Body);
 			innerPara.AddRange(versionPara);
-		}
+		} 
 
 		/// <summary>
 		/// Получение списка структур предложений абзаца.
@@ -146,19 +146,10 @@ namespace AsmApp.Types
 			sentstruct.IsActual = true;
 			sentstruct.Order = Order;
 			innerPara.Add(sentstruct);
-		}
+		} 
 
-		/// <summary>
-		/// Запиcь в хранилище предложения новой структуры синтана этого предложения.
-		/// </summary>
-		public void AddSentStruct(int Position, SentenceAsm sentstruct)
-		{
-//			sentstruct.ParagraphID = this.ParagraphID;
-//			sentstruct.Order = Position;
-			innerPara.Add(sentstruct);
-		}
 
-		/// <summary>
+		/*// <summary>
 		/// Обновление элемента хранения предложения.
 		/// </summary>
 		public void RefreshSentProp(string sentence, SentenceAsm sentstruct, bool IsActual)
@@ -171,7 +162,7 @@ namespace AsmApp.Types
 			}
 			sprop.hash = sentence.GetHashCode();
 			sprop.IsActual = true;
-		}
+		} */
 
 		public string GetHeader()
 		{

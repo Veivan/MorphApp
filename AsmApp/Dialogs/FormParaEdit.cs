@@ -55,25 +55,20 @@ namespace AsmApp
 		private void btParaSave_Click(object sender, EventArgs e)
 		{
 
-/*			try
+			try
 			{
-				store.UpdateParagraph(this.paraMap, memoHeader.Text, true);
+				store.UpdateParagraph(this.paraAsm, memoHeader.Text, true);
 				//memoBody.Text = rtbBody.Text;
 
-				store.UpdateParagraph(this.paraMap, rtbBody.Text, false);
-				var paramlist = store.SaveParagraphBD(this.paraMap);
+				store.UpdateParagraph(this.paraAsm, rtbBody.Text, false);
 
-				if (this.typeOper == treeOper.toEdit)
-				{
-					var pMap = store.GetParagraph(contID, docID, parID);
-					if (pMap != null)
-						pMap = this.paraMap;
-				}
+				this.paraAsm.Save();
+				theNode.Assembly = paraAsm;
 			}
 			catch (Exception ex)
 			{
 				MessageBox.Show(ex.Message, ex.Source);
-			}*/
+			}
 		}
 
 		private void btClose_Click(object sender, EventArgs e)
