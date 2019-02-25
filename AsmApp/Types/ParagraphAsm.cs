@@ -16,20 +16,24 @@ namespace AsmApp.Types
 	{
 		#region Privates				
 		private AssemblyBase srcAsm; // Сборка, из которой был сформирован Параграф
-		
 		/// <summary>
 		/// Список предназначен для хранения предложений абзаца.
 		/// </summary>
 		private List<SentenceAsm> innerPara = new List<SentenceAsm>();
 		#endregion
 
+		#region Properties		
+		#endregion
+
 		#region Constructors
 		public ParagraphAsm() : base(Session.Instance().GetBlockTypeByNameKey(Session.paragraphTypeName))
 		{
+			IsDirty = true;
 		}
 
 		public ParagraphAsm(AssemblyBase srcAsm) : base(srcAsm)
 		{
+			IsDirty = false;
 			this.srcAsm = srcAsm;
 			var store = Session.Instance().Store;
 			var sentIDs = (List<long>)srcAsm.GetValue("Phrases");
@@ -62,6 +66,7 @@ namespace AsmApp.Types
 		/// если нет, то добавляется новая структура с признаком "Неактуальная".
 		/// Для "Неактуальных" надо делать синтаксический анализ.
 		/// По окончании новый список заменяет предыдущее содержание хранилища.
+		/// Используется в UpdateParagraph при сохранении абзаца после редактирования в FormParaEdit.
 		/// </summary>
 		public void RefreshParagraph(ArrayList input, bool IsHeader)
 		{
@@ -79,6 +84,8 @@ namespace AsmApp.Types
 					newsprops.Text = sent as string;
 					newsprops.hash = ihash;
 					newsprops.IsActual = false;
+					newsprops.IsDirty = true;
+					this.IsDirty = true;
 				}
 				else
 				{
@@ -90,13 +97,31 @@ namespace AsmApp.Types
 				i++;
 			}
 
-//			SetDeleted(versionPara, IsHeader);
-			if (IsHeader)
-				innerPara.RemoveAll(Belongs2Header);
-			else
-				innerPara.RemoveAll(Belongs2Body);
-			innerPara.AddRange(versionPara);
-		} 
+			if (! IsListsEqual(versionPara, IsHeader))
+			{
+				IsDirty = true;
+				if (IsHeader)
+					innerPara.RemoveAll(Belongs2Header);
+				else
+					innerPara.RemoveAll(Belongs2Body);
+				innerPara.AddRange(versionPara);
+			}
+
+		}
+
+		/// <summary>
+		/// Запиcь в хранилище предложения новой структуры синтана этого предложения.
+		/// Используется в UpdateParagraph при сохранении абзаца после редактирования в FormParaEdit.
+		/// </summary>
+		public void UpdateSentStruct(long Order, SentenceAsm sentstruct)
+		{
+			var sent = innerPara.Where(x => x.Order == Order).FirstOrDefault();
+			if (sent != null)
+				innerPara.Remove(sent);
+			sentstruct.IsActual = true;
+			sentstruct.Order = Order;
+			innerPara.Add(sentstruct);
+		}
 
 		/// <summary>
 		/// Получение списка структур предложений абзаца.
@@ -134,20 +159,6 @@ namespace AsmApp.Types
 			}
 			return versionPara;
 		}
-
-		/// <summary>
-		/// Запиcь в хранилище предложения новой структуры синтана этого предложения.
-		/// </summary>
-		public void UpdateSentStruct(long Order, SentenceAsm sentstruct)
-		{
-			var sent = innerPara.Where(x => x.Order == Order).FirstOrDefault();
-			if (sent != null)
-				innerPara.Remove(sent);
-			sentstruct.IsActual = true;
-			sentstruct.Order = Order;
-			innerPara.Add(sentstruct);
-		} 
-
 
 		/*// <summary>
 		/// Обновление элемента хранения предложения.
@@ -213,6 +224,31 @@ namespace AsmApp.Types
 		private static bool Belongs2Body(SentenceAsm p)
 		{
 			return p.Order > -1;
+		}
+
+		/// <summary>
+		/// Сравнение двух списков на одинаковость.
+		/// Сравнение идёт по количеству элементов и по одинаковости ID входящих предложений,
+		/// упорядоченных по Order.
+		/// Проверка выполняется 
+		/// </summary>
+		/// <param name="list4check">список предложений (новая версия абзаца)</param>
+		/// <param name="IsHeader">признак, определяющий отношение предложений - к заголовку или содержимиму абзаца</param>
+		/// <returns>bool</returns>
+		private bool IsListsEqual(List<SentenceAsm> list4check, bool IsHeader)
+		{
+			bool result = true;
+			var sentprops = innerPara.Where(x => (Belongs2Header(x) == IsHeader)).ToList();
+			if (sentprops.Count != list4check.Count)
+				return false;
+
+			foreach (var sentN in list4check)
+			{
+				var sentP = sentprops.Where(x => x.Order == sentN.Order).FirstOrDefault();
+				if (sentP == null || sentN.BlockID != sentP.BlockID)
+					return false;
+			}
+			return result;
 		}
 
 		#endregion

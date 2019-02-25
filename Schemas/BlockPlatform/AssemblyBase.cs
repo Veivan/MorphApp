@@ -17,7 +17,7 @@ namespace Schemas.BlockPlatform
 
 		protected List<AssemblyBase> children = new List<AssemblyBase>();
 
-		#region Свойства
+		#region Properties
 		/// <summary>
 		/// Стартовый блок сборки.
 		/// </summary>
@@ -76,6 +76,10 @@ namespace Schemas.BlockPlatform
 			}
 		}
 
+		/// <summary>
+		/// Признак того, что содержимое было изменено в процессе редактирования и отличается от содержавшегося в БД.
+		/// </summary>
+		public bool IsDirty { get; set; }
 		#endregion
 
 		#region Характеристики
@@ -104,6 +108,7 @@ namespace Schemas.BlockPlatform
 		public AssemblyBase(BlockType blockType) :
 				base(-1, blockType, -1, 0, -1, -1, -1, null, DateTime.Now)
 		{
+			IsDirty = true;
 		}
 
 		/// <summary>
@@ -114,6 +119,7 @@ namespace Schemas.BlockPlatform
 		public AssemblyBase(BlockAddress id, BlockType blockType, BlockAddress ParentContID = -1) :
 			base(id, blockType, ParentContID, 0, -1, -1, -1, null, DateTime.Now)
 		{
+			IsDirty = false;
 		}
 
 		/// <summary>
@@ -150,6 +156,7 @@ namespace Schemas.BlockPlatform
 
 		#endregion
 
+		#region Public methods
 		public void AddChild(AssemblyBase asm)
 		{
 			var cont = children.Where(x => x.BlockID == asm.BlockID).FirstOrDefault();
@@ -164,6 +171,8 @@ namespace Schemas.BlockPlatform
 			store.Save();
 		}
 
+		#endregion
+	
 		#region Вспомогательные функции
 		/// <summary>
 		/// Получение плоского списка из дерева рекурсивно.

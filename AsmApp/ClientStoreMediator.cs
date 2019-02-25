@@ -121,8 +121,7 @@ namespace AsmApp
 
 		public AssemblyBase CreateParagraph(BlockAddress ParentID)
 		{
-			var paragraphType = Session.Instance().GetBlockTypeByNameKey(Session.paragraphTypeName);
-			var asm = new AssemblyBase(paragraphType);
+			var asm = new ParagraphAsm();
 			asm.ParentID = ParentID;
 			//asm.SetValue("Name", name);
 			asm.Save();

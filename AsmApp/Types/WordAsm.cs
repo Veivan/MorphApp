@@ -78,7 +78,6 @@ namespace AsmApp.Types
 			//wasm.xPart = wmap.xPart;
 			this.RealWord = (string)srcAsm.GetValue("RealWord");
 			var gramIDs = (List<long>)srcAsm.GetValue("Grammems");
-			int i = 0;
 			if (gramIDs != null)
 				foreach (var ID in gramIDs)
 				{
